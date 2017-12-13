@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/title"
+        style="@style/TitleTextCenterVertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:maxLines="2"
+        tools:text="@string/tools_movie_title" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/release_date"
+        style="@style/DetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_event_black"
+        android:drawablePadding="@dimen/text_view_drawable_padding"
+        android:drawableStart="@drawable/icon_event_black"
+        tools:text="@string/tools_movie_date" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/vote_average"
+        style="@style/DetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_star_black"
+        android:drawablePadding="@dimen/text_view_drawable_padding"
+        android:drawableStart="@drawable/icon_star_black"
+        tools:text="@string/tools_movie_vote" />
+
+    <LinearLayout
+        android:id="@+id/overview_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/text_view_min_height"
+            android:text="@string/overview_text"
+            android:textAllCaps="true"
+            android:textColor="?colorPrimary"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/overview"
+            style="@style/DetailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

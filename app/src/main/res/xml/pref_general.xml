@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="@bool/use_adult_search"
+        android:key="@string/adult_search"
+        android:summaryOff="@string/pref_description_adult_search_off"
+        android:summaryOn="@string/pref_description_adult_search_on"
+        android:title="@string/pref_title_adult_search" />
+
+    <ListPreference
+        android:defaultValue="@string/pref_theme_grey_key"
+        android:entries="@array/pref_theme_options"
+        android:entryValues="@array/pref_theme_values"
+        android:icon="@drawable/icon_color_lens"
+        android:key="@string/pref_theme_key"
+        android:title="@string/pref_theme_title" />
+    <Preference
+        android:title="@string/pref_about_title"
+        android:icon="@drawable/icon_info_outline_black"
+        android:key="@string/pref_about_key" />
+</PreferenceScreen>

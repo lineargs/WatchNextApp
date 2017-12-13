@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/padding_twelve"
+    android:paddingLeft="@dimen/padding_twelve"
+    android:paddingRight="@dimen/padding_twelve"
+    android:paddingStart="@dimen/padding_twelve"
+    android:paddingTop="@dimen/padding_twelve">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/review_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="@dimen/line_spacing_extra"
+        android:minHeight="@dimen/text_view_min_height"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/review_author"
+        android:textStyle="bold"
+        tools:text="@string/tools_person_name" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_view_min_height"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/link_image_content_description"
+        app:srcCompat="@drawable/icon_link_black" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/review_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/review_author"
+        android:autoLink="web"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="@dimen/line_spacing_extra"
+        android:minHeight="@dimen/small_min_height"
+        android:textColor="@android:color/black"
+        tools:text="@string/tools_review_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one_dimen"
+        android:layout_below="@+id/review_content"
+        android:layout_marginTop="@dimen/appbar_padding_top"
+        android:background="@android:color/darker_gray" />
+
+</RelativeLayout>

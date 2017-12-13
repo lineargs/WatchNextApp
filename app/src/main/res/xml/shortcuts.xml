@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/icon_shortcut_movies">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.TabbedMoviesActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/icon_shortcut_series">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.TabbedSeriesActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/icon_shortcut_theater">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.TheaterActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+    </shortcut>
+
+</shortcuts>

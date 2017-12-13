@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/small_padding"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
+    app:cardCornerRadius="@dimen/card_view_corner_radius"
+    app:cardElevation="@dimen/card_view_elevation">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/main_poster"
+            android:layout_width="@dimen/main_poster_width"
+            android:layout_height="@dimen/main_poster_height"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/movie_poster_content_description"
+            android:padding="@dimen/appbar_padding_top"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/main_star_image"
+            android:layout_width="@dimen/text_view_min_height"
+            android:layout_height="@dimen/text_view_min_height"
+            android:clickable="true"
+            android:contentDescription="@string/star_image_content_description"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:scaleType="centerInside"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="@dimen/line_spacing_extra"
+            android:lines="2"
+            android:maxLines="2"
+            android:padding="@dimen/appbar_padding_top"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintLeft_toRightOf="@+id/main_poster"
+            app:layout_constraintRight_toLeftOf="@id/main_star_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_title"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/appbar_padding_top"
+            android:paddingEnd="@dimen/card_view_padding_top"
+            android:paddingLeft="@dimen/appbar_padding_top"
+            android:paddingRight="@dimen/card_view_padding_top"
+            android:paddingStart="@dimen/appbar_padding_top"
+            app:layout_constraintLeft_toRightOf="@+id/main_poster"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_title" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

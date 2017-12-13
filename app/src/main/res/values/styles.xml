@@ -1,0 +1,66 @@
+<resources>
+
+    <!-- TextView -->
+    <style name="TitleText" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">@dimen/empty_text_size</item>
+        <item name="android:minHeight">@dimen/text_view_min_height</item>
+        <item name="android:lineSpacingExtra">@dimen/line_spacing_extra</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TitleTextCenter" parent="TitleText">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TitleTextCenterVertical" parent="TitleText">
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="DetailText" parent="android:Widget.TextView">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lineSpacingExtra">@dimen/line_spacing_extra</item>
+        <item name="android:minHeight">@dimen/text_view_min_height</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="DetailLinkText" parent="android:Widget.TextView">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lineSpacingExtra">@dimen/line_spacing_extra</item>
+        <item name="android:minHeight">@dimen/text_view_min_height</item>
+    </style>
+
+    <style name="HeaderText" parent="DetailLinkText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="HeaderTextPrimary" parent="HeaderText">
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
+    <style name="HeaderTextAccent" parent="HeaderText">
+        <item name="android:textColor">?colorAccent</item>
+    </style>
+
+    <!-- TextView as a Button -->
+    <style name="TextButton" parent="android:Widget.TextView">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lineSpacingExtra">@dimen/line_spacing_extra</item>
+        <item name="android:minHeight">@dimen/text_view_min_height</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextButtonPrimary" parent="TextButton">
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
+    <style name="TextButtonAccent" parent="TextButton">
+        <item name="android:textColor">?colorAccent</item>
+    </style>
+
+</resources>

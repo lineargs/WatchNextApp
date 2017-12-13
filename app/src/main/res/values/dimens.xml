@@ -1,0 +1,74 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+
+    <!-- Images -->
+    <dimen name="poster_large_width">175</dimen>
+    <dimen name="poster_large_height">267</dimen>
+    <dimen name="movie_poster_width_default">99dp</dimen>
+    <dimen name="movie_poster_height_default">150dp</dimen>
+    <dimen name="movie_poster_small_width">70dp</dimen>
+    <dimen name="movie_poster_small_height">90dp</dimen>
+    <dimen name="cast_image_height">170dp</dimen>
+    <dimen name="main_star_height">56dp</dimen>
+    <dimen name="video_height">208dp</dimen>
+    <dimen name="logo_header_width">100dp</dimen>
+    <dimen name="logo_header_height">100dp</dimen>
+
+    <!-- Widget -->
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_min_height">180dp</dimen>
+    <dimen name="widget_min_width">250dp</dimen>
+
+    <!-- FAB -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_detail_margin">32dp</dimen>
+
+    <!-- Text -->
+    <dimen name="line_spacing_extra">6dp</dimen>
+    <dimen name="text_view_min_height">48dp</dimen>
+    <dimen name="empty_text_size">28sp</dimen>
+    <dimen name="small_min_height">36dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="title_height">80dp</dimen>
+    <dimen name="text_view_drawable_padding">16dp</dimen>
+    <dimen name="review_author">18sp</dimen>
+    <dimen name="text_size_sixteen">16sp</dimen>
+    <dimen name="nav_text_padding">8dp</dimen>
+
+    <!-- Card View -->
+    <dimen name="search_card_view_margin">8dp</dimen>
+    <dimen name="search_card_view_corner_radius">2dp</dimen>
+    <dimen name="card_view_elevation">2dp</dimen>
+    <dimen name="card_view_padding">16dp</dimen>
+    <dimen name="landscape_card_view_padding">80dp</dimen>
+    <dimen name="card_view_padding_top">32dp</dimen>
+    <dimen name="card_view_corner_radius">8dp</dimen>
+
+    <!-- Recycler View -->
+    <dimen name="search_recycler_view_padding">8dp</dimen>
+
+    <!-- Nested Scroll View -->
+    <dimen name="portrait_nested_view_padding">240dp</dimen>
+    <dimen name="landscape_nexted_view_padding">140dp</dimen>
+    <dimen name="person_nested_view_padding">40dp</dimen>
+
+    <!-- Common -->
+    <dimen name="one_dimen">1dp</dimen>
+    <dimen name="small_padding">4dp</dimen>
+    <dimen name="padding_six">6dp</dimen>
+    <dimen name="padding_nine">9dp</dimen>
+    <dimen name="padding_twelve">12dp</dimen>
+
+    <!-- Tools -->
+    <dimen name="tools_layout_width">100dp</dimen>
+    <dimen name="cast_layout_width">120dp</dimen>
+    <dimen name="main_poster_width">100dp</dimen>
+    <dimen name="main_poster_height">130dp</dimen>
+
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/main_poster"
+        android:layout_width="@dimen/movie_poster_small_width"
+        android:layout_height="@dimen/movie_poster_small_height"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/movie_poster_content_description"
+        android:padding="@dimen/appbar_padding_top"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/main_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="start"
+        android:padding="@dimen/padding_six"
+        android:singleLine="true"
+        android:textSize="@dimen/text_size_sixteen"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/main_poster"
+        app:layout_constraintLeft_toRightOf="@+id/main_poster"
+        app:layout_constraintRight_toLeftOf="@+id/star_image"
+        app:layout_constraintTop_toTopOf="@+id/main_poster"
+        tools:text="@string/tools_movie_title" />
+
+    <ImageView
+        android:id="@+id/star_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/star_image_content_description"
+        android:focusable="true"
+        android:padding="@dimen/appbar_padding_top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

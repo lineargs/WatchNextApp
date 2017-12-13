@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/title"
+        style="@style/TitleTextCenterVertical"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_view_min_height"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/seasons_date"
+        android:layout_toStartOf="@+id/seasons_date"
+        tools:text="@string/tools_season_title" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/seasons_date"
+        style="@style/DetailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        tools:text="@string/tools_season_date" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/seasons_episodes"
+        style="@style/DetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        tools:text="@string/tools_season_episodes" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one_dimen"
+        android:layout_below="@+id/seasons_episodes"
+        android:background="@android:color/darker_gray" />
+
+</RelativeLayout>

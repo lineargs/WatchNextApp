@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Grey / Black -->
+    <color name="colorGreyLight">#9E9E9E</color>
+    <color name="colorGrey">#757575</color>
+    <color name="colorGreyDark">#616161</color>
+
+    <!-- Blue Grey / Black -->
+    <color name="colorBlueGreyLight">#C8E6C9</color>
+    <color name="colorBlueGrey">#78909C</color>
+    <color name="colorBlueGreyDark">#546E7A</color>
+
+    <!-- Yellow -->
+    <color name="colorYellow">#FFD600</color>
+    <color name="colorYellowTransparent">#66FFD600</color>
+
+    <!-- Other colors -->
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="shortcutBackground">#fff5f5f5</color>
+
+</resources>

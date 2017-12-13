@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme Settings options -->
+    <string-array name="pref_theme_options">
+        <item>@string/pref_theme_grey_label</item>
+        <item>@string/pref_theme_blue_grey_label</item>
+    </string-array>
+
+    <!-- Theme Settings values -->
+    <string-array name="pref_theme_values">
+        <item>@string/pref_theme_grey_key</item>
+        <item>@string/pref_theme_blue_grey_key</item>
+    </string-array>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base Theme -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <!-- Grey App Theme -->
+    <style name="GreyTheme" parent="BaseAppTheme">
+        <item name="colorPrimary">@color/colorGrey</item>
+        <item name="colorPrimaryDark">@color/colorGreyDark</item>
+        <item name="colorAccent">@color/colorBlack</item>
+        <item name="background">@color/colorYellowTransparent</item>
+    </style>
+
+    <!-- Blue Grey App Theme -->
+    <style name="BlueGreyTheme" parent="BaseAppTheme">
+        <item name="colorPrimary">@color/colorBlueGrey</item>
+        <item name="colorPrimaryDark">@color/colorBlueGreyDark</item>
+        <item name="colorAccent">@color/colorBlack</item>
+        <item name="background">@color/colorYellowTransparent</item>
+    </style>
+
+</resources>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/icon_shortcut_movies"
+        android:shortcutDisabledMessage="@string/no_app_available"
+        android:shortcutId="movies"
+        android:shortcutLongLabel="@string/title_activity_tabbed_movies"
+        android:shortcutShortLabel="@string/title_activity_tabbed_movies">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.TabbedMoviesActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/icon_shortcut_series"
+        android:shortcutDisabledMessage="@string/no_app_available"
+        android:shortcutId="series"
+        android:shortcutLongLabel="@string/title_activity_tabbed_series"
+        android:shortcutShortLabel="@string/title_activity_tabbed_series">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.TabbedSeriesActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/icon_shortcut_theater"
+        android:shortcutDisabledMessage="@string/no_app_available"
+        android:shortcutId="theater"
+        android:shortcutLongLabel="@string/title_activity_theater"
+        android:shortcutShortLabel="@string/title_activity_theater">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lineargs.watchnext.ui.TheaterActivity"
+            android:targetPackage="com.lineargs.watchnext" />
+    </shortcut>
+
+</shortcuts>

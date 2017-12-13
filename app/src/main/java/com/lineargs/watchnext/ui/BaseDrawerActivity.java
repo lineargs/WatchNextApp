@@ -1,0 +1,196 @@
+package com.lineargs.watchnext.ui;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+
+import com.lineargs.watchnext.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by goranminov on 05/11/2017.
+ * <p>
+ * Adds Navigation Drawer to {@link BaseActivity}
+ */
+
+public abstract class BaseDrawerActivity extends BaseActivity {
+
+    private static final int NAV_DRAWER_CLOSE_DELAY = 250;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    private Handler handler;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        handler = new Handler();
+    }
+
+    @Override
+    protected void setCustomTheme() {
+        super.setCustomTheme();
+    }
+
+    /**
+     * Initializes the navigation drawer. Implementers must call this
+     * in {@link #onCreate} after {@link #setContentView}.
+     */
+    public void setupNavDrawer() {
+        ButterKnife.bind(this);
+        navigationView.inflateMenu(R.menu.activity_main_drawer);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                onNavItemClicked(item.getItemId());
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isNavDrawerOpen()) {
+            closeNavDrawer();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    /**
+     * Simple switch statement checking if we are already displaying the correct screen
+     *
+     * @param itemId Navigation menu item
+     */
+    private void onNavItemClicked(int itemId) {
+        Intent intent = null;
+        switch (itemId) {
+            case R.id.nav_favorite:
+                if (this instanceof MainActivity) {
+                    break;
+                }
+                intent = new Intent(this, MainActivity.class);
+                break;
+            case R.id.nav_movies:
+                if (this instanceof TabbedMoviesActivity) {
+                    break;
+                }
+                intent = new Intent(this, TabbedMoviesActivity.class);
+                break;
+            case R.id.nav_series:
+                if (this instanceof TabbedSeriesActivity) {
+                    break;
+                }
+                intent = new Intent(this, TabbedSeriesActivity.class);
+                break;
+            case R.id.nav_theaters:
+                if (this instanceof TheaterActivity) {
+                    break;
+                }
+                intent = new Intent(this, TheaterActivity.class);
+                break;
+            case R.id.nav_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                break;
+        }
+
+        if (intent != null) {
+            final Intent finalIntent = intent;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startNavDrawerItem(finalIntent);
+                }
+            }, NAV_DRAWER_CLOSE_DELAY);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    private void startNavDrawerItem(Intent intent) {
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    /**
+     * @return true if Nav Drawer is open
+     */
+    public boolean isNavDrawerOpen() {
+        return drawerLayout.isDrawerOpen(navigationView);
+    }
+
+    /**
+     * Hilghlights the given position. Activities listed
+     * should call this method in {@link #onStart()}
+     *
+     * @param menuItemId Navigation menu item
+     */
+    public void setDrawerSelectedItem(@IdRes int menuItemId) {
+        navigationView.setCheckedItem(menuItemId);
+    }
+
+    public void setDrawerIndicatorEnabled() {
+        toolbar.setNavigationIcon(R.drawable.icon_menu_white);
+    }
+
+    public void openNavDrawer() {
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    public void closeNavDrawer() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    public boolean toggleDrawer(MenuItem item) {
+        if (item != null && item.getItemId() == android.R.id.home) {
+            if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return true if the device is connected to WiFi or mobile data
+     */
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Shows snackbar if the device is not connected
+     */
+    public void showSnackBar() {
+        if (!isConnected()) {
+            Snackbar.make(findViewById(R.id.drawer_layout), getString(R.string.snackbar_no_connection), Snackbar.LENGTH_INDEFINITE).show();
+        }
+    }
+}
