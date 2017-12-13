@@ -173,5 +173,6 @@
     <string name="tmdb_api_terms">TMDb API Terms</string>
     <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
     <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
+    <string name="open_source_text">This application is open source at https://github.com/lineargs/WatchNextApp</string>
 
 </resources>

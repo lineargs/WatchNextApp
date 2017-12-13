@@ -20,10 +20,12 @@
         android:layout_height="wrap_content"
         android:text="@string/about_version" />
 
-    <View
+    <android.support.v7.widget.AppCompatTextView
+        style="@style/DetailText"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/one_dimen"
-        android:background="?colorPrimary" />
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:text="@string/open_source_text" />
 
     <android.support.v7.widget.AppCompatTextView
         style="@style/DetailText"
@@ -78,5 +80,10 @@
                 android:text="@string/tmdb_api_terms" />
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one_dimen"
+        android:background="?colorPrimary" />
 
 </LinearLayout>
