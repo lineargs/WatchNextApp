@@ -2,8 +2,10 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.data.CrewQuery;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +25,6 @@ import butterknife.ButterKnife;
  * See {@link MainAdapter}
  */
 
-@SuppressWarnings("unused")
 public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
@@ -73,15 +76,16 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void bindViews(int position) {
-//            mCursor.moveToPosition(position);
-//            crewName.setText(mCursor.getString(MovieDetailsFragment.INDEX_CREW_NAME));
-//            crewJob.setText(mCursor.getString(MovieDetailsFragment.INDEX_CREW_JOB));
-//            Picasso.with(profilePath.getContext())
-//                    .load(mCursor.getString(MovieDetailsFragment.INDEX_CREW_PROFILE_PATH))
-//                    .centerInside()
-//                    .error(R.drawable.ic_broken_image_black_24px)
-//                    .fit()
-//                    .into(profilePath);
+            cursor.moveToPosition(position);
+            Log.w("Cursor", DatabaseUtils.dumpCursorToString(cursor));
+            crewName.setText(cursor.getString(CrewQuery.CREW_NAME));
+            crewJob.setText(cursor.getString(CrewQuery.CREW_JOB));
+            Picasso.with(profilePath.getContext())
+                    .load(cursor.getString(CrewQuery.PROFILE_PATH))
+                    .centerCrop()
+                    .error(R.drawable.icon_person_grey)
+                    .fit()
+                    .into(profilePath);
         }
     }
 }

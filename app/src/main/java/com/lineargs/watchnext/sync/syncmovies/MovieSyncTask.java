@@ -6,12 +6,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.dbutils.CreditDbUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
-import com.lineargs.watchnext.utils.retrofit.movies.Movies;
+import com.lineargs.watchnext.utils.dbutils.VideosDbUtils;
 import com.lineargs.watchnext.utils.retrofit.movies.MoviesAPI;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 
@@ -54,9 +54,18 @@ class MovieSyncTask {
             public void onResponse(@NonNull Call<MovieDetail> call, @NonNull final Response<MovieDetail> response) {
 
                 if (response.isSuccessful() && response.body() != null) {
-                    ContentValues values = MovieDbUtils.updateMovie(response.body());
+                    ContentValues updateValues = MovieDbUtils.updateMovie(response.body());
                     UpdateMovie updateMovie = new UpdateMovie(context);
-                    updateMovie.execute(values);
+                    updateMovie.execute(updateValues);
+                    ContentValues[] castValues = CreditDbUtils.getMovieCastContentValues(response.body().getCredits(), id);
+                    InsertMovieCast insertMovieCast = new InsertMovieCast(context);
+                    insertMovieCast.execute(castValues);
+                    ContentValues[] crewValues = CreditDbUtils.getMovieCrewContentValues(response.body().getCredits(), id);
+                    InsertMovieCrew insertMovieCrew = new InsertMovieCrew(context);
+                    insertMovieCrew.execute(crewValues);
+                    ContentValues[] videoValues = VideosDbUtils.getMovieVideosContentValues(response.body().getVideos(), id);
+                    InsertVideos insertVideos = new InsertVideos(context);
+                    insertVideos.execute(videoValues);
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
                 }
@@ -85,6 +94,68 @@ class MovieSyncTask {
                 if (values != null) {
                     contentResolver.update(mUri, values, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?",
                             new String[]{id});
+                }
+            }
+            return null;
+        }
+    }
+
+    static class InsertMovieCast extends AsyncTask<ContentValues, Void, Void> {
+        private final WeakReference<Context> weakReference;
+
+        InsertMovieCast(Context context) {
+            this.weakReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(ContentValues... contentValues) {
+            Context context = weakReference.get();
+            if (context != null) {
+                ContentResolver contentResolver = context.getContentResolver();
+                if (contentValues != null && contentValues.length != 0) {
+                    contentResolver.bulkInsert(DataContract.CreditCast.CONTENT_URI, contentValues);
+                }
+
+            }
+            return null;
+        }
+    }
+
+    static class InsertMovieCrew extends AsyncTask<ContentValues, Void, Void> {
+        private final WeakReference<Context> weakReference;
+
+        InsertMovieCrew(Context context) {
+            this.weakReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(ContentValues... contentValues) {
+            Context context = weakReference.get();
+            if (context != null) {
+                ContentResolver contentResolver = context.getContentResolver();
+                if (contentValues != null && contentValues.length != 0) {
+                    contentResolver.bulkInsert(DataContract.CreditCrew.CONTENT_URI, contentValues);
+                }
+
+            }
+            return null;
+        }
+    }
+
+    static class InsertVideos extends AsyncTask<ContentValues, Void, Void> {
+        private final WeakReference<Context> weakReference;
+
+        InsertVideos(Context context) {
+            this.weakReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(ContentValues... contentValues) {
+            Context context = weakReference.get();
+            if (context != null) {
+                ContentResolver contentResolver = context.getContentResolver();
+                if (contentValues != null && contentValues.length != 0) {
+                    contentResolver.bulkInsert(DataContract.Videos.CONTENT_URI, contentValues);
                 }
             }
             return null;

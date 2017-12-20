@@ -17,7 +17,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +31,7 @@ import android.widget.Toast;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.CastQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.synccredits.CreditSyncUtils;
@@ -229,7 +228,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
                 Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         uri,
-                        CreditsQuery.CAST_PROJECTION,
+                        CastQuery.CAST_PROJECTION,
                         null,
                         null,
                         null);

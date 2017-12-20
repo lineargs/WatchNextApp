@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.CastQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;
@@ -82,9 +82,9 @@ public class CreditsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bindViews(int position) {
             cursor.moveToPosition(position);
-            name.setText(cursor.getString(CreditsQuery.NAME));
-            characterName.setText(cursor.getString(CreditsQuery.CHARACTER_NAME));
-            ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
+            name.setText(cursor.getString(CastQuery.NAME));
+            characterName.setText(cursor.getString(CastQuery.CHARACTER_NAME));
+            ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(CastQuery.PROFILE_PATH))
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
@@ -94,7 +94,7 @@ public class CreditsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @Override
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CreditsQuery.PERSON_ID);
+            String id = cursor.getString(CastQuery.PERSON_ID);
             callBack.onPersonClick(id);
         }
     }

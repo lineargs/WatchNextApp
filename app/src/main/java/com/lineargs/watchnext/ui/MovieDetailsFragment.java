@@ -4,7 +4,6 @@ package com.lineargs.watchnext.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +18,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,11 +31,12 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
+import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.CastQuery;
+import com.lineargs.watchnext.data.CrewQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.sync.synccredits.CreditSyncUtils;
 import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
@@ -56,7 +55,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
 
     static final String ID = "id", TITLE = "title";
-    private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333;
+    private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333, CREW_LOADER_ID = 445;
     private static final String URI = "uri";
     @Nullable
     @BindView(R.id.cover_poster)
@@ -70,14 +69,23 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     RecyclerView mCastRecyclerView;
     @BindView(R.id.movie_details_recycler_view)
     RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    @BindView(R.id.cast_progress_bar)
+    ProgressBar mCastProgressBar;
     @BindView(R.id.cast_linear_layout)
     LinearLayout mCastLayout;
     @BindView(R.id.empty_cast)
     AppCompatTextView mEmptyCast;
+    @BindView(R.id.crew_recycler_view)
+    RecyclerView mCrewRecyclerView;
+    @BindView(R.id.crew_linear_layout)
+    LinearLayout mCrewLayout;
+    @BindView(R.id.empty_crew)
+    AppCompatTextView mEmptyCrew;
+    @BindView(R.id.crew_progress_bar)
+    ProgressBar mCrewProgressBar;
     private Uri mUri;
     private CastAdapter mCastAdapter;
+    private CrewAdapter mCrewAdapter;
     private MovieDetailAdapter mAdapter;
     private Handler handler;
     private String title = "";
@@ -121,20 +129,27 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         mCastAdapter = new CastAdapter(context, this);
         mCastRecyclerView.setAdapter(mCastAdapter);
 
+        LinearLayoutManager crewManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mCrewRecyclerView.setLayoutManager(crewManager);
+        mCrewRecyclerView.setHasFixedSize(true);
+        mCrewAdapter = new CrewAdapter(context);
+        mCrewRecyclerView.setAdapter(mCrewAdapter);
+
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
             starFab.setVisibility(View.GONE);
         }
 
         if (mUri != null) {
             if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
-                CreditSyncUtils.syncMovieCredits(context, mUri.getLastPathSegment());
                 MovieSyncUtils.syncMovieDetail(context, mUri);
-                startLoading();
+                startCastLoading();
+                startCrewLoading();
             }
         }
 
         getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
         getLoaderManager().initLoader(CAST_LOADER_ID, null, this);
+        getLoaderManager().initLoader(CREW_LOADER_ID, null, this);
     }
 
     @Override
@@ -161,22 +176,40 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         outState.putString(URI, String.valueOf(mUri));
     }
 
-    private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
+    private void startCastLoading() {
+        mCastProgressBar.setVisibility(View.VISIBLE);
         mCastLayout.setVisibility(View.GONE);
         mEmptyCast.setVisibility(View.GONE);
     }
 
     private void showCastData() {
-        mProgressBar.setVisibility(View.GONE);
+        mCastProgressBar.setVisibility(View.GONE);
         mCastLayout.setVisibility(View.VISIBLE);
         mEmptyCast.setVisibility(View.GONE);
     }
 
-    private void showEmpty() {
-        mProgressBar.setVisibility(View.GONE);
+    private void showEmptyCast() {
+        mCastProgressBar.setVisibility(View.GONE);
         mCastLayout.setVisibility(View.GONE);
         mEmptyCast.setVisibility(View.VISIBLE);
+    }
+
+    private void startCrewLoading() {
+        mCrewProgressBar.setVisibility(View.VISIBLE);
+        mCrewLayout.setVisibility(View.GONE);
+        mEmptyCrew.setVisibility(View.GONE);
+    }
+
+    private void showCrewData() {
+        mCrewProgressBar.setVisibility(View.GONE);
+        mCrewLayout.setVisibility(View.VISIBLE);
+        mEmptyCrew.setVisibility(View.GONE);
+    }
+
+    private void showEmptyCrew() {
+        mCrewProgressBar.setVisibility(View.GONE);
+        mCrewLayout.setVisibility(View.GONE);
+        mEmptyCrew.setVisibility(View.VISIBLE);
     }
 
     /* If the activity is opened from anywhere except the Main activity we have an option
@@ -210,7 +243,15 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         uri,
-                        CreditsQuery.CAST_PROJECTION,
+                        CastQuery.CAST_PROJECTION,
+                        null,
+                        null,
+                        null);
+            case CREW_LOADER_ID:
+                Uri crewUri = DataContract.CreditCrew.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+                return new CursorLoader(getContext(),
+                        crewUri,
+                        CrewQuery.CREW_PROJECTION,
                         null,
                         null,
                         null);
@@ -247,7 +288,22 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            showEmpty();
+                            showEmptyCast();
+                        }
+                    }, 7000);
+                }
+                break;
+            case CREW_LOADER_ID:
+                mCrewAdapter.swapCursor(data);
+                if (data != null && data.getCount() != 0) {
+                    handler.removeCallbacksAndMessages(null);
+                    data.moveToFirst();
+                    showCrewData();
+                } else if (data != null && data.getCount() == 0) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showEmptyCrew();
                         }
                     }, 7000);
                 }
@@ -304,7 +360,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     }
 
     private void imageLoad(Cursor cursor) {
-        Log.w("Cursor", DatabaseUtils.dumpCursorToString(cursor));
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
         if (isFavorite(getContext(), id)) {

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.CastQuery;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -83,10 +83,10 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void bindViews(int position) {
             cursor.moveToPosition(position);
-            castName.setText(cursor.getString(CreditsQuery.NAME));
-            castCharacter.setText(cursor.getString(CreditsQuery.CHARACTER_NAME));
+            castName.setText(cursor.getString(CastQuery.NAME));
+            castCharacter.setText(cursor.getString(CastQuery.CHARACTER_NAME));
             Picasso.with(profilePath.getContext())
-                    .load(cursor.getString(CreditsQuery.PROFILE_PATH))
+                    .load(cursor.getString(CastQuery.PROFILE_PATH))
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
                     .fit()
@@ -96,7 +96,7 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CreditsQuery.PERSON_ID);
+            String id = cursor.getString(CastQuery.PERSON_ID);
             callback.onPersonClick(id);
         }
     }

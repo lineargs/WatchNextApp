@@ -65,8 +65,7 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
         mAdapter = new VideosAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
 
-        if (mUri != null && savedState == null) {
-            VideosSyncUtils.syncVideos(getContext(), mUri.getLastPathSegment());
+        if (savedState == null) {
             startLoading();
         }
 
@@ -121,7 +120,7 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
                         public void run() {
                             showEmpty();
                         }
-                    }, 5000);
+                    }, 3000);
 
                 }
                 break;

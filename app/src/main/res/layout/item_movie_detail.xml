@@ -24,6 +24,16 @@
         tools:text="@string/tools_movie_date" />
 
     <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/runtime"
+        style="@style/DetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_timelapse_black"
+        android:drawablePadding="@dimen/text_view_drawable_padding"
+        android:drawableStart="@drawable/icon_timelapse_black"
+        tools:text="@string/tools_runtime" />
+
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/vote_average"
         style="@style/DetailText"
         android:layout_width="match_parent"

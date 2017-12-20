@@ -11,14 +11,13 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.CastQuery;
 import com.lineargs.watchnext.data.DataContract;
 
 import butterknife.BindView;
@@ -93,7 +92,7 @@ public class CreditsFragment extends BaseFragment implements LoaderManager.Loade
             case LOADER_ID:
                 return new CursorLoader(getContext(),
                         mUri,
-                        CreditsQuery.CAST_PROJECTION,
+                        CastQuery.CAST_PROJECTION,
                         null,
                         null,
                         null);

@@ -37,6 +37,7 @@
     <string name="sort_menu_title">Title</string>
     <string name="sort_menu_highest_rated">Highest Rated</string>
     <string name="sort_menu_lowest_rated">Lowest Rated</string>
+
     <!-- Titles and subtitles -->
     <string name="title_activity_review">Reviews</string>
     <string name="title_activity_credits">Cast</string>
@@ -115,6 +116,8 @@
     <string name="star_image_content_description">Star image</string>
     <string name="date_pattern" translatable="false">dd MMM yyyy</string>
     <string name="nav_icon_content_description">Application icon</string>
+    <string name="runtime">%s mins</string>
+    <string name="status_text">Status</string>
 
     <!-- Shortcuts -->
     <string name="no_app_available">No app available to handle this</string>
@@ -137,6 +140,7 @@
     <string name="tools_season_title" translatable="false">Season 12345</string>
     <string name="tools_season_date" translatable="false">29 Oct 1988</string>
     <string name="tools_season_episodes" translatable="false">24 Episodes</string>
+    <string name="tools_runtime">135 mins</string>
 
     <!-- Content Description -->
     <string name="toolbar_content_description">Toolbar navigation</string>
