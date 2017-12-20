@@ -115,6 +115,9 @@
         <service
             android:name=".jobs.ReminderIntentService"
             android:exported="false" />
+        <service
+            android:name=".sync.syncmovies.MovieSyncIntentService"
+            android:exported="false"/>
 
         <!-- Widget Service -->
         <service

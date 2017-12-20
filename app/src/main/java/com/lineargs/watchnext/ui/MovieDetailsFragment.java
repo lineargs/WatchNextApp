@@ -4,6 +4,7 @@ package com.lineargs.watchnext.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,6 +38,7 @@ import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.synccredits.CreditSyncUtils;
+import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
@@ -126,6 +128,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         if (mUri != null) {
             if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
                 CreditSyncUtils.syncMovieCredits(context, mUri.getLastPathSegment());
+                MovieSyncUtils.syncMovieDetail(context, mUri);
                 startLoading();
             }
         }
@@ -301,6 +304,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     }
 
     private void imageLoad(Cursor cursor) {
+        Log.w("Cursor", DatabaseUtils.dumpCursorToString(cursor));
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
         if (isFavorite(getContext(), id)) {

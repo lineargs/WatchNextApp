@@ -83,7 +83,8 @@
 
     <!-- Credits -->
     <string name="text_not_available">N / A</string>
-    <string name="cast_empty_text">No credits found</string>
+    <string name="cast_empty_text">No cast found</string>
+    <string name="crew_empty_text">No crew found</string>
     <string name="biography_text">Biography</string>
     <string name="person_content_description">Person photo</string>
     <string name="cast_text_view">Cast</string>
@@ -166,7 +167,7 @@
     <string name="navigation_back_content_description">Go back</string>
 
     <!-- About -->
-    <string name="about_version">Version 1.0 (Database version 37)</string>
+    <string name="about_version">Version 1.0 (Database version 39)</string>
     <string name="the_tmdb">The TMDb</string>
     <string name="tmdb_notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
     <string name="tmdb_terms">TMDb Terms</string>

@@ -55,6 +55,8 @@
 
                     <include layout="@layout/fragment_cast" />
 
+                    <include layout="@layout/fragment_crew" />
+
                     <include layout="@layout/item_footer_movies" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>

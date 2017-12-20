@@ -54,9 +54,9 @@ public class SearchDbUtils {
         for (SeriesResult result : results) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(DataContract.SearchTv.COLUMN_MOVIE_ID, result.getId());
-            contentValues.put(DataContract.SearchTv.COLUMN_TITLE, result.getName());
-            contentValues.put(DataContract.SearchTv.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + result.getPosterPath());
+            contentValues.put(DataContract.Search.COLUMN_MOVIE_ID, result.getId());
+            contentValues.put(DataContract.Search.COLUMN_TITLE, result.getName());
+            contentValues.put(DataContract.Search.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + result.getPosterPath());
 
             values[i] = contentValues;
             i++;

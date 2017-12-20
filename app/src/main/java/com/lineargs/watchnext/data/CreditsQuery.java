@@ -9,22 +9,18 @@ package com.lineargs.watchnext.data;
 public interface CreditsQuery {
 
     String[] CAST_PROJECTION = new String[]{
-            DataContract.CreditCast._ID,
-            DataContract.CreditCast.COLUMN_MOVIE_ID,
             DataContract.CreditCast.COLUMN_PERSON_ID,
             DataContract.CreditCast.COLUMN_NAME,
             DataContract.CreditCast.COLUMN_CHARACTER_NAME,
             DataContract.CreditCast.COLUMN_PROFILE_PATH
     };
 
-    int _ID = 0;
-    int MOVIE_ID = 1;
-    int PERSON_ID = 2;
-    int NAME = 3;
-    int CHARACTER_NAME = 4;
-    int PROFILE_PATH = 5;
+    int PERSON_ID = 0;
+    int NAME = 1;
+    int CHARACTER_NAME = 2;
+    int PROFILE_PATH = 3;
 
-    @SuppressWarnings("unused")
+
     String[] CREW_PROJECTION = new String[]{
             DataContract.CreditCrew._ID,
             DataContract.CreditCrew.COLUMN_MOVIE_ID,
@@ -36,10 +32,8 @@ public interface CreditsQuery {
             DataContract.CreditCrew.COLUMN_JOB
     };
 
-    /* Unused
-     * int CREW_ID = 2;
-     * int CREDIT_ID = 4;
-     * int DEPARTMENT = 5;
-     * int JOB = 6;
-    */
+     int CREW_ID = 2;
+     int CREDIT_ID = 4;
+     int DEPARTMENT = 5;
+     int JOB = 6;
 }

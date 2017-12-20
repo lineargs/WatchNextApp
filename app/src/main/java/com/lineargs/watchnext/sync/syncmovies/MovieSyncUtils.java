@@ -2,6 +2,7 @@ package com.lineargs.watchnext.sync.syncmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 /**
@@ -12,27 +13,9 @@ import android.support.annotation.NonNull;
 
 public class MovieSyncUtils {
 
-    public static void syncPopularMovies(@NonNull Context context) {
+    public static void syncMovieDetail (@NonNull Context context, Uri uri) {
         Intent intent = new Intent(context, MovieSyncIntentService.class);
-        intent.putExtra(MovieSyncIntentService.SYNC, 1);
-        context.startService(intent);
-    }
-
-    public static void syncTopMovies(@NonNull Context context) {
-        Intent intent = new Intent(context, MovieSyncIntentService.class);
-        intent.putExtra(MovieSyncIntentService.SYNC, 2);
-        context.startService(intent);
-    }
-
-    public static void syncUpcomingMovies(@NonNull Context context) {
-        Intent intent = new Intent(context, MovieSyncIntentService.class);
-        intent.putExtra(MovieSyncIntentService.SYNC, 3);
-        context.startService(intent);
-    }
-
-    public static void syncTheaterMovies(@NonNull Context context) {
-        Intent intent = new Intent(context, MovieSyncIntentService.class);
-        intent.putExtra(MovieSyncIntentService.SYNC, 4);
+        intent.setData(uri);
         context.startService(intent);
     }
 }

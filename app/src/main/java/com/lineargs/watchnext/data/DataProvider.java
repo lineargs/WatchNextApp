@@ -14,11 +14,8 @@ import android.support.annotation.Nullable;
  * Created by goranminov on 15/10/2017.
  * <p>
  * This class serves as the ContentProvider for all of WatchNext's data. This class allows us to
- * bulkInsert, query, and delete data.
+ * bulkInsert, insert, query, update and delete data.
  * <p>
- * Although ContentProvider implementation requires the implementation of additional methods to
- * perform single inserts, updates, and the ability to get the type of the data from a URI.
- * However, here, they are not yet implemented.
  */
 
 public class DataProvider extends ContentProvider {
@@ -300,7 +297,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.TopRatedMovieEntry.TABLE_NAME,
                         projection,
-                        DataContract.TopRatedMovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -320,7 +317,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.UpcomingMovieEntry.TABLE_NAME,
                         projection,
-                        DataContract.UpcomingMovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -340,7 +337,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.TheaterMovieEntry.TABLE_NAME,
                         projection,
-                        DataContract.TheaterMovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -400,7 +397,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.PopularSerieEntry.TABLE_NAME,
                         projection,
-                        DataContract.PopularSerieEntry.COLUMN_SERIE_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -420,7 +417,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.TopRatedSerieEntry.TABLE_NAME,
                         projection,
-                        DataContract.TopRatedSerieEntry.COLUMN_SERIE_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -440,7 +437,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.OnTheAirSerieEntry.TABLE_NAME,
                         projection,
-                        DataContract.OnTheAirSerieEntry.COLUMN_SERIE_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -460,7 +457,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.Favorites.TABLE_NAME,
                         projection,
-                        DataContract.Favorites.COLUMN_FAV_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -500,7 +497,7 @@ public class DataProvider extends ContentProvider {
                 cursor = dataDbHelper.getReadableDatabase().query(
                         DataContract.SearchTv.TABLE_NAME,
                         projection,
-                        DataContract.SearchTv.COLUMN_MOVIE_ID + " = ? ",
+                        DataContract.Search.COLUMN_MOVIE_ID + " = ? ",
                         new String[]{uri.getLastPathSegment()},
                         null,
                         null,
@@ -1303,7 +1300,7 @@ public class DataProvider extends ContentProvider {
             case CODE_FAVORITES_WITH_ID:
                 rowsDeleted = dataDbHelper.getWritableDatabase().delete(
                         DataContract.Favorites.TABLE_NAME,
-                        DataContract.Favorites.COLUMN_FAV_ID + " = ? ",
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_SEARCH:

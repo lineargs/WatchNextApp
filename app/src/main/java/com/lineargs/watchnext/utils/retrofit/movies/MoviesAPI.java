@@ -1,6 +1,7 @@
 package com.lineargs.watchnext.utils.retrofit.movies;
 
 import com.lineargs.watchnext.utils.retrofit.credits.MovieCredits;
+import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -24,4 +25,11 @@ public interface MoviesAPI {
     Call<MovieCredits> getMovieCredits(
             @Path("movie_id") String movieId,
             @Query("api_key") String apiKey);
+
+    @GET("movie/{movie_id}")
+    Call<MovieDetail> getMovieDetail(
+            @Path("movie_id") String movieId,
+            @Query("api_key") String apiKey,
+            @Query("append_to_response") String append
+    );
 }

@@ -25,14 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="web"
+        android:layout_marginBottom="@dimen/padding_six"
         android:text="@string/open_source_text" />
-
-    <android.support.v7.widget.AppCompatTextView
-        style="@style/DetailText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/the_tmdb"
-        android:textStyle="bold" />
 
     <android.support.v7.widget.AppCompatTextView
         style="@style/DetailText"
@@ -40,6 +34,10 @@
         android:layout_height="wrap_content"
         android:text="@string/tmdb_notice" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one_dimen"
+        android:background="?colorPrimary" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,6 +61,10 @@
                 android:text="@string/tmdb_terms" />
         </LinearLayout>
 
+        <View
+            android:layout_width="@dimen/one_dimen"
+            android:layout_height="match_parent"
+            android:background="?colorPrimary" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

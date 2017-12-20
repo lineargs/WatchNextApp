@@ -65,6 +65,10 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_POPULAR_MOVIE)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_MOVIE;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_MOVIE;
+
         /*The movie details as returned by API*/
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";
@@ -75,8 +79,13 @@ public class DataContract {
         public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
         public static final String COLUMN_ORIGINAL_TITLE = "original_title";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_MOVIE;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_MOVIE;
+        public static final String COLUMN_IMDB_ID = "imdb_id";
+        public static final String COLUMN_HOMEPAGE = "homepage";
+        public static final String COLUMN_PRODUCTION_COMPANIES = "production_companies";
+        public static final String COLUMN_PRODUCTION_COUNTRIES = "production_countries";
+        public static final String COLUMN_RUNTIME = "runtime";
+        public static final String COLUMN_STATUS = "status";
+
         /* Used internally as the name of our popular movies table. */
         static final String TABLE_NAME = "popularmovies";
 
@@ -115,18 +124,14 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_TOP_RATED_MOVIE)
                 .build();
-        /*The movie details as returned by API*/
-        public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
-        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
-        public static final String COLUMN_ORIGINAL_TITLE = "original_title";
+
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOP_RATED_MOVIE;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOP_RATED_MOVIE;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
         /* Used internally as the name of our top rated movies table. */
         static final String TABLE_NAME = "topmovies";
 
@@ -151,18 +156,14 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_UPCOMING_MOVIE)
                 .build();
-        /*The movie details as returned by API*/
-        public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
-        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
-        public static final String COLUMN_ORIGINAL_TITLE = "original_title";
+
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_UPCOMING_MOVIE;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_UPCOMING_MOVIE;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
         /* Used internally as the name of our upcoming movies table. */
         static final String TABLE_NAME = "upcomingmovies";
 
@@ -187,18 +188,14 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_THEATER_MOVIE)
                 .build();
-        /*The movie details as returned by API*/
-        public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
-        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
-        public static final String COLUMN_ORIGINAL_TITLE = "original_title";
+
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_THEATER_MOVIE;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_THEATER_MOVIE;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
         /* Used internally as the name of our in theaters table. */
         static final String TABLE_NAME = "theatermovies";
 
@@ -223,14 +220,17 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_CREDIT_CAST)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
+
         /*The cast details as returned by API*/
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_PERSON_ID = "person_id";
         public static final String COLUMN_CHARACTER_NAME = "character_name";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PROFILE_PATH = "profile_path";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
+
         /* Used internally as the name of our casts table. */
         static final String TABLE_NAME = "casts";
 
@@ -249,13 +249,16 @@ public class DataContract {
     }
 
     /* Inner class that defines the table contents of the crew movies table */
-    @SuppressWarnings("unused")
     public static final class CreditCrew implements BaseColumns {
 
         /* The base CONTENT_URI used to query the crew table from the content provider */
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_CREDIT_CREW)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
+
         /*The crew details as returned by API*/
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_CREDIT_ID = "credit_id";
@@ -264,8 +267,7 @@ public class DataContract {
         public static final String COLUMN_JOB = "job";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PROFILE_PATH = "profile_path";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
+
         /* Used internally as the name of our crew table. */
         static final String TABLE_NAME = "crew";
 
@@ -290,20 +292,14 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_POPULAR_SERIE)
                 .build();
-        /* The serie details as returned by API. As you can see we use
-         * column name of movie_id for the serie_id for better implementation
-         */
-        public static final String COLUMN_SERIE_ID = "movie_id";
-        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_NAME = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
-        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
-        public static final String COLUMN_ORIGINAL_NAME = "original_title";
+
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_SERIE;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_SERIE;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
         /* Used internally as the name of our popular series table. */
         static final String TABLE_NAME = "popularseries";
 
@@ -328,20 +324,14 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_TOP_SERIE)
                 .build();
-        /* The serie details as returned by API. As you can see we use
-         * column name of movie_id for the serie_id for better implementation
-         */
-        public static final String COLUMN_SERIE_ID = "movie_id";
-        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_NAME = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
-        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
-        public static final String COLUMN_ORIGINAL_NAME = "original_title";
+
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOP_SERIE;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOP_SERIE;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
         /* Used internally as the name of our top rated series table. */
         static final String TABLE_NAME = "topseries";
 
@@ -366,20 +356,14 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_ON_THE_AIR_SERIE)
                 .build();
-        /* The serie details as returned by API. As you can see we use
-         * column name of movie_id for the serie_id for better implementation
-         */
-        public static final String COLUMN_SERIE_ID = "movie_id";
-        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_NAME = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
-        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
-        public static final String COLUMN_ORIGINAL_NAME = "original_title";
+
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ON_THE_AIR_SERIE;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ON_THE_AIR_SERIE;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
         /* Used internally as the name of our on the air series table. */
         static final String TABLE_NAME = "ontheairseries";
 
@@ -404,27 +388,21 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_FAVORITES)
                 .build();
-        /**
-         * The serie / movie details as queried by the cursor. See {@link com.lineargs.watchnext.utils.dbutils.DbUtils}
-         * As you can see we use column name of movie_id for the fav_id for better implementation
-         */
-        public static final String COLUMN_FAV_ID = "movie_id";
-        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
-        public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "release_date";
-        public static final String COLUMN_ORIGINAL_LANGUAGE = "original_language";
-        public static final String COLUMN_ORIGINAL_TITLE = "original_title";
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
         /*
          * We add this column for better implementation in our Favorites activity
          * where we check if the data in that row is movie or series
          * The value for movie is 0, and for series is 1
          */
         public static final String COLUMN_TYPE = "type";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
+
         /* Used internally as the name of our favorites table. */
         static final String TABLE_NAME = "favorites";
 
@@ -449,12 +427,15 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_SEARCH)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH;
+
         /* The search details as returned by API.*/
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_POSTER_PATH = "poster_path";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH;
+
         /* Used internally as the name of our search table. */
         static final String TABLE_NAME = "search";
 
@@ -479,12 +460,14 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_SEARCH_TV)
                 .build();
-        /* The search details as returned by API.*/
-        public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_POSTER_PATH = "poster_path";
+
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH_TV;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH_TV;
+
+        /* *************************************
+         * We use the Search column names
+         * ************************************* */
+
         /* Used internally as the name of our search table. */
         static final String TABLE_NAME = "searchtv";
 
@@ -509,6 +492,10 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_REVIEW)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
+
         /*
          * The review details as returned by API.
          */
@@ -517,8 +504,7 @@ public class DataContract {
         public static final String COLUMN_AUTHOR = "author";
         public static final String COLUMN_CONTENT = "content";
         public static final String COLUMN_URL = "url";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
+
         /* Used internally as the name of our review table. */
         static final String TABLE_NAME = "review";
 
@@ -543,6 +529,10 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_VIDEOS)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
+
         /*
          * The videos details as returned by API.
          */
@@ -553,8 +543,7 @@ public class DataContract {
         public static final String COLUMN_SITE = "site";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_IMG = "image";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
+
         /* Used internally as the name of our videos table. */
         static final String TABLE_NAME = "videos";
 
@@ -579,6 +568,10 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_SEASONS)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEASONS;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEASONS;
+
         /*
          * The seasons details as returned by API.
          */
@@ -589,8 +582,7 @@ public class DataContract {
         public static final String COLUMN_POSTER_PATH = "poster_path";
         public static final String COLUMN_SEASON_NUMBER = "season_number";
         public static final String COLUMN_SHOW_NAME = "name";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEASONS;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEASONS;
+
         /* Used internally as the name of our seasons table. */
         static final String TABLE_NAME = "seasons";
 
@@ -615,6 +607,10 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_EPISODES)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EPISODES;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EPISODES;
+
         /*
          * The details as returned by API.
          */
@@ -628,8 +624,7 @@ public class DataContract {
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_VOTE_COUNT = "vote_count";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EPISODES;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EPISODES;
+
         /* Used internally as the name of our table. */
         static final String TABLE_NAME = "episodes";
 
@@ -654,6 +649,10 @@ public class DataContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_PERSON)
                 .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PERSON;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PERSON;
+
         /*
          * The details as returned by API.
          */
@@ -664,8 +663,7 @@ public class DataContract {
         public static final String COLUMN_PLACE_OF_BIRTH = "place_of_birth";
         public static final String COLUMN_PROFILE_PATH = "profile_path";
         public static final String COLUMN_HOMEPAGE = "homepage";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PERSON;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PERSON;
+
         /* Used internally as the name of our table. */
         static final String TABLE_NAME = "person";
 

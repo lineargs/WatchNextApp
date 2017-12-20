@@ -10,9 +10,7 @@ public interface PersonQuery {
 
     /* The columns of data that we are interested in displaying. */
     String[] PERSON_PROJECTION = new String[]{
-//            DataContract.Person._ID,
             DataContract.Person.COLUMN_PERSON_ID,
-//            DataContract.Person.COLUMN_BIRTHDAY,
             DataContract.Person.COLUMN_NAME,
             DataContract.Person.COLUMN_BIOGRAPHY,
             DataContract.Person.COLUMN_PLACE_OF_BIRTH,
@@ -25,9 +23,8 @@ public interface PersonQuery {
      * to access the data from our query. If the order of the Strings above changes, these
      * indices must be adjusted to match the order of the Strings.
      */
-//    int _ID = 0;
+
     int ID = 0;
-    //    int BIRTHDAY = 2;
     int NAME = 1;
     int BIOGRAPHY = 2;
     int PLACE_OF_BIRTH = 3;

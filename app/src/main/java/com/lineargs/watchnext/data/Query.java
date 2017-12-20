@@ -24,7 +24,13 @@ public interface Query {
             DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE,
             DataContract.PopularMovieEntry.COLUMN_POSTER_PATH,
             DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH,
-            DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE
+            DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE,
+            DataContract.PopularMovieEntry.COLUMN_IMDB_ID,
+            DataContract.PopularMovieEntry.COLUMN_HOMEPAGE,
+            DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES,
+            DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES,
+            DataContract.PopularMovieEntry.COLUMN_RUNTIME,
+            DataContract.PopularMovieEntry.COLUMN_STATUS
     };
 
     /*
@@ -42,4 +48,10 @@ public interface Query {
     int POSTER_PATH = 7;
     int BACKDROP_PATH = 8;
     int ORIGINAL_LANGUAGE = 9;
+    int IMDB_ID = 10;
+    int HOMEPAGE = 11;
+    int PRODUCTION_COMPANIES = 12;
+    int PRODUCTION_COUNTRIES = 13;
+    int RUNTIME = 14;
+    int STATUS = 15;
 }

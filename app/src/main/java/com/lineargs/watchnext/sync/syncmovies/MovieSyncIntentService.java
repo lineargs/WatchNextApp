@@ -9,10 +9,9 @@ import android.content.Intent;
  * <p>
  * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncIntentService}
  */
-@SuppressLint({"unused", "Registered"})
 public class MovieSyncIntentService extends IntentService {
 
-    static final String SYNC = "syncmovies";
+    static final String ID = "movie_id";
     private final static String TAG = "MovieSyncIntentService";
 
     public MovieSyncIntentService() {
@@ -21,24 +20,8 @@ public class MovieSyncIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
-        if (intent.hasExtra(SYNC)) {
-            switch (intent.getIntExtra(SYNC, 0)) {
-                case 0:
-                    break;
-                case 1:
-                    MovieSyncTask.syncPopularMovies(this);
-                    break;
-                case 2:
-                    MovieSyncTask.syncTopMovies(this);
-                    break;
-                case 3:
-                    MovieSyncTask.syncUpcomingMovies(this);
-                    break;
-                case 4:
-                    MovieSyncTask.syncTheaterMovies(this);
-                    break;
-            }
+        if (intent.getData() != null) {
+            MovieSyncTask.syncMovieDetail(this, intent.getData());
         }
     }
 }

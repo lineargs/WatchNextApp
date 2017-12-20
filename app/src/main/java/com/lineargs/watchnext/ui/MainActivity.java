@@ -13,6 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.lineargs.watchnext.adapters.MainAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -163,15 +166,15 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.sort_title:
-                        bundle.putString(BUNDLE_ARG, DataContract.Favorites.COLUMN_TITLE + ASC);
+                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_TITLE + ASC);
                         getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
                         break;
                     case R.id.sort_highest_rated:
-                        bundle.putString(BUNDLE_ARG, DataContract.Favorites.COLUMN_VOTE_AVERAGE + DESC);
+                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + DESC);
                         getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
                         break;
                     case R.id.sort_lowest_rated:
-                        bundle.putString(BUNDLE_ARG, DataContract.Favorites.COLUMN_VOTE_AVERAGE + ASC);
+                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + ASC);
                         getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
                         break;
                 }
@@ -256,7 +259,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         String id = uri.getLastPathSegment();
         Cursor cursor = this.getContentResolver().query(DataContract.Favorites.CONTENT_URI,
                 null,
-                DataContract.Favorites.COLUMN_TYPE + " = ? AND " + DataContract.Favorites.COLUMN_FAV_ID + " = ? ",
+                DataContract.Favorites.COLUMN_TYPE + " = ? AND " + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                 new String[]{String.valueOf(1), id},
                 null);
         if (cursor == null) {
