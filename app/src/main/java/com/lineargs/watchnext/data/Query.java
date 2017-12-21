@@ -30,7 +30,8 @@ public interface Query {
             DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES,
             DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES,
             DataContract.PopularMovieEntry.COLUMN_RUNTIME,
-            DataContract.PopularMovieEntry.COLUMN_STATUS
+            DataContract.PopularMovieEntry.COLUMN_STATUS,
+            DataContract.PopularMovieEntry.COLUMN_GENRES
     };
 
     /*
@@ -54,4 +55,5 @@ public interface Query {
     int PRODUCTION_COUNTRIES = 13;
     int RUNTIME = 14;
     int STATUS = 15;
+    int GENRES = 16;
 }

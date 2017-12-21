@@ -77,7 +77,6 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void bindViews(int position) {
             cursor.moveToPosition(position);
-            Log.w("Cursor", DatabaseUtils.dumpCursorToString(cursor));
             crewName.setText(cursor.getString(CrewQuery.CREW_NAME));
             crewJob.setText(cursor.getString(CrewQuery.CREW_JOB));
             Picasso.with(profilePath.getContext())

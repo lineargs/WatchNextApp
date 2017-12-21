@@ -11,6 +11,7 @@ import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.dbutils.CreditDbUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
+import com.lineargs.watchnext.utils.dbutils.ReviewsDbUtils;
 import com.lineargs.watchnext.utils.dbutils.VideosDbUtils;
 import com.lineargs.watchnext.utils.retrofit.movies.MoviesAPI;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
@@ -66,6 +67,9 @@ class MovieSyncTask {
                     ContentValues[] videoValues = VideosDbUtils.getMovieVideosContentValues(response.body().getVideos(), id);
                     InsertVideos insertVideos = new InsertVideos(context);
                     insertVideos.execute(videoValues);
+                    ContentValues[] reviewsValues = ReviewsDbUtils.getReviewsContentValues(response.body().getReviews(), id);
+                    InsertReviews insertReviews = new InsertReviews(context);
+                    insertReviews.execute(reviewsValues);
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
                 }
@@ -156,6 +160,26 @@ class MovieSyncTask {
                 ContentResolver contentResolver = context.getContentResolver();
                 if (contentValues != null && contentValues.length != 0) {
                     contentResolver.bulkInsert(DataContract.Videos.CONTENT_URI, contentValues);
+                }
+            }
+            return null;
+        }
+    }
+
+    static class InsertReviews extends AsyncTask<ContentValues, Void, Void> {
+        private final WeakReference<Context> weakReference;
+
+        InsertReviews(Context context) {
+            this.weakReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(ContentValues... contentValues) {
+            Context context = weakReference.get();
+            if (context != null) {
+                ContentResolver contentResolver = context.getContentResolver();
+                if (contentValues != null && contentValues.length != 0) {
+                    contentResolver.bulkInsert(DataContract.Review.CONTENT_URI, contentValues);
                 }
             }
             return null;

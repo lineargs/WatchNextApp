@@ -73,6 +73,8 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         AppCompatTextView companies;
         @BindView(R.id.countries)
         AppCompatTextView countries;
+        @BindView(R.id.genres)
+        AppCompatTextView genres;
 
         MovieViewHolder(View view) {
             super(view);
@@ -88,6 +90,7 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             runtime.setText(context.getString(R.string.runtime, cursor.getString(Query.RUNTIME)));
             companies.setText(cursor.getString(Query.PRODUCTION_COMPANIES));
             countries.setText(cursor.getString(Query.PRODUCTION_COUNTRIES));
+            genres.setText(cursor.getString(Query.GENRES));
         }
     }
 }

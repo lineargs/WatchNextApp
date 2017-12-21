@@ -10,6 +10,8 @@ import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Genre;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ProductionCompany;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ProductionCountry;
+import com.lineargs.watchnext.utils.retrofit.reviews.Reviews;
+import com.lineargs.watchnext.utils.retrofit.reviews.ReviewsResult;
 
 import java.text.ParseException;
 import java.util.List;
@@ -204,6 +206,8 @@ public class MovieDbUtils {
                 buildCompaniesString(result.getProductionCompanies()));
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES,
                 buildCountriesString(result.getProductionCountries()));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES,
+                buildGenresString(result.getGenres()));
 
         return contentValues;
     }

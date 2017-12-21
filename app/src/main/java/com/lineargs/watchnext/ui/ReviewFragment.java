@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ReviewAdapter;
 import com.lineargs.watchnext.data.ReviewQuery;
-import com.lineargs.watchnext.sync.syncreviews.ReviewSyncUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,8 +66,7 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         mRecyclerView.setAdapter(mAdapter);
 
 
-        if (mUri != null && savedState == null) {
-            ReviewSyncUtils.syncReviews(getContext(), mUri.getLastPathSegment());
+        if (savedState == null) {
             startLoading();
         }
         getLoaderManager().initLoader(LOADER_ID, null, this);
@@ -122,7 +120,7 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
                         public void run() {
                             showEmpty();
                         }
-                    }, 5000);
+                    }, 3000);
 
                 }
                 break;

@@ -85,6 +85,7 @@ public class DataContract {
         public static final String COLUMN_PRODUCTION_COUNTRIES = "production_countries";
         public static final String COLUMN_RUNTIME = "runtime";
         public static final String COLUMN_STATUS = "status";
+        public static final String COLUMN_GENRES = "genres";
 
         /* Used internally as the name of our popular movies table. */
         static final String TABLE_NAME = "popularmovies";

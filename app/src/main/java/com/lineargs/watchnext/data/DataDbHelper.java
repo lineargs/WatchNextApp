@@ -28,7 +28,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = DB_VER_39;
+    private static final int DATABASE_VERSION = DB_VER_40;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
@@ -56,6 +56,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
                     DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER, " +
                     DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
 
                         /*
                          * To ensure this table can only contain one movie entry per id, we declare
@@ -85,6 +86,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
                     DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER, " +
                     DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
                     "UNIQUE (" + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
@@ -107,6 +109,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
                     DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER, " +
                     DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
                     "UNIQUE (" + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
@@ -129,6 +132,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
                     DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER DEFAULT 0, " +
                     DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
                     "UNIQUE (" + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
@@ -223,6 +227,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
                     DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER, " +
                     DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
                     DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
@@ -417,6 +422,11 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
                     " TEXT;");
         }
+        if (isColumnMissing(db, DataContract.PopularMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularMovieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
+                    " TEXT;");
+        }
 
         /* Check if the columns are missing then alter the  Top Rated Movie table*/
         if (isColumnMissing(db, DataContract.TopRatedMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
@@ -447,6 +457,11 @@ public class DataDbHelper extends SQLiteOpenHelper {
         if (isColumnMissing(db, DataContract.TopRatedMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_STATUS)) {
             db.execSQL("ALTER TABLE " + DataContract.TopRatedMovieEntry.TABLE_NAME +
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
+                    " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.TopRatedMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedMovieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
                     " TEXT;");
         }
 
@@ -481,6 +496,11 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
                     " TEXT;");
         }
+        if (isColumnMissing(db, DataContract.UpcomingMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.UpcomingMovieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
+                    " TEXT;");
+        }
 
         /* Check if the columns are missing then alter the  Theater Movie table*/
         if (isColumnMissing(db, DataContract.TheaterMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
@@ -513,6 +533,11 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
                     " TEXT;");
         }
+        if (isColumnMissing(db, DataContract.TheaterMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.TheaterMovieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
+                    " TEXT;");
+        }
 
         /* Check if the columns are missing then alter the  Favorites Movie table*/
         if (isColumnMissing(db, DataContract.Favorites.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
@@ -543,6 +568,11 @@ public class DataDbHelper extends SQLiteOpenHelper {
         if (isColumnMissing(db, DataContract.Favorites.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_STATUS)) {
             db.execSQL("ALTER TABLE " + DataContract.Favorites.TABLE_NAME +
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
+                    " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.Favorites.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.Favorites.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
                     " TEXT;");
         }
     }

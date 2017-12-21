@@ -99,9 +99,6 @@
             android:name=".sync.syncsearch.SearchSyncIntentService"
             android:exported="false" />
         <service
-            android:name=".sync.syncreviews.ReviewSyncIntentService"
-            android:exported="false" />
-        <service
             android:name=".sync.syncvideos.VideosSyncIntentService"
             android:exported="false" />
         <service
