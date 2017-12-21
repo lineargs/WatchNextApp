@@ -30,11 +30,11 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
-import com.lineargs.watchnext.adapters.MovieDetailAdapter;
+import com.lineargs.watchnext.adapters.TVDetailAdapter;
 import com.lineargs.watchnext.data.CastQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.sync.synccredits.CreditSyncUtils;
+import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
@@ -64,8 +64,8 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     FloatingActionButton starFab;
     @BindView(R.id.cast_recycler_view)
     RecyclerView mCastRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    @BindView(R.id.cast_progress_bar)
+    ProgressBar mCastProgressBar;
     @BindView(R.id.cast_linear_layout)
     LinearLayout mCastLayout;
     @BindView(R.id.movie_details_recycler_view)
@@ -74,7 +74,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     AppCompatTextView mEmptyCast;
     private Uri mUri;
     private CastAdapter mCastAdapter;
-    private MovieDetailAdapter mAdapter;
+    private TVDetailAdapter mAdapter;
     private Handler handler;
     private String title = "";
     private Unbinder unbinder;
@@ -107,7 +107,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
         layoutManager.setAutoMeasureEnabled(true);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new MovieDetailAdapter(getContext());
+        mAdapter = new TVDetailAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -122,7 +122,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
 
         if (mUri != null) {
             if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
-                CreditSyncUtils.syncTVCredits(getContext(), mUri.getLastPathSegment());
+                SerieDetailUtils.syncSeasons(getContext(), mUri);
                 startLoading();
             }
         }
@@ -155,19 +155,19 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mCastProgressBar.setVisibility(View.VISIBLE);
         mCastLayout.setVisibility(View.GONE);
         mEmptyCast.setVisibility(View.GONE);
     }
 
     private void showCastData() {
-        mProgressBar.setVisibility(View.GONE);
+        mCastProgressBar.setVisibility(View.GONE);
         mCastLayout.setVisibility(View.VISIBLE);
         mEmptyCast.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        mProgressBar.setVisibility(View.GONE);
+        mCastProgressBar.setVisibility(View.GONE);
         mCastLayout.setVisibility(View.GONE);
         mEmptyCast.setVisibility(View.VISIBLE);
     }

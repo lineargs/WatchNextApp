@@ -76,8 +76,7 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
         mAdapter = new SeasonsAdapter(context, this);
         mRecyclerView.setAdapter(mAdapter);
         handler = new Handler();
-        if (mUri != null && savedState == null) {
-            SerieDetailUtils.syncSeasons(context, mUri.getLastPathSegment());
+        if (savedState == null) {
             startLoading();
         }
         getLoaderManager().initLoader(LOADER_ID, null, this);

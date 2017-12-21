@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.utils.dbutils;
 
 import android.content.ContentValues;
-import android.text.TextUtils;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
@@ -10,8 +9,6 @@ import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Genre;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ProductionCompany;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ProductionCountry;
-import com.lineargs.watchnext.utils.retrofit.reviews.Reviews;
-import com.lineargs.watchnext.utils.retrofit.reviews.ReviewsResult;
 
 import java.text.ParseException;
 import java.util.List;

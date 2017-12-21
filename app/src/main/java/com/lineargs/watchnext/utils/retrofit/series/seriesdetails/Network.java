@@ -14,6 +14,7 @@ public class Network {
     @SerializedName("id")
     @Expose
     private int id;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -22,25 +23,7 @@ public class Network {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Network withId(int id) {
-        this.id = id;
-        return this;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Network withName(String name) {
-        this.name = name;
-        return this;
     }
 }

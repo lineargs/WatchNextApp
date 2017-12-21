@@ -13,7 +13,7 @@ import com.lineargs.watchnext.utils.dbutils.CreditDbUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.ReviewsDbUtils;
 import com.lineargs.watchnext.utils.dbutils.VideosDbUtils;
-import com.lineargs.watchnext.utils.retrofit.movies.MoviesAPI;
+import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 
 import java.lang.ref.WeakReference;
@@ -23,12 +23,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by goranminov on 10/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncTask}
- */
 
 class MovieSyncTask {
 
@@ -42,14 +36,14 @@ class MovieSyncTask {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    private static final MoviesAPI moviesAPI = retrofit.create(MoviesAPI.class);
+    private static final MovieApiService MOVIE_API_SERVICE = retrofit.create(MovieApiService.class);
 
     static void syncMovieDetail(final Context context, final Uri uri) {
         String stringUri = uri.toString();
         stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
         mUri = Uri.parse(stringUri);
         id = uri.getLastPathSegment();
-        Call<MovieDetail> call = moviesAPI.getMovieDetail(id, BuildConfig.MOVIE_DATABASE_API_KEY, APPEND_TO_RESPONSE);
+        Call<MovieDetail> call = MOVIE_API_SERVICE.getMovieDetail(id, BuildConfig.MOVIE_DATABASE_API_KEY, APPEND_TO_RESPONSE);
         call.enqueue(new Callback<MovieDetail>() {
             @Override
             public void onResponse(@NonNull Call<MovieDetail> call, @NonNull final Response<MovieDetail> response) {
@@ -58,13 +52,13 @@ class MovieSyncTask {
                     ContentValues updateValues = MovieDbUtils.updateMovie(response.body());
                     UpdateMovie updateMovie = new UpdateMovie(context);
                     updateMovie.execute(updateValues);
-                    ContentValues[] castValues = CreditDbUtils.getMovieCastContentValues(response.body().getCredits(), id);
-                    InsertMovieCast insertMovieCast = new InsertMovieCast(context);
-                    insertMovieCast.execute(castValues);
-                    ContentValues[] crewValues = CreditDbUtils.getMovieCrewContentValues(response.body().getCredits(), id);
-                    InsertMovieCrew insertMovieCrew = new InsertMovieCrew(context);
-                    insertMovieCrew.execute(crewValues);
-                    ContentValues[] videoValues = VideosDbUtils.getMovieVideosContentValues(response.body().getVideos(), id);
+                    ContentValues[] castValues = CreditDbUtils.getCastContentValues(response.body().getCredits(), id);
+                    InsertCast insertCast = new InsertCast(context);
+                    insertCast.execute(castValues);
+                    ContentValues[] crewValues = CreditDbUtils.getCrewContentValues(response.body().getCredits(), id);
+                    InsertCrew insertCrew = new InsertCrew(context);
+                    insertCrew.execute(crewValues);
+                    ContentValues[] videoValues = VideosDbUtils.getVideosContentValues(response.body().getVideos(), id);
                     InsertVideos insertVideos = new InsertVideos(context);
                     insertVideos.execute(videoValues);
                     ContentValues[] reviewsValues = ReviewsDbUtils.getReviewsContentValues(response.body().getReviews(), id);
@@ -104,10 +98,10 @@ class MovieSyncTask {
         }
     }
 
-    static class InsertMovieCast extends AsyncTask<ContentValues, Void, Void> {
+    static class InsertCast extends AsyncTask<ContentValues, Void, Void> {
         private final WeakReference<Context> weakReference;
 
-        InsertMovieCast(Context context) {
+        InsertCast(Context context) {
             this.weakReference = new WeakReference<>(context);
         }
 
@@ -125,10 +119,10 @@ class MovieSyncTask {
         }
     }
 
-    static class InsertMovieCrew extends AsyncTask<ContentValues, Void, Void> {
+    static class InsertCrew extends AsyncTask<ContentValues, Void, Void> {
         private final WeakReference<Context> weakReference;
 
-        InsertMovieCrew(Context context) {
+        InsertCrew(Context context) {
             this.weakReference = new WeakReference<>(context);
         }
 

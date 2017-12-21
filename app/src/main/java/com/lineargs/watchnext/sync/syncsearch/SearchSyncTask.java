@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
@@ -14,7 +13,7 @@ import com.lineargs.watchnext.utils.dbutils.SearchDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
 import com.lineargs.watchnext.utils.retrofit.movies.Movies;
 import com.lineargs.watchnext.utils.retrofit.movies.Result;
-import com.lineargs.watchnext.utils.retrofit.search.SearchAPI;
+import com.lineargs.watchnext.utils.retrofit.search.SearchApiService;
 import com.lineargs.watchnext.utils.retrofit.series.Series;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
 
@@ -26,12 +25,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by goranminov on 11/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncTask}
- */
-
 class SearchSyncTask {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
@@ -42,12 +35,12 @@ class SearchSyncTask {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    private static final SearchAPI searchAPI = retrofit.create(SearchAPI.class);
+    private static final SearchApiService SEARCH_API_SERVICE = retrofit.create(SearchApiService.class);
 
     static void syncSearchMovies(final Context context, String query, boolean adult) {
 
 
-        Call<Movies> call = searchAPI.searchMovies(PATH_MOVIE, BuildConfig.MOVIE_DATABASE_API_KEY, query, adult);
+        Call<Movies> call = SEARCH_API_SERVICE.searchMovies(PATH_MOVIE, BuildConfig.MOVIE_DATABASE_API_KEY, query, adult);
 
         call.enqueue(new Callback<Movies>() {
             @Override
@@ -71,7 +64,7 @@ class SearchSyncTask {
     static void syncSearchTV(final Context context, String query, boolean adult) {
 
 
-        Call<Series> call = searchAPI.searchTV(PATH_TV, BuildConfig.MOVIE_DATABASE_API_KEY, query, adult);
+        Call<Series> call = SEARCH_API_SERVICE.searchTV(PATH_TV, BuildConfig.MOVIE_DATABASE_API_KEY, query, adult);
 
         call.enqueue(new Callback<Series>() {
             @Override
@@ -94,7 +87,7 @@ class SearchSyncTask {
 
     static void syncSearchMovie(final Context context, String id) {
 
-        Call<Result> call = searchAPI.getMovie(id, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Result> call = SEARCH_API_SERVICE.getMovie(id, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         call.enqueue(new Callback<Result>() {
             @Override
@@ -117,7 +110,7 @@ class SearchSyncTask {
 
     static void syncSearchTV(final Context context, String id) {
 
-        Call<SeriesResult> call = searchAPI.getTV(id, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<SeriesResult> call = SEARCH_API_SERVICE.getTV(id, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         call.enqueue(new Callback<SeriesResult>() {
             @Override

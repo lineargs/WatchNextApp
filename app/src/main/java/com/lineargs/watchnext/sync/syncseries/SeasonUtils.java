@@ -4,12 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-/**
- * Created by goranminov on 28/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncUtils}
- */
-
 public class SeasonUtils {
 
     public static void syncEpisodes(@NonNull Context context, @NonNull String id, @NonNull String seasonNumber, @NonNull String seasonId) {

@@ -23,12 +23,12 @@ public class DataDbHelper extends SQLiteOpenHelper {
 
     private static final int DB_VER_38 = 38;
     private static final int DB_VER_39 = 39;
-    private static final int DB_VER_40 = 40;
+    private static final int DB_VER_41 = 41;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = DB_VER_40;
+    private static final int DATABASE_VERSION = DB_VER_41;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
@@ -173,6 +173,13 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
                     DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
                     DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
+                    DataContract.PopularMovieEntry.COLUMN_IMDB_ID + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_HOMEPAGE + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER, " +
+                    DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
                     "UNIQUE (" + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
@@ -189,6 +196,13 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
                     DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
                     DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
+                    DataContract.PopularMovieEntry.COLUMN_IMDB_ID + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_HOMEPAGE + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER, " +
+                    DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
                     "UNIQUE (" + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
@@ -205,6 +219,13 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
                     DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
                     DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
+                    DataContract.PopularMovieEntry.COLUMN_IMDB_ID + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_HOMEPAGE + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES + " TEXT DEFAULT 0, " +
+                    DataContract.PopularMovieEntry.COLUMN_RUNTIME + " INTEGER, " +
+                    DataContract.PopularMovieEntry.COLUMN_STATUS + " TEXT, " +
+                    DataContract.PopularMovieEntry.COLUMN_GENRES + " TEXT, " +
                     "UNIQUE (" + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
@@ -379,7 +400,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         Log.d("DataDbHelper", "Upgrading from " + oldVersion + " to " + newVersion);
 
         switch (oldVersion) {
-            case DB_VER_39:
+            case 40:
                 upgradeToThirtyEight(db);
         }
     }
@@ -572,6 +593,117 @@ public class DataDbHelper extends SQLiteOpenHelper {
         }
         if (isColumnMissing(db, DataContract.Favorites.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
             db.execSQL("ALTER TABLE " + DataContract.Favorites.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
+                    " TEXT;");
+        }
+
+        /* Check if the columns are missing then alter the  Favorites Series table*/
+        if (isColumnMissing(db, DataContract.PopularSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_IMDB_ID +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.PopularSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_HOMEPAGE)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_HOMEPAGE +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.PopularSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.PopularSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.PopularSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_RUNTIME)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_RUNTIME +
+                    " INTEGER DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.PopularSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_STATUS)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
+                    " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.PopularSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.PopularSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
+                    " TEXT;");
+        }
+
+        /* Check if the columns are missing then alter the  TopRated Series table*/
+        if (isColumnMissing(db, DataContract.TopRatedSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_IMDB_ID +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.TopRatedSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_HOMEPAGE)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_HOMEPAGE +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.TopRatedSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.TopRatedSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.TopRatedSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_RUNTIME)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_RUNTIME +
+                    " INTEGER DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.TopRatedSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_STATUS)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
+                    " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.TopRatedSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.TopRatedSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
+                    " TEXT;");
+        }
+
+        /* Check if the columns are missing then alter the  OnTheAir Series table*/
+        if (isColumnMissing(db, DataContract.OnTheAirSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
+            db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_IMDB_ID +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.OnTheAirSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_HOMEPAGE)) {
+            db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_HOMEPAGE +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.OnTheAirSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES)) {
+            db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.OnTheAirSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES)) {
+            db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES +
+                    " TEXT DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.OnTheAirSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_RUNTIME)) {
+            db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_RUNTIME +
+                    " INTEGER DEFAULT 0;");
+        }
+        if (isColumnMissing(db, DataContract.OnTheAirSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_STATUS)) {
+            db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_STATUS +
+                    " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.OnTheAirSerieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_GENRES)) {
+            db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
                     " TEXT;");
         }

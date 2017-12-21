@@ -1,4 +1,4 @@
-package com.lineargs.watchnext.utils.retrofit.series;
+package com.lineargs.watchnext.utils.retrofit.movies.moviedetail;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,42 +6,50 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by goranminov on 03/11/2017.
+ * Created by goranminov on 22/11/2017.
  * <p>
  * JSON POJO class for our {@link retrofit2.converter.gson.GsonConverterFactory}
  */
 
-public class Series {
+public class Reviews {
+
+    @SerializedName("id")
+    @Expose
+    private int id;
 
     @SerializedName("page")
     @Expose
     private int page;
 
-    @SerializedName("total_results")
+    @SerializedName("results")
     @Expose
-    private int totalResults;
+    private List<ReviewsResult> results = null;
 
     @SerializedName("total_pages")
     @Expose
     private int totalPages;
 
-    @SerializedName("results")
+    @SerializedName("total_results")
     @Expose
-    private List<SeriesResult> results = null;
+    private int totalResults;
+
+    public int getId() {
+        return id;
+    }
 
     public int getPage() {
         return page;
     }
 
-    public int getTotalResults() {
-        return totalResults;
+    public List<ReviewsResult> getResults() {
+        return results;
     }
 
     public int getTotalPages() {
         return totalPages;
     }
 
-    public List<SeriesResult> getResults() {
-        return results;
+    public int getTotalResults() {
+        return totalResults;
     }
 }

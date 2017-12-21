@@ -7,6 +7,8 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Episode;
+import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Genre;
+import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionCompany;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Season;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.SeriesDetails;
 
@@ -222,5 +224,58 @@ public class SerieDbUtils {
         }
 
         return values;
+    }
+
+    /**
+     * Builds ContentValues[] used for our ContentResolver
+     *
+     * @param result Object used to get the values from our API response
+     * @return The {@link ContentValues}
+     */
+    public static ContentValues updateSeries(SeriesDetails result) {
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, result.getStatus());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES,
+                buildCompaniesString(result.getProductionCompanies()));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES,
+                buildGenresString(result.getGenres()));
+
+        return contentValues;
+    }
+
+    private static String buildCompaniesString(List<ProductionCompany> companies) {
+
+        if (companies == null || companies.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < companies.size(); i++) {
+            ProductionCompany company = companies.get(i);
+            stringBuilder.append(company.getName());
+            if (i + 1 < companies.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String buildGenresString(List<Genre> genres) {
+
+        if (genres == null || genres.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < genres.size(); i++) {
+            Genre genre = genres.get(i);
+            stringBuilder.append(genre.getName());
+            if (i + 1 < genres.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
     }
 }

@@ -1,6 +1,5 @@
 package com.lineargs.watchnext.utils.retrofit.series;
 
-import com.lineargs.watchnext.utils.retrofit.credits.TVCredits;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.SeasonDetails;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.SeriesDetails;
 
@@ -15,22 +14,18 @@ import retrofit2.http.Query;
  * {@link retrofit2.Retrofit} interface for our GET methods
  */
 
-public interface SeriesAPI {
+public interface SeriesApiService {
 
     @GET("tv/{path}")
     Call<Series> getSeries(
             @Path("path") String path,
             @Query("api_key") String apiKey);
 
-    @GET("tv/{tv_id}/credits")
-    Call<TVCredits> getCredits(
-            @Path("tv_id") String id,
-            @Query("api_key") String apiKey);
-
     @GET("tv/{tv_id}")
     Call<SeriesDetails> getDetails(
             @Path("tv_id") String id,
-            @Query("api_key") String apiKey);
+            @Query("api_key") String apiKey,
+            @Query ("append_to_response") String appendToResponse);
 
     @GET("tv/{tv_id}/season/{season_number}")
     Call<SeasonDetails> getSeason(

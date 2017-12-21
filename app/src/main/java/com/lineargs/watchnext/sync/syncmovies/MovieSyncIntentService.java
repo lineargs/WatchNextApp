@@ -4,11 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.Intent;
 
-/**
- * Created by goranminov on 10/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncIntentService}
- */
 public class MovieSyncIntentService extends IntentService {
 
     static final String ID = "movie_id";

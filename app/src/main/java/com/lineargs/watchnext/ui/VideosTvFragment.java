@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
 import com.lineargs.watchnext.data.VideosQuery;
-import com.lineargs.watchnext.sync.syncvideos.VideosSyncUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;
@@ -64,8 +63,7 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
         mAdapter = new VideosAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
 
-        if (mUri != null && savedState == null) {
-            VideosSyncUtils.syncTVVideos(getContext(), mUri.getLastPathSegment());
+        if (savedState == null) {
             startLoading();
         }
 
@@ -120,7 +118,7 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
                         public void run() {
                             showEmpty();
                         }
-                    }, 5000);
+                    }, 3000);
 
                 }
                 break;

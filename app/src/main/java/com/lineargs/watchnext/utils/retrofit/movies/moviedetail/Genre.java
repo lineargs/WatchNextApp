@@ -12,6 +12,7 @@ public class Genre {
     @SerializedName("id")
     @Expose
     private int id;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -24,21 +25,11 @@ public class Genre {
         this.id = id;
     }
 
-    public Genre withId(int id) {
-        this.id = id;
-        return this;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Genre withName(String name) {
-        this.name = name;
-        return this;
     }
 }

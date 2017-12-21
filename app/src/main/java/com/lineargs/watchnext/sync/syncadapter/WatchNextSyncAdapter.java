@@ -12,17 +12,16 @@ import android.content.SyncResult;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
+import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
 import com.lineargs.watchnext.utils.retrofit.movies.Movies;
-import com.lineargs.watchnext.utils.retrofit.movies.MoviesAPI;
 import com.lineargs.watchnext.utils.retrofit.series.Series;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesAPI;
+import com.lineargs.watchnext.utils.retrofit.series.SeriesApiService;
 
 import java.lang.ref.WeakReference;
 
@@ -115,9 +114,9 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        final MoviesAPI moviesAPI = retrofit.create(MoviesAPI.class);
+        final MovieApiService movieApiService = retrofit.create(MovieApiService.class);
 
-        Call<Movies> popularCall = moviesAPI.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Movies> popularCall = movieApiService.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
         popularCall.enqueue(new Callback<Movies>() {
             @Override
             public void onResponse(@NonNull Call<Movies> call, @NonNull final Response<Movies> response) {
@@ -136,7 +135,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Movies> upcomingCall = moviesAPI.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Movies> upcomingCall = movieApiService.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         upcomingCall.enqueue(new Callback<Movies>() {
             @Override
@@ -155,7 +154,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Movies> topCall = moviesAPI.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Movies> topCall = movieApiService.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         topCall.enqueue(new Callback<Movies>() {
             @Override
@@ -174,7 +173,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Movies> theaterCall = moviesAPI.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Movies> theaterCall = movieApiService.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         theaterCall.enqueue(new Callback<Movies>() {
             @Override
@@ -194,9 +193,9 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        final SeriesAPI seriesAPI = retrofit.create(SeriesAPI.class);
+        final SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);
 
-        Call<Series> popularSeriesCall = seriesAPI.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> popularSeriesCall = seriesApiService.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         popularSeriesCall.enqueue(new Callback<Series>() {
             @Override
@@ -216,7 +215,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Series> topSeriesCall = seriesAPI.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> topSeriesCall = seriesApiService.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         topSeriesCall.enqueue(new Callback<Series>() {
             @Override
@@ -236,7 +235,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Series> onTheAirCall = seriesAPI.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> onTheAirCall = seriesApiService.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         onTheAirCall.enqueue(new Callback<Series>() {
             @Override

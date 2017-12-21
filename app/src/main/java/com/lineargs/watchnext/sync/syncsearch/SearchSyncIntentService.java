@@ -3,12 +3,6 @@ package com.lineargs.watchnext.sync.syncsearch;
 import android.app.IntentService;
 import android.content.Intent;
 
-/**
- * Created by goranminov on 11/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncIntentService}
- */
-
 public class SearchSyncIntentService extends IntentService {
 
     static final String QUERY = "query";

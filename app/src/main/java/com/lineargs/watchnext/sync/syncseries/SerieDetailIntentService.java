@@ -2,16 +2,10 @@ package com.lineargs.watchnext.sync.syncseries;
 
 import android.app.IntentService;
 import android.content.Intent;
-
-/**
- * Created by goranminov on 27/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncIntentService}
- */
+import android.net.Uri;
 
 public class SerieDetailIntentService extends IntentService {
 
-    static final String ID = "id";
     private final static String TAG = "SerieDetailIntentService";
 
     public SerieDetailIntentService() {
@@ -20,9 +14,7 @@ public class SerieDetailIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent.hasExtra(ID)) {
-            String id = intent.getStringExtra(ID);
-            SerieDetailTask.syncSeasons(this, id);
-        }
+        Uri uri = intent.getData();
+        SerieDetailTask.syncSeasons(this, uri);
     }
 }

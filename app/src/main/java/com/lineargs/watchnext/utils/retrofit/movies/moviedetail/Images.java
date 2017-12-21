@@ -14,6 +14,7 @@ public class Images {
     @SerializedName("backdrops")
     @Expose
     private List<Object> backdrops = null;
+
     @SerializedName("posters")
     @Expose
     private List<Object> posters = null;
@@ -22,26 +23,7 @@ public class Images {
         return backdrops;
     }
 
-    public void setBackdrops(List<Object> backdrops) {
-        this.backdrops = backdrops;
-    }
-
-    public Images withBackdrops(List<Object> backdrops) {
-        this.backdrops = backdrops;
-        return this;
-    }
-
     public List<Object> getPosters() {
         return posters;
     }
-
-    public void setPosters(List<Object> posters) {
-        this.posters = posters;
-    }
-
-    public Images withPosters(List<Object> posters) {
-        this.posters = posters;
-        return this;
-    }
-
 }

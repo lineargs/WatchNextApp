@@ -5,12 +5,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesAPI;
+import com.lineargs.watchnext.utils.retrofit.series.SeriesApiService;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.SeasonDetails;
 
 import java.lang.ref.WeakReference;
@@ -20,12 +19,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by goranminov on 28/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncTask}
- */
 
 class SeasonTask {
 
@@ -38,9 +31,9 @@ class SeasonTask {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        SeriesAPI seriesAPI = retrofit.create(SeriesAPI.class);
+        SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);
 
-        Call<SeasonDetails> call = seriesAPI.getSeason(id, seasonNumber, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<SeasonDetails> call = seriesApiService.getSeason(id, seasonNumber, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         call.enqueue(new Callback<SeasonDetails>() {
             @Override

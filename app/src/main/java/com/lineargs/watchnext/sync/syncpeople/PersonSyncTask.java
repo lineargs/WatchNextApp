@@ -5,12 +5,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.dbutils.PersonDbUtils;
-import com.lineargs.watchnext.utils.retrofit.people.PeopleAPI;
+import com.lineargs.watchnext.utils.retrofit.people.PeopleApiService;
 import com.lineargs.watchnext.utils.retrofit.people.Person;
 
 import java.lang.ref.WeakReference;
@@ -20,12 +19,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by goranminov on 29/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncTask}
- */
 
 class PersonSyncTask {
 
@@ -38,9 +31,9 @@ class PersonSyncTask {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        PeopleAPI peopleAPI = retrofit.create(PeopleAPI.class);
+        PeopleApiService peopleApiService = retrofit.create(PeopleApiService.class);
 
-        Call<Person> call = peopleAPI.getPerson(id, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Person> call = peopleApiService.getPerson(id, BuildConfig.MOVIE_DATABASE_API_KEY);
 
         call.enqueue(new Callback<Person>() {
             @Override

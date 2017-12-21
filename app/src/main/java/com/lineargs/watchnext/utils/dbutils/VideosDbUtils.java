@@ -20,39 +20,11 @@ public class VideosDbUtils {
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
-     * @param results List used to get the values from our API response
-     * @param id      The movie / serie ID
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues[] getVideosContentValues(List<VideosResult> results, String id) {
-        int i = 0;
-        ContentValues[] values = new ContentValues[results.size()];
-        for (VideosResult result : results) {
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put(DataContract.Videos.COLUMN_MOVIE_ID, id);
-            contentValues.put(DataContract.Videos.COLUMN_VIDEO_ID, result.getId());
-            contentValues.put(DataContract.Videos.COLUMN_KEY, result.getKey());
-            contentValues.put(DataContract.Videos.COLUMN_NAME, result.getName());
-            contentValues.put(DataContract.Videos.COLUMN_SITE, result.getSite());
-            contentValues.put(DataContract.Videos.COLUMN_TYPE, result.getType());
-            contentValues.put(DataContract.Videos.COLUMN_IMG, MovieUtils.getYouTubeImage(result.getKey()));
-
-            values[i] = contentValues;
-            i++;
-        }
-
-        return values;
-    }
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
      * @param videos Object used to get the values from our API response
      * @param id      The movie / serie ID
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getMovieVideosContentValues(Videos videos, String id) {
+    public static ContentValues[] getVideosContentValues(Videos videos, String id) {
         List<VideosResult> results = videos.getResults();
         int i = 0;
         ContentValues[] values = new ContentValues[results.size()];

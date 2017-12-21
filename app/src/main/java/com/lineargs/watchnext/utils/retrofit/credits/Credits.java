@@ -6,18 +6,21 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by goranminov on 17/11/2017.
+ * Created by goranminov on 31/10/2017.
  * <p>
  * JSON POJO class for our {@link retrofit2.converter.gson.GsonConverterFactory}
  */
 
-public class TVCredits {
+public class Credits {
+
     @SerializedName("id")
     @Expose
     private int id;
+
     @SerializedName("cast")
     @Expose
     private List<Cast> cast = null;
+
     @SerializedName("crew")
     @Expose
     private List<Crew> crew = null;
@@ -30,7 +33,7 @@ public class TVCredits {
         this.id = id;
     }
 
-    public TVCredits withId(int id) {
+    public Credits withId(int id) {
         this.id = id;
         return this;
     }
@@ -39,25 +42,7 @@ public class TVCredits {
         return cast;
     }
 
-    public void setCast(List<Cast> cast) {
-        this.cast = cast;
-    }
-
-    public TVCredits withCast(List<Cast> cast) {
-        this.cast = cast;
-        return this;
-    }
-
     public List<Crew> getCrew() {
         return crew;
-    }
-
-    public void setCrew(List<Crew> crew) {
-        this.crew = crew;
-    }
-
-    public TVCredits withCrew(List<Crew> crew) {
-        this.crew = crew;
-        return this;
     }
 }

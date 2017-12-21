@@ -4,12 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-/**
- * Created by goranminov on 11/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncUtils}
- */
-
 public class SearchSyncUtils {
 
     public static void syncSearchMovies(@NonNull Context context, @NonNull String query, @NonNull boolean adult) {

@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
 import com.lineargs.watchnext.data.VideosQuery;
-import com.lineargs.watchnext.sync.syncvideos.VideosSyncUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;

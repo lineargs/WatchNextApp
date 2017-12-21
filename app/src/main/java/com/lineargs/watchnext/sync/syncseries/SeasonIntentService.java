@@ -3,12 +3,6 @@ package com.lineargs.watchnext.sync.syncseries;
 import android.app.IntentService;
 import android.content.Intent;
 
-/**
- * Created by goranminov on 28/11/2017.
- * <p>
- * See {@link com.lineargs.watchnext.sync.synccredits.CreditSyncIntentService}
- */
-
 public class SeasonIntentService extends IntentService {
 
     static final String ID = "id";

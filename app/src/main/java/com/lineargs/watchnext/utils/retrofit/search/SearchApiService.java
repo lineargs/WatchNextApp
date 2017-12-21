@@ -16,7 +16,7 @@ import retrofit2.http.Query;
  * {@link retrofit2.Retrofit} interface for our GET methods
  */
 
-public interface SearchAPI {
+public interface SearchApiService {
 
     @GET("search/{path}")
     Call<Movies> searchMovies(

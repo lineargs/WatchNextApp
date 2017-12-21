@@ -93,13 +93,7 @@
 
         <!-- Intent Services -->
         <service
-            android:name=".sync.synccredits.CreditSyncIntentService"
-            android:exported="false" />
-        <service
             android:name=".sync.syncsearch.SearchSyncIntentService"
-            android:exported="false" />
-        <service
-            android:name=".sync.syncvideos.VideosSyncIntentService"
             android:exported="false" />
         <service
             android:name=".sync.syncseries.SerieDetailIntentService"

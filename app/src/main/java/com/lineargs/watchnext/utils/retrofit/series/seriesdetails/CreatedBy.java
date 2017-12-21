@@ -14,12 +14,11 @@ public class CreatedBy {
     @SerializedName("id")
     @Expose
     private int id;
+
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("gender")
-    @Expose
-    private int gender;
+
     @SerializedName("profile_path")
     @Expose
     private String profilePath;
@@ -28,52 +27,11 @@ public class CreatedBy {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public CreatedBy withId(int id) {
-        this.id = id;
-        return this;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public CreatedBy withName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
-    public CreatedBy withGender(int gender) {
-        this.gender = gender;
-        return this;
     }
 
     public String getProfilePath() {
         return profilePath;
     }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
-    }
-
-    public CreatedBy withProfilePath(String profilePath) {
-        this.profilePath = profilePath;
-        return this;
-    }
-
 }
