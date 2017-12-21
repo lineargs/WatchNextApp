@@ -1,7 +1,7 @@
 WatchNext
 =========
 Simple application to track and explore all the information from your favourite movies and series.
-![Logo](https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png)
+<img alt='WatchNext Logo' src='https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png'/></a>
 
 - Explore all the details from the Popular, Top Rated and Upcoming Movies.
 - Explore all the details from the Popular, Top Rated and On The Air Series. 
@@ -15,7 +15,7 @@ Simple application to track and explore all the information from your favourite 
 
 Powered By
 ----------
-![TMDb](https://github.com/lineargs/WatchNextApp/blob/master/408x161-powered-by-rectangle-blue.png)
+<img alt='TMDb' src='https://github.com/lineargs/WatchNextApp/blob/master/408x161-powered-by-rectangle-blue.png'/></a>
 
 
 License
