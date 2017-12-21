@@ -176,7 +176,7 @@
     <string name="navigation_back_content_description">Go back</string>
 
     <!-- About -->
-    <string name="about_version">Version 1.0 (Database version 39)</string>
+    <string name="about_version">Version 1.01 (Database version 38)</string>
     <string name="the_tmdb">The TMDb</string>
     <string name="tmdb_notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
     <string name="tmdb_terms">TMDb Terms</string>

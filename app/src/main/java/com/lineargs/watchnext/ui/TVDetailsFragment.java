@@ -30,8 +30,10 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
+import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
 import com.lineargs.watchnext.data.CastQuery;
+import com.lineargs.watchnext.data.CrewQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
@@ -74,6 +76,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     AppCompatTextView mEmptyCast;
     private Uri mUri;
     private CastAdapter mCastAdapter;
+    private CrewAdapter mCrewAdapter;
     private TVDetailAdapter mAdapter;
     private Handler handler;
     private String title = "";
@@ -123,7 +126,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
         if (mUri != null) {
             if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
                 SerieDetailUtils.syncSeasons(getContext(), mUri);
-                startLoading();
+                startCastLoading();
             }
         }
         getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
@@ -154,7 +157,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
         outState.putString(URI, String.valueOf(mUri));
     }
 
-    private void startLoading() {
+    private void startCastLoading() {
         mCastProgressBar.setVisibility(View.VISIBLE);
         mCastLayout.setVisibility(View.GONE);
         mEmptyCast.setVisibility(View.GONE);
@@ -166,7 +169,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
         mEmptyCast.setVisibility(View.GONE);
     }
 
-    private void showEmpty() {
+    private void showEmptyCast() {
         mCastProgressBar.setVisibility(View.GONE);
         mCastLayout.setVisibility(View.GONE);
         mEmptyCast.setVisibility(View.VISIBLE);
@@ -257,7 +260,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            showEmpty();
+                            showEmptyCast();
                         }
                     }, 7000);
                 }

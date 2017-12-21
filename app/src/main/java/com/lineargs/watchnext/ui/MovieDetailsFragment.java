@@ -51,7 +51,7 @@ import butterknife.Unbinder;
 /**
  * A fragment using Loaders to show details for the movie.
  */
-public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick {
+public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick, CrewAdapter.OnClick {
 
 
     static final String ID = "id", TITLE = "title";
@@ -132,7 +132,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         LinearLayoutManager crewManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mCrewRecyclerView.setLayoutManager(crewManager);
         mCrewRecyclerView.setHasFixedSize(true);
-        mCrewAdapter = new CrewAdapter(context);
+        mCrewAdapter = new CrewAdapter(context, this);
         mCrewRecyclerView.setAdapter(mCrewAdapter);
 
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
@@ -448,6 +448,22 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onPersonClick(String id) {
+        if (mDualPane) {
+            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
+            Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+            intent.setData(uri);
+            intent.putExtra(ID, id);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getContext(), PersonActivity.class);
+            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
+            intent.putExtra(ID, id);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onCrewClick(String id) {
         if (mDualPane) {
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));

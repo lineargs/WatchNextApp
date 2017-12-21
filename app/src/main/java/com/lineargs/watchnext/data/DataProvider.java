@@ -1426,6 +1426,9 @@ public class DataProvider extends ContentProvider {
             case CODE_TOP_SERIES:
                 rowsUpdated = db.update(DataContract.TopRatedSerieEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
+            case CODE_ON_THE_AIR_SERIES:
+                rowsUpdated = db.update(DataContract.OnTheAirSerieEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
             case CODE_FAVORITES:
                 rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, values, selection, selectionArgs);
                 break;

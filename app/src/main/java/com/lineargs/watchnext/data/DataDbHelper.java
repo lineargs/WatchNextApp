@@ -22,13 +22,11 @@ public class DataDbHelper extends SQLiteOpenHelper {
 
 
     private static final int DB_VER_38 = 38;
-    private static final int DB_VER_39 = 39;
-    private static final int DB_VER_41 = 41;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = DB_VER_41;
+    private static final int DATABASE_VERSION = DB_VER_38;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
@@ -400,7 +398,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         Log.d("DataDbHelper", "Upgrading from " + oldVersion + " to " + newVersion);
 
         switch (oldVersion) {
-            case 40:
+            case DB_VER_38:
                 upgradeToThirtyEight(db);
         }
     }

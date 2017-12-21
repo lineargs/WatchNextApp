@@ -60,9 +60,6 @@ class SerieDetailTask {
                     ContentValues[] castValues = CreditDbUtils.getCastContentValues(response.body().getCredits(), id);
                     InsertCast insertCast = new InsertCast(context);
                     insertCast.execute(castValues);
-                    ContentValues[] crewValues = CreditDbUtils.getCrewContentValues(response.body().getCredits(), id);
-                    InsertCrew insertCrew = new InsertCrew(context);
-                    insertCrew.execute(crewValues);
                     ContentValues[] videoValues = VideosDbUtils.getVideosContentValues(response.body().getVideos(), id);
                     InsertVideos insertVideos = new InsertVideos(context);
                     insertVideos.execute(videoValues);
@@ -155,27 +152,6 @@ class SerieDetailTask {
                 if (contentValues != null && contentValues.length != 0) {
                     contentResolver.bulkInsert(DataContract.Videos.CONTENT_URI, contentValues);
                 }
-            }
-            return null;
-        }
-    }
-
-    static class InsertCrew extends AsyncTask<ContentValues, Void, Void> {
-        private final WeakReference<Context> weakReference;
-
-        InsertCrew(Context context) {
-            this.weakReference = new WeakReference<>(context);
-        }
-
-        @Override
-        protected Void doInBackground(ContentValues... contentValues) {
-            Context context = weakReference.get();
-            if (context != null) {
-                ContentResolver contentResolver = context.getContentResolver();
-                if (contentValues != null && contentValues.length != 0) {
-                    contentResolver.bulkInsert(DataContract.CreditCrew.CONTENT_URI, contentValues);
-                }
-
             }
             return null;
         }

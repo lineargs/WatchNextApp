@@ -29,9 +29,16 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private Cursor cursor;
+    private OnClick onClick;
 
-    public CrewAdapter(@NonNull Context context) {
+    public interface OnClick {
+        void onCrewClick(String id);
+    }
+
+
+    public CrewAdapter(@NonNull Context context, @NonNull OnClick onClick) {
         this.context = context;
+        this.onClick = onClick;
     }
 
     @Override
@@ -62,7 +69,7 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder {
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.crew_name)
         TextView crewName;
         @BindView(R.id.crew_job)
@@ -73,6 +80,9 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         MovieViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+            if (onClick != null) {
+                view.setOnClickListener(this);
+            }
         }
 
         void bindViews(int position) {
@@ -85,6 +95,13 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .error(R.drawable.icon_person_grey)
                     .fit()
                     .into(profilePath);
+        }
+
+        @Override
+        public void onClick(View view) {
+            cursor.moveToPosition(getAdapterPosition());
+            String id = cursor.getString(CrewQuery.CREW_ID);
+            onClick.onCrewClick(id);
         }
     }
 }
