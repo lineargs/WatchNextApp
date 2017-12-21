@@ -21,6 +21,8 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "watchnext.db";
 
 
+    private static final int DB_VER_37 = 37;
+
     private static final int DB_VER_38 = 38;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
@@ -398,7 +400,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         Log.d("DataDbHelper", "Upgrading from " + oldVersion + " to " + newVersion);
 
         switch (oldVersion) {
-            case DB_VER_38:
+            case DB_VER_37:
                 upgradeToThirtyEight(db);
         }
     }
