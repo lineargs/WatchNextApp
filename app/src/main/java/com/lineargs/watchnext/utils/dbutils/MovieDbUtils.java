@@ -6,7 +6,10 @@ import android.text.TextUtils;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.utils.retrofit.movies.Result;
+import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Genre;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
+import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ProductionCompany;
+import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ProductionCountry;
 
 import java.text.ParseException;
 import java.util.List;
@@ -194,12 +197,65 @@ public class MovieDbUtils {
 
         ContentValues contentValues = new ContentValues();
 
-        if (!TextUtils.isEmpty(result.getImdbId())) {
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_IMDB_ID, result.getImdbId());
-        }
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_IMDB_ID, result.getImdbId());
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_RUNTIME, result.getRuntime());
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, result.getStatus());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES,
+                buildCompaniesString(result.getProductionCompanies()));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES,
+                buildCountriesString(result.getProductionCountries()));
 
         return contentValues;
+    }
+
+    private static String buildCompaniesString(List<ProductionCompany> companies) {
+
+        if (companies == null || companies.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < companies.size(); i++) {
+            ProductionCompany company = companies.get(i);
+            stringBuilder.append(company.getName());
+            if (i + 1 < companies.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String buildCountriesString(List<ProductionCountry> countries) {
+
+        if (countries == null || countries.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < countries.size(); i++) {
+            ProductionCountry country = countries.get(i);
+            stringBuilder.append(country.getName());
+            if (i + 1 < countries.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String buildGenresString(List<Genre> genres) {
+
+        if (genres == null || genres.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < genres.size(); i++) {
+            Genre genre = genres.get(i);
+            stringBuilder.append(genre.getName());
+            if (i + 1 < genres.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
     }
 }

@@ -40,7 +40,8 @@
 
     <!-- Titles and subtitles -->
     <string name="title_activity_review">Reviews</string>
-    <string name="title_activity_credits">Cast</string>
+    <string name="title_activity_credits_cast">Cast</string>
+    <string name="title_activity_credits_crew">Crew</string>
     <string name="title_activity_tabbed_movies">Movies</string>
     <string name="title_activity_tabbed_series">Series</string>
     <string name="title_activity_theater">In Theaters</string>
@@ -116,8 +117,11 @@
     <string name="star_image_content_description">Star image</string>
     <string name="date_pattern" translatable="false">dd MMM yyyy</string>
     <string name="nav_icon_content_description">Application icon</string>
-    <string name="runtime">%s mins</string>
+    <string name="runtime">%s min</string>
     <string name="status_text">Status</string>
+    <string name="production_companies">Production companies</string>
+    <string name="production_countries">Production Countries</string>
+    <string name="genres">Genres</string>
 
     <!-- Shortcuts -->
     <string name="no_app_available">No app available to handle this</string>
@@ -141,6 +145,7 @@
     <string name="tools_season_date" translatable="false">29 Oct 1988</string>
     <string name="tools_season_episodes" translatable="false">24 Episodes</string>
     <string name="tools_runtime">135 mins</string>
+    <string name="tools_companies">Warner Bros</string>
 
     <!-- Content Description -->
     <string name="toolbar_content_description">Toolbar navigation</string>

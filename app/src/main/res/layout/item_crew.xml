@@ -14,8 +14,7 @@
         android:layout_height="@dimen/cast_image_height"
         android:adjustViewBounds="true"
         android:contentDescription="@string/person_content_description"
-        android:padding="@dimen/small_padding"
-        android:scaleType="fitXY" />
+        android:padding="@dimen/small_padding" />
 
     <TextView
         android:id="@+id/crew_name"

@@ -7,12 +7,12 @@ import android.view.View;
 
 import com.lineargs.watchnext.R;
 
-public class CreditsActivity extends BaseTopActivity {
+public class CreditsCastActivity extends BaseTopActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_credits);
+        setContentView(R.layout.activity_credits_cast);
         setupActionBar();
         setupNavDrawer();
     }
@@ -20,10 +20,10 @@ public class CreditsActivity extends BaseTopActivity {
     @Override
     protected void setupActionBar() {
         super.setupActionBar();
-        setTitle(getString(R.string.title_activity_credits));
+        setTitle(getString(R.string.title_activity_credits_cast));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(getString(R.string.title_activity_credits));
+            actionBar.setTitle(getString(R.string.title_activity_credits_cast));
         }
     }
 

@@ -69,6 +69,10 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         AppCompatTextView voteAverage;
         @BindView(R.id.runtime)
         AppCompatTextView runtime;
+        @BindView(R.id.companies)
+        AppCompatTextView companies;
+        @BindView(R.id.countries)
+        AppCompatTextView countries;
 
         MovieViewHolder(View view) {
             super(view);
@@ -82,6 +86,8 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             overview.setText(cursor.getString(Query.OVERVIEW));
             voteAverage.setText(cursor.getString(Query.VOTE_AVERAGE));
             runtime.setText(context.getString(R.string.runtime, cursor.getString(Query.RUNTIME)));
+            companies.setText(cursor.getString(Query.PRODUCTION_COMPANIES));
+            countries.setText(cursor.getString(Query.PRODUCTION_COUNTRIES));
         }
     }
 }

@@ -20,7 +20,10 @@ import com.squareup.picasso.RequestCreator;
  * See {@link RequestCreator}
  */
 
-public class ServiceUtils {
+public final class ServiceUtils {
+
+    /** The class is never initialized */
+    private ServiceUtils(){}
 
     @NonNull
     public static RequestCreator loadPicasso(Context context, String path) {

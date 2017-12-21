@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/background"
-    tools:context="com.lineargs.watchnext.ui.CreditsFragment"
-    tools:showIn="@layout/activity_credits">
+    tools:context="com.lineargs.watchnext.ui.CreditsCrewFragment"
+    tools:showIn="@layout/activity_credits_crew">
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/credits_recycler_view"
+        android:id="@+id/credits_crew_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/small_padding"

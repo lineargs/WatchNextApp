@@ -353,8 +353,16 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @OnClick(R.id.cast_header_layout)
     public void loadCast() {
-        Intent intent = (new Intent(getContext(), CreditsActivity.class));
+        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
         Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+        intent.setData(uri);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.crew_header_layout)
+    public void loadCrew() {
+        Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
+        Uri uri = DataContract.CreditCrew.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
         startActivity(intent);
     }
@@ -441,7 +449,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onPersonClick(String id) {
         if (mDualPane) {
-            Intent intent = (new Intent(getContext(), CreditsActivity.class));
+            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(ID, id);

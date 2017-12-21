@@ -18,6 +18,7 @@
     <!-- Other colors -->
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhite90">#E6FFFFFF</color>
     <color name="shortcutBackground">#fff5f5f5</color>
 
 </resources>

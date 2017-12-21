@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.CreditsAdapter;
+import com.lineargs.watchnext.adapters.CreditsCastAdapter;
 import com.lineargs.watchnext.data.CastQuery;
 import com.lineargs.watchnext.data.DataContract;
 
@@ -28,13 +28,13 @@ import butterknife.Unbinder;
  * A fragment loading and showing list of cast members for now.
  * We will use same class to implement crew.
  */
-public class CreditsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsAdapter.OnClick {
+public class CreditsCastFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCastAdapter.OnClick {
 
     static final String ID = "id";
     private static final int LOADER_ID = 333;
-    @BindView(R.id.credits_recycler_view)
+    @BindView(R.id.credits_cast_recycler_view)
     RecyclerView mRecyclerView;
-    private CreditsAdapter mAdapter;
+    private CreditsCastAdapter mAdapter;
     private Uri mUri;
     private Uri mDualUri = null;
     private Unbinder unbinder;
@@ -47,7 +47,7 @@ public class CreditsFragment extends BaseFragment implements LoaderManager.Loade
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_credits, container, false);
+        View view = inflater.inflate(R.layout.fragment_credits_cast, container, false);
         setupViews(getContext(), view);
         return view;
     }
@@ -57,7 +57,7 @@ public class CreditsFragment extends BaseFragment implements LoaderManager.Loade
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), numberOfColumns());
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new CreditsAdapter(context, this);
+        mAdapter = new CreditsCastAdapter(context, this);
         mRecyclerView.setAdapter(mAdapter);
         if (getActivity().getIntent().getData() != null) {
             mUri = getActivity().getIntent().getData();

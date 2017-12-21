@@ -7,39 +7,34 @@ import android.view.View;
 
 import com.lineargs.watchnext.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class PersonActivity extends BaseActivity {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+public class CreditsCrewActivity extends BaseTopActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_person);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_credits_crew);
         setupActionBar();
-        if (savedInstanceState == null) {
-            PersonFragment fragment = new PersonFragment();
-            fragment.setmUri(getIntent().getData());
-            if (getIntent().hasExtra(CreditsCastFragment.ID)) {
-                fragment.setId(getIntent().getStringExtra(CreditsCastFragment.ID));
-            }
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.frame_layout_person, fragment)
-                    .commit();
-        }
+        setupNavDrawer();
     }
 
     @Override
     protected void setupActionBar() {
         super.setupActionBar();
-        setTitle("");
+        setTitle(getString(R.string.title_activity_credits_crew));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle("");
+            actionBar.setTitle(getString(R.string.title_activity_credits_crew));
         }
+    }
+
+    @Override
+    public void setDrawerIndicatorEnabled() {
+        super.setDrawerIndicatorEnabled();
+        /* We change the menu icon with an arrow so the user
+         * can navigate back and still able to open the Nav
+         * Drawer while swiping right from left
+         */
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.icon_arrow_back_white);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

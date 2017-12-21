@@ -20,7 +20,10 @@ public class DataDbHelper extends SQLiteOpenHelper {
      */
     private static final String DATABASE_NAME = "watchnext.db";
 
+
+    private static final int DB_VER_38 = 38;
     private static final int DB_VER_39 = 39;
+    private static final int DB_VER_40 = 40;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
@@ -370,16 +373,18 @@ public class DataDbHelper extends SQLiteOpenHelper {
 
         Log.d("DataDbHelper", "Upgrading from " + oldVersion + " to " + newVersion);
 
-        switch (newVersion) {
+        switch (oldVersion) {
             case DB_VER_39:
-                upgradeToThirtyNine(db);
-                break;
+                upgradeToThirtyEight(db);
         }
     }
 
-    private static void upgradeToThirtyNine(SQLiteDatabase db) {
+    private static void upgradeToThirtyEight(SQLiteDatabase db) {
+
         /* Create the Crew table*/
-        db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
+        if (isTableMissing(db, DataContract.CreditCrew.TABLE_NAME)) {
+            db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
+        }
 
         /* Check if the columns are missing then alter the  Popular Movie table*/
         if (isColumnMissing(db, DataContract.PopularMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
@@ -550,5 +555,16 @@ public class DataDbHelper extends SQLiteOpenHelper {
         boolean columnExists = cursor.getColumnIndex(column) != -1;
         cursor.close();
         return !columnExists;
+    }
+
+    private static boolean isTableMissing(SQLiteDatabase db, String table) {
+        Cursor cursor = db.query("sqlite_master", new String[]{"name"}, "type='table' AND name=?",
+                new String[]{table}, null, null, null, "1");
+        if (cursor == null) {
+            return true;
+        }
+        boolean tableExists = cursor.getCount() > 0;
+        cursor.close();
+        return !tableExists;
     }
 }

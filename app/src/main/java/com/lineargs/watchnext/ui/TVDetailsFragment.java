@@ -187,7 +187,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
 
     @OnClick(R.id.cast_header_layout)
     public void loadCast() {
-        Intent intent = (new Intent(getContext(), CreditsActivity.class));
+        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
         Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
         intent.putExtra(MovieDetailsFragment.TITLE, title);
@@ -368,7 +368,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onPersonClick(String id) {
         if (mDualPane) {
-            Intent intent = (new Intent(getContext(), CreditsActivity.class));
+            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(MovieDetailsFragment.ID, id);
