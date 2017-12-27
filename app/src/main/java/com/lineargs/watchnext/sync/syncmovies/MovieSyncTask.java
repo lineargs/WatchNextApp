@@ -17,6 +17,7 @@ import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +44,9 @@ class MovieSyncTask {
         stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
         mUri = Uri.parse(stringUri);
         id = uri.getLastPathSegment();
-        Call<MovieDetail> call = MOVIE_API_SERVICE.getMovieDetail(id, BuildConfig.MOVIE_DATABASE_API_KEY, APPEND_TO_RESPONSE);
+        String language = Locale.getDefault().toString();
+        language = language.replace('_', '-');
+        Call<MovieDetail> call = MOVIE_API_SERVICE.getMovieDetail(id, BuildConfig.MOVIE_DATABASE_API_KEY, language, APPEND_TO_RESPONSE);
         call.enqueue(new Callback<MovieDetail>() {
             @Override
             public void onResponse(@NonNull Call<MovieDetail> call, @NonNull final Response<MovieDetail> response) {

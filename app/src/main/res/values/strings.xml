@@ -1,8 +1,6 @@
 <resources>
 
     <!-- Main -->
-    <string name="app_name">WatchNext</string>
-    <string name="nav_header_text">Watch Next</string>
     <string name="main_text_view">Once you add a favorite, you will see it listed here.</string>
     <string name="empty_image_content_description">Conversation image for empty view</string>
 
@@ -10,18 +8,13 @@
     <!-- Settings -->
     <string name="pref_theme_grey_label">Grey</string>
     <string name="pref_theme_blue_grey_label">Blue Grey</string>
-    <string name="pref_theme_key" translatable="false">app_theme</string>
-    <string name="pref_theme_grey_key" translatable="false">theme_grey</string>
-    <string name="pref_theme_blue_grey_key" translatable="false">theme_blue_grey</string>
     <string name="pref_theme_title">Themes</string>
     <string name="pref_title_adult_search">Adult search</string>
     <string name="pref_description_adult_search_off">Enabling will make adult content available in the search
     </string>
     <string name="pref_description_adult_search_on">Disabling will make adult content unavailable in the search
     </string>
-    <string name="adult_search" translatable="false">adult_search</string>
     <string name="pref_about_title">About</string>
-    <string name="pref_about_key" translatable="false">about_key</string>
 
     <!-- Search -->
     <string name="search_label">WatchNext</string>
@@ -77,11 +70,6 @@
     <string name="seasons_text_view_button">Seasons</string>
     <string name="serie_content_description">Serie poster</string>
 
-    <!-- Provider and SyncAdapter -->
-    <string name="content_authority" translatable="false">com.lineargs.watchnext</string>
-    <string name="sync_account_type" translatable="false">lineargs.watchnext.com</string>
-    <string name="sync_account_name" translatable="false">WatchNext Sync</string>
-
 
     <!-- Credits -->
     <string name="text_not_available">N / A</string>
@@ -95,16 +83,12 @@
 
     <!-- Share -->
     <string name="menu_share">Share</string>
-    <string name="you_tube" translatable="false">http://www.youtube.com/watch?v=%s</string>
-    <string name="share_movie" translatable="false">https://www.themoviedb.org/movie/%s #WatchNext</string>
-    <string name="share_serie" translatable="false">https://www.themoviedb.org/tv/%s #WatchNext</string>
 
     <!-- Videos -->
     <string name="videos_empty_text">No videos found</string>
     <string name="videos_text_view_button">Videos</string>
     <string name="play_circle_content_description">Circle play image</string>
     <string name="you_tube_image_content_description">YouTube video poster</string>
-    <string name="you_tube_image" translatable="false">https://img.youtube.com/vi/%s/0.jpg</string>
 
     <!-- Reviews -->
     <string name="review_empty_text">No reviews found</string>
@@ -115,7 +99,6 @@
     <string name="overview_text">overview</string>
     <string name="movie_poster_content_description">Movie poster</string>
     <string name="star_image_content_description">Star image</string>
-    <string name="date_pattern" translatable="false">dd MMM yyyy</string>
     <string name="nav_icon_content_description">Application icon</string>
     <string name="runtime">%s min</string>
     <string name="status_text">Status</string>
@@ -129,23 +112,6 @@
     <!-- Notification -->
     <string name="notification_dismiss">Dismiss</string>
     <string name="notification_text">Airing today: %s</string>
-
-    <!-- Tools -->
-    <string name="tools_episode_title" translatable="false">Episode Title</string>
-    <string name="tools_episode_date" translatable="false">29/10/1988</string>
-    <string name="tools_episode_vote" translatable="false">8 / 10</string>
-    <string name="tools_person_name" translatable="false">Goran Minov</string>
-    <string name="tools_person_place" translatable="false">Negotino</string>
-    <string name="tools_person_homepage" translatable="false">https://github.com/lineargs</string>
-    <string name="tools_movie_title" translatable="false">Movie Title</string>
-    <string name="tools_movie_date" translatable="false">29/10/1988</string>
-    <string name="tools_movie_vote" translatable="false">8 / 10</string>
-    <string name="tools_review_content" translatable="false">Be together, not the same.</string>
-    <string name="tools_season_title" translatable="false">Season 12345</string>
-    <string name="tools_season_date" translatable="false">29 Oct 1988</string>
-    <string name="tools_season_episodes" translatable="false">24 Episodes</string>
-    <string name="tools_runtime">135 mins</string>
-    <string name="tools_companies">Warner Bros</string>
 
     <!-- Content Description -->
     <string name="toolbar_content_description">Toolbar navigation</string>
@@ -177,12 +143,60 @@
 
     <!-- About -->
     <string name="about_version">Version 1.01 (Database version 38)</string>
-    <string name="the_tmdb">The TMDb</string>
-    <string name="tmdb_notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
-    <string name="tmdb_terms">TMDb Terms</string>
-    <string name="tmdb_api_terms">TMDb API Terms</string>
-    <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
-    <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
     <string name="open_source_text">This application is open source at https://github.com/lineargs/WatchNextApp</string>
 
+
+    <!-- NON TRANSLATABLE -->
+    <!-- Main -->
+    <string name="app_name" translatable="false">WatchNext</string>
+    <string name="nav_header_text" translatable="false">Watch Next</string>
+
+
+    <!-- Settings -->
+    <string name="pref_theme_key" translatable="false">app_theme</string>
+    <string name="pref_theme_grey_key" translatable="false">theme_grey</string>
+    <string name="pref_theme_blue_grey_key" translatable="false">theme_blue_grey</string>
+    <string name="adult_search" translatable="false">adult_search</string>
+    <string name="pref_about_key" translatable="false">about_key</string>
+
+    <!-- Provider and SyncAdapter -->
+    <string name="content_authority" translatable="false">com.lineargs.watchnext</string>
+    <string name="sync_account_type" translatable="false">lineargs.watchnext.com</string>
+    <string name="sync_account_name" translatable="false">WatchNext Sync</string>
+
+    <!-- Share -->
+    <string name="you_tube" translatable="false">http://www.youtube.com/watch?v=%s</string>
+    <string name="share_movie" translatable="false">https://www.themoviedb.org/movie/%s #WatchNext</string>
+    <string name="share_serie" translatable="false">https://www.themoviedb.org/tv/%s #WatchNext</string>
+
+    <!-- Videos -->
+    <string name="you_tube_image" translatable="false">https://img.youtube.com/vi/%s/0.jpg</string>
+
+    <!-- Common -->
+    <string name="date_pattern" translatable="false">dd MMM yyyy</string>
+
+    <!-- Tools -->
+    <string name="tools_episode_title" translatable="false">Episode Title</string>
+    <string name="tools_episode_date" translatable="false">29/10/1988</string>
+    <string name="tools_episode_vote" translatable="false">8 / 10</string>
+    <string name="tools_person_name" translatable="false">Goran Minov</string>
+    <string name="tools_person_place" translatable="false">Negotino</string>
+    <string name="tools_person_homepage" translatable="false">https://github.com/lineargs</string>
+    <string name="tools_movie_title" translatable="false">Movie Title</string>
+    <string name="tools_movie_date" translatable="false">29/10/1988</string>
+    <string name="tools_movie_vote" translatable="false">8 / 10</string>
+    <string name="tools_review_content" translatable="false">Be together, not the same.</string>
+    <string name="tools_season_title" translatable="false">Season 12345</string>
+    <string name="tools_season_date" translatable="false">29 Oct 1988</string>
+    <string name="tools_season_episodes" translatable="false">24 Episodes</string>
+    <string name="tools_runtime" translatable="false">135 mins</string>
+    <string name="tools_companies" translatable="false">Warner Bros</string>
+
+    <!-- About -->
+    <string name="the_tmdb" translatable="false">The TMDb</string>
+    <string name="tmdb_notice" translatable="false">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
+    <string name="tmdb_terms" translatable="false">TMDb Terms</string>
+    <string name="tmdb_api_terms" translatable="false">TMDb API Terms</string>
+    <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
+    <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
 </resources>
