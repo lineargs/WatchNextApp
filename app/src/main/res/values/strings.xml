@@ -72,7 +72,6 @@
 
 
     <!-- Credits -->
-    <string name="text_not_available">N / A</string>
     <string name="cast_empty_text">No cast found</string>
     <string name="crew_empty_text">No crew found</string>
     <string name="biography_text">Biography</string>
@@ -199,4 +198,5 @@
     <string name="tmdb_api_terms" translatable="false">TMDb API Terms</string>
     <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
     <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
+    <string name="text_not_available">N / A</string>
 </resources>
