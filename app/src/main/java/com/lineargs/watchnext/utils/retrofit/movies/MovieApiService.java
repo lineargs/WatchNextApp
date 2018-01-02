@@ -19,14 +19,12 @@ public interface MovieApiService {
     Call<Movies> getMovies(
             @Path("path") String path,
             @Query("api_key") String apiKey,
-            @Query("language") String language,
             @Query("region") String region);
 
     @GET("movie/{movie_id}")
     Call<MovieDetail> getMovieDetail(
             @Path("movie_id") String movieId,
             @Query("api_key") String apiKey,
-            @Query("language") String language,
             @Query("append_to_response") String appendToResponse
     );
 }

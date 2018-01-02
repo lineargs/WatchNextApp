@@ -64,8 +64,10 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
 
     @Override
     protected void onResume() {
-        showSnackBar();
         super.onResume();
+        if (isConnected()) {
+
+        }
     }
 
     @OnClick(R.id.fab)

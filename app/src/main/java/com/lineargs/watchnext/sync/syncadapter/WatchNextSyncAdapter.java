@@ -81,7 +81,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    private static void syncImmediately(Context context) {
+    public static void syncImmediately(Context context) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -124,7 +124,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
         String region = language.substring(language.indexOf('-') + 1, language.length());
         Log.w("Region", region);
         Log.w("Locale", Locale.getDefault().getLanguage());
-        Call<Movies> popularCall = movieApiService.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, language, region);
+        Call<Movies> popularCall = movieApiService.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, region);
         popularCall.enqueue(new Callback<Movies>() {
             @Override
             public void onResponse(@NonNull Call<Movies> call, @NonNull final Response<Movies> response) {
@@ -143,7 +143,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Movies> upcomingCall = movieApiService.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY, language, region);
+        Call<Movies> upcomingCall = movieApiService.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY, region);
 
         upcomingCall.enqueue(new Callback<Movies>() {
             @Override
@@ -162,7 +162,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Movies> topCall = movieApiService.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, language, region);
+        Call<Movies> topCall = movieApiService.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, region);
 
         topCall.enqueue(new Callback<Movies>() {
             @Override
@@ -181,7 +181,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        Call<Movies> theaterCall = movieApiService.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY, language, region);
+        Call<Movies> theaterCall = movieApiService.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY, region);
 
         theaterCall.enqueue(new Callback<Movies>() {
             @Override
