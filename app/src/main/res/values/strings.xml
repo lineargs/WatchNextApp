@@ -7,7 +7,6 @@
 
     <!-- Settings -->
     <string name="pref_theme_grey_label">Grey</string>
-    <string name="pref_theme_blue_grey_label">Blue Grey</string>
     <string name="pref_theme_title">Themes</string>
     <string name="pref_title_adult_search">Adult search</string>
     <string name="pref_description_adult_search_off">Enabling will make adult content available in the search
@@ -22,8 +21,8 @@
     <string name="menu_search">Search</string>
     <string name="settings_description">Search for latest movies and series</string>
     <string name="search_query_hint">Search The MovieDb</string>
-    <string name="search_empty_text_movie">Please use the search to look up for a movie.\n\nPowered by THE MOVIE DB</string>
-    <string name="search_empty_text_serie">Please use the search to look up for a serie.\n\nPowered by THE MOVIE DB</string>
+    <string name="search_empty_text_movie">Please use the search to look up for a movie.  Powered by THE MOVIE DB</string>
+    <string name="search_empty_text_serie">Please use the search to look up for a serie.  Powered by THE MOVIE DB</string>
 
     <!-- Sort Menu -->
     <string name="sort_by">Sort By</string>
@@ -142,7 +141,7 @@
 
     <!-- About -->
     <string name="about_version">Version 1.01 (Database version 38)</string>
-    <string name="open_source_text">This application is open source at https://github.com/lineargs/WatchNextApp</string>
+    <string name="open_source_text">This application is open source at https://lineargs.github.io/WatchNextApp</string>
 
 
     <!-- NON TRANSLATABLE -->
@@ -199,4 +198,5 @@
     <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
     <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
     <string name="text_not_available">N / A</string>
+    <string name="pref_theme_blue_grey_label">Blue Grey</string>
 </resources>
