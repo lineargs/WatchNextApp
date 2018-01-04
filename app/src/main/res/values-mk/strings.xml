@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_theme_grey_label">Сива</string>
+    <string name="pref_theme_blue_grey_label">Сина/Сива</string>
+    <string name="pref_theme_title">Теми</string>
+    <string name="pref_title_adult_search">Возрасно пребарување</string>
+    <string name="search_label">WatchNext</string>
+    <string name="menu_search">Пребарување</string>
+    <string name="sort_by">Сортирај</string>
+    <string name="sort_menu_title">Наслов</string>
+    <string name="title_activity_tabbed_movies">Филмови</string>
+    <string name="title_activity_tabbed_series">ТВ Серии</string>
+    <string name="title_activity_theater">Во кината</string>
+    <string name="title_activity_main">Омилени</string>
+    <string name="subtitle_activity_videos">Видеа</string>
+    <string name="subtitle_activity_seasons">Сезони</string>
+    <string name="tab_popular">Популарни</string>
+    <string name="title_activity_about">За нас</string>
+    <string name="toast_add_to_favorites">Додадено во омилени</string>
+    <string name="snackbar_no_connection">Нема конекција</string>
+    <string name="season">Сезона %d</string>
+    <string name="runtime">%s мин</string>
+</resources>
