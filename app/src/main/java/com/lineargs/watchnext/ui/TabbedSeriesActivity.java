@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -74,15 +73,39 @@ public class TabbedSeriesActivity extends BaseTopActivity {
          * may be best to switch to a
          * {@link android.support.v4.app.FragmentStatePagerAdapter}.
          */
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+            private final Fragment[] fragments = new Fragment[]{
+                    new NavPopularSeriesFragment(),
+                    new NavTopSeriesFragment(),
+                    new NavOnTheAirSeriesFragment()
+            };
+            private final String[] fragmentNames = new String[]{
+                    getString(R.string.tab_popular),
+                    getString(R.string.tab_top_rated),
+                    getString(R.string.tab_on_the_air)
+            };
+
+            @Override
+            public Fragment getItem(int position) {
+                return fragments[position];
+            }
+
+            @Override
+            public int getCount() {
+                return fragments.length;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return fragmentNames[position];
+            }
+        };
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager.setAdapter(sectionsPagerAdapter);
+        mViewPager.setAdapter(fragmentPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
-
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -127,38 +150,5 @@ public class TabbedSeriesActivity extends BaseTopActivity {
     private void startSearchIntent(Intent intent) {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            switch (position) {
-                case 0:
-                    return NavPopularSeriesFragment.newInstance();
-                case 1:
-                    return NavTopSeriesFragment.newInstance();
-                case 2:
-                    return NavOnTheAirSeriesFragment.newInstance();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
     }
 }

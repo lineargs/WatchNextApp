@@ -5,6 +5,7 @@
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="background">@color/colorYellowTransparent</item>
     </style>
 
     <!-- Grey App Theme -->
@@ -12,7 +13,6 @@
         <item name="colorPrimary">@color/colorGrey</item>
         <item name="colorPrimaryDark">@color/colorGreyDark</item>
         <item name="colorAccent">@color/colorBlack</item>
-        <item name="background">@color/colorYellowTransparent</item>
     </style>
 
     <!-- Blue Grey App Theme -->
@@ -20,7 +20,6 @@
         <item name="colorPrimary">@color/colorBlueGrey</item>
         <item name="colorPrimaryDark">@color/colorBlueGreyDark</item>
         <item name="colorAccent">@color/colorBlack</item>
-        <item name="background">@color/colorYellowTransparent</item>
     </style>
 
 </resources>
