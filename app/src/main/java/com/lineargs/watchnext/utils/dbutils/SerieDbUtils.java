@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.utils.dbutils;
 
 import android.content.ContentValues;
-import android.util.Log;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;

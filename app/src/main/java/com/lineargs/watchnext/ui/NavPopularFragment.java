@@ -1,32 +1,16 @@
 package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ExplorePopularAdapter;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by goranminov on 03/11/2017.
@@ -34,80 +18,30 @@ import butterknife.Unbinder;
  * A fragment for our Tabbed Movies View Pager
  */
 
-public class NavPopularFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        ExplorePopularAdapter.OnItemClickListener {
+public class NavPopularFragment extends MovieListFragment implements ExplorePopularAdapter.OnItemClickListener {
 
-    private static final int LOADER_ID = 225;
-    @BindView(R.id.tabbed_movies_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+
     private ExplorePopularAdapter mAdapter;
-    private Unbinder unbinder;
-
-    public static NavPopularFragment newInstance() {
-        return new NavPopularFragment();
-    }
-
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_popular_movies, container, false);
-        setupViews(rootView);
-        return rootView;
-    }
-
-    private void setupViews(View view) {
-        unbinder = ButterKnife.bind(this, view);
-        if (isConnected()) {
-            startLoading();
-        }
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        mAdapter = new ExplorePopularAdapter(getContext(), this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+    public RecyclerView.Adapter getAdapter() {
+        mAdapter = new ExplorePopularAdapter(getActivity(), this);
+        return mAdapter;
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        DataContract.PopularMovieEntry.CONTENT_URI,
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
+    public Uri getLoaderUri() {
+        return DataContract.PopularMovieEntry.CONTENT_URI;
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                    showData();
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
+    public void swapData(Cursor data) {
+        mAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void resetLoader(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override
@@ -118,25 +52,4 @@ public class NavPopularFragment extends BaseFragment implements LoaderManager.Lo
         startActivity(intent, bundle);
     }
 
-    private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
-    }
-
-    private void showData() {
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private boolean isConnected() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert connectivityManager != null;
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

@@ -25,7 +25,6 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SeasonsQuery;
-import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -29,15 +29,13 @@ class MovieSyncTask {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String APPEND_TO_RESPONSE = "videos,reviews,credits";
-    private static String id;
-    private static Uri mUri;
-
     private static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
-
     private static final MovieApiService MOVIE_API_SERVICE = retrofit.create(MovieApiService.class);
+    private static String id;
+    private static Uri mUri;
 
     static void syncMovieDetail(final Context context, final Uri uri) {
         String stringUri = uri.toString();

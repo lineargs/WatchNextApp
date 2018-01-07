@@ -3,9 +3,9 @@ package com.lineargs.watchnext.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +23,10 @@ import butterknife.Unbinder;
  */
 public class AboutFragment extends Fragment {
 
-    @BindView(R.id.tmdb_terms) AppCompatTextView terms;
-    @BindView(R.id.tmdb_api_terms) AppCompatTextView apiTerms;
+    @BindView(R.id.tmdb_terms)
+    AppCompatTextView terms;
+    @BindView(R.id.tmdb_api_terms)
+    AppCompatTextView apiTerms;
     private Unbinder unbinder;
 
     public AboutFragment() {
@@ -38,7 +40,7 @@ public class AboutFragment extends Fragment {
         return rootView;
     }
 
-    @OnClick (R.id.tmdb_terms)
+    @OnClick(R.id.tmdb_terms)
     public void openTerms() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(getString(R.string.tmdb_terms_link)));
@@ -48,7 +50,7 @@ public class AboutFragment extends Fragment {
         startActivity(intent);
     }
 
-    @OnClick (R.id.tmdb_api_terms)
+    @OnClick(R.id.tmdb_api_terms)
     public void openTermsApi() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(getString(R.string.tmdb_api_terms_link)));

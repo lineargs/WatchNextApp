@@ -13,7 +13,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +24,6 @@ import com.lineargs.watchnext.adapters.MainAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
-
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,14 +56,6 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         showSnackBar();
         if (isConnected()) {
             WatchNextSyncAdapter.initializeMovieSyncAdapter(this);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isConnected()) {
-
         }
     }
 

@@ -4,8 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/background"
-    tools:context="com.lineargs.watchnext.ui.NavPopularFragment">
+    android:background="?attr/background">
 
     <ProgressBar
         android:id="@+id/progress_bar"

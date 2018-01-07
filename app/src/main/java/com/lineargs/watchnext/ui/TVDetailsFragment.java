@@ -33,7 +33,6 @@ import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
 import com.lineargs.watchnext.data.CastQuery;
-import com.lineargs.watchnext.data.CrewQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;

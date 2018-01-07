@@ -2,10 +2,8 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +28,6 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private Cursor cursor;
     private OnClick onClick;
-
-    public interface OnClick {
-        void onCrewClick(String id);
-    }
-
 
     public CrewAdapter(@NonNull Context context, @NonNull OnClick onClick) {
         this.context = context;
@@ -67,6 +60,10 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void swapCursor(Cursor cursor) {
         this.cursor = cursor;
         notifyDataSetChanged();
+    }
+
+    public interface OnClick {
+        void onCrewClick(String id);
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

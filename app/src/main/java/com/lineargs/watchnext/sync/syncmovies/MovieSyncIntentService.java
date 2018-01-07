@@ -1,6 +1,5 @@
 package com.lineargs.watchnext.sync.syncmovies;
 
-import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.Intent;
 

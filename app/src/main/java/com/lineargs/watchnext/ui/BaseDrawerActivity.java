@@ -2,6 +2,7 @@ package com.lineargs.watchnext.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,10 +14,14 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,8 +46,20 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (isConnected()) {
+            syncAdapterNow();
+        }
         handler = new Handler();
+    }
+
+    private void syncAdapterNow() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String locale = Locale.getDefault().toString();
+        if (!sharedPreferences
+                .getString(getString(R.string.pref_locale_key), "").contains(locale)) {
+            sharedPreferences.edit().putString(getString(R.string.pref_locale_key), locale).apply();
+            WatchNextSyncAdapter.syncImmediately(this);
+        }
     }
 
     @Override

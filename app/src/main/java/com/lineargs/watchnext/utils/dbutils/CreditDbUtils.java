@@ -4,8 +4,8 @@ import android.content.ContentValues;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.retrofit.credits.Cast;
-import com.lineargs.watchnext.utils.retrofit.credits.Crew;
 import com.lineargs.watchnext.utils.retrofit.credits.Credits;
+import com.lineargs.watchnext.utils.retrofit.credits.Crew;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class CreditDbUtils {
      * Builds ContentValues[] used for our ContentResolver
      *
      * @param credits List used to get the values from our API response
-     * @param id    The ID of the movie / serie
+     * @param id      The ID of the movie / serie
      * @return The {@link ContentValues}
      */
     public static ContentValues[] getCastContentValues(Credits credits, String id) {
@@ -50,7 +50,7 @@ public class CreditDbUtils {
      * Builds ContentValues[] used for our ContentResolver
      *
      * @param credits List used to get the values from our API response
-     * @param id    The ID of the movie / serie
+     * @param id      The ID of the movie / serie
      * @return The {@link ContentValues}
      */
     @SuppressWarnings("unused")

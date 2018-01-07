@@ -26,10 +26,9 @@ import butterknife.Unbinder;
 
 /**
  * Created by goranminov on 21/12/2017.
- *
+ * <p>
  * A fragment loading and showing list of cast members for now.
  * We will use same class to implement crew.
- *
  */
 
 public class CreditsCrewFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCrewAdapter.OnClick {
