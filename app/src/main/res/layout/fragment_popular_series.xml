@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/background"
-    tools:context="com.lineargs.watchnext.ui.NavPopularSeriesFragment">
+    tools:context="com.lineargs.watchnext.ui.SeriesPopularFragment">
 
     <ProgressBar
         android:id="@+id/progress_bar"

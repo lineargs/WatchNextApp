@@ -1,15 +1,12 @@
 package com.lineargs.watchnext.ui;
 
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -21,53 +18,37 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.SeriesTopAdapter;
-import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * Created by goranminov on 04/11/2017.
- * <p>
- * A fragment for our Tabbed Series View Pager
- */
+public abstract class SeriesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-public class NavTopSeriesFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        SeriesTopAdapter.OnItemClickListener {
-
-    private static final int LOADER_ID = 228;
+    private static final int LOADER_ID = 233;
     @BindView(R.id.tabbed_series_recycler_view)
-    RecyclerView mRecyclerView;
+    RecyclerView recyclerView;
     @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    private SeriesTopAdapter mAdapter;
+    ProgressBar progressBar;
     private Unbinder unbinder;
 
-    public static NavTopSeriesFragment newInstance() {
-        return new NavTopSeriesFragment();
-    }
-
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_top_series, container, false);
-        setupViews(getContext(), rootView);
+        super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.fragment_list_series, container, false);
+        setupViews(rootView);
         return rootView;
     }
 
-    private void setupViews(Context context, View view) {
+    private void setupViews(View view) {
         unbinder = ButterKnife.bind(this, view);
         if (isConnected()) {
             startLoading();
         }
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        mAdapter = new SeriesTopAdapter(context, this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(getAdapter());
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -76,7 +57,7 @@ public class NavTopSeriesFragment extends BaseFragment implements LoaderManager.
         switch (id) {
             case LOADER_ID:
                 return new CursorLoader(getContext(),
-                        DataContract.TopRatedSerieEntry.CONTENT_URI,
+                        getLoaderUri(),
                         Query.PROJECTION,
                         null,
                         null,
@@ -92,7 +73,7 @@ public class NavTopSeriesFragment extends BaseFragment implements LoaderManager.
             case LOADER_ID:
                 if (data.getCount() != 0) {
                     data.moveToFirst();
-                    mAdapter.swapCursor(data);
+                    swapData(data);
                     showData();
                 }
                 break;
@@ -103,15 +84,7 @@ public class NavTopSeriesFragment extends BaseFragment implements LoaderManager.
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onItemSelected(Uri uri) {
-        Intent intent = new Intent(getContext(), TVDetailsActivity.class);
-        intent.setData(uri);
-        Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
-        startActivity(intent, bundle);
+        resetLoader(loader);
     }
 
     @Override
@@ -121,13 +94,13 @@ public class NavTopSeriesFragment extends BaseFragment implements LoaderManager.
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     private boolean isConnected() {
@@ -141,6 +114,12 @@ public class NavTopSeriesFragment extends BaseFragment implements LoaderManager.
             return false;
         }
     }
+
+    public abstract RecyclerView.Adapter getAdapter();
+
+    public abstract void resetLoader(Loader<Cursor> loader);
+
+    public abstract void swapData(Cursor data);
+
+    public abstract Uri getLoaderUri();
 }
-
-

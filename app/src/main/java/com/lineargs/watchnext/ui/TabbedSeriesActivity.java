@@ -75,9 +75,9 @@ public class TabbedSeriesActivity extends BaseTopActivity {
          */
         FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             private final Fragment[] fragments = new Fragment[]{
-                    new NavPopularSeriesFragment(),
-                    new NavTopSeriesFragment(),
-                    new NavOnTheAirSeriesFragment()
+                    new SeriesPopularFragment(),
+                    new SeriesTopFragment(),
+                    new SeriesOnTheAirFragment()
             };
             private final String[] fragmentNames = new String[]{
                     getString(R.string.tab_popular),
