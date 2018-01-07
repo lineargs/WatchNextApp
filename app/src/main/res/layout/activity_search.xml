@@ -42,12 +42,12 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/empty_search"
+            style="@style/DetailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:gravity="center"
             android:text="@string/search_empty_text_movie"
-            style="@style/DetailText"
             android:visibility="gone"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:visibility="visible" />
