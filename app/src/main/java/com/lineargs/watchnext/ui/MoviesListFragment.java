@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class MovieListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class MoviesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 225;
     @BindView(R.id.tabbed_movies_recycler_view)

@@ -16,16 +16,18 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
 /**
  * Created by goranminov on 25/10/2017.
  * <p>
- * See {@link ExplorePopularAdapter}
+ * See {@link MoviesPopularAdapter}
  */
 
-public class ExploreUpcomingAdapter extends BaseTabbedAdapter {
+public class MoviesTopAdapter extends BaseTabbedAdapter {
 
     private Cursor cursor;
 
-    public ExploreUpcomingAdapter(@NonNull Context context, OnItemClickListener listener) {
+
+    public MoviesTopAdapter(@NonNull Context context, OnItemClickListener listener) {
         super(context, listener);
     }
+
 
     @Override
     protected void bindViews(final TabbedViewHolder holder, final Context context, int position) {
@@ -37,7 +39,6 @@ public class ExploreUpcomingAdapter extends BaseTabbedAdapter {
             holder.star.setImageDrawable(starImageBorder());
         }
         holder.title.setText(cursor.getString(Query.TITLE));
-
         ServiceUtils.loadPicasso(holder.poster.getContext(), cursor.getString(Query.POSTER_PATH))
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
@@ -46,7 +47,7 @@ public class ExploreUpcomingAdapter extends BaseTabbedAdapter {
         holder.star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = DataContract.UpcomingMovieEntry.buildMovieUriWithId(id);
+                Uri uri = DataContract.TopRatedMovieEntry.buildMovieUriWithId(id);
                 if (isFavorite(context, id)) {
                     DbUtils.removeFromFavorites(context, uri);
                     Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
@@ -63,7 +64,7 @@ public class ExploreUpcomingAdapter extends BaseTabbedAdapter {
     @Override
     protected void onViewClick(View view, int position) {
         cursor.moveToPosition(position);
-        Uri uri = DataContract.UpcomingMovieEntry.buildMovieUriWithId(
+        Uri uri = DataContract.TopRatedMovieEntry.buildMovieUriWithId(
                 Long.parseLong(cursor.getString(Query.ID)));
         callback.onItemSelected(uri);
     }

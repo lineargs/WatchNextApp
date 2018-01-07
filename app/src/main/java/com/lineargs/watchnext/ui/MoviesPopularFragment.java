@@ -9,7 +9,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.ExploreTopAdapter;
+import com.lineargs.watchnext.adapters.MoviesPopularAdapter;
 import com.lineargs.watchnext.data.DataContract;
 
 /**
@@ -18,19 +18,20 @@ import com.lineargs.watchnext.data.DataContract;
  * A fragment for our Tabbed Movies View Pager
  */
 
-public class NavTopFragment extends MovieListFragment implements ExploreTopAdapter.OnItemClickListener {
+public class MoviesPopularFragment extends MoviesListFragment implements MoviesPopularAdapter.OnItemClickListener {
 
-    private ExploreTopAdapter mAdapter;
+
+    private MoviesPopularAdapter mAdapter;
 
     @Override
     public RecyclerView.Adapter getAdapter() {
-        mAdapter = new ExploreTopAdapter(getActivity(), this);
+        mAdapter = new MoviesPopularAdapter(getActivity(), this);
         return mAdapter;
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+    public Uri getLoaderUri() {
+        return DataContract.PopularMovieEntry.CONTENT_URI;
     }
 
     @Override
@@ -39,8 +40,8 @@ public class NavTopFragment extends MovieListFragment implements ExploreTopAdapt
     }
 
     @Override
-    public Uri getLoaderUri() {
-        return DataContract.TopRatedMovieEntry.CONTENT_URI;
+    public void resetLoader(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 
     @Override
@@ -50,5 +51,5 @@ public class NavTopFragment extends MovieListFragment implements ExploreTopAdapt
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
     }
-}
 
+}

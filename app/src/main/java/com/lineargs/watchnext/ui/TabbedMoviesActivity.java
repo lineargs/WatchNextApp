@@ -74,9 +74,9 @@ public class TabbedMoviesActivity extends BaseTopActivity {
          */
         FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             private final Fragment[] fragments = new Fragment[]{
-                    new NavPopularFragment(),
-                    new NavTopFragment(),
-                    new NavUpcomingFragment()
+                    new MoviesPopularFragment(),
+                    new MoviesTopFragment(),
+                    new MoviesUpcomingFragment()
             };
             private final String[] fragmentNames = new String[]{
                     getString(R.string.tab_popular),

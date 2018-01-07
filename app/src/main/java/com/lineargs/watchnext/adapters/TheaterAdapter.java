@@ -16,7 +16,7 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
 /**
  * Created by goranminov on 17/10/2017.
  * <p>
- * See {@link ExplorePopularAdapter}
+ * See {@link MoviesPopularAdapter}
  */
 
 public class TheaterAdapter extends BaseTabbedAdapter {

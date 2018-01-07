@@ -10,7 +10,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.ExploreUpcomingAdapter;
+import com.lineargs.watchnext.adapters.MoviesUpcomingAdapter;
 import com.lineargs.watchnext.data.DataContract;
 
 /**
@@ -19,14 +19,14 @@ import com.lineargs.watchnext.data.DataContract;
  * A fragment for our Tabbed Movies View Pager
  */
 
-public class NavUpcomingFragment extends MovieListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        ExploreUpcomingAdapter.OnItemClickListener {
+public class MoviesUpcomingFragment extends MoviesListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        MoviesUpcomingAdapter.OnItemClickListener {
 
-    private ExploreUpcomingAdapter mAdapter;
+    private MoviesUpcomingAdapter mAdapter;
 
     @Override
     public RecyclerView.Adapter getAdapter() {
-        mAdapter = new ExploreUpcomingAdapter(getActivity(), this);
+        mAdapter = new MoviesUpcomingAdapter(getActivity(), this);
         return mAdapter;
     }
 

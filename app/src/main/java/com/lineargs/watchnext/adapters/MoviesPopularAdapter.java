@@ -19,18 +19,18 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
  * Extends our abstract BaseTabbedAdapter for better implementation
  */
 
-public class ExplorePopularAdapter extends BaseTabbedAdapter {
+public class MoviesPopularAdapter extends BaseTabbedAdapter {
 
     private Cursor cursor;
 
     /**
-     * Creates a ExplorePopularAdapter.
+     * Creates a MoviesPopularAdapter.
      * We call super as all our children views are being cached there.
      *
      * @param context  The context passed
      * @param listener The listener passed
      */
-    public ExplorePopularAdapter(@NonNull Context context, @NonNull OnItemClickListener listener) {
+    public MoviesPopularAdapter(@NonNull Context context, @NonNull OnItemClickListener listener) {
         super(context, listener);
     }
 
