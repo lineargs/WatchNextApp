@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.data.DataDbHelper;
+import com.lineargs.watchnext.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +29,8 @@ public class AboutFragment extends Fragment {
     AppCompatTextView terms;
     @BindView(R.id.tmdb_api_terms)
     AppCompatTextView apiTerms;
+    @BindView(R.id.version_text)
+    AppCompatTextView version;
     private Unbinder unbinder;
 
     public AboutFragment() {
@@ -37,6 +41,7 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+        version.setText(Utils.versionString(getActivity()));
         return rootView;
     }
 

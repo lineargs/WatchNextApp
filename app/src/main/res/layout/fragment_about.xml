@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/padding_six"
+    android:background="?colorPrimary"
     tools:context="com.lineargs.watchnext.ui.AboutFragment"
     tools:showIn="@layout/activity_about">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_six"
+        android:background="@color/colorWhite">
 
     <android.support.v7.widget.AppCompatTextView
         style="@style/TitleTextCenterVertical"
@@ -15,10 +22,11 @@
         android:text="@string/app_name" />
 
     <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/version_text"
         style="@style/DetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/about_version" />
+        tools:text="@string/about_version" />
 
     <android.support.v7.widget.AppCompatTextView
         style="@style/DetailText"
@@ -79,4 +87,5 @@
                 android:text="@string/tmdb_api_terms" />
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+</FrameLayout>

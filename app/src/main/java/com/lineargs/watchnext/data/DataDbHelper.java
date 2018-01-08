@@ -28,7 +28,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = DB_VER_38;
+    public static final int DATABASE_VERSION = DB_VER_38;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
