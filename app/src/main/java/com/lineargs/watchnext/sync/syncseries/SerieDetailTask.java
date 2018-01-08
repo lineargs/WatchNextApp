@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.CreditDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.VideosDbUtils;
@@ -32,9 +33,7 @@ class SerieDetailTask {
 
     static void syncSeasons(final Context context, final Uri uri) {
 
-        String stringUri = uri.toString();
-        stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
-        mUri = Uri.parse(stringUri);
+        mUri = Utils.getBaseUri(uri);
         id = uri.getLastPathSegment();
 
         Retrofit retrofit = new Retrofit.Builder()

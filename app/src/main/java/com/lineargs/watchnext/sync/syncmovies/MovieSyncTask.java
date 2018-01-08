@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.CreditDbUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.ReviewsDbUtils;
@@ -38,12 +39,8 @@ class MovieSyncTask {
     private static Uri mUri;
 
     static void syncMovieDetail(final Context context, final Uri uri) {
-        String stringUri = uri.toString();
-        stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
-        mUri = Uri.parse(stringUri);
+        mUri = Utils.getBaseUri(uri);
         id = uri.getLastPathSegment();
-        String language = Locale.getDefault().toString();
-        language = language.replace('_', '-');
         Call<MovieDetail> call = MOVIE_API_SERVICE.getMovieDetail(id, BuildConfig.MOVIE_DATABASE_API_KEY, APPEND_TO_RESPONSE);
         call.enqueue(new Callback<MovieDetail>() {
             @Override

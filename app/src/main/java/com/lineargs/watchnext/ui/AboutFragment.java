@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataDbHelper;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
 
 import butterknife.BindView;
@@ -47,22 +48,12 @@ public class AboutFragment extends Fragment {
 
     @OnClick(R.id.tmdb_terms)
     public void openTerms() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(getString(R.string.tmdb_terms_link)));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        }
-        startActivity(intent);
+        ServiceUtils.openTMDbTerms(getActivity(), getString(R.string.tmdb_terms_link));
     }
 
     @OnClick(R.id.tmdb_api_terms)
     public void openTermsApi() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(getString(R.string.tmdb_api_terms_link)));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        }
-        startActivity(intent);
+        ServiceUtils.openTMDbTerms(getActivity(), getString(R.string.tmdb_api_terms_link));
     }
 
     @Override
