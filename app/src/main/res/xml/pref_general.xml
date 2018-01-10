@@ -15,6 +15,10 @@
         android:key="@string/pref_theme_key"
         android:title="@string/pref_theme_title" />
     <Preference
+        android:icon="@drawable/icon_notifications_black"
+        android:key="@string/pref_notifications_key"
+        android:title="@string/pref_notifications" />
+    <Preference
         android:icon="@drawable/icon_info_outline_black"
         android:key="@string/pref_about_key"
         android:title="@string/pref_about_title" />

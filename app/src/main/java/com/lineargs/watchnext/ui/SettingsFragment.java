@@ -2,7 +2,9 @@ package com.lineargs.watchnext.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
@@ -47,6 +49,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(getActivity(), AboutActivity.class));
+                return true;
+            }
+        });
+
+        Preference notifications = findPreference(getString(R.string.pref_notifications_key));
+        notifications.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, getActivity().getPackageName());
+                } else {
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+                }
+                startActivity(intent);
                 return true;
             }
         });

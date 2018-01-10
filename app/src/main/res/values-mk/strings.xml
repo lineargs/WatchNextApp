@@ -71,4 +71,5 @@
         <item quantity="one">%d Епизода</item>
         <item quantity="other">%d Епизоди</item>
     </plurals>
+    <string name="pref_notifications">Известувања</string>
 </resources>
