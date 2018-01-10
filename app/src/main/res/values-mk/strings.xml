@@ -67,4 +67,8 @@
     <string name="cast_empty_text">Не се пронајдени актери</string>
     <string name="cast_text_view">Актери</string>
     <string name="text_not_available">Н / Д</string>
+    <plurals name="numberOfEpisodes">
+        <item quantity="one">%d Епизода</item>
+        <item quantity="other">%d Епизоди</item>
+    </plurals>
 </resources>

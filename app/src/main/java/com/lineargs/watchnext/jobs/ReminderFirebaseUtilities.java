@@ -67,8 +67,8 @@ public class ReminderFirebaseUtilities {
                  * guaranteed, but is more of a guideline for FirebaseJobDispatcher to go off of.
                  */
                 .setTrigger(Trigger.executionWindow(
-                        5,
-                        5 + 5))
+                        reminderSeconds,
+                        reminderSeconds + SYNC_FLEXTIME_SECONDS))
                 /*
                  * If a Job with the tag provided already exists, this new job will replace
                  * the old one.
