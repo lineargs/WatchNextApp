@@ -7,6 +7,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.utils.NotificationUtils;
 
 /**
  * Created by goranminov on 05/11/2017.
@@ -21,7 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setCustomTheme();
         super.onCreate(savedInstanceState);
-
+        NotificationUtils utils = new NotificationUtils(this);
     }
 
     /*

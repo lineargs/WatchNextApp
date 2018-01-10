@@ -422,7 +422,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         return favorite;
     }
 
-    /* Used so we can save on bandwith and network calls*/
+    /* Used so we can save on bandwith and network calls */
     private boolean checkForCredits(Context context, String id) {
         Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(id));
         Cursor cursor = context.getContentResolver().query(uri,

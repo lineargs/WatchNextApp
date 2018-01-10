@@ -14,9 +14,9 @@ public class ReminderTasks {
 
     public static final String ACTION_DISMISS_NOTIFICATION = "dismiss-notification";
 
-    static void executeTask(Context context, int id, String action) {
+    static void executeTask(int id, String action) {
         if (ACTION_DISMISS_NOTIFICATION.equals(action)) {
-            NotificationUtils.clearNotification(context, id);
+            NotificationUtils.clearNotification(id);
         }
     }
 }
