@@ -49,16 +49,11 @@ public class SearchActivity extends BaseTopActivity implements LoaderManager.Loa
     SearchView mSearchView;
     @BindView(R.id.search_results)
     RecyclerView mSearchResults;
-    @BindView(R.id.search_panel)
-    CardView mSearchPanel;
-    @BindView(R.id.empty_search)
-    AppCompatTextView mSearchEmpty;
     boolean adult;
     private String queryString;
     private Handler handler;
     private String mQuery = "";
     private SearchAdapter mResultsAdapter;
-    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +68,6 @@ public class SearchActivity extends BaseTopActivity implements LoaderManager.Loa
         mSearchResults.setLayoutManager(layoutManager);
         mResultsAdapter = new SearchAdapter(this);
         mSearchResults.setAdapter(mResultsAdapter);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;
         mQuery = query;
@@ -85,7 +79,7 @@ public class SearchActivity extends BaseTopActivity implements LoaderManager.Loa
     @Override
     protected void onResume() {
         super.onResume();
-        adult = sharedPreferences.getBoolean(getString(R.string.adult_search), false);
+        adult = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.adult_search), false);
     }
 
     @Override
@@ -177,9 +171,6 @@ public class SearchActivity extends BaseTopActivity implements LoaderManager.Loa
             SearchSyncUtils.syncSearchMovies(this, query, adult);
             startLoading();
         }
-        if (TextUtils.equals(query, "")) {
-            emptySearch();
-        }
         mQuery = query;
     }
 
@@ -193,20 +184,12 @@ public class SearchActivity extends BaseTopActivity implements LoaderManager.Loa
 
     private void startLoading() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mSearchPanel.setVisibility(GONE);
-        mSearchEmpty.setVisibility(GONE);
+        mSearchResults.setVisibility(GONE);
     }
 
     private void showData() {
         mProgressBar.setVisibility(GONE);
-        mSearchPanel.setVisibility(View.VISIBLE);
-        mSearchEmpty.setVisibility(GONE);
-    }
-
-    private void emptySearch() {
-        mProgressBar.setVisibility(GONE);
-        mSearchPanel.setVisibility(GONE);
-        mSearchEmpty.setVisibility(View.VISIBLE);
+        mSearchResults.setVisibility(View.VISIBLE);
     }
 
     @Override

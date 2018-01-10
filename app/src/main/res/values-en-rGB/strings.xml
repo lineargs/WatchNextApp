@@ -62,7 +62,7 @@
     <string name="notification_dismiss">Dismiss</string>
     <string name="notification_text">Airing today: %s</string>
     <string name="about_version">Version %1$s (Database version %2$d)</string>
-    <string name="open_source_text">This application is open source at https://lineargs.github.io/WatchNextApp</string>
+    <string name="open_source_text">The application is open source at https://lineargs.github.io/WatchNextApp</string>
     <string name="text_not_available">N / A</string>
     <string name="season">Season %d</string>
     <string name="seasons_empty_text">No seasons found</string>

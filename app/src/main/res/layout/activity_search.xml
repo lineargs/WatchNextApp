@@ -10,20 +10,13 @@
         android:id="@+id/list_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:orientation="vertical">
-
-        <View
-            android:id="@+id/scrim"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0"
-            android:background="@android:color/transparent" />
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white">
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -36,21 +29,16 @@
                     android:layout_height="match_parent"
                     android:imeOptions="actionSearch|flagNoExtractUi" />
 
+                <View
+                    android:id="@+id/scrim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0"
+                    android:background="@android:color/transparent" />
+
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/empty_search"
-            style="@style/DetailText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:gravity="center"
-            android:text="@string/search_empty_text_movie"
-            android:visibility="gone"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:visibility="visible" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -61,28 +49,17 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:visibility="visible" />
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/search_panel"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/search_card_view_margin"
-            android:background="@color/colorWhite"
-            android:visibility="gone"
-            app:cardCornerRadius="@dimen/search_card_view_corner_radius"
-            app:cardElevation="@dimen/card_view_elevation"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:visibility="visible">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/search_results"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:divider="@null"
-                android:paddingBottom="@dimen/search_recycler_view_padding"
-                android:paddingTop="@dimen/search_recycler_view_padding" />
-
-        </android.support.v7.widget.CardView>
+            android:layout_marginEnd="@dimen/search_card_view_margin"
+            android:layout_marginLeft="@dimen/search_card_view_margin"
+            android:layout_marginRight="@dimen/search_card_view_margin"
+            android:layout_marginStart="@dimen/search_card_view_margin"
+            android:clipToPadding="false"
+            android:divider="@null"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 
