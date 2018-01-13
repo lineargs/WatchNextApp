@@ -349,6 +349,120 @@ public class DataDbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Called when the database is created for the first time. This is where the creation of
+     * tables and the initial population of the tables should happen.
+     *
+     * @param db The database.
+     */
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+
+        /*
+         * After we've spelled out our SQLite table creation statements above, we actually execute
+         * that SQLs with the execSQL method of our SQLite database object.
+         */
+        db.execSQL(SQL_CREATE_POPULAR_MOVIE_TABLE);
+        db.execSQL(SQL_CREATE_TOP_RATED_MOVIE_TABLE);
+        db.execSQL(SQL_CREATE_UPCOMING_MOVIE_TABLE);
+        db.execSQL(SQL_CREATE_THEATER_MOVIE_TABLE);
+        db.execSQL(SQL_CREATE_MOVIE_CAST_TABLE);
+        db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
+        db.execSQL(SQL_CREATE_POPULAR_SERIE_TABLE);
+        db.execSQL(SQL_CREATE_TOP_SERIE_TABLE);
+        db.execSQL(SQL_CREATE_ON_THE_AIR_SERIE_TABLE);
+        db.execSQL(SQL_CREATE_FAVORITES_TABLE);
+        db.execSQL(SQL_CREATE_SEARCH_TABLE);
+        db.execSQL(SQL_CREATE_REVIEW_TABLE);
+        db.execSQL(SQL_CREATE_VIDEOS_TABLE);
+        db.execSQL(SQL_CREATE_SEASONS_TABLE);
+        db.execSQL(SQL_CREATE_EPISODES_TABLE);
+        db.execSQL(SQL_CREATE_PERSON_TABLE);
+        db.execSQL(SQL_CREATE_SEARCH_TV_TABLE);
+    }
+
+    /**
+     * All the tables except favorites one are only a cache for online data, so its upgrade policy is simply to discard
+     * the data and call through to onCreate to recreate the table. Note that this only fires if
+     * we change the version number for our database (in our case, DATABASE_VERSION). It does NOT
+     * depend on the version number for our application found in our app/build.gradle file.
+     *
+     * @param db         Database that is being upgraded
+     * @param oldVersion The old database version
+     * @param newVersion The new database version
+     */
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        Log.d("DataDbHelper", "Upgrading from " + oldVersion + " to " + newVersion);
+
+        int dbVersion = oldVersion;
+        switch (dbVersion) {
+            case DB_VER_37:
+                upgradeToThirtyEight(db);
+                dbVersion = DB_VER_38;
+        }
+
+        if (dbVersion != DATABASE_VERSION) {
+            recreateDatabase(db);
+        }
+    }
+
+    /**
+     * NOTE: We do not support downgrading the database version, so its downgrade policy is simply to discard
+     * the data and call through to onCreate to recreate the table.
+     * @param db Database that is being downgraded
+     * @param oldVersion The old database version
+     * @param newVersion The new database version
+     */
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        recreateDatabase(db);
+    }
+
+    private void recreateDatabase(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.PopularMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.TopRatedMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.UpcomingMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.TheaterMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.CreditCast.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.CreditCrew.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.PopularSerieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.TopRatedSerieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.OnTheAirSerieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Favorites.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Search.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.SearchTv.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Review.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Videos.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Seasons.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Episodes.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Person.TABLE_NAME);
+
+        onCreate(db);
+    }
+
+    private static boolean isColumnMissing(SQLiteDatabase db, String table, String column) {
+        Cursor cursor = db.query(table, null, null, null, null, null, null, "1");
+        if (cursor == null) {
+            return true;
+        }
+        boolean columnExists = cursor.getColumnIndex(column) != -1;
+        cursor.close();
+        return !columnExists;
+    }
+
+    private static boolean isTableMissing(SQLiteDatabase db, String table) {
+        Cursor cursor = db.query("sqlite_master", new String[]{"name"}, "type='table' AND name=?",
+                new String[]{table}, null, null, null, "1");
+        if (cursor == null) {
+            return true;
+        }
+        boolean tableExists = cursor.getCount() > 0;
+        cursor.close();
+        return !tableExists;
+    }
+
     private static void upgradeToThirtyEight(SQLiteDatabase db) {
 
         /* Create the Crew table*/
@@ -650,82 +764,6 @@ public class DataDbHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
                     " TEXT;");
-        }
-    }
-
-    private static boolean isColumnMissing(SQLiteDatabase db, String table, String column) {
-        Cursor cursor = db.query(table, null, null, null, null, null, null, "1");
-        if (cursor == null) {
-            return true;
-        }
-        boolean columnExists = cursor.getColumnIndex(column) != -1;
-        cursor.close();
-        return !columnExists;
-    }
-
-    private static boolean isTableMissing(SQLiteDatabase db, String table) {
-        Cursor cursor = db.query("sqlite_master", new String[]{"name"}, "type='table' AND name=?",
-                new String[]{table}, null, null, null, "1");
-        if (cursor == null) {
-            return true;
-        }
-        boolean tableExists = cursor.getCount() > 0;
-        cursor.close();
-        return !tableExists;
-    }
-
-    /**
-     * Called when the database is created for the first time. This is where the creation of
-     * tables and the initial population of the tables should happen.
-     *
-     * @param db The database.
-     */
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-
-        /*
-         * After we've spelled out our SQLite table creation statements above, we actually execute
-         * that SQLs with the execSQL method of our SQLite database object.
-         */
-        db.execSQL(SQL_CREATE_POPULAR_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_TOP_RATED_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_UPCOMING_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_THEATER_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_MOVIE_CAST_TABLE);
-        db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
-        db.execSQL(SQL_CREATE_POPULAR_SERIE_TABLE);
-        db.execSQL(SQL_CREATE_TOP_SERIE_TABLE);
-        db.execSQL(SQL_CREATE_ON_THE_AIR_SERIE_TABLE);
-        db.execSQL(SQL_CREATE_FAVORITES_TABLE);
-        db.execSQL(SQL_CREATE_SEARCH_TABLE);
-        db.execSQL(SQL_CREATE_REVIEW_TABLE);
-        db.execSQL(SQL_CREATE_VIDEOS_TABLE);
-        db.execSQL(SQL_CREATE_SEASONS_TABLE);
-        db.execSQL(SQL_CREATE_EPISODES_TABLE);
-        db.execSQL(SQL_CREATE_PERSON_TABLE);
-        db.execSQL(SQL_CREATE_SEARCH_TV_TABLE);
-    }
-
-    /**
-     * All the tables except favorites one are only a cache for online data, so its upgrade policy is simply to discard
-     * the data and call through to onCreate to recreate the table. Note that this only fires if
-     * we change the version number for our database (in our case, DATABASE_VERSION). It does NOT
-     * depend on the version number for our application found in our app/build.gradle file. If
-     * we want to update the schema without wiping data, commenting out the current body of this
-     * method should be our top priority before modifying this method.
-     *
-     * @param db         Database that is being upgraded
-     * @param oldVersion The old database version
-     * @param newVersion The new database version
-     */
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        Log.d("DataDbHelper", "Upgrading from " + oldVersion + " to " + newVersion);
-
-        switch (oldVersion) {
-            case DB_VER_37:
-                upgradeToThirtyEight(db);
         }
     }
 }

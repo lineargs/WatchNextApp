@@ -46,10 +46,6 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import butterknife.Unbinder;
 
-/**
- * Created by goranminov on 24/11/2017.
- */
-
 public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick {
 
 
