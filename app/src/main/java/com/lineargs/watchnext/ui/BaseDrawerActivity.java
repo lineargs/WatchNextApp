@@ -1,7 +1,9 @@
 package com.lineargs.watchnext.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,6 +44,9 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     @BindView(R.id.nav_view)
     NavigationView navigationView;
     private Handler handler;
+    ConnectivityBroadcastReceiver connectivityBroadcastReceiver;
+    IntentFilter connectivityIntentFilter;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +55,23 @@ public abstract class BaseDrawerActivity extends BaseActivity {
             syncAdapterNow();
         }
         handler = new Handler();
+        connectivityIntentFilter = new IntentFilter();
+        connectivityBroadcastReceiver = new ConnectivityBroadcastReceiver();
+        connectivityIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        snackbar = Snackbar.make(findViewById(R.id.list_coordinator_layout), getString(R.string.snackbar_no_connection), Snackbar.LENGTH_INDEFINITE);
+        showSnackBar();
+        registerReceiver(connectivityBroadcastReceiver, connectivityIntentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(connectivityBroadcastReceiver);
     }
 
     private void syncAdapterNow() {
@@ -178,9 +200,9 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     public boolean toggleDrawer(MenuItem item) {
         if (item != null && item.getItemId() == android.R.id.home) {
             if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START);
+                closeNavDrawer();
             } else {
-                drawerLayout.openDrawer(GravityCompat.START);
+                openNavDrawer();
             }
             return true;
         }
@@ -195,11 +217,7 @@ public abstract class BaseDrawerActivity extends BaseActivity {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connectivityManager != null;
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     /**
@@ -207,7 +225,20 @@ public abstract class BaseDrawerActivity extends BaseActivity {
      */
     public void showSnackBar() {
         if (!isConnected()) {
-            Snackbar.make(findViewById(R.id.drawer_layout), getString(R.string.snackbar_no_connection), Snackbar.LENGTH_INDEFINITE).show();
+            snackbar.show();
+        } else {
+            snackbar.dismiss();
+        }
+    }
+
+    private class ConnectivityBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                showSnackBar();
+            }
         }
     }
 }

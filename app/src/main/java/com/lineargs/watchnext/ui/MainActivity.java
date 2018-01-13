@@ -53,9 +53,8 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         setupActionBar();
         setupNavDrawer();
         setupViews();
-        showSnackBar();
         if (isConnected()) {
-            WatchNextSyncAdapter.initializeMovieSyncAdapter(this);
+            WatchNextSyncAdapter.initializeSyncAdapter(this);
         }
     }
 
@@ -173,18 +172,6 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             }
         });
         popupMenu.show();
-    }
-
-    /* The SnackBar in the parent activity uses the Drawer Layout id. In order to
-     * prevent the SnackBar to overlap the FAB, we override it here using the
-     * Coordinator Layout id.
-     */
-    @Override
-    public void showSnackBar() {
-        if (!isConnected()) {
-            Snackbar.make(findViewById(R.id.list_coordinator_layout), getString(R.string.snackbar_no_connection), Snackbar.LENGTH_INDEFINITE)
-                    .show();
-        }
     }
 
     @Override

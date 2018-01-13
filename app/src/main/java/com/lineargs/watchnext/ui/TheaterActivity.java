@@ -19,12 +19,6 @@ public class TheaterActivity extends BaseTopActivity {
         setupFragment(savedInstanceState);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        showSnackBar();
-    }
-
     private void setupFragment(Bundle savedInstance) {
         if (savedInstance == null) {
             TheaterFragment theaterFragment = new TheaterFragment();

@@ -109,7 +109,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
         syncImmediately(context);
     }
 
-    public static void initializeMovieSyncAdapter(Context context) {
+    public static void initializeSyncAdapter(Context context) {
         getSyncAccount(context);
     }
 

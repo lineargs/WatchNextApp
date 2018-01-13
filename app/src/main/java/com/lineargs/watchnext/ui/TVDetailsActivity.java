@@ -16,7 +16,6 @@ public class TVDetailsActivity extends BaseTopActivity {
         setContentView(R.layout.activity_tv_detail);
         setupActionBar();
         setupNavDrawer();
-        showSnackBar();
         setupFragment(savedInstanceState);
     }
 

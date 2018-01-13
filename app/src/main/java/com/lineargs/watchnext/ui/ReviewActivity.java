@@ -20,7 +20,6 @@ public class ReviewActivity extends BaseTopActivity {
         }
         setupActionBar();
         setupNavDrawer();
-        showSnackBar();
         if (savedInstanceState == null) {
             ReviewFragment reviewFragment = new ReviewFragment();
             reviewFragment.setmUri(getIntent().getData());

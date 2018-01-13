@@ -50,12 +50,6 @@ public class TabbedSeriesActivity extends BaseTopActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        showSnackBar();
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
