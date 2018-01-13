@@ -14,6 +14,9 @@ public interface EpisodesQuery {
             DataContract.Episodes.COLUMN_OVERVIEW,
             DataContract.Episodes.COLUMN_STILL_PATH,
             DataContract.Episodes.COLUMN_VOTE_AVERAGE,
+            DataContract.Episodes.COLUMN_GUEST_STARS,
+            DataContract.Episodes.COLUMN_DIRECTORS,
+            DataContract.Episodes.COLUMN_WRITERS
     };
 
     int EPISODE_ID = 0;
@@ -22,4 +25,7 @@ public interface EpisodesQuery {
     int OVERVIEW = 3;
     int STILL_PATH = 4;
     int VOTE_AVERAGE = 5;
+    int GUEST_STARS = 6;
+    int DIRECTORS = 7;
+    int WRITERS = 8;
 }

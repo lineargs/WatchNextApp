@@ -135,6 +135,7 @@
                     <LinearLayout
                         android:id="@+id/directors_container"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
@@ -158,6 +159,7 @@
                     <LinearLayout
                         android:id="@+id/writers_container"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 

@@ -14,10 +14,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -194,6 +196,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         private static final String ARG_IMG = "img";
         private static final String ARG_ID = "id";
         private static final String ARG_TITLE = "title";
+        private static final String ARG_GUEST_STARS = "guest_stars";
+
         @BindView(R.id.name)
         AppCompatTextView name;
         @BindView(R.id.still_path)
@@ -204,6 +208,10 @@ public class EpisodesActivity extends BaseTopActivity implements
         AppCompatTextView releaseDate;
         @BindView(R.id.overview)
         AppCompatTextView overview;
+        @BindView(R.id.guest_stars)
+        AppCompatTextView guestStars;
+        @BindView(R.id.guest_stars_container)
+        LinearLayout guestStarsContainer;
         @BindView(R.id.cover_poster)
         ImageView poster;
         @BindView(R.id.notification_fab)
@@ -219,7 +227,7 @@ public class EpisodesActivity extends BaseTopActivity implements
          * number.
          */
         public static PlaceholderFragment newInstance(String name, String stillPath, String vote, String releaseDate,
-                                                      String overview, String poster, int id, String title) {
+                                                      String overview, String poster, int id, String title, String guestStars) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putString(ARG_NAME, name);
@@ -230,6 +238,7 @@ public class EpisodesActivity extends BaseTopActivity implements
             args.putString(ARG_IMG, poster);
             args.putInt(ARG_ID, id);
             args.putString(ARG_TITLE, title);
+            args.putString(ARG_GUEST_STARS, guestStars);
             fragment.setArguments(args);
             return fragment;
         }
@@ -243,6 +252,11 @@ public class EpisodesActivity extends BaseTopActivity implements
             voteAverage.setText(getArguments().getString(ARG_VOTE));
             releaseDate.setText(getArguments().getString(ARG_DATE));
             overview.setText(getArguments().getString(ARG_OVERVIEW));
+            if (TextUtils.isEmpty(getArguments().getString(ARG_GUEST_STARS))) {
+                guestStarsContainer.setVisibility(View.GONE);
+            } else {
+                guestStars.setText(getArguments().getString(ARG_GUEST_STARS));
+            }
             Picasso.with(poster.getContext())
                     .load(getArguments().getString(ARG_IMG))
                     .centerInside()
@@ -269,8 +283,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         }
 
         @Override
-        public void onDestroy() {
-            super.onDestroy();
+        public void onDestroyView() {
+            super.onDestroyView();
             unbinder.unbind();
         }
 
@@ -322,9 +336,10 @@ public class EpisodesActivity extends BaseTopActivity implements
             String poster = mBackCursor.getString(SeasonsQuery.POSTER_PATH);
             int id = mCursor.getInt(EpisodesQuery.EPISODE_ID);
             String title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
+            String guestStars = mCursor.getString(EpisodesQuery.GUEST_STARS);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, poster, id, title);
+            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, poster, id, title, guestStars);
         }
 
         @Override

@@ -6,6 +6,7 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Episode;
+import com.lineargs.watchnext.utils.retrofit.series.seasondetails.GuestStar;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Genre;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionCompany;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Season;
@@ -218,6 +219,7 @@ public class SerieDbUtils {
             contentValues.put(DataContract.Episodes.COLUMN_OVERVIEW, episode.getOverview());
             contentValues.put(DataContract.Episodes.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(episode.getVoteAverage())));
             contentValues.put(DataContract.Episodes.COLUMN_VOTE_COUNT, episode.getVoteCount());
+            contentValues.put(DataContract.Episodes.COLUMN_GUEST_STARS, buildGuestStarsString(episode.getGuestStars()));
             values[i] = contentValues;
             i++;
         }
@@ -244,6 +246,22 @@ public class SerieDbUtils {
         return contentValues;
     }
 
+    private static String buildGuestStarsString(List<GuestStar> guestStars) {
+
+        if (guestStars == null || guestStars.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < guestStars.size(); i++) {
+            GuestStar guestStar = guestStars.get(i);
+            stringBuilder.append(guestStar.getName());
+            if (i + 1 < guestStars.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
     private static String buildCompaniesString(List<ProductionCompany> companies) {
 
         if (companies == null || companies.isEmpty()) {
