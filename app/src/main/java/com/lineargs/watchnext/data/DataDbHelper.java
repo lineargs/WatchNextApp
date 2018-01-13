@@ -24,11 +24,13 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private static final int DB_VER_37 = 37;
 
     private static final int DB_VER_38 = 38;
+
+    private static final int DB_VER_39 = 39;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    public static final int DATABASE_VERSION = DB_VER_38;
+    public static final int DATABASE_VERSION = DB_VER_39;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
@@ -323,6 +325,9 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.Episodes.COLUMN_SEASON_NUMBER + " INTEGER NOT NULL, " +
                     DataContract.Episodes.COLUMN_STILL_PATH + " TEXT NOT NULL, " +
                     DataContract.Episodes.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
+                    DataContract.Episodes.COLUMN_DIRECTORS + " TEXT, " +
+                    DataContract.Episodes.COLUMN_WRITERS + " TEXT, " +
+                    DataContract.Episodes.COLUMN_GUEST_STARS + " TEXT, " +
                     DataContract.Episodes.COLUMN_VOTE_COUNT + " INTEGER DEFAULT 0, " +
                     "UNIQUE (" + DataContract.Episodes.COLUMN_EPISODE_ID + ") ON CONFLICT REPLACE);";
     /*
@@ -400,7 +405,9 @@ public class DataDbHelper extends SQLiteOpenHelper {
         switch (dbVersion) {
             case DB_VER_37:
                 upgradeToThirtyEight(db);
-                dbVersion = DB_VER_38;
+            case DB_VER_38:
+                upgradeToThirtyNine(db);
+                dbVersion = DB_VER_39;
         }
 
         if (dbVersion != DATABASE_VERSION) {
@@ -764,6 +771,21 @@ public class DataDbHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + DataContract.OnTheAirSerieEntry.TABLE_NAME +
                     " ADD COLUMN " + DataContract.PopularMovieEntry.COLUMN_GENRES +
                     " TEXT;");
+        }
+    }
+
+    private static void upgradeToThirtyNine(SQLiteDatabase db) {
+        if (isColumnMissing(db, DataContract.Episodes.TABLE_NAME, DataContract.Episodes.COLUMN_DIRECTORS)) {
+            db.execSQL("ALTER TABLE " + DataContract.Episodes.TABLE_NAME +
+            " ADD COLUMN " + DataContract.Episodes.COLUMN_DIRECTORS + " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.Episodes.TABLE_NAME, DataContract.Episodes.COLUMN_WRITERS)) {
+            db.execSQL("ALTER TABLE " + DataContract.Episodes.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.Episodes.COLUMN_WRITERS + " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.Episodes.TABLE_NAME, DataContract.Episodes.COLUMN_GUEST_STARS)) {
+            db.execSQL("ALTER TABLE " + DataContract.Episodes.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.Episodes.COLUMN_GUEST_STARS + " TEXT;");
         }
     }
 }

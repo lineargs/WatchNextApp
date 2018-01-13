@@ -68,4 +68,7 @@
     <string name="seasons_empty_text">No seasons found</string>
     <string name="seasons_text_view_button">Seasons</string>
     <string name="pref_notifications">Notifications</string>
+    <string name="guest_stars">Guest Stars</string>
+    <string name="directors">Directors</string>
+    <string name="writers">Writers</string>
 </resources>

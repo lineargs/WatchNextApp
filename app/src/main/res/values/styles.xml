@@ -24,6 +24,12 @@
         <item name="android:textColor">@color/colorBlack</item>
     </style>
 
+    <style name="SmallHeightDetailText" parent="android:Widget.TextView">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lineSpacingExtra">@dimen/line_spacing_extra</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
     <style name="DetailLinkText" parent="android:Widget.TextView">
         <item name="android:gravity">center_vertical</item>
         <item name="android:lineSpacingExtra">@dimen/line_spacing_extra</item>

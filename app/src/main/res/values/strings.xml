@@ -63,6 +63,9 @@
     </plurals>
     <string name="seasons_empty_text">No seasons found</string>
     <string name="seasons_text_view_button">Seasons</string>
+    <string name="guest_stars">Guest Stars</string>
+    <string name="directors">Directors</string>
+    <string name="writers">Writers</string>
 
     <!-- Credits -->
     <string name="cast_empty_text">No cast found</string>
@@ -201,4 +204,5 @@
     <string name="empty_image_content_description" translatable="false">Conversation image for empty view</string>
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
+
 </resources>
