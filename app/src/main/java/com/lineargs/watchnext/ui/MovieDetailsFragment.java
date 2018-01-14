@@ -465,8 +465,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onCrewClick(String id) {
         if (mDualPane) {
-            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-            Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+            Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
+            Uri uri = DataContract.CreditCrew.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(ID, id);
             startActivity(intent);

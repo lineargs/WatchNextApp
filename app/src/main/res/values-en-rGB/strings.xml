@@ -71,4 +71,5 @@
     <string name="guest_stars">Guest Stars</string>
     <string name="directors">Directors</string>
     <string name="writers">Writers</string>
+    <string name="biography_not_available">There is no biography available for now. That\'s all we know.</string>
 </resources>

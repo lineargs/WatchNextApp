@@ -128,7 +128,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
                 .centerCrop()
                 .into(photo);
         if (TextUtils.isEmpty(cursor.getString(PersonQuery.BIOGRAPHY))) {
-            biography.setText(getString(R.string.text_not_available));
+            biography.setText(getString(R.string.biography_not_available));
         } else {
             biography.setText(cursor.getString(PersonQuery.BIOGRAPHY));
         }
@@ -136,8 +136,13 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
          * homepage, just one small but big step for the mankind is that the Movie Db
          * API returns {String or null} for these. Still no bother implementing for now.
          * Just sayin'
+         * UPDATE: Took only less than a minute to implement that. Do not be lazy please :)
          */
-        placeOfBirth.setText(cursor.getString(PersonQuery.PLACE_OF_BIRTH));
+        if (TextUtils.isEmpty(cursor.getString(PersonQuery.PLACE_OF_BIRTH))) {
+            placeOfBirth.setVisibility(View.GONE);
+        } else {
+            placeOfBirth.setText(cursor.getString(PersonQuery.PLACE_OF_BIRTH));
+        }
         if (TextUtils.isEmpty(cursor.getString(PersonQuery.HOMEPAGE))) {
             homepage.setVisibility(View.GONE);
         } else {
