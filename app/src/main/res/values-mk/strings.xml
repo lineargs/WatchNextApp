@@ -72,4 +72,7 @@
         <item quantity="other">%d Епизоди</item>
     </plurals>
     <string name="pref_notifications">Известувања</string>
+    <string name="directors">Директори</string>
+    <string name="writers">Писатели</string>
+    <string name="guest_stars">Sвезди</string>
 </resources>

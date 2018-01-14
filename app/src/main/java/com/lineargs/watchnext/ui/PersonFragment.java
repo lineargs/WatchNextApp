@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +127,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
                 .into(photo);
-        if (cursor.getString(PersonQuery.BIOGRAPHY).equals("")) {
+        if (TextUtils.isEmpty(cursor.getString(PersonQuery.BIOGRAPHY))) {
             biography.setText(getString(R.string.text_not_available));
         } else {
             biography.setText(cursor.getString(PersonQuery.BIOGRAPHY));
@@ -137,6 +138,10 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
          * Just sayin'
          */
         placeOfBirth.setText(cursor.getString(PersonQuery.PLACE_OF_BIRTH));
-        homepage.setText(cursor.getString(PersonQuery.HOMEPAGE));
+        if (TextUtils.isEmpty(cursor.getString(PersonQuery.HOMEPAGE))) {
+            homepage.setVisibility(View.GONE);
+        } else {
+            homepage.setText(cursor.getString(PersonQuery.HOMEPAGE));
+        }
     }
 }
