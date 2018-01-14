@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/actionBarSize"
+    android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
-    app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
     android:theme="?attr/actionBarTheme"
+    app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+    app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="?attr/actionBarPopupTheme" />
