@@ -14,7 +14,7 @@ buildscript {
             'firebaseCore': '11.8.0',
             'firebaseJob': '0.8.5',
             'espresso': '3.0.1',
-            'code': 12,
+            'code': 13,
             'name': '1.1.0'
     ]
     repositories {
