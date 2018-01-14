@@ -53,6 +53,8 @@ public class EpisodesActivity extends BaseTopActivity implements
     ProgressBar mProgressBar;
     @BindView(R.id.container)
     ViewPager mViewPager;
+    @BindView(R.id.cover_poster)
+    ImageView seasonPoster;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -169,6 +171,7 @@ public class EpisodesActivity extends BaseTopActivity implements
                 if (data != null && data.getCount() != 0) {
                     data.moveToFirst();
                     mSectionsPagerAdapter.swapBackCursor(data);
+                    swapPosterCursor(data);
                 }
                 break;
             default:
@@ -180,6 +183,14 @@ public class EpisodesActivity extends BaseTopActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
         mSectionsPagerAdapter.swapCursor(null);
         mSectionsPagerAdapter.swapBackCursor(null);
+    }
+
+    void swapPosterCursor(Cursor cursor) {
+        Picasso.with(seasonPoster.getContext())
+                .load(cursor.getString(SeasonsQuery.POSTER_PATH))
+                .centerInside()
+                .fit()
+                .into(seasonPoster);
     }
 
     /**
@@ -195,7 +206,6 @@ public class EpisodesActivity extends BaseTopActivity implements
         private static final String ARG_VOTE = "vote";
         private static final String ARG_DATE = "date";
         private static final String ARG_OVERVIEW = "overview";
-        private static final String ARG_IMG = "img";
         private static final String ARG_ID = "id";
         private static final String ARG_TITLE = "title";
         private static final String ARG_GUEST_STARS = "guest_stars";
@@ -224,8 +234,6 @@ public class EpisodesActivity extends BaseTopActivity implements
         LinearLayout directorsContainer;
         @BindView(R.id.writers_container)
         LinearLayout writersContainer;
-        @BindView(R.id.cover_poster)
-        ImageView poster;
         @BindView(R.id.notification_fab)
         FloatingActionButton notification;
         private Unbinder unbinder;
@@ -239,7 +247,7 @@ public class EpisodesActivity extends BaseTopActivity implements
          * number.
          */
         public static PlaceholderFragment newInstance(String name, String stillPath, String vote, String releaseDate,
-                                                      String overview, String poster, int id, String title, String guestStars,
+                                                      String overview, int id, String title, String guestStars,
                                                       String directors, String writers) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -248,7 +256,6 @@ public class EpisodesActivity extends BaseTopActivity implements
             args.putString(ARG_VOTE, vote);
             args.putString(ARG_DATE, releaseDate);
             args.putString(ARG_OVERVIEW, overview);
-            args.putString(ARG_IMG, poster);
             args.putInt(ARG_ID, id);
             args.putString(ARG_TITLE, title);
             args.putString(ARG_GUEST_STARS, guestStars);
@@ -282,11 +289,9 @@ public class EpisodesActivity extends BaseTopActivity implements
             } else {
                 writers.setText(getArguments().getString(ARG_WRITERS));
             }
-            Picasso.with(poster.getContext())
-                    .load(getArguments().getString(ARG_IMG))
-                    .centerInside()
-                    .fit()
-                    .into(poster);
+            if (airedAlready(getArguments().getString(ARG_DATE))) {
+                notification.setVisibility(GONE);
+            }
             ServiceUtils.loadPicasso(stillPath.getContext(), getArguments().getString(ARG_STILL_PATH))
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerInside()
@@ -327,14 +332,10 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @OnClick(R.id.notification_fab)
         public void setNotification() {
-            if (!airedAlready(getArguments().getString(ARG_DATE))) {
-                int intervalSeconds = getSeconds(System.currentTimeMillis(), getArguments().getString(ARG_DATE));
-                ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, getArguments().getInt(ARG_ID),
-                        getArguments().getString(ARG_TITLE), getArguments().getString(ARG_NAME));
-                Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), getString(R.string.toast_aired_already), Toast.LENGTH_SHORT).show();
-            }
+            int intervalSeconds = getSeconds(System.currentTimeMillis(), getArguments().getString(ARG_DATE));
+            ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, getArguments().getInt(ARG_ID),
+                    getArguments().getString(ARG_TITLE), getArguments().getString(ARG_NAME));
+            Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -358,7 +359,6 @@ public class EpisodesActivity extends BaseTopActivity implements
             String vote = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);
             String date = mCursor.getString(EpisodesQuery.RELEASE_DATE);
             String overview = mCursor.getString(EpisodesQuery.OVERVIEW);
-            String poster = mBackCursor.getString(SeasonsQuery.POSTER_PATH);
             int id = mCursor.getInt(EpisodesQuery.EPISODE_ID);
             String title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
             String guestStars = mCursor.getString(EpisodesQuery.GUEST_STARS);
@@ -366,7 +366,7 @@ public class EpisodesActivity extends BaseTopActivity implements
             String writers = mCursor.getString(EpisodesQuery.WRITERS);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, poster, id, title,
+            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, id, title,
                     guestStars, directors, writers);
         }
 

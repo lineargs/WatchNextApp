@@ -7,14 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.lineargs.watchnext.ui.EpisodesActivity$PlaceholderFragment">
 
-    <ImageView
-        android:id="@+id/cover_poster"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/season_cover_poster_description"
-        android:scaleType="centerCrop" />
-
     <View
         android:id="@+id/black_mask"
         android:layout_width="match_parent"

@@ -30,6 +30,15 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
+        <ImageView
+            android:id="@+id/cover_poster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:contentDescription="@string/season_cover_poster_description"
+            android:scaleType="centerCrop" />
+
         <android.support.v4.view.ViewPager
             android:id="@+id/container"
             android:layout_width="match_parent"
