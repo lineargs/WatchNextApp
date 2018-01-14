@@ -43,6 +43,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.view.View.GONE;
+
 public class EpisodesActivity extends BaseTopActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -99,11 +101,11 @@ public class EpisodesActivity extends BaseTopActivity implements
 
     private void startLoading() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
+        mViewPager.setVisibility(GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(GONE);
         mViewPager.setVisibility(View.VISIBLE);
     }
 
@@ -197,6 +199,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         private static final String ARG_ID = "id";
         private static final String ARG_TITLE = "title";
         private static final String ARG_GUEST_STARS = "guest_stars";
+        private static final String ARG_DIRECTORS = "directors";
+        private static final String ARG_WRITERS = "writers";
 
         @BindView(R.id.name)
         AppCompatTextView name;
@@ -210,8 +214,16 @@ public class EpisodesActivity extends BaseTopActivity implements
         AppCompatTextView overview;
         @BindView(R.id.guest_stars)
         AppCompatTextView guestStars;
+        @BindView(R.id.directors)
+        AppCompatTextView directors;
+        @BindView(R.id.writers)
+        AppCompatTextView writers;
         @BindView(R.id.guest_stars_container)
         LinearLayout guestStarsContainer;
+        @BindView(R.id.directors_container)
+        LinearLayout directorsContainer;
+        @BindView(R.id.writers_container)
+        LinearLayout writersContainer;
         @BindView(R.id.cover_poster)
         ImageView poster;
         @BindView(R.id.notification_fab)
@@ -227,7 +239,8 @@ public class EpisodesActivity extends BaseTopActivity implements
          * number.
          */
         public static PlaceholderFragment newInstance(String name, String stillPath, String vote, String releaseDate,
-                                                      String overview, String poster, int id, String title, String guestStars) {
+                                                      String overview, String poster, int id, String title, String guestStars,
+                                                      String directors, String writers) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putString(ARG_NAME, name);
@@ -239,6 +252,8 @@ public class EpisodesActivity extends BaseTopActivity implements
             args.putInt(ARG_ID, id);
             args.putString(ARG_TITLE, title);
             args.putString(ARG_GUEST_STARS, guestStars);
+            args.putString(ARG_DIRECTORS, directors);
+            args.putString(ARG_WRITERS, writers);
             fragment.setArguments(args);
             return fragment;
         }
@@ -253,9 +268,19 @@ public class EpisodesActivity extends BaseTopActivity implements
             releaseDate.setText(getArguments().getString(ARG_DATE));
             overview.setText(getArguments().getString(ARG_OVERVIEW));
             if (TextUtils.isEmpty(getArguments().getString(ARG_GUEST_STARS))) {
-                guestStarsContainer.setVisibility(View.GONE);
+                guestStarsContainer.setVisibility(GONE);
             } else {
                 guestStars.setText(getArguments().getString(ARG_GUEST_STARS));
+            }
+            if (TextUtils.isEmpty(getArguments().getString(ARG_DIRECTORS))) {
+                directorsContainer.setVisibility(GONE);
+            } else {
+                directors.setText(getArguments().getString(ARG_DIRECTORS));
+            }
+            if (TextUtils.isEmpty(getArguments().getString(ARG_WRITERS))) {
+                writersContainer.setVisibility(GONE);
+            } else {
+                writers.setText(getArguments().getString(ARG_WRITERS));
             }
             Picasso.with(poster.getContext())
                     .load(getArguments().getString(ARG_IMG))
@@ -337,9 +362,12 @@ public class EpisodesActivity extends BaseTopActivity implements
             int id = mCursor.getInt(EpisodesQuery.EPISODE_ID);
             String title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
             String guestStars = mCursor.getString(EpisodesQuery.GUEST_STARS);
+            String directors = mCursor.getString(EpisodesQuery.DIRECTORS);
+            String writers = mCursor.getString(EpisodesQuery.WRITERS);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, poster, id, title, guestStars);
+            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, poster, id, title,
+                    guestStars, directors, writers);
         }
 
         @Override

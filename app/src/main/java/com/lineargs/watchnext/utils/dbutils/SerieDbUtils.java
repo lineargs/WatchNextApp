@@ -6,14 +6,17 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Episode;
-import com.lineargs.watchnext.utils.retrofit.series.seasondetails.GuestStar;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Genre;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionCompany;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Season;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.SeriesDetails;
 
 import java.text.ParseException;
 import java.util.List;
+
+import static com.lineargs.watchnext.utils.Utils.buildCompaniesString;
+import static com.lineargs.watchnext.utils.Utils.buildDirectorsString;
+import static com.lineargs.watchnext.utils.Utils.buildGenresString;
+import static com.lineargs.watchnext.utils.Utils.buildGuestStarsString;
+import static com.lineargs.watchnext.utils.Utils.buildWritersString;
 
 /**
  * Created by goranminov on 11/11/2017.
@@ -220,6 +223,8 @@ public class SerieDbUtils {
             contentValues.put(DataContract.Episodes.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(episode.getVoteAverage())));
             contentValues.put(DataContract.Episodes.COLUMN_VOTE_COUNT, episode.getVoteCount());
             contentValues.put(DataContract.Episodes.COLUMN_GUEST_STARS, buildGuestStarsString(episode.getGuestStars()));
+            contentValues.put(DataContract.Episodes.COLUMN_DIRECTORS, buildDirectorsString(episode.getCrew()));
+            contentValues.put(DataContract.Episodes.COLUMN_WRITERS, buildWritersString(episode.getCrew()));
             values[i] = contentValues;
             i++;
         }
@@ -244,55 +249,5 @@ public class SerieDbUtils {
                 buildGenresString(result.getGenres()));
 
         return contentValues;
-    }
-
-    private static String buildGuestStarsString(List<GuestStar> guestStars) {
-
-        if (guestStars == null || guestStars.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < guestStars.size(); i++) {
-            GuestStar guestStar = guestStars.get(i);
-            stringBuilder.append(guestStar.getName());
-            if (i + 1 < guestStars.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
-    }
-    private static String buildCompaniesString(List<ProductionCompany> companies) {
-
-        if (companies == null || companies.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < companies.size(); i++) {
-            ProductionCompany company = companies.get(i);
-            stringBuilder.append(company.getName());
-            if (i + 1 < companies.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    private static String buildGenresString(List<Genre> genres) {
-
-        if (genres == null || genres.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < genres.size(); i++) {
-            Genre genre = genres.get(i);
-            stringBuilder.append(genre.getName());
-            if (i + 1 < genres.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
     }
 }
