@@ -13,6 +13,7 @@
     </string>
     <string name="pref_about_title">About</string>
     <string name="pref_notifications">Notifications</string>
+    <string name="nav_feedback">Feedback</string>
 
     <!-- Search -->
     <string name="search_label">WatchNext</string>
@@ -79,6 +80,7 @@
 
     <!-- Share -->
     <string name="menu_share">Share</string>
+    <string name="feedback">"%1s %2s, Android %3s  Please send your feedback below this line  "</string>
 
     <!-- Videos -->
     <string name="videos_empty_text">No videos found</string>

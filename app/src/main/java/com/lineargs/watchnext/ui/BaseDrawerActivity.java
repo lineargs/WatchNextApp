@@ -19,9 +19,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+import com.lineargs.watchnext.tools.Tools;
 
 import java.util.Locale;
 
@@ -149,6 +151,13 @@ public abstract class BaseDrawerActivity extends BaseActivity {
             case R.id.nav_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 break;
+            case R.id.nav_feedback:
+                Intent feedbackIntent = Tools.getFeedbackIntent(this);
+                if (feedbackIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(feedbackIntent);
+                } else {
+                    Toast.makeText(this, R.string.no_apps_installed, Toast.LENGTH_SHORT).show();
+                }
         }
 
         if (intent != null) {

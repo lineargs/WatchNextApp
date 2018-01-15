@@ -77,4 +77,6 @@
     <string name="guest_stars">Sвезди</string>
     <string name="biography_not_available">Засега нема достапна биографија. Тоа е сè што знаеме.</string>
     <string name="main_date">Објавен на: %s</string>
+    <string name="nav_feedback">Повратни информации</string>
+    <string name="feedback">%1s %2s, Android %3s  Ве молиме испратете ги вашите информации под оваа линија</string>
 </resources>
