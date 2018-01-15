@@ -20,5 +20,6 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhite90">#E6FFFFFF</color>
     <color name="shortcutBackground">#fff5f5f5</color>
+    <color name="colorGold">#FFD700</color>
 
 </resources>

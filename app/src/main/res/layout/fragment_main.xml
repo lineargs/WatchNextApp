@@ -12,7 +12,13 @@
         android:id="@+id/main_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/small_padding"
+        android:paddingLeft="@dimen/small_padding"
+        android:paddingStart="@dimen/small_padding"
+        android:paddingRight="@dimen/small_padding"
+        android:paddingEnd="@dimen/small_padding"
+        android:paddingTop="@dimen/small_padding"
+        android:paddingBottom="@dimen/main_recycler_view_padding_bottom"
+        android:clipToPadding="false"
         android:visibility="invisible"
         tools:visibility="visible" />
 </LinearLayout>

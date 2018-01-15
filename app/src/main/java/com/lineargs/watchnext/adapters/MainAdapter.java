@@ -131,6 +131,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         AppCompatTextView title;
         @BindView(R.id.main_date)
         TextView date;
+        @BindView(R.id.main_vote)
+        AppCompatTextView vote;
         @BindView(R.id.main_star_image)
         ImageView star;
 
@@ -158,7 +160,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
             title.setText(cursor.getString(Query.TITLE));
-            date.setText(cursor.getString(Query.RELEASE_DATE));
+            date.setText(context.getString(R.string.main_date, cursor.getString(Query.RELEASE_DATE)));
+            vote.setText(cursor.getString(Query.VOTE_AVERAGE));
             Picasso.with(poster.getContext())
                     .load(cursor.getString(Query.POSTER_PATH))
                     .fit()

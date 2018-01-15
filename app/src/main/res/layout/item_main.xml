@@ -45,8 +45,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:lineSpacingExtra="@dimen/line_spacing_extra"
-            android:lines="2"
             android:maxLines="2"
+            android:textStyle="bold"
             android:padding="@dimen/appbar_padding_top"
             android:textColor="@color/colorBlack"
             app:layout_constraintLeft_toRightOf="@+id/main_poster"
@@ -57,9 +57,9 @@
             android:id="@+id/main_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/main_title"
             android:ellipsize="end"
             android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
             android:paddingBottom="@dimen/appbar_padding_top"
             android:paddingEnd="@dimen/card_view_padding_top"
             android:paddingLeft="@dimen/appbar_padding_top"
@@ -68,6 +68,25 @@
             app:layout_constraintLeft_toRightOf="@+id/main_poster"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_title" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_vote"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorBlack"
+            android:drawableLeft="@drawable/icon_star_gold"
+            android:drawableStart="@drawable/icon_star_gold"
+            android:drawablePadding="@dimen/text_view_drawable_padding"
+            android:paddingBottom="@dimen/appbar_padding_top"
+            android:paddingEnd="@dimen/card_view_padding_top"
+            android:paddingLeft="@dimen/appbar_padding_top"
+            android:paddingRight="@dimen/card_view_padding_top"
+            android:paddingStart="@dimen/appbar_padding_top"
+            app:layout_constraintLeft_toRightOf="@+id/main_poster"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_date" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -76,4 +76,5 @@
     <string name="writers">Писатели</string>
     <string name="guest_stars">Sвезди</string>
     <string name="biography_not_available">Засега нема достапна биографија. Тоа е сè што знаеме.</string>
+    <string name="main_date">Објавен на: %s</string>
 </resources>
