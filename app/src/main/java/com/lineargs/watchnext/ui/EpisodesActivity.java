@@ -326,16 +326,21 @@ public class EpisodesActivity extends BaseTopActivity implements
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            assert releaseDay != null;
-            return (int) (TimeUnit.MILLISECONDS.toSeconds(releaseDay.getTime() - today));
+            if (releaseDay != null) {
+                return (int) (TimeUnit.MILLISECONDS.toSeconds(releaseDay.getTime() - today));
+            } else {
+                return 0;
+            }
         }
 
         @OnClick(R.id.notification_fab)
         public void setNotification() {
             int intervalSeconds = getSeconds(System.currentTimeMillis(), getArguments().getString(ARG_DATE));
-            ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, getArguments().getInt(ARG_ID),
-                    getArguments().getString(ARG_TITLE), getArguments().getString(ARG_NAME));
-            Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+            if (intervalSeconds != 0) {
+                ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, getArguments().getInt(ARG_ID),
+                        getArguments().getString(ARG_TITLE), getArguments().getString(ARG_NAME));
+                Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
