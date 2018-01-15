@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CrewQuery;
+import com.lineargs.watchnext.data.CeditsQuery;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -84,10 +84,10 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void bindViews(int position) {
             cursor.moveToPosition(position);
-            crewName.setText(cursor.getString(CrewQuery.CREW_NAME));
-            crewJob.setText(cursor.getString(CrewQuery.CREW_JOB));
+            crewName.setText(cursor.getString(CeditsQuery.NAME));
+            crewJob.setText(cursor.getString(CeditsQuery.JOB));
             Picasso.with(profilePath.getContext())
-                    .load(cursor.getString(CrewQuery.PROFILE_PATH))
+                    .load(cursor.getString(CeditsQuery.PROFILE_PATH))
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
                     .fit()
@@ -97,7 +97,7 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CrewQuery.CREW_ID);
+            String id = cursor.getString(CeditsQuery.PERSON_ID);
             onClick.onCrewClick(id);
         }
     }

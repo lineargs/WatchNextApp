@@ -32,7 +32,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
-import com.lineargs.watchnext.data.CastQuery;
+import com.lineargs.watchnext.data.CeditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
@@ -186,7 +186,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     @OnClick(R.id.cast_header_layout)
     public void loadCast() {
         Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-        Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
         intent.putExtra(MovieDetailsFragment.TITLE, title);
         startActivity(intent);
@@ -223,10 +223,10 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
                         null,
                         null);
             case CAST_LOADER_ID:
-                Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+                Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         uri,
-                        CastQuery.CAST_PROJECTION,
+                        CeditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);
@@ -341,7 +341,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     private boolean checkForCredits(Context context, String id) {
-        Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(id));
+        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(id));
         Cursor cursor = context.getContentResolver().query(uri,
                 null,
                 null,
@@ -367,7 +367,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     public void onPersonClick(String id) {
         if (mDualPane) {
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-            Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+            Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(MovieDetailsFragment.ID, id);
             startActivity(intent);

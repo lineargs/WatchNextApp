@@ -34,11 +34,11 @@ public class CreditDbUtils {
 
         for (Cast cast : casts) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(DataContract.CreditCast.COLUMN_MOVIE_ID, id);
-            contentValues.put(DataContract.CreditCast.COLUMN_CHARACTER_NAME, cast.getCharacter());
-            contentValues.put(DataContract.CreditCast.COLUMN_NAME, cast.getName());
-            contentValues.put(DataContract.CreditCast.COLUMN_PERSON_ID, cast.getId());
-            contentValues.put(DataContract.CreditCast.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(cast.getProfilePath()));
+            contentValues.put(DataContract.Credits.COLUMN_MOVIE_ID, id);
+            contentValues.put(DataContract.Credits.COLUMN_CHARACTER_NAME, cast.getCharacter());
+            contentValues.put(DataContract.Credits.COLUMN_NAME, cast.getName());
+            contentValues.put(DataContract.Credits.COLUMN_PERSON_ID, cast.getId());
+            contentValues.put(DataContract.Credits.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(cast.getProfilePath()));
             values[i] = contentValues;
             i++;
         }
@@ -61,13 +61,12 @@ public class CreditDbUtils {
 
         for (Crew crew : crews) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(DataContract.CreditCrew.COLUMN_MOVIE_ID, id);
-            contentValues.put(DataContract.CreditCrew.COLUMN_CREDIT_ID, crew.getCreditId());
-            contentValues.put(DataContract.CreditCrew.COLUMN_NAME, crew.getName());
-            contentValues.put(DataContract.CreditCrew.COLUMN_CREW_ID, crew.getId());
-            contentValues.put(DataContract.CreditCrew.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(crew.getProfilePath()));
-            contentValues.put(DataContract.CreditCrew.COLUMN_DEPARTMENT, crew.getDepartment());
-            contentValues.put(DataContract.CreditCrew.COLUMN_JOB, crew.getJob());
+            contentValues.put(DataContract.Credits.COLUMN_MOVIE_ID, id);
+            contentValues.put(DataContract.Credits.COLUMN_NAME, crew.getName());
+            contentValues.put(DataContract.Credits.COLUMN_PERSON_ID, crew.getId());
+            contentValues.put(DataContract.Credits.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(crew.getProfilePath()));
+            contentValues.put(DataContract.Credits.COLUMN_JOB, crew.getJob());
+            contentValues.put(DataContract.Credits.COLUMN_TYPE, 1);
             values[i] = contentValues;
             i++;
         }

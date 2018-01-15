@@ -128,7 +128,7 @@ class SerieDetailTask {
             if (context != null) {
                 ContentResolver contentResolver = context.getContentResolver();
                 if (contentValues != null && contentValues.length != 0) {
-                    contentResolver.bulkInsert(DataContract.CreditCast.CONTENT_URI, contentValues);
+                    contentResolver.bulkInsert(DataContract.Credits.CONTENT_URI_CAST, contentValues);
                 }
 
             }

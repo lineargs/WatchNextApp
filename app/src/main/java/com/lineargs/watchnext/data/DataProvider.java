@@ -34,10 +34,10 @@ public class DataProvider extends ContentProvider {
     public static final int CODE_UPCOMING_MOVIES_WITH_ID = 301;
     public static final int CODE_THEATER_MOVIES = 400;
     public static final int CODE_THEATER_MOVIES_WITH_ID = 401;
-    public static final int CODE_MOVIE_CAST = 500;
-    public static final int CODE_MOVIE_CAST_WITH_ID = 501;
-    public static final int CODE_MOVIE_CREW = 600;
-    public static final int CODE_MOVIE_CREW_WITH_ID = 601;
+    public static final int CODE_CAST = 500;
+    public static final int CODE_CAST_WITH_ID = 501;
+    public static final int CODE_CREW = 600;
+    public static final int CODE_CREW_WITH_ID = 601;
     public static final int CODE_POPULAR_SERIES = 700;
     public static final int CODE_POPULAR_SERIES_WITH_ID = 701;
     public static final int CODE_TOP_SERIES = 800;
@@ -110,10 +110,10 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(authority, DataContract.PATH_UPCOMING_MOVIE + "/#", CODE_UPCOMING_MOVIES_WITH_ID);
         matcher.addURI(authority, DataContract.PATH_THEATER_MOVIE, CODE_THEATER_MOVIES);
         matcher.addURI(authority, DataContract.PATH_THEATER_MOVIE + "/#", CODE_THEATER_MOVIES_WITH_ID);
-        matcher.addURI(authority, DataContract.PATH_CREDIT_CAST, CODE_MOVIE_CAST);
-        matcher.addURI(authority, DataContract.PATH_CREDIT_CAST + "/#", CODE_MOVIE_CAST_WITH_ID);
-        matcher.addURI(authority, DataContract.PATH_CREDIT_CREW, CODE_MOVIE_CREW);
-        matcher.addURI(authority, DataContract.PATH_CREDIT_CREW + "/#", CODE_MOVIE_CREW_WITH_ID);
+        matcher.addURI(authority, DataContract.PATH_CREDIT_CAST, CODE_CAST);
+        matcher.addURI(authority, DataContract.PATH_CREDIT_CAST + "/#", CODE_CAST_WITH_ID);
+        matcher.addURI(authority, DataContract.PATH_CREDIT_CREW, CODE_CREW);
+        matcher.addURI(authority, DataContract.PATH_CREDIT_CREW + "/#", CODE_CREW_WITH_ID);
         matcher.addURI(authority, DataContract.PATH_POPULAR_SERIE, CODE_POPULAR_SERIES);
         matcher.addURI(authority, DataContract.PATH_POPULAR_SERIE + "/#", CODE_POPULAR_SERIES_WITH_ID);
         matcher.addURI(authority, DataContract.PATH_TOP_SERIE, CODE_TOP_SERIES);
@@ -343,42 +343,44 @@ public class DataProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
-            case CODE_MOVIE_CAST:
+            case CODE_CAST:
                 cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.CreditCast.TABLE_NAME,
+                        DataContract.Credits.TABLE_NAME,
                         projection,
-                        selection,
-                        selectionArgs,
+                        DataContract.Credits.COLUMN_TYPE + " = ? ",
+                        new String[]{"0"},
                         null,
                         null,
                         sortOrder);
                 break;
-            case CODE_MOVIE_CAST_WITH_ID:
+            case CODE_CAST_WITH_ID:
                 cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.CreditCast.TABLE_NAME,
+                        DataContract.Credits.TABLE_NAME,
                         projection,
-                        DataContract.CreditCast.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
+                        DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
+                        + DataContract.Credits.COLUMN_TYPE + " = ? ",
+                        new String[]{uri.getLastPathSegment(), "0"},
                         null,
                         null,
                         sortOrder);
                 break;
-            case CODE_MOVIE_CREW:
+            case CODE_CREW:
                 cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.CreditCrew.TABLE_NAME,
+                        DataContract.Credits.TABLE_NAME,
                         projection,
-                        selection,
-                        selectionArgs,
+                        DataContract.Credits.COLUMN_TYPE + " = ? ",
+                        new String[]{"1"},
                         null,
                         null,
                         sortOrder);
                 break;
-            case CODE_MOVIE_CREW_WITH_ID:
+            case CODE_CREW_WITH_ID:
                 cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.CreditCrew.TABLE_NAME,
+                        DataContract.Credits.TABLE_NAME,
                         projection,
-                        DataContract.CreditCrew.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
+                        DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
+                        + DataContract.Credits.COLUMN_TYPE + " = ? ",
+                        new String[]{uri.getLastPathSegment(), "1"},
                         null,
                         null,
                         sortOrder);
@@ -655,14 +657,14 @@ public class DataProvider extends ContentProvider {
                 return DataContract.TheaterMovieEntry.CONTENT_TYPE;
             case CODE_THEATER_MOVIES_WITH_ID:
                 return DataContract.TheaterMovieEntry.CONTENT_ITEM_TYPE;
-            case CODE_MOVIE_CAST:
-                return DataContract.CreditCast.CONTENT_TYPE;
-            case CODE_MOVIE_CAST_WITH_ID:
-                return DataContract.CreditCast.CONTENT_ITEM_TYPE;
-            case CODE_MOVIE_CREW:
-                return DataContract.CreditCrew.CONTENT_TYPE;
-            case CODE_MOVIE_CREW_WITH_ID:
-                return DataContract.CreditCrew.CONTENT_ITEM_TYPE;
+            case CODE_CAST:
+                return DataContract.Credits.CONTENT_TYPE_CAST;
+            case CODE_CAST_WITH_ID:
+                return DataContract.Credits.CONTENT_ITEM_TYPE_CAST;
+            case CODE_CREW:
+                return DataContract.Credits.CONTENT_TYPE_CREW;
+            case CODE_CREW_WITH_ID:
+                return DataContract.Credits.CONTENT_ITEM_TYPE_CREW;
             case CODE_REVIEW:
                 return DataContract.Review.CONTENT_TYPE;
             case CODE_REVIEW_WITH_ID:
@@ -730,19 +732,19 @@ public class DataProvider extends ContentProvider {
                 }
                 break;
             }
-            case CODE_MOVIE_CAST: {
-                long _id = db.insert(DataContract.CreditCast.TABLE_NAME, null, values);
+            case CODE_CAST: {
+                long _id = db.insert(DataContract.Credits.TABLE_NAME, null, values);
                 if (_id > 0) {
-                    returnUri = DataContract.CreditCast.buildCastUriWithId(_id);
+                    returnUri = DataContract.Credits.buildCastUriWithId(_id);
                 } else {
                     throw new SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
-            case CODE_MOVIE_CREW: {
-                long _id = db.insert(DataContract.CreditCrew.TABLE_NAME, null, values);
+            case CODE_CREW: {
+                long _id = db.insert(DataContract.Credits.TABLE_NAME, null, values);
                 if (_id > 0) {
-                    returnUri = DataContract.CreditCrew.buildCrewUriWithId(_id);
+                    returnUri = DataContract.Credits.buildCrewUriWithId(_id);
                 } else {
                     throw new SQLException("Failed to insert row into " + uri);
                 }
@@ -936,11 +938,11 @@ public class DataProvider extends ContentProvider {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 return rowsInserted;
-            case CODE_MOVIE_CAST:
+            case CODE_CAST:
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.CreditCast.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Credits.TABLE_NAME, null, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -953,11 +955,11 @@ public class DataProvider extends ContentProvider {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 return rowsInserted;
-            case CODE_MOVIE_CREW:
+            case CODE_CREW:
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.CreditCrew.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Credits.TABLE_NAME, null, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1231,28 +1233,28 @@ public class DataProvider extends ContentProvider {
                         DataContract.TheaterMovieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
-            case CODE_MOVIE_CAST:
+            case CODE_CAST:
                 rowsDeleted = dataDbHelper.getWritableDatabase().delete(
-                        DataContract.CreditCast.TABLE_NAME,
-                        selection,
+                        DataContract.Credits.TABLE_NAME,
+                        DataContract.Credits.COLUMN_TYPE + " = ? ",
+                        new String[]{"0"});
+                break;
+            case CODE_CAST_WITH_ID:
+                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                        DataContract.Credits.TABLE_NAME,
+                        DataContract.Credits._ID + " = ? ",
                         selectionArgs);
                 break;
-            case CODE_MOVIE_CAST_WITH_ID:
+            case CODE_CREW:
                 rowsDeleted = dataDbHelper.getWritableDatabase().delete(
-                        DataContract.CreditCast.TABLE_NAME,
-                        DataContract.CreditCast._ID + " = ? ",
-                        selectionArgs);
+                        DataContract.Credits.TABLE_NAME,
+                        DataContract.Credits.COLUMN_TYPE + " = ? ",
+                        new String[]{"1"});
                 break;
-            case CODE_MOVIE_CREW:
+            case CODE_CREW_WITH_ID:
                 rowsDeleted = dataDbHelper.getWritableDatabase().delete(
-                        DataContract.CreditCrew.TABLE_NAME,
-                        selection,
-                        selectionArgs);
-                break;
-            case CODE_MOVIE_CREW_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
-                        DataContract.CreditCrew.TABLE_NAME,
-                        DataContract.CreditCrew._ID + " = ? ",
+                        DataContract.Credits.TABLE_NAME,
+                        DataContract.Credits._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_POPULAR_SERIES:
@@ -1414,11 +1416,11 @@ public class DataProvider extends ContentProvider {
             case CODE_THEATER_MOVIES:
                 rowsUpdated = db.update(DataContract.TheaterMovieEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
-            case CODE_MOVIE_CAST:
-                rowsUpdated = db.update(DataContract.CreditCast.TABLE_NAME, values, selection, selectionArgs);
+            case CODE_CAST:
+                rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, values, selection, selectionArgs);
                 break;
-            case CODE_MOVIE_CREW:
-                rowsUpdated = db.update(DataContract.CreditCrew.TABLE_NAME, values, selection, selectionArgs);
+            case CODE_CREW:
+                rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case CODE_POPULAR_SERIES:
                 rowsUpdated = db.update(DataContract.PopularSerieEntry.TABLE_NAME, values, selection, selectionArgs);

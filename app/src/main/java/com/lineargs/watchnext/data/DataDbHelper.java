@@ -26,11 +26,13 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private static final int DB_VER_38 = 38;
 
     private static final int DB_VER_39 = 39;
+
+    private static final int DB_VER_40 = 40;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    public static final int DATABASE_VERSION = DB_VER_39;
+    public static final int DATABASE_VERSION = DB_VER_40;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
@@ -139,27 +141,16 @@ public class DataDbHelper extends SQLiteOpenHelper {
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
      */
-    private static final String SQL_CREATE_MOVIE_CAST_TABLE =
-            "CREATE TABLE " + DataContract.CreditCast.TABLE_NAME + " ( " +
-                    DataContract.CreditCast._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    DataContract.CreditCast.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_PERSON_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_NAME + " TEXT NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_CHARACTER_NAME + " TEXT NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_PROFILE_PATH + " TEXT NOT NULL);";
-    /*
-     * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
-     */
-    private static final String SQL_CREATE_MOVIE_CREW_TABLE =
-            "CREATE TABLE " + DataContract.CreditCrew.TABLE_NAME + " ( " +
-                    DataContract.CreditCrew._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    DataContract.CreditCrew.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_CREW_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_NAME + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_CREDIT_ID + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_DEPARTMENT + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_JOB + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_PROFILE_PATH + " TEXT NOT NULL);";
+    private static final String SQL_CREATE_CREDITS_TABLE =
+            "CREATE TABLE " + DataContract.Credits.TABLE_NAME + " ( " +
+                    DataContract.Credits._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    DataContract.Credits.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
+                    DataContract.Credits.COLUMN_PERSON_ID + " INTEGER NOT NULL, " +
+                    DataContract.Credits.COLUMN_NAME + " TEXT NOT NULL, " +
+                    DataContract.Credits.COLUMN_CHARACTER_NAME + " TEXT, " +
+                    DataContract.Credits.COLUMN_JOB + " TEXT, " +
+                    DataContract.Credits.COLUMN_TYPE + " INTEGER DEFAULT 0, " +
+                    DataContract.Credits.COLUMN_PROFILE_PATH + " TEXT NOT NULL);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
      */
@@ -371,8 +362,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TOP_RATED_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_UPCOMING_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_THEATER_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_MOVIE_CAST_TABLE);
-        db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
+        db.execSQL(SQL_CREATE_CREDITS_TABLE);
         db.execSQL(SQL_CREATE_POPULAR_SERIE_TABLE);
         db.execSQL(SQL_CREATE_TOP_SERIE_TABLE);
         db.execSQL(SQL_CREATE_ON_THE_AIR_SERIE_TABLE);
@@ -407,7 +397,9 @@ public class DataDbHelper extends SQLiteOpenHelper {
                 upgradeToThirtyEight(db);
             case DB_VER_38:
                 upgradeToThirtyNine(db);
-                dbVersion = DB_VER_39;
+            case DB_VER_39:
+                upgradeToForty(db);
+                dbVersion = DB_VER_40;
         }
 
         if (dbVersion != DATABASE_VERSION) {
@@ -432,8 +424,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.TopRatedMovieEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.UpcomingMovieEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.TheaterMovieEntry.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DataContract.CreditCast.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DataContract.CreditCrew.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Credits.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.PopularSerieEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.TopRatedSerieEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.OnTheAirSerieEntry.TABLE_NAME);
@@ -471,11 +462,6 @@ public class DataDbHelper extends SQLiteOpenHelper {
     }
 
     private static void upgradeToThirtyEight(SQLiteDatabase db) {
-
-        /* Create the Crew table*/
-        if (isTableMissing(db, DataContract.CreditCrew.TABLE_NAME)) {
-            db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
-        }
 
         /* Check if the columns are missing then alter the  Popular Movie table*/
         if (isColumnMissing(db, DataContract.PopularMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
@@ -786,6 +772,14 @@ public class DataDbHelper extends SQLiteOpenHelper {
         if (isColumnMissing(db, DataContract.Episodes.TABLE_NAME, DataContract.Episodes.COLUMN_GUEST_STARS)) {
             db.execSQL("ALTER TABLE " + DataContract.Episodes.TABLE_NAME +
                     " ADD COLUMN " + DataContract.Episodes.COLUMN_GUEST_STARS + " TEXT;");
+        }
+    }
+
+    private static void upgradeToForty(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS casts");
+        db.execSQL("DROP TABLE IF EXISTS crew");
+        if (isTableMissing(db, DataContract.Credits.TABLE_NAME)) {
+            db.execSQL(SQL_CREATE_CREDITS_TABLE);
         }
     }
 }

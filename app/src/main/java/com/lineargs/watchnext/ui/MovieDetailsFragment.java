@@ -33,8 +33,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
-import com.lineargs.watchnext.data.CastQuery;
-import com.lineargs.watchnext.data.CrewQuery;
+import com.lineargs.watchnext.data.CeditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
@@ -240,18 +239,18 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                         null,
                         null);
             case CAST_LOADER_ID:
-                Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+                Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         uri,
-                        CastQuery.CAST_PROJECTION,
+                        CeditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);
             case CREW_LOADER_ID:
-                Uri crewUri = DataContract.CreditCrew.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+                Uri crewUri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         crewUri,
-                        CrewQuery.CREW_PROJECTION,
+                        CeditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);
@@ -354,7 +353,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @OnClick(R.id.cast_header_layout)
     public void loadCast() {
         Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-        Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
         startActivity(intent);
     }
@@ -362,7 +361,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @OnClick(R.id.crew_header_layout)
     public void loadCrew() {
         Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
-        Uri uri = DataContract.CreditCrew.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+        Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
         startActivity(intent);
     }
@@ -424,7 +423,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     /* Used so we can save on bandwith and network calls */
     private boolean checkForCredits(Context context, String id) {
-        Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(id));
+        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(id));
         Cursor cursor = context.getContentResolver().query(uri,
                 null,
                 null,
@@ -450,7 +449,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public void onPersonClick(String id) {
         if (mDualPane) {
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-            Uri uri = DataContract.CreditCast.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+            Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(ID, id);
             startActivity(intent);
@@ -466,7 +465,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public void onCrewClick(String id) {
         if (mDualPane) {
             Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
-            Uri uri = DataContract.CreditCrew.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
+            Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(ID, id);
             startActivity(intent);
