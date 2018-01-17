@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_TYPE_ABOUT = 0;
     private final int VIEW_TYPE_HEADER = 1;
@@ -26,7 +26,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final Context context;
     OnWebsiteClick onClick;
 
-    public LibraryAdapter(Context context, OnWebsiteClick click) {
+    public AboutAdapter(Context context, OnWebsiteClick click) {
         this.context = context;
         onClick = click;
     }
