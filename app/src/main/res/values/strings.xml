@@ -166,6 +166,7 @@
     <string name="tmdb_api_terms" translatable="false">TMDb API Terms</string>
     <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
     <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
+    <string name="library_link">website</string>
 
     <!-- Content Description -->
     <!-- We do not translate yet the content description until
@@ -207,5 +208,6 @@
     <string name="empty_image_content_description" translatable="false">Conversation image for empty view</string>
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
+    <string name="libraries">Libraries</string>
 
 </resources>

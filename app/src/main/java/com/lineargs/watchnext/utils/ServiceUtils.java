@@ -61,7 +61,7 @@ public final class ServiceUtils {
         }
     }
 
-    public static void openTMDbTerms(Context context, String link) {
+    public static void openLink(Context context, String link) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(link));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.adapters.LibraryAdapter;
 import com.lineargs.watchnext.data.DataDbHelper;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
@@ -24,14 +28,10 @@ import butterknife.Unbinder;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class AboutFragment extends Fragment {
+public class AboutFragment extends Fragment implements LibraryAdapter.OnWebsiteClick {
 
-    @BindView(R.id.tmdb_terms)
-    AppCompatTextView terms;
-    @BindView(R.id.tmdb_api_terms)
-    AppCompatTextView apiTerms;
-    @BindView(R.id.version_text)
-    AppCompatTextView version;
+    @BindView(R.id.library_recycler_view)
+    RecyclerView libraryRecyclerView;
     private Unbinder unbinder;
 
     public AboutFragment() {
@@ -42,23 +42,18 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        version.setText(Utils.versionString(getActivity()));
+        libraryRecyclerView.setAdapter(new LibraryAdapter(getActivity(), this));
         return rootView;
-    }
-
-    @OnClick(R.id.tmdb_terms)
-    public void openTerms() {
-        ServiceUtils.openTMDbTerms(getActivity(), getString(R.string.tmdb_terms_link));
-    }
-
-    @OnClick(R.id.tmdb_api_terms)
-    public void openTermsApi() {
-        ServiceUtils.openTMDbTerms(getActivity(), getString(R.string.tmdb_api_terms_link));
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onClick(String link) {
+        ServiceUtils.openLink(getActivity(), link);
     }
 }

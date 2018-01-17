@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ReviewAdapter;
 import com.lineargs.watchnext.data.ReviewQuery;
+import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,9 +137,7 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void OnClick(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
+        ServiceUtils.openLink(getActivity(), url);
     }
 
     @Override
