@@ -114,6 +114,8 @@
 
     <!-- Statistics -->
     <string name="title_activity_statistics">Statistics</string>
+    <string name="movies_count">movies</string>
+    <string name="series_count">series</string>
 
     <!-- NON TRANSLATABLE -->
     <!-- Main -->
@@ -211,5 +213,6 @@
     <string name="empty_image_content_description" translatable="false">Conversation image for empty view</string>
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
+    <string name="runtime_of_all_movies">Runtime of all movies</string>
 
 </resources>

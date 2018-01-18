@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/movies_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="56sp"
+            tools:text="3"
+            android:fontFamily="@font/roboto_mono"
+            android:layout_centerHorizontal="true"
+            android:textAllCaps="true" />
+
+        <TextView
+            android:id="@+id/movies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_mono"
+            android:textAllCaps="true"
+            android:layout_below="@id/movies_count"
+            android:layout_centerHorizontal="true"
+            android:text="@string/movies_count"/>
+
+        <TextView
+            android:id="@+id/movies_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            tools:text="243 minutes"
+            android:fontFamily="@font/roboto_mono"
+            android:layout_below="@id/movies"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_mono"
+            android:textAllCaps="true"
+            android:layout_below="@id/movies_minutes"
+            android:layout_centerHorizontal="true"
+            android:text="@string/runtime_of_all_movies"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/series_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="56sp"
+            tools:text="2"
+            android:fontFamily="@font/roboto_mono"
+            android:textAllCaps="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_mono"
+            android:textAllCaps="true"
+            android:layout_below="@id/series_count"
+            android:layout_centerHorizontal="true"
+            android:text="@string/series_count"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
