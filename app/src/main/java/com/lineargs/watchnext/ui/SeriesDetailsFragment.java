@@ -46,7 +46,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import butterknife.Unbinder;
 
-public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick {
+public class SeriesDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick {
 
 
     private static final String URI = "uri";
@@ -71,7 +71,6 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     AppCompatTextView mEmptyCast;
     private Uri mUri;
     private CastAdapter mCastAdapter;
-    private CrewAdapter mCrewAdapter;
     private TVDetailAdapter mAdapter;
     private Handler handler;
     private String title = "";
@@ -79,7 +78,7 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
     private long id;
     private boolean mDualPane;
 
-    public TVDetailsFragment() {
+    public SeriesDetailsFragment() {
     }
 
     public void setmUri(Uri uri) {
@@ -121,8 +120,8 @@ public class TVDetailsFragment extends Fragment implements LoaderManager.LoaderC
         if (mUri != null) {
             if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
                 SerieDetailUtils.syncSeasons(getContext(), mUri);
-                startCastLoading();
             }
+            startCastLoading();
         }
         getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
         getLoaderManager().initLoader(CAST_LOADER_ID, null, this);

@@ -13,7 +13,7 @@ import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionComp
 
 import java.util.List;
 
-public class Utils {
+public final class Utils {
 
     private Utils() {}
 

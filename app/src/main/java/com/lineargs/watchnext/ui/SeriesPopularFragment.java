@@ -24,7 +24,7 @@ public class SeriesPopularFragment extends SeriesListFragment implements SeriesP
 
     @Override
     public void onItemSelected(Uri uri) {
-        Intent intent = new Intent(getContext(), TVDetailsActivity.class);
+        Intent intent = new Intent(getContext(), SeriesDetailsActivity.class);
         intent.setData(uri);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);

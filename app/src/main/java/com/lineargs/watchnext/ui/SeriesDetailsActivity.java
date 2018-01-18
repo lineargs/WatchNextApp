@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.lineargs.watchnext.R;
 
-public class TVDetailsActivity extends BaseTopActivity {
+public class SeriesDetailsActivity extends BaseTopActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class TVDetailsActivity extends BaseTopActivity {
 
     private void setupFragment(Bundle savedState) {
         if (savedState == null) {
-            TVDetailsFragment fragment = new TVDetailsFragment();
+            SeriesDetailsFragment fragment = new SeriesDetailsFragment();
             fragment.setmUri(getIntent().getData());
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_tv_detail, fragment).commit();
         }

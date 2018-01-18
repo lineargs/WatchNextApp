@@ -141,9 +141,9 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         if (mUri != null) {
             if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
                 MovieSyncUtils.syncMovieDetail(context, mUri);
-                startCastLoading();
-                startCrewLoading();
             }
+            startCastLoading();
+            startCrewLoading();
         }
 
         getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);

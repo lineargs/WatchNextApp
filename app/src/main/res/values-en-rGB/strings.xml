@@ -75,4 +75,7 @@
     <string name="main_date">Released on: %s</string>
     <string name="nav_feedback">Feedback</string>
     <string name="feedback">"%1s %2s, Android %3s  Please send your feedback below this line  "</string>
+    <string name="library_link">website</string>
+    <string name="libraries">Libraries</string>
+    <string name="title_activity_statistics">Statistics</string>
 </resources>

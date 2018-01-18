@@ -110,7 +110,10 @@
     <string name="open_source_text">The application is open source at https://lineargs.github.io/WatchNextApp</string>
     <string name="text_not_available">N / A</string>
     <string name="pref_theme_blue_grey_label">Blue Grey</string>
+    <string name="libraries">Libraries</string>
 
+    <!-- Statistics -->
+    <string name="title_activity_statistics">Statistics</string>
 
     <!-- NON TRANSLATABLE -->
     <!-- Main -->
@@ -208,6 +211,5 @@
     <string name="empty_image_content_description" translatable="false">Conversation image for empty view</string>
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
-    <string name="libraries">Libraries</string>
 
 </resources>

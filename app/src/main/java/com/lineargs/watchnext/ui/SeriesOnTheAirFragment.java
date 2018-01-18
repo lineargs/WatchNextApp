@@ -24,7 +24,7 @@ public class SeriesOnTheAirFragment extends SeriesListFragment implements Series
 
     @Override
     public void onItemSelected(Uri uri) {
-        Intent intent = new Intent(getActivity(), TVDetailsActivity.class);
+        Intent intent = new Intent(getActivity(), SeriesDetailsActivity.class);
         intent.setData(uri);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
