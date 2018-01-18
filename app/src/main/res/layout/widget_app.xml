@@ -22,10 +22,11 @@
         android:layout_toRightOf="@+id/widget_poster"
         android:gravity="center_vertical"
         android:lineSpacingExtra="@dimen/line_spacing_extra"
+        android:textStyle="bold"
         android:lines="2"
         android:maxLines="2"
         android:padding="@dimen/appbar_padding_top"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorGrey"
         tools:text="Movie Title" />
 
 </RelativeLayout>

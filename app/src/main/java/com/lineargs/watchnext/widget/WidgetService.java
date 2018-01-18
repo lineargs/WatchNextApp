@@ -81,8 +81,6 @@ public class WidgetService extends RemoteViewsService {
 
             Intent fillIntent = new Intent();
 
-            fillIntent.setData(DataContract.Favorites.CONTENT_URI);
-
             views.setOnClickFillInIntent(R.id.widget_row, fillIntent);
 
             views.setTextViewText(R.id.widget_title, mCursor.getString(Query.TITLE));
