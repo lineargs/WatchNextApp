@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.StatsUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,11 +51,11 @@ public class StatisticsActivity extends BaseTopActivity {
         viewPager.setAdapter(fragmentPagerAdapter);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        setDrawerSelectedItem(R.id.nav_statistics);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        setDrawerSelectedItem(R.id.nav_statistics);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -74,8 +75,8 @@ public class StatisticsActivity extends BaseTopActivity {
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.item_statistics, container, false);
             unbinder = ButterKnife.bind(this, view);
-            movies.setText(String.valueOf(getMoviesCount(getActivity())));
-            series.setText(String.valueOf(getSeriesCount(getActivity())));
+            movies.setText(String.valueOf(StatsUtils.getMoviesCount(getActivity())));
+            series.setText(String.valueOf(StatsUtils.getSeriesCount(getActivity())));
             return view;
         }
 
@@ -83,34 +84,6 @@ public class StatisticsActivity extends BaseTopActivity {
         public void onDestroyView() {
             super.onDestroyView();
             unbinder.unbind();
-        }
-
-        private int getMoviesCount(Context context) {
-            Cursor cursor = context.getContentResolver().query(DataContract.Favorites.CONTENT_URI,
-                    null,
-                    DataContract.Favorites.COLUMN_TYPE + " = ?",
-                    new String[]{"0"},
-                    null);
-            if (cursor == null) {
-                return 0;
-            }
-            int contains = cursor.getCount();
-            cursor.close();
-            return contains;
-        }
-
-        private int getSeriesCount(Context context) {
-            Cursor cursor = context.getContentResolver().query(DataContract.Favorites.CONTENT_URI,
-                    null,
-                    DataContract.Favorites.COLUMN_TYPE + " = ?",
-                    new String[]{"1"},
-                    null);
-            if (cursor == null) {
-                return 0;
-            }
-            int contains = cursor.getCount();
-            cursor.close();
-            return contains;
         }
     }
 }

@@ -27,14 +27,8 @@
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:imeOptions="actionSearch|flagNoExtractUi" />
-
-                <View
-                    android:id="@+id/scrim"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0"
-                    android:background="@android:color/transparent"/>
+                    app:searchIcon="@android:color/transparent"
+                    app:iconifiedByDefault="false" />
 
             </android.support.v7.widget.Toolbar>
 

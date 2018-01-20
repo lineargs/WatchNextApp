@@ -148,12 +148,12 @@ public abstract class BaseDrawerActivity extends BaseActivity {
                 }
                 intent = new Intent(this, TheaterActivity.class);
                 break;
-            case R.id.nav_statistics:
-                if (this instanceof StatisticsActivity) {
-                    break;
-                }
-                intent = new Intent(this, StatisticsActivity.class);
-                break;
+//            case R.id.nav_statistics:
+//                if (this instanceof StatisticsActivity) {
+//                    break;
+//                }
+//                intent = new Intent(this, StatisticsActivity.class);
+//                break;
             case R.id.nav_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 break;

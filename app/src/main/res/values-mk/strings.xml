@@ -82,4 +82,7 @@
     <string name="library_link">Веб-страница</string>
     <string name="libraries">Библиотеки</string>
     <string name="title_activity_statistics">Статистика</string>
+    <string name="movies_count">филмови</string>
+    <string name="series_count">тв серии</string>
+    <string name="runtime_of_all_movies">Траење на сите филмови</string>
 </resources>

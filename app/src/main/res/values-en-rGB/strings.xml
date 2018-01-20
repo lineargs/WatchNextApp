@@ -78,4 +78,7 @@
     <string name="library_link">website</string>
     <string name="libraries">Libraries</string>
     <string name="title_activity_statistics">Statistics</string>
+    <string name="movies_count">movies</string>
+    <string name="series_count">series</string>
+    <string name="runtime_of_all_movies">Runtime of all movies</string>
 </resources>

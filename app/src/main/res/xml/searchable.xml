@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:hint="@string/search_hint"
-    android:includeInGlobalSearch="true"
-    android:label="@string/search_label"
-    android:searchSettingsDescription="@string/settings_description"
-    android:searchSuggestSelection=" ?"
-    android:searchSuggestThreshold="1" />
+    android:label="@string/search_hint"
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
+    android:voicePromptText="@string/search_hint"/>

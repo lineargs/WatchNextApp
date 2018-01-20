@@ -20,10 +20,10 @@
             android:id="@+id/nav_theaters"
             android:icon="@drawable/icon_theater"
             android:title="@string/title_activity_theater" />
-        <item
-            android:id="@+id/nav_statistics"
-            android:icon="@drawable/icon_statistics_black"
-            android:title="@string/title_activity_statistics" />
+        <!--<item-->
+            <!--android:id="@+id/nav_statistics"-->
+            <!--android:icon="@drawable/icon_statistics_black"-->
+            <!--android:title="@string/title_activity_statistics" />-->
     </group>
 
     <group
