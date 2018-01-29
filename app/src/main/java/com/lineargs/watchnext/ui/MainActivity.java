@@ -7,15 +7,16 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.lineargs.watchnext.R;
@@ -102,13 +103,10 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     }
 
     @Override
-    protected void setupActionBar() {
-        super.setupActionBar();
-        setTitle(getString(R.string.title_activity_main));
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(getString(R.string.title_activity_main));
-        }
+    public void setDrawerIndicatorEnabled() {
+        super.setDrawerIndicatorEnabled();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_black);
     }
 
     @Override
