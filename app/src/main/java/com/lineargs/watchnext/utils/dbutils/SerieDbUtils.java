@@ -52,8 +52,8 @@ public class SerieDbUtils {
                 e.printStackTrace();
             }
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + seriesResult.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
 
@@ -85,8 +85,8 @@ public class SerieDbUtils {
                 e.printStackTrace();
             }
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + seriesResult.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
 
@@ -118,8 +118,8 @@ public class SerieDbUtils {
                 e.printStackTrace();
             }
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + seriesResult.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
 
@@ -151,8 +151,8 @@ public class SerieDbUtils {
             e.printStackTrace();
         }
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + result.getPosterPath());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + result.getBackdropPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + result.getPosterPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + result.getBackdropPath());
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, result.getOriginalLanguage());
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, result.getOriginalName());
 
@@ -185,7 +185,7 @@ public class SerieDbUtils {
                     e.printStackTrace();
                 }
             }
-            contentValues.put(DataContract.Seasons.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + season.getPosterPath());
+            contentValues.put(DataContract.Seasons.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + season.getPosterPath());
             contentValues.put(DataContract.Seasons.COLUMN_SEASON_NUMBER, season.getSeasonNumber());
             values[i] = contentValues;
             i++;
@@ -216,7 +216,7 @@ public class SerieDbUtils {
                     e.printStackTrace();
                 }
             }
-            contentValues.put(DataContract.Episodes.COLUMN_STILL_PATH, IMAGE_SMALL_BASE + episode.getStillPath());
+            contentValues.put(DataContract.Episodes.COLUMN_STILL_PATH, IMAGE_MEDIUM_BASE + episode.getStillPath());
             contentValues.put(DataContract.Episodes.COLUMN_EPISODE_NUMBER, episode.getEpisodeNumber());
             contentValues.put(DataContract.Episodes.COLUMN_NAME, episode.getName());
             contentValues.put(DataContract.Episodes.COLUMN_OVERVIEW, episode.getOverview());
