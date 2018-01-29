@@ -131,7 +131,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.search) {
-            Intent searchIntent = new Intent(this, SearchMovieActivity.class);
+            Intent searchIntent = new Intent(this, SearchActivity.class);
             startIntent(searchIntent);
             return true;
         } else if (id == R.id.sort) {

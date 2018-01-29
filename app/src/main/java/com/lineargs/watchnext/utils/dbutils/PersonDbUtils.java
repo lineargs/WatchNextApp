@@ -41,7 +41,7 @@ public class PersonDbUtils {
         contentValues.put(DataContract.Person.COLUMN_NAME, person.getName());
         contentValues.put(DataContract.Person.COLUMN_BIOGRAPHY, person.getBiography());
         contentValues.put(DataContract.Person.COLUMN_PLACE_OF_BIRTH, person.getPlaceOfBirth());
-        contentValues.put(DataContract.Person.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + person.getProfilePath());
+        contentValues.put(DataContract.Person.COLUMN_PROFILE_PATH, IMAGE_MEDIUM_BASE + person.getProfilePath());
         contentValues.put(DataContract.Person.COLUMN_HOMEPAGE, person.getHomepage());
 
         values[0] = contentValues;

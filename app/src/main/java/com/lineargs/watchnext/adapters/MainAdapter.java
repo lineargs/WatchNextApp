@@ -2,11 +2,13 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
