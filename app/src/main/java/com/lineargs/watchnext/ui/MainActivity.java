@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.lineargs.watchnext.R;
@@ -106,7 +105,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     public void setDrawerIndicatorEnabled() {
         super.setDrawerIndicatorEnabled();
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.icon_menu_black);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_grey);
     }
 
     @Override

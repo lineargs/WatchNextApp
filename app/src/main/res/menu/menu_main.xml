@@ -3,14 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/sort"
-        android:icon="@drawable/icon_sort_white"
+        android:icon="@drawable/icon_keyboard_voice_grey"
         android:orderInCategory="0"
         android:title="@string/sort_by"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/search"
-        android:icon="@drawable/icon_search_white"
-        android:orderInCategory="1"
-        android:title="@string/menu_search"
-        app:showAsAction="ifRoom" />
 </menu>
