@@ -73,7 +73,7 @@
     <string name="writers">Writers</string>
     <string name="biography_not_available">There is no biography available for now. That\'s all we know.</string>
     <string name="main_date">Released on: %s</string>
-    <string name="nav_feedback">Feedback</string>
+    <string name="nav_feedback">Send feedback</string>
     <string name="feedback">"%1s %2s, Android %3s  Please send your feedback below this line  "</string>
     <string name="library_link">website</string>
     <string name="libraries">Libraries</string>

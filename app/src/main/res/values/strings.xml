@@ -13,7 +13,7 @@
     </string>
     <string name="pref_about_title">About</string>
     <string name="pref_notifications">Notifications</string>
-    <string name="nav_feedback">Feedback</string>
+    <string name="nav_feedback">Send feedback</string>
 
     <!-- Search -->
     <string name="search_label">WatchNext</string>
