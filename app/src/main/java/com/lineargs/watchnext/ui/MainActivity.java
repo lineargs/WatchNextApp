@@ -59,9 +59,15 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
 
     @OnClick(R.id.fab)
     public void searchFab() {
-        Intent fabIntent = new Intent(MainActivity.this, SearchActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent fabIntent = new Intent(MainActivity.this, SearchActivity.class);
         startIntent(fabIntent);
+    }
+
+    @OnClick(R.id.title_main_activity)
+    public void searchTextView() {
+        Intent txtIntent = new Intent(MainActivity.this, SearchActivity.class);
+        startActivity(txtIntent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void showData() {
@@ -127,12 +133,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.search) {
-            Intent searchIntent = new Intent(this, SearchActivity.class);
-            startIntent(searchIntent);
-            return true;
-        } else if (id == R.id.sort) {
-            showPopup();
+        if (id == R.id.voice_search) {
             return true;
         }
 
@@ -143,7 +144,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
      * Popup Menu item clicked
      */
     public void showPopup() {
-        View menu = findViewById(R.id.sort);
+        View menu = findViewById(R.id.voice_search);
         PopupMenu popupMenu = new PopupMenu(this, menu);
         popupMenu.inflate(R.menu.sort_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
