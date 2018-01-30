@@ -10,20 +10,26 @@
     app:cardCornerRadius="@dimen/card_view_corner_radius"
     app:cardElevation="@dimen/card_view_elevation">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/main_sort"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/icon_sort_black"
-        android:drawablePadding="@dimen/text_view_drawable_padding"
-        android:drawableRight="@drawable/icon_sort_black"
-        android:ellipsize="end"
-        android:gravity="end|center_vertical"
-        android:lineSpacingExtra="@dimen/line_spacing_extra"
-        android:maxLines="2"
-        android:padding="@dimen/padding_twelve"
-        android:text="@string/sort_by"
-        android:textColor="@color/colorBlack"
-        />
+        android:layout_height="wrap_content">
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:drawableEnd="@drawable/icon_sort_black"
+            android:drawablePadding="@dimen/text_view_drawable_padding"
+            android:drawableRight="@drawable/icon_sort_black"
+            android:ellipsize="end"
+            android:gravity="end|center_vertical"
+            android:lineSpacingExtra="@dimen/line_spacing_extra"
+            android:maxLines="2"
+            android:padding="@dimen/padding_twelve"
+            android:text="@string/sort_by"
+            android:textColor="@color/colorBlack" />
+
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -144,7 +144,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
      * Popup Menu item clicked
      */
     public void showPopup() {
-        View menu = findViewById(R.id.voice_search);
+        View menu = findViewById(R.id.main_sort);
         PopupMenu popupMenu = new PopupMenu(this, menu);
         popupMenu.inflate(R.menu.sort_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -227,6 +227,11 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             startIntent(intent);
         }
 
+    }
+
+    @Override
+    public void onSortClick() {
+        showPopup();
     }
 
     private boolean isSeries(Uri uri) {

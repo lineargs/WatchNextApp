@@ -144,6 +144,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnItemClickListener {
         void onItemSelected(Uri uri);
+        void onSortClick();
     }
 
     private void bindSortView(final SortViewHolder holder){}
@@ -213,11 +214,12 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         SortViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-
+            callback.onSortClick();
         }
     }
 }
