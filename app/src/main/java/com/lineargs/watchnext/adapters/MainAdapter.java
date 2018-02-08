@@ -194,7 +194,9 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         MainViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            if (callback != null) view.setOnClickListener(this);
+            if (callback != null) {
+                view.setOnClickListener(this);
+            }
         }
 
         @Override
@@ -214,7 +216,9 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         SortViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            view.setOnClickListener(this);
+            if (callback != null) {
+                view.setOnClickListener(this);
+            }
         }
 
         @Override

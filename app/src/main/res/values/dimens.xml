@@ -63,6 +63,7 @@
     <dimen name="one_dimen">1dp</dimen>
     <dimen name="small_padding">4dp</dimen>
     <dimen name="padding_six">6dp</dimen>
+    <dimen name="padding_eight">8dp</dimen>
     <dimen name="padding_nine">9dp</dimen>
     <dimen name="padding_twelve">12dp</dimen>
 

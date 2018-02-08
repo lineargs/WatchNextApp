@@ -25,7 +25,7 @@
     <string name="search_empty_text_serie">Please use the search to look up for a serie.  Powered by THE MOVIE DB</string>
 
     <!-- Sort Menu -->
-    <string name="sort_by">Sort By</string>
+    <string name="sort_by">Sort by</string>
     <string name="sort_menu_title">Title</string>
     <string name="sort_menu_highest_rated">Highest Rated</string>
     <string name="sort_menu_lowest_rated">Lowest Rated</string>
