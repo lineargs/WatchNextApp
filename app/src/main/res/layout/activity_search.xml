@@ -6,6 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/scrim"/>
+
     <RelativeLayout
         android:id="@+id/list_coordinator_layout"
         android:layout_width="match_parent"
@@ -50,12 +55,14 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/search_results"
             android:layout_width="match_parent"
+            android:background="@color/colorWhite"
             android:layout_height="wrap_content"
             android:layout_below="@id/search_card_view"
             android:layout_marginEnd="@dimen/search_card_view_margin"
             android:layout_marginLeft="@dimen/search_card_view_margin"
             android:layout_marginRight="@dimen/search_card_view_margin"
             android:layout_marginStart="@dimen/search_card_view_margin"
+            android:layout_marginBottom="@dimen/search_card_view_margin"
             android:clipToPadding="false"
             android:divider="@null" />
 

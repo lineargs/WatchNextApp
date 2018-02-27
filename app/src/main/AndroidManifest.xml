@@ -43,7 +43,8 @@
         <activity android:name=".ui.TabbedMoviesActivity" />
         <activity
             android:name=".ui.SearchActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/WatchNext.Search">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
