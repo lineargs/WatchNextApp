@@ -133,7 +133,10 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.voice_search) {
+        if (id == R.id.search) {
+            Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+            startActivity(txtIntent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             return true;
         }
 
