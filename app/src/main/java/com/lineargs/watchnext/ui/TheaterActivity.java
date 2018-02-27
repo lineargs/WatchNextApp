@@ -58,7 +58,7 @@ public class TheaterActivity extends BaseTopActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.search) {
-            Intent searchIntent = new Intent(this, SearchActivity.class)
+            Intent searchIntent = new Intent(this, SearchMainActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startSearchIntent(searchIntent);
             return true;

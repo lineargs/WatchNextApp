@@ -2,7 +2,6 @@ package com.lineargs.watchnext.ui;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +10,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -39,7 +36,7 @@ import static android.view.View.GONE;
  */
 
 //TODO For future implementations refactor the enter and exit transition
-public class SearchActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SearchMainActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_QUERY = "query";
     private static final int LOADER_ID = 223;
@@ -58,7 +55,7 @@ public class SearchActivity extends BaseTopActivity implements LoaderManager.Loa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_search_main);
         handler = new Handler();
         setupActionBar();
         setupNavDrawer();
@@ -178,7 +175,7 @@ public class SearchActivity extends BaseTopActivity implements LoaderManager.Loa
     protected void onPause() {
         super.onPause();
         if (isFinishing()) {
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 

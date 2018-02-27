@@ -42,7 +42,7 @@
         <activity android:name=".ui.TabbedSeriesActivity" />
         <activity android:name=".ui.TabbedMoviesActivity" />
         <activity
-            android:name=".ui.SearchActivity"
+            android:name=".ui.SearchMainActivity"
             android:launchMode="singleTop"
             android:theme="@style/WatchNext.Search">
             <meta-data

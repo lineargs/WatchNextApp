@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.ui.SearchActivity;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SearchDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;

@@ -59,13 +59,13 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
 
     @OnClick(R.id.fab)
     public void searchFab() {
-        Intent fabIntent = new Intent(MainActivity.this, SearchActivity.class);
+        Intent fabIntent = new Intent(MainActivity.this, SearchMainActivity.class);
         startIntent(fabIntent);
     }
 
     @OnClick(R.id.title_main_activity)
     public void searchTextView() {
-        Intent txtIntent = new Intent(MainActivity.this, SearchActivity.class);
+        Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
         startActivity(txtIntent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
