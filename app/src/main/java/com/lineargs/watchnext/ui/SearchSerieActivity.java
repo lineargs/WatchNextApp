@@ -37,7 +37,7 @@ import static android.view.View.GONE;
  */
 
 //TODO For future implementations refactor the enter and exit transition
-public class SearchTVActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SearchSerieActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_QUERY = "query";
     private static final int LOADER_ID = 223;

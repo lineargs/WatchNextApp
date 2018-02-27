@@ -54,8 +54,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SearchTVActivity"
-            android:launchMode="singleTop">
+            android:name=".ui.SearchSerieActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/WatchNext.Search">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />

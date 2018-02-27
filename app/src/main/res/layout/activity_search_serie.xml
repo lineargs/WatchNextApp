@@ -6,17 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.CoordinatorLayout
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/scrim"/>
+
+    <RelativeLayout
         android:id="@+id/list_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
         android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/toolbar_container"
+        <android.support.v7.widget.CardView
+            android:id="@+id/search_card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_eight"
+            android:layout_marginStart="@dimen/padding_eight"
+            android:layout_marginEnd="@dimen/padding_eight"
+            android:layout_marginRight="@dimen/padding_eight"
+            android:layout_marginTop="@dimen/padding_eight">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -27,35 +36,37 @@
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:searchIcon="@android:color/transparent"
-                    app:iconifiedByDefault="false" />
+                    app:iconifiedByDefault="false"
+                    android:imeOptions="actionSearch|flagNoExtractUi" />
+
 
             </android.support.v7.widget.Toolbar>
 
-        </android.support.design.widget.AppBarLayout>
+        </android.support.v7.widget.CardView>
 
         <ProgressBar
             android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:layout_below="@id/search_card_view"
             android:visibility="gone"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:visibility="visible" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/search_results"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/search_card_view_margin"
-                android:layout_marginLeft="@dimen/search_card_view_margin"
-                android:layout_marginRight="@dimen/search_card_view_margin"
-                android:layout_marginStart="@dimen/search_card_view_margin"
-                android:clipToPadding="false"
-                android:divider="@null"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_results"
+            android:layout_width="match_parent"
+            android:background="@color/colorWhite"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_card_view"
+            android:layout_marginEnd="@dimen/search_card_view_margin"
+            android:layout_marginLeft="@dimen/search_card_view_margin"
+            android:layout_marginRight="@dimen/search_card_view_margin"
+            android:layout_marginStart="@dimen/search_card_view_margin"
+            android:layout_marginBottom="@dimen/search_card_view_margin"
+            android:clipToPadding="false"
+            android:divider="@null" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 
     <include layout="@layout/nav_view" />
 
