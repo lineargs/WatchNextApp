@@ -12,7 +12,7 @@ import com.lineargs.watchnext.utils.NotificationUtils;
 /**
  * Created by goranminov on 05/11/2017.
  * <p>
- * Provides common functionality across all actitivies like setting the theme.
+ * Provides common functionality across all activities like setting the theme.
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -32,7 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void setCustomTheme() {
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(getString(R.string.pref_theme_key), "").contains(getString(R.string.pref_theme_blue_grey_key))) {
-            setTheme(R.style.BlueGreyTheme);
+            setTheme(R.style.WatchNext_BlueGrey);
         }
     }
 

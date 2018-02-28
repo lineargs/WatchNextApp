@@ -83,7 +83,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     private void setupViews() {
         ButterKnife.bind(this);
         bundle = new Bundle();
-        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns());
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new MainAdapter(this, this);
@@ -93,18 +93,6 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
          * first to display. We still do not save the user preference.
          */
         getSupportLoaderManager().initLoader(LOADER_ID, bundle, this);
-    }
-
-    private int numberOfColumns() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int widthDivider = 800;
-        int width = displayMetrics.widthPixels;
-        int nColumns = width / widthDivider;
-        if (nColumns < 1) {
-            return 1;
-        }
-        return nColumns;
     }
 
     @Override

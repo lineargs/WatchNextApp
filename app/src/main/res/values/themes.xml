@@ -2,33 +2,35 @@
 <resources>
 
     <!-- Base Theme -->
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="WatchNext" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="background">@color/colorYellowTransparent</item>
     </style>
 
     <!-- Grey App Theme -->
-    <style name="GreyTheme" parent="BaseAppTheme">
+    <style name="WatchNext.Grey">
         <item name="colorPrimary">@color/colorGrey</item>
         <item name="colorPrimaryDark">@color/colorGreyDark</item>
         <item name="colorAccent">@color/colorBlack</item>
     </style>
 
     <!-- Blue Grey App Theme -->
-    <style name="BlueGreyTheme" parent="BaseAppTheme">
+    <style name="WatchNext.BlueGrey">
         <item name="colorPrimary">@color/colorBlueGrey</item>
         <item name="colorPrimaryDark">@color/colorBlueGreyDark</item>
         <item name="colorAccent">@color/colorBlack</item>
     </style>
 
-    <style name="WatchNext.Search" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="WatchNext.Search">
+        <item name="background">@null</item>
         <item name="android:windowBackground">@color/scrim</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
 </resources>
