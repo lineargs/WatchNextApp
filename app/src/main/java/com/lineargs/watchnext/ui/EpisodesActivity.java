@@ -376,7 +376,7 @@ public class EpisodesActivity extends BaseTopActivity implements
         @Override
         public CharSequence getPageTitle(int position) {
             mCursor.moveToPosition(position);
-            return "S" + number + "E" + mCursor.getString(EpisodesQuery.EPISODE_NUMBER);
+            return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, mCursor.getInt(EpisodesQuery.EPISODE_NUMBER));
         }
 
         void swapCursor(Cursor cursor) {

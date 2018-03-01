@@ -24,7 +24,7 @@ class SeasonTask {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
 
-    static void syncEpisodes(final Context context, final String id, String seasonNumber, final String seasonId) {
+    static void syncEpisodes(final Context context, final String id, int seasonNumber, final String seasonId) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
