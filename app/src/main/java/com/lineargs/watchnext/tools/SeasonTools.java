@@ -24,6 +24,7 @@ public class SeasonTools {
     /* Will return the episode format according to the users preferences.
      * S1E1, S01E01, s1e1, s01e01
      */
+    //TODO Add the user preference settings
     public static String getEpisodeFormat(Context context, int season, int episode) {
         NumberFormat numberFormat = NumberFormat.getIntegerInstance();
         numberFormat.setGroupingUsed(false);
