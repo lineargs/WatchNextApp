@@ -1,7 +1,10 @@
 package com.lineargs.watchnext.utils.dbutils;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.text.TextUtils;
 
+import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
@@ -167,7 +170,7 @@ public class SerieDbUtils {
      * @param details Object used to get the values from our API response
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getSeasons(SeriesDetails details, String serieId) {
+    public static ContentValues[] getSeasons(Context context, SeriesDetails details, String serieId) {
         int i = 0;
         String name = details.getName();
         List<Season> seasons = details.getSeasons();
@@ -187,6 +190,7 @@ public class SerieDbUtils {
             }
             contentValues.put(DataContract.Seasons.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + season.getPosterPath());
             contentValues.put(DataContract.Seasons.COLUMN_SEASON_NUMBER, season.getSeasonNumber());
+
             values[i] = contentValues;
             i++;
         }

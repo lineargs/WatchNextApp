@@ -68,6 +68,7 @@
     <string name="guest_stars">Guest Stars</string>
     <string name="directors">Directors</string>
     <string name="writers">Writers</string>
+    <string name="season_specials">Specials</string>
 
     <!-- Credits -->
     <string name="cast_empty_text">No cast found</string>

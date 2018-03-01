@@ -53,7 +53,7 @@ class SerieDetailTask {
                     ContentValues updateValues = SerieDbUtils.updateSeries(response.body());
                     UpdateSeries updateSeries = new UpdateSeries(context);
                     updateSeries.execute(updateValues);
-                    ContentValues[] seasonValues = SerieDbUtils.getSeasons(response.body(), id);
+                    ContentValues[] seasonValues = SerieDbUtils.getSeasons(context, response.body(), id);
                     InsertSeasons insertSeasons = new InsertSeasons(context);
                     insertSeasons.execute(seasonValues);
                     ContentValues[] castValues = CreditDbUtils.getCastContentValues(response.body().getCredits(), id);

@@ -28,11 +28,15 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private static final int DB_VER_39 = 39;
 
     private static final int DB_VER_40 = 40;
+
+    /* Changed the season number column to text so we can insert Specials
+     * value when we have value of 0 */
+    private static final int DB_VER_41 = 41;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    public static final int DATABASE_VERSION = DB_VER_40;
+    public static final int DATABASE_VERSION = DB_VER_41;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
@@ -298,7 +302,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.Seasons.COLUMN_EPISODE_COUNT + " INTEGER NOT NULL, " +
                     DataContract.Seasons.COLUMN_RELEASE_DATE + " TEXT, " +
                     DataContract.Seasons.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
-                    DataContract.Seasons.COLUMN_SEASON_NUMBER + " INTEGER NOT NULL, " +
+                    DataContract.Seasons.COLUMN_SEASON_NUMBER + " TEXT NOT NULL, " +
                     DataContract.Seasons.COLUMN_SHOW_NAME + " TEXT NOT NULL, " +
                     "UNIQUE (" + DataContract.Seasons.COLUMN_SEASON_ID + ") ON CONFLICT REPLACE);";
     /*
@@ -399,7 +403,9 @@ public class DataDbHelper extends SQLiteOpenHelper {
                 upgradeToThirtyNine(db);
             case DB_VER_39:
                 upgradeToForty(db);
-                dbVersion = DB_VER_40;
+            case DB_VER_40:
+                upgradeToFortyOne(db);
+                dbVersion = DB_VER_41;
         }
 
         if (dbVersion != DATABASE_VERSION) {
@@ -781,5 +787,10 @@ public class DataDbHelper extends SQLiteOpenHelper {
         if (isTableMissing(db, DataContract.Credits.TABLE_NAME)) {
             db.execSQL(SQL_CREATE_CREDITS_TABLE);
         }
+    }
+
+    private static void upgradeToFortyOne(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Seasons.TABLE_NAME);
+        db.execSQL(SQL_CREATE_SEASONS_TABLE);
     }
 }

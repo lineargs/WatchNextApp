@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.SeasonsQuery;
+import com.lineargs.watchnext.tools.SeasonTools;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,8 +83,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void bindViews(Context context, int position) {
             Resources resources = context.getResources();
             cursor.moveToPosition(position);
-            String seasonTitle = resources.getString(R.string.season, cursor.getInt(SeasonsQuery.SEASON_NUMBER));
-            title.setText(seasonTitle);
+            title.setText(SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER)));
             date.setText(cursor.getString(SeasonsQuery.RELEASE_DATE));
             String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
             episodes.setText(episodesCount);
@@ -94,7 +94,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Resources resources = context.getResources();
             cursor.moveToPosition(getAdapterPosition());
             String seasonId = cursor.getString(SeasonsQuery.SEASON_ID);
-            String seasonTitle = resources.getString(R.string.season, cursor.getInt(SeasonsQuery.SEASON_NUMBER));
+            String seasonTitle = SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER));
             String episodes = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
             String serieId = cursor.getString(SeasonsQuery.SERIE_ID);
             String number = cursor.getString(SeasonsQuery.SEASON_NUMBER);
