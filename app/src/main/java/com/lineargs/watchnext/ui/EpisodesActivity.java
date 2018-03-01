@@ -3,7 +3,9 @@ package com.lineargs.watchnext.ui;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -29,6 +31,7 @@ import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
+import com.lineargs.watchnext.tools.SeasonTools;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
@@ -49,12 +52,10 @@ public class EpisodesActivity extends BaseTopActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 667, BACK_LOADER_ID = 888;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.container)
-    ViewPager mViewPager;
-    @BindView(R.id.cover_poster)
-    ImageView seasonPoster;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.container) ViewPager viewPager;
+    @BindView(R.id.tabs) TabLayout tabs;
+    @BindView(R.id.cover_poster) ImageView seasonPoster;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -68,6 +69,7 @@ public class EpisodesActivity extends BaseTopActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
     private String title = "", subtitle = "";
+    private int number;
     private String seasonId = "";
 
     @Override
@@ -76,8 +78,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         setContentView(R.layout.activity_episodes);
         ButterKnife.bind(this);
 
-        if (getIntent().hasExtra(SeasonsFragment.SEASON_TITLE) && getIntent().hasExtra(SeasonsFragment.EPISODES)) {
-            title = getIntent().getStringExtra(SeasonsFragment.SEASON_TITLE);
+        if (getIntent().hasExtra(SeasonsFragment.SEASON_NUMBER) && getIntent().hasExtra(SeasonsFragment.EPISODES)) {
+            title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(SeasonsFragment.SEASON_NUMBER, -1));
             subtitle = getIntent().getStringExtra(SeasonsFragment.EPISODES);
         }
 
@@ -90,25 +92,24 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         if (getIntent().hasExtra(SeasonsFragment.SEASON_ID) && getIntent().hasExtra(SeasonsFragment.SERIE_ID) && getIntent().hasExtra(SeasonsFragment.SEASON_NUMBER)) {
             String serieId = getIntent().getStringExtra(SeasonsFragment.SERIE_ID);
-            String number = getIntent().getStringExtra(SeasonsFragment.SEASON_NUMBER);
+            number = getIntent().getIntExtra(SeasonsFragment.SEASON_NUMBER, -1);
             seasonId = getIntent().getStringExtra(SeasonsFragment.SEASON_ID);
             SeasonUtils.syncEpisodes(this, serieId, number, seasonId);
             startLoading();
         }
-        // Set up the ViewPager with the sections adapter.
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         getSupportLoaderManager().initLoader(BACK_LOADER_ID, null, this);
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        viewPager.setVisibility(GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(GONE);
-        mViewPager.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(GONE);
+        viewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -165,6 +166,8 @@ public class EpisodesActivity extends BaseTopActivity implements
                     data.moveToFirst();
                     mSectionsPagerAdapter.swapCursor(data);
                     showData();
+                    viewPager.setAdapter(mSectionsPagerAdapter);
+                    tabs.setupWithViewPager(viewPager);
                 }
                 break;
             case BACK_LOADER_ID:
@@ -214,28 +217,17 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @BindView(R.id.name)
         AppCompatTextView name;
-        @BindView(R.id.still_path)
-        ImageView stillPath;
-        @BindView(R.id.vote_average)
-        AppCompatTextView voteAverage;
-        @BindView(R.id.release_date)
-        AppCompatTextView releaseDate;
-        @BindView(R.id.overview)
-        AppCompatTextView overview;
-        @BindView(R.id.guest_stars)
-        AppCompatTextView guestStars;
-        @BindView(R.id.directors)
-        AppCompatTextView directors;
-        @BindView(R.id.writers)
-        AppCompatTextView writers;
-        @BindView(R.id.guest_stars_container)
-        LinearLayout guestStarsContainer;
-        @BindView(R.id.directors_container)
-        LinearLayout directorsContainer;
-        @BindView(R.id.writers_container)
-        LinearLayout writersContainer;
-        @BindView(R.id.notification_fab)
-        FloatingActionButton notification;
+        @BindView(R.id.still_path) ImageView stillPath;
+        @BindView(R.id.vote_average) AppCompatTextView voteAverage;
+        @BindView(R.id.release_date) AppCompatTextView releaseDate;
+        @BindView(R.id.overview) AppCompatTextView overview;
+        @BindView(R.id.guest_stars) AppCompatTextView guestStars;
+        @BindView(R.id.directors) AppCompatTextView directors;
+        @BindView(R.id.writers) AppCompatTextView writers;
+        @BindView(R.id.guest_stars_container) LinearLayout guestStarsContainer;
+        @BindView(R.id.directors_container) LinearLayout directorsContainer;
+        @BindView(R.id.writers_container) LinearLayout writersContainer;
+        @BindView(R.id.notification_fab) FloatingActionButton notification;
         private Unbinder unbinder;
 
 
@@ -379,6 +371,12 @@ public class EpisodesActivity extends BaseTopActivity implements
         public int getCount() {
             if (mCursor == null) return 0;
             return mCursor.getCount();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            mCursor.moveToPosition(position);
+            return "S" + number + "E" + mCursor.getString(EpisodesQuery.EPISODE_NUMBER);
         }
 
         void swapCursor(Cursor cursor) {

@@ -63,7 +63,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnClickListener {
-        void OnClick(String seasonId, String seasonNumber, String serieId, String seasonTitle, String episodes);
+        void OnClick(String seasonId, int seasonNumber, String serieId, String episodes);
     }
 
     class SeasonsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -94,11 +94,10 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Resources resources = context.getResources();
             cursor.moveToPosition(getAdapterPosition());
             String seasonId = cursor.getString(SeasonsQuery.SEASON_ID);
-            String seasonTitle = SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER));
             String episodes = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
             String serieId = cursor.getString(SeasonsQuery.SERIE_ID);
-            String number = cursor.getString(SeasonsQuery.SEASON_NUMBER);
-            callback.OnClick(seasonId, number, serieId, seasonTitle, episodes);
+            int number = cursor.getInt(SeasonsQuery.SEASON_NUMBER);
+            callback.OnClick(seasonId, number, serieId, episodes);
         }
     }
 }
