@@ -85,4 +85,5 @@
     <string name="movies_count">филмови</string>
     <string name="series_count">тв серии</string>
     <string name="runtime_of_all_movies">Траење на сите филмови</string>
+    <string name="season_specials">Посебни епизоди</string>
 </resources>

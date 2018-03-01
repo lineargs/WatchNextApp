@@ -81,4 +81,5 @@
     <string name="movies_count">movies</string>
     <string name="series_count">series</string>
     <string name="runtime_of_all_movies">Runtime of all movies</string>
+    <string name="season_specials">Specials</string>
 </resources>
