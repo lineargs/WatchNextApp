@@ -6,7 +6,7 @@ buildscript {
             'compileSdk': 27,
             'targetSdk': 27,
             'buildTools': '27.0.1',
-            'supportLibrary': '27.0.2',
+            'supportLibrary': '27.1.0',
             'butterknife': '8.8.1',
             'retrofit': '2.3.0',
             'picasso': '2.5.2',
