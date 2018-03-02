@@ -15,17 +15,20 @@ import com.lineargs.watchnext.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String PACKAGE = "package:";
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         Preference preference = findPreference(s);
         if (preference != null) {
             if (preference instanceof ListPreference) {
-                setThemePreferenceSummary(preference, sharedPreferences.getString(s, ""));
-                TaskStackBuilder.create(getActivity())
-                        .addNextIntent(new Intent(getActivity(), MainActivity.class))
-                        .addNextIntent(getActivity().getIntent())
-                        .startActivities();
+                setListPreferenceSummary(preference, sharedPreferences.getString(s, ""));
+                if (preference.equals(findPreference(getString(R.string.pref_theme_key)))) {
+                    TaskStackBuilder.create(getActivity())
+                            .addNextIntent(new Intent(getActivity(), MainActivity.class))
+                            .addNextIntent(getActivity().getIntent())
+                            .startActivities();
+                }
             }
         }
     }
@@ -41,7 +44,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             Preference preference = preferenceScreen.getPreference(i);
             if (preference instanceof ListPreference) {
                 String value = sharedPreferences.getString(preference.getKey(), "");
-                setThemePreferenceSummary(preference, value);
+                setListPreferenceSummary(preference, value);
             }
         }
         Preference about = findPreference(getString(R.string.pref_about_key));
@@ -64,7 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 } else {
                     intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     intent.addCategory(Intent.CATEGORY_DEFAULT);
-                    intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+                    intent.setData(Uri.parse(PACKAGE + getActivity().getPackageName()));
                 }
                 startActivity(intent);
                 return true;
@@ -72,7 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         });
     }
 
-    private void setThemePreferenceSummary(Preference preference, String value) {
+    private void setListPreferenceSummary(Preference preference, String value) {
         if (preference instanceof ListPreference) {
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(value);
