@@ -5,7 +5,9 @@
 
     <!-- Settings -->
     <string name="pref_theme_grey_label">Grey</string>
+    <string name="pref_theme_blue_grey_label">Blue Grey</string>
     <string name="pref_theme_title">Themes</string>
+    <string name="pref_season_number_title">Season number format</string>
     <string name="pref_title_adult_search">Adult search</string>
     <string name="pref_description_adult_search_off">Enabling will make adult content available in the search
     </string>
@@ -110,7 +112,6 @@
     <string name="about_version">Version %1$s (Database version %2$d)</string>
     <string name="open_source_text">The application is open source at https://lineargs.github.io/WatchNextApp</string>
     <string name="text_not_available">N / A</string>
-    <string name="pref_theme_blue_grey_label">Blue Grey</string>
     <string name="libraries">Libraries</string>
 
     <!-- Statistics -->
@@ -127,6 +128,15 @@
     <string name="pref_theme_key" translatable="false">app_theme</string>
     <string name="pref_theme_grey_key" translatable="false">theme_grey</string>
     <string name="pref_theme_blue_grey_key" translatable="false">theme_blue_grey</string>
+    <string name="pref_season_number_key" translatable="false">season_number</string>
+    <string name="pref_season_number_SO_key" translatable="false">capital_with_zero</string>
+    <string name="pref_season_number_S_key" translatable="false">capital_no_zero</string>
+    <string name="pref_season_number_so_key" translatable="false">lower_with_zero</string>
+    <string name="pref_season_number_s_key" translatable="false">lower_no_zero</string>
+    <string name="pref_season_number_SO_label" translatable="false">S01E01</string>
+    <string name="pref_season_number_S_label" translatable="false">S1E1</string>
+    <string name="pref_season_number_so_label" translatable="false">s01e01</string>
+    <string name="pref_season_number_s_label" translatable="false">s1e1</string>
     <string name="adult_search" translatable="false">adult_search</string>
     <string name="pref_about_key" translatable="false">about_key</string>
     <string name="pref_locale_key" translatable="false">locale</string>
