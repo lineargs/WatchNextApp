@@ -1,6 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    def versionMajor = 1
+    def versionMinor = 2
+    def versionPatch = 1
+
     ext.versions = [
             'minSdk': 16,
             'compileSdk': 27,
@@ -14,7 +18,7 @@ buildscript {
             'firebaseCore': '11.8.0',
             'firebaseJob': '0.8.5',
             'espresso': '3.0.1',
-            'code': 28,
+            'code': versionMajor * 10000 + versionMinor * 100 + versionPatch,
             'name': '1.2'
     ]
     repositories {
