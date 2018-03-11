@@ -21,8 +21,8 @@ android {
         applicationId "com.lineargs.watchnext"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode versions.code
-        versionName versions.name
+        versionCode versions.versionCode
+        versionName versions.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         buildConfigField 'String', 'MOVIE_DATABASE_API_KEY', TMDbApiKey

@@ -18,8 +18,8 @@ buildscript {
             'firebaseCore': '11.8.0',
             'firebaseJob': '0.8.5',
             'espresso': '3.0.1',
-            'code': versionMajor * 10000 + versionMinor * 100 + versionPatch,
-            'name': '1.2'
+            'versionCode': versionMajor * 10000 + versionMinor * 100 + versionPatch,
+            'versionName': "${versionMajor}.${versionMinor}.${versionPatch}"
     ]
     repositories {
         jcenter()
