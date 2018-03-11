@@ -17,7 +17,7 @@ public final class Utils {
 
     private Utils() {}
 
-    public static String version(Context context) {
+    private static String versionName(Context context) {
         String version;
         try {
             version = context.getPackageManager().getPackageInfo
@@ -28,8 +28,19 @@ public final class Utils {
         return version;
     }
 
+    private static int versionCode(Context context) {
+        int version;
+        try {
+            version = context.getPackageManager().getPackageInfo
+                    (context.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            version = 0;
+        }
+        return version;
+    }
+
     public static String versionString(Context context) {
-        return context.getString(R.string.about_version, version(context),
+        return context.getString(R.string.about_version, versionCode(context), versionName(context),
                 DataDbHelper.DATABASE_VERSION);
     }
 
