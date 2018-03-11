@@ -2,10 +2,8 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CrewQuery;
+import com.lineargs.watchnext.data.CeditsQuery;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -30,11 +28,6 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private Cursor cursor;
     private OnClick onClick;
-
-    public interface OnClick {
-        void onCrewClick(String id);
-    }
-
 
     public CrewAdapter(@NonNull Context context, @NonNull OnClick onClick) {
         this.context = context;
@@ -69,6 +62,10 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public interface OnClick {
+        void onCrewClick(String id);
+    }
+
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.crew_name)
         TextView crewName;
@@ -87,10 +84,10 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void bindViews(int position) {
             cursor.moveToPosition(position);
-            crewName.setText(cursor.getString(CrewQuery.CREW_NAME));
-            crewJob.setText(cursor.getString(CrewQuery.CREW_JOB));
+            crewName.setText(cursor.getString(CeditsQuery.NAME));
+            crewJob.setText(cursor.getString(CeditsQuery.JOB));
             Picasso.with(profilePath.getContext())
-                    .load(cursor.getString(CrewQuery.PROFILE_PATH))
+                    .load(cursor.getString(CeditsQuery.PROFILE_PATH))
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
                     .fit()
@@ -100,7 +97,7 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CrewQuery.CREW_ID);
+            String id = cursor.getString(CeditsQuery.PERSON_ID);
             onClick.onCrewClick(id);
         }
     }

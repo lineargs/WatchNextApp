@@ -4,22 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame_layout_episodes"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.lineargs.watchnext.ui.EpisodesActivity$PlaceholderFragment">
-
-    <ImageView
-        android:id="@+id/cover_poster"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/season_cover_poster_description"
-        android:scaleType="centerCrop" />
-
-    <View
-        android:id="@+id/mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/background" />
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -105,6 +90,75 @@
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/overview"
                             style="@style/DetailText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/guest_stars_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/small_min_height"
+                            android:text="@string/guest_stars"
+                            android:textAllCaps="true"
+                            android:textColor="?colorPrimary"
+                            android:textStyle="bold" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/guest_stars"
+                            style="@style/SmallHeightDetailText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/directors_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/small_min_height"
+                            android:text="@string/directors"
+                            android:textAllCaps="true"
+                            android:textColor="?colorPrimary"
+                            android:textStyle="bold" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/directors"
+                            style="@style/SmallHeightDetailText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/writers_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/small_min_height"
+                            android:text="@string/writers"
+                            android:textAllCaps="true"
+                            android:textColor="?colorPrimary"
+                            android:textStyle="bold" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/writers"
+                            style="@style/SmallHeightDetailText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>

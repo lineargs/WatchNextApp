@@ -15,10 +15,6 @@ import com.lineargs.watchnext.data.Query;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by goranminov on 21/12/2017.
- */
-
 public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;

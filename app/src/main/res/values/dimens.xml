@@ -52,6 +52,7 @@
 
     <!-- Recycler View -->
     <dimen name="search_recycler_view_padding">8dp</dimen>
+    <dimen name="main_recycler_view_padding_bottom">80dp</dimen>
 
     <!-- Nested Scroll View -->
     <dimen name="portrait_nested_view_padding">240dp</dimen>
@@ -62,6 +63,7 @@
     <dimen name="one_dimen">1dp</dimen>
     <dimen name="small_padding">4dp</dimen>
     <dimen name="padding_six">6dp</dimen>
+    <dimen name="padding_eight">8dp</dimen>
     <dimen name="padding_nine">9dp</dimen>
     <dimen name="padding_twelve">12dp</dimen>
 

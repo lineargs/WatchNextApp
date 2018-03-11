@@ -8,9 +8,10 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
+        android:id="@+id/list_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/background"
         android:fitsSystemWindows="true"
         tools:context="com.lineargs.watchnext.ui.TabbedSeriesActivity">
 
@@ -20,7 +21,7 @@
             android:layout_height="wrap_content"
             android:theme="?attr/actionBarTheme">
 
-            <include layout="@layout/tabbed_toolbar" />
+            <include layout="@layout/tabbed_main_toolbar" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
@@ -30,20 +31,17 @@
                 <android.support.design.widget.TabItem
                     android:id="@+id/tab_item_popular"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tab_popular" />
+                    android:layout_height="wrap_content" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/tab_item_top"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tab_top_rated" />
+                    android:layout_height="wrap_content" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/tab_item_on"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tab_on_the_air" />
+                    android:layout_height="wrap_content" />
 
             </android.support.design.widget.TabLayout>
         </android.support.design.widget.AppBarLayout>

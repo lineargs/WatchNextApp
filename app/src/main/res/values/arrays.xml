@@ -11,4 +11,21 @@
         <item>@string/pref_theme_grey_key</item>
         <item>@string/pref_theme_blue_grey_key</item>
     </string-array>
+
+    <!-- Season number options -->
+    <string-array name="pref_season_number_options">
+        <item>@string/pref_season_number_SO_label</item>
+        <item>@string/pref_season_number_S_label</item>
+        <item>@string/pref_season_number_so_label</item>
+        <item>@string/pref_season_number_s_label</item>
+    </string-array>
+
+    <!-- Season number values -->
+    <string-array name="pref_season_number_values">
+        <item>@string/pref_season_number_SO_key</item>
+        <item>@string/pref_season_number_S_key</item>
+        <item>@string/pref_season_number_so_key</item>
+        <item>@string/pref_season_number_s_key</item>
+    </string-array>
+
 </resources>

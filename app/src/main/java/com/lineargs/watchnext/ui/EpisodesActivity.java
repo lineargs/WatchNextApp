@@ -3,7 +3,9 @@ package com.lineargs.watchnext.ui;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,10 +16,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -27,6 +31,7 @@ import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
+import com.lineargs.watchnext.tools.SeasonTools;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
@@ -41,14 +46,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.view.View.GONE;
+
 public class EpisodesActivity extends BaseTopActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 667, BACK_LOADER_ID = 888;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.container)
-    ViewPager mViewPager;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.container) ViewPager viewPager;
+    @BindView(R.id.tabs) TabLayout tabs;
+    @BindView(R.id.cover_poster) ImageView seasonPoster;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -62,6 +69,7 @@ public class EpisodesActivity extends BaseTopActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
     private String title = "", subtitle = "";
+    private int number;
     private String seasonId = "";
 
     @Override
@@ -70,8 +78,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         setContentView(R.layout.activity_episodes);
         ButterKnife.bind(this);
 
-        if (getIntent().hasExtra(SeasonsFragment.SEASON_TITLE) && getIntent().hasExtra(SeasonsFragment.EPISODES)) {
-            title = getIntent().getStringExtra(SeasonsFragment.SEASON_TITLE);
+        if (getIntent().hasExtra(SeasonsFragment.SEASON_NUMBER) && getIntent().hasExtra(SeasonsFragment.EPISODES)) {
+            title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(SeasonsFragment.SEASON_NUMBER, -1));
             subtitle = getIntent().getStringExtra(SeasonsFragment.EPISODES);
         }
 
@@ -84,25 +92,24 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         if (getIntent().hasExtra(SeasonsFragment.SEASON_ID) && getIntent().hasExtra(SeasonsFragment.SERIE_ID) && getIntent().hasExtra(SeasonsFragment.SEASON_NUMBER)) {
             String serieId = getIntent().getStringExtra(SeasonsFragment.SERIE_ID);
-            String number = getIntent().getStringExtra(SeasonsFragment.SEASON_NUMBER);
+            number = getIntent().getIntExtra(SeasonsFragment.SEASON_NUMBER, -1);
             seasonId = getIntent().getStringExtra(SeasonsFragment.SEASON_ID);
             SeasonUtils.syncEpisodes(this, serieId, number, seasonId);
             startLoading();
         }
-        // Set up the ViewPager with the sections adapter.
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         getSupportLoaderManager().initLoader(BACK_LOADER_ID, null, this);
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        viewPager.setVisibility(GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.GONE);
-        mViewPager.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(GONE);
+        viewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -159,12 +166,15 @@ public class EpisodesActivity extends BaseTopActivity implements
                     data.moveToFirst();
                     mSectionsPagerAdapter.swapCursor(data);
                     showData();
+                    viewPager.setAdapter(mSectionsPagerAdapter);
+                    tabs.setupWithViewPager(viewPager);
                 }
                 break;
             case BACK_LOADER_ID:
                 if (data != null && data.getCount() != 0) {
                     data.moveToFirst();
                     mSectionsPagerAdapter.swapBackCursor(data);
+                    swapPosterCursor(data);
                 }
                 break;
             default:
@@ -176,6 +186,14 @@ public class EpisodesActivity extends BaseTopActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
         mSectionsPagerAdapter.swapCursor(null);
         mSectionsPagerAdapter.swapBackCursor(null);
+    }
+
+    void swapPosterCursor(Cursor cursor) {
+        Picasso.with(seasonPoster.getContext())
+                .load(cursor.getString(SeasonsQuery.POSTER_PATH))
+                .centerInside()
+                .fit()
+                .into(seasonPoster);
     }
 
     /**
@@ -191,23 +209,25 @@ public class EpisodesActivity extends BaseTopActivity implements
         private static final String ARG_VOTE = "vote";
         private static final String ARG_DATE = "date";
         private static final String ARG_OVERVIEW = "overview";
-        private static final String ARG_IMG = "img";
         private static final String ARG_ID = "id";
         private static final String ARG_TITLE = "title";
+        private static final String ARG_GUEST_STARS = "guest_stars";
+        private static final String ARG_DIRECTORS = "directors";
+        private static final String ARG_WRITERS = "writers";
+
         @BindView(R.id.name)
         AppCompatTextView name;
-        @BindView(R.id.still_path)
-        ImageView stillPath;
-        @BindView(R.id.vote_average)
-        AppCompatTextView voteAverage;
-        @BindView(R.id.release_date)
-        AppCompatTextView releaseDate;
-        @BindView(R.id.overview)
-        AppCompatTextView overview;
-        @BindView(R.id.cover_poster)
-        ImageView poster;
-        @BindView(R.id.notification_fab)
-        FloatingActionButton notification;
+        @BindView(R.id.still_path) ImageView stillPath;
+        @BindView(R.id.vote_average) AppCompatTextView voteAverage;
+        @BindView(R.id.release_date) AppCompatTextView releaseDate;
+        @BindView(R.id.overview) AppCompatTextView overview;
+        @BindView(R.id.guest_stars) AppCompatTextView guestStars;
+        @BindView(R.id.directors) AppCompatTextView directors;
+        @BindView(R.id.writers) AppCompatTextView writers;
+        @BindView(R.id.guest_stars_container) LinearLayout guestStarsContainer;
+        @BindView(R.id.directors_container) LinearLayout directorsContainer;
+        @BindView(R.id.writers_container) LinearLayout writersContainer;
+        @BindView(R.id.notification_fab) FloatingActionButton notification;
         private Unbinder unbinder;
 
 
@@ -219,7 +239,8 @@ public class EpisodesActivity extends BaseTopActivity implements
          * number.
          */
         public static PlaceholderFragment newInstance(String name, String stillPath, String vote, String releaseDate,
-                                                      String overview, String poster, int id, String title) {
+                                                      String overview, int id, String title, String guestStars,
+                                                      String directors, String writers) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putString(ARG_NAME, name);
@@ -227,9 +248,11 @@ public class EpisodesActivity extends BaseTopActivity implements
             args.putString(ARG_VOTE, vote);
             args.putString(ARG_DATE, releaseDate);
             args.putString(ARG_OVERVIEW, overview);
-            args.putString(ARG_IMG, poster);
             args.putInt(ARG_ID, id);
             args.putString(ARG_TITLE, title);
+            args.putString(ARG_GUEST_STARS, guestStars);
+            args.putString(ARG_DIRECTORS, directors);
+            args.putString(ARG_WRITERS, writers);
             fragment.setArguments(args);
             return fragment;
         }
@@ -243,11 +266,24 @@ public class EpisodesActivity extends BaseTopActivity implements
             voteAverage.setText(getArguments().getString(ARG_VOTE));
             releaseDate.setText(getArguments().getString(ARG_DATE));
             overview.setText(getArguments().getString(ARG_OVERVIEW));
-            Picasso.with(poster.getContext())
-                    .load(getArguments().getString(ARG_IMG))
-                    .centerInside()
-                    .fit()
-                    .into(poster);
+            if (TextUtils.isEmpty(getArguments().getString(ARG_GUEST_STARS))) {
+                guestStarsContainer.setVisibility(GONE);
+            } else {
+                guestStars.setText(getArguments().getString(ARG_GUEST_STARS));
+            }
+            if (TextUtils.isEmpty(getArguments().getString(ARG_DIRECTORS))) {
+                directorsContainer.setVisibility(GONE);
+            } else {
+                directors.setText(getArguments().getString(ARG_DIRECTORS));
+            }
+            if (TextUtils.isEmpty(getArguments().getString(ARG_WRITERS))) {
+                writersContainer.setVisibility(GONE);
+            } else {
+                writers.setText(getArguments().getString(ARG_WRITERS));
+            }
+            if (airedAlready(getArguments().getString(ARG_DATE))) {
+                notification.setVisibility(GONE);
+            }
             ServiceUtils.loadPicasso(stillPath.getContext(), getArguments().getString(ARG_STILL_PATH))
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerInside()
@@ -269,8 +305,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         }
 
         @Override
-        public void onDestroy() {
-            super.onDestroy();
+        public void onDestroyView() {
+            super.onDestroyView();
             unbinder.unbind();
         }
 
@@ -282,19 +318,20 @@ public class EpisodesActivity extends BaseTopActivity implements
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            assert releaseDay != null;
-            return (int) (TimeUnit.MILLISECONDS.toSeconds(releaseDay.getTime() - today));
+            if (releaseDay != null) {
+                return (int) (TimeUnit.MILLISECONDS.toSeconds(releaseDay.getTime() - today));
+            } else {
+                return 0;
+            }
         }
 
         @OnClick(R.id.notification_fab)
         public void setNotification() {
-            if (!airedAlready(getArguments().getString(ARG_DATE))) {
-                int intervalSeconds = getSeconds(System.currentTimeMillis(), getArguments().getString(ARG_DATE));
+            int intervalSeconds = getSeconds(System.currentTimeMillis(), getArguments().getString(ARG_DATE));
+            if (intervalSeconds != 0) {
                 ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, getArguments().getInt(ARG_ID),
                         getArguments().getString(ARG_TITLE), getArguments().getString(ARG_NAME));
                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), getString(R.string.toast_aired_already), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -319,18 +356,27 @@ public class EpisodesActivity extends BaseTopActivity implements
             String vote = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);
             String date = mCursor.getString(EpisodesQuery.RELEASE_DATE);
             String overview = mCursor.getString(EpisodesQuery.OVERVIEW);
-            String poster = mBackCursor.getString(SeasonsQuery.POSTER_PATH);
             int id = mCursor.getInt(EpisodesQuery.EPISODE_ID);
             String title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
+            String guestStars = mCursor.getString(EpisodesQuery.GUEST_STARS);
+            String directors = mCursor.getString(EpisodesQuery.DIRECTORS);
+            String writers = mCursor.getString(EpisodesQuery.WRITERS);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, poster, id, title);
+            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, id, title,
+                    guestStars, directors, writers);
         }
 
         @Override
         public int getCount() {
             if (mCursor == null) return 0;
             return mCursor.getCount();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            mCursor.moveToPosition(position);
+            return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, mCursor.getInt(EpisodesQuery.EPISODE_NUMBER));
         }
 
         void swapCursor(Cursor cursor) {

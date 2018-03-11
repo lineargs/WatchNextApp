@@ -1,0 +1,54 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    //This version naming gives us the possibility of 100 minor versions
+    //for every major version and 100 patch levels for every minor version
+    def versionMajor = 1
+    def versionMinor = 2
+    def versionPatch = 1
+
+    ext.versions = [
+            'minSdk': 16,
+            'compileSdk': 27,
+            'targetSdk': 27,
+            'buildTools': '27.0.2',
+            'supportLibrary': '27.1.0',
+            'butterknife': '8.8.1',
+            'retrofit': '2.3.0',
+            'picasso': '2.5.2',
+            'crashlytics': '2.8.0',
+            'firebaseCore': '11.8.0',
+            'firebaseJob': '0.8.5',
+            'espresso': '3.0.1',
+            'versionCode': versionMajor * 10000 + versionMinor * 100 + versionPatch,
+            'versionName': "${versionMajor}.${versionMinor}.${versionPatch}"
+    ]
+    repositories {
+        jcenter()
+        google()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        // These docs use an open ended version so that our plugin
+        // can be updated quickly in response to Android tooling updates
+
+        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
+        classpath 'io.fabric.tools:gradle:1.25.1'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        classpath 'com.google.gms:google-services:3.1.2'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

@@ -1,91 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?colorPrimary"
     android:orientation="vertical"
-    android:padding="@dimen/padding_six"
     tools:context="com.lineargs.watchnext.ui.AboutFragment"
     tools:showIn="@layout/activity_about">
 
-    <android.support.v7.widget.AppCompatTextView
-        style="@style/TitleTextCenterVertical"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/library_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-    <android.support.v7.widget.AppCompatTextView
-        style="@style/DetailText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/about_version" />
-
-    <android.support.v7.widget.AppCompatTextView
-        style="@style/DetailText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:layout_marginBottom="@dimen/padding_six"
-        android:text="@string/open_source_text" />
-
-    <android.support.v7.widget.AppCompatTextView
-        style="@style/DetailText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tmdb_notice" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/one_dimen"
-        android:background="?colorPrimary" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tmdb_terms"
-                style="@style/DetailText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?selectableItemBackgroundBorderless"
-                android:gravity="center"
-                android:text="@string/tmdb_terms" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="@dimen/one_dimen"
-            android:layout_height="match_parent"
-            android:background="?colorPrimary" />
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tmdb_api_terms"
-                style="@style/DetailText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?selectableItemBackgroundBorderless"
-                android:gravity="center"
-                android:text="@string/tmdb_api_terms" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/one_dimen"
-        android:background="?colorPrimary" />
-
-</LinearLayout>
+</FrameLayout>

@@ -1,7 +1,10 @@
 package com.lineargs.watchnext.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,10 +16,16 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+import com.lineargs.watchnext.tools.Tools;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,12 +46,44 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     @BindView(R.id.nav_view)
     NavigationView navigationView;
     private Handler handler;
+    ConnectivityBroadcastReceiver connectivityBroadcastReceiver;
+    IntentFilter connectivityIntentFilter;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (isConnected()) {
+            syncAdapterNow();
+        }
         handler = new Handler();
+        connectivityIntentFilter = new IntentFilter();
+        connectivityBroadcastReceiver = new ConnectivityBroadcastReceiver();
+        connectivityIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        snackbar = Snackbar.make(findViewById(R.id.list_coordinator_layout), getString(R.string.snackbar_no_connection), Snackbar.LENGTH_INDEFINITE);
+        showSnackBar();
+        registerReceiver(connectivityBroadcastReceiver, connectivityIntentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(connectivityBroadcastReceiver);
+    }
+
+    private void syncAdapterNow() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String locale = Locale.getDefault().toString();
+        if (!sharedPreferences
+                .getString(getString(R.string.pref_locale_key), "").contains(locale)) {
+            sharedPreferences.edit().putString(getString(R.string.pref_locale_key), locale).apply();
+            WatchNextSyncAdapter.syncImmediately(this);
+        }
     }
 
     @Override
@@ -107,9 +148,22 @@ public abstract class BaseDrawerActivity extends BaseActivity {
                 }
                 intent = new Intent(this, TheaterActivity.class);
                 break;
+//            case R.id.nav_statistics:
+//                if (this instanceof StatisticsActivity) {
+//                    break;
+//                }
+//                intent = new Intent(this, StatisticsActivity.class);
+//                break;
             case R.id.nav_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 break;
+            case R.id.nav_feedback:
+                Intent feedbackIntent = Tools.getFeedbackIntent(this);
+                if (feedbackIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(feedbackIntent);
+                } else {
+                    Toast.makeText(this, R.string.no_apps_installed, Toast.LENGTH_SHORT).show();
+                }
         }
 
         if (intent != null) {
@@ -161,9 +215,9 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     public boolean toggleDrawer(MenuItem item) {
         if (item != null && item.getItemId() == android.R.id.home) {
             if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START);
+                closeNavDrawer();
             } else {
-                drawerLayout.openDrawer(GravityCompat.START);
+                openNavDrawer();
             }
             return true;
         }
@@ -178,11 +232,7 @@ public abstract class BaseDrawerActivity extends BaseActivity {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connectivityManager != null;
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     /**
@@ -190,7 +240,20 @@ public abstract class BaseDrawerActivity extends BaseActivity {
      */
     public void showSnackBar() {
         if (!isConnected()) {
-            Snackbar.make(findViewById(R.id.drawer_layout), getString(R.string.snackbar_no_connection), Snackbar.LENGTH_INDEFINITE).show();
+            snackbar.show();
+        } else {
+            snackbar.dismiss();
+        }
+    }
+
+    private class ConnectivityBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                showSnackBar();
+            }
         }
     }
 }

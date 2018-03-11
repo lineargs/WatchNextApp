@@ -24,11 +24,19 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private static final int DB_VER_37 = 37;
 
     private static final int DB_VER_38 = 38;
+
+    private static final int DB_VER_39 = 39;
+
+    private static final int DB_VER_40 = 40;
+
+    /* Changed the season number column to text so we can insert Specials
+     * value when we have value of 0 */
+    private static final int DB_VER_41 = 41;
     /*
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = DB_VER_38;
+    public static final int DATABASE_VERSION = DB_VER_41;
     /*
      * Contains a simple SQL statement that will create a table that will
      * cache our popular movies data.
@@ -137,27 +145,16 @@ public class DataDbHelper extends SQLiteOpenHelper {
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
      */
-    private static final String SQL_CREATE_MOVIE_CAST_TABLE =
-            "CREATE TABLE " + DataContract.CreditCast.TABLE_NAME + " ( " +
-                    DataContract.CreditCast._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    DataContract.CreditCast.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_PERSON_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_NAME + " TEXT NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_CHARACTER_NAME + " TEXT NOT NULL, " +
-                    DataContract.CreditCast.COLUMN_PROFILE_PATH + " TEXT NOT NULL);";
-    /*
-     * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
-     */
-    private static final String SQL_CREATE_MOVIE_CREW_TABLE =
-            "CREATE TABLE " + DataContract.CreditCrew.TABLE_NAME + " ( " +
-                    DataContract.CreditCrew._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    DataContract.CreditCrew.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_CREW_ID + " INTEGER NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_NAME + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_CREDIT_ID + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_DEPARTMENT + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_JOB + " TEXT NOT NULL, " +
-                    DataContract.CreditCrew.COLUMN_PROFILE_PATH + " TEXT NOT NULL);";
+    private static final String SQL_CREATE_CREDITS_TABLE =
+            "CREATE TABLE " + DataContract.Credits.TABLE_NAME + " ( " +
+                    DataContract.Credits._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    DataContract.Credits.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
+                    DataContract.Credits.COLUMN_PERSON_ID + " INTEGER NOT NULL, " +
+                    DataContract.Credits.COLUMN_NAME + " TEXT NOT NULL, " +
+                    DataContract.Credits.COLUMN_CHARACTER_NAME + " TEXT, " +
+                    DataContract.Credits.COLUMN_JOB + " TEXT, " +
+                    DataContract.Credits.COLUMN_TYPE + " INTEGER DEFAULT 0, " +
+                    DataContract.Credits.COLUMN_PROFILE_PATH + " TEXT NOT NULL);";
     /*
      * {@link SQL_CREATE_POPULAR_MOVIE_TABLE}
      */
@@ -305,7 +302,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.Seasons.COLUMN_EPISODE_COUNT + " INTEGER NOT NULL, " +
                     DataContract.Seasons.COLUMN_RELEASE_DATE + " TEXT, " +
                     DataContract.Seasons.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
-                    DataContract.Seasons.COLUMN_SEASON_NUMBER + " INTEGER NOT NULL, " +
+                    DataContract.Seasons.COLUMN_SEASON_NUMBER + " TEXT NOT NULL, " +
                     DataContract.Seasons.COLUMN_SHOW_NAME + " TEXT NOT NULL, " +
                     "UNIQUE (" + DataContract.Seasons.COLUMN_SEASON_ID + ") ON CONFLICT REPLACE);";
     /*
@@ -323,6 +320,9 @@ public class DataDbHelper extends SQLiteOpenHelper {
                     DataContract.Episodes.COLUMN_SEASON_NUMBER + " INTEGER NOT NULL, " +
                     DataContract.Episodes.COLUMN_STILL_PATH + " TEXT NOT NULL, " +
                     DataContract.Episodes.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
+                    DataContract.Episodes.COLUMN_DIRECTORS + " TEXT, " +
+                    DataContract.Episodes.COLUMN_WRITERS + " TEXT, " +
+                    DataContract.Episodes.COLUMN_GUEST_STARS + " TEXT, " +
                     DataContract.Episodes.COLUMN_VOTE_COUNT + " INTEGER DEFAULT 0, " +
                     "UNIQUE (" + DataContract.Episodes.COLUMN_EPISODE_ID + ") ON CONFLICT REPLACE);";
     /*
@@ -349,7 +349,6 @@ public class DataDbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
     /**
      * Called when the database is created for the first time. This is where the creation of
      * tables and the initial population of the tables should happen.
@@ -367,8 +366,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TOP_RATED_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_UPCOMING_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_THEATER_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_MOVIE_CAST_TABLE);
-        db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
+        db.execSQL(SQL_CREATE_CREDITS_TABLE);
         db.execSQL(SQL_CREATE_POPULAR_SERIE_TABLE);
         db.execSQL(SQL_CREATE_TOP_SERIE_TABLE);
         db.execSQL(SQL_CREATE_ON_THE_AIR_SERIE_TABLE);
@@ -386,9 +384,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
      * All the tables except favorites one are only a cache for online data, so its upgrade policy is simply to discard
      * the data and call through to onCreate to recreate the table. Note that this only fires if
      * we change the version number for our database (in our case, DATABASE_VERSION). It does NOT
-     * depend on the version number for our application found in our app/build.gradle file. If
-     * we want to update the schema without wiping data, commenting out the current body of this
-     * method should be our top priority before modifying this method.
+     * depend on the version number for our application found in our app/build.gradle file.
      *
      * @param db         Database that is being upgraded
      * @param oldVersion The old database version
@@ -399,18 +395,79 @@ public class DataDbHelper extends SQLiteOpenHelper {
 
         Log.d("DataDbHelper", "Upgrading from " + oldVersion + " to " + newVersion);
 
-        switch (oldVersion) {
+        int dbVersion = oldVersion;
+        switch (dbVersion) {
             case DB_VER_37:
                 upgradeToThirtyEight(db);
+            case DB_VER_38:
+                upgradeToThirtyNine(db);
+            case DB_VER_39:
+                upgradeToForty(db);
+            case DB_VER_40:
+                upgradeToFortyOne(db);
+                dbVersion = DB_VER_41;
+        }
+
+        if (dbVersion != DATABASE_VERSION) {
+            recreateDatabase(db);
         }
     }
 
-    private static void upgradeToThirtyEight(SQLiteDatabase db) {
+    /**
+     * NOTE: We do not support downgrading the database version, so its downgrade policy is simply to discard
+     * the data and call through to onCreate to recreate the table.
+     * @param db Database that is being downgraded
+     * @param oldVersion The old database version
+     * @param newVersion The new database version
+     */
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        recreateDatabase(db);
+    }
 
-        /* Create the Crew table*/
-        if (isTableMissing(db, DataContract.CreditCrew.TABLE_NAME)) {
-            db.execSQL(SQL_CREATE_MOVIE_CREW_TABLE);
+    private void recreateDatabase(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.PopularMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.TopRatedMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.UpcomingMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.TheaterMovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Credits.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.PopularSerieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.TopRatedSerieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.OnTheAirSerieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Favorites.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Search.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.SearchTv.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Review.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Videos.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Seasons.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Episodes.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Person.TABLE_NAME);
+
+        onCreate(db);
+    }
+
+    private static boolean isColumnMissing(SQLiteDatabase db, String table, String column) {
+        Cursor cursor = db.query(table, null, null, null, null, null, null, "1");
+        if (cursor == null) {
+            return true;
         }
+        boolean columnExists = cursor.getColumnIndex(column) != -1;
+        cursor.close();
+        return !columnExists;
+    }
+
+    private static boolean isTableMissing(SQLiteDatabase db, String table) {
+        Cursor cursor = db.query("sqlite_master", new String[]{"name"}, "type='table' AND name=?",
+                new String[]{table}, null, null, null, "1");
+        if (cursor == null) {
+            return true;
+        }
+        boolean tableExists = cursor.getCount() > 0;
+        cursor.close();
+        return !tableExists;
+    }
+
+    private static void upgradeToThirtyEight(SQLiteDatabase db) {
 
         /* Check if the columns are missing then alter the  Popular Movie table*/
         if (isColumnMissing(db, DataContract.PopularMovieEntry.TABLE_NAME, DataContract.PopularMovieEntry.COLUMN_IMDB_ID)) {
@@ -709,24 +766,31 @@ public class DataDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    private static boolean isColumnMissing(SQLiteDatabase db, String table, String column) {
-        Cursor cursor = db.query(table, null, null, null, null, null, null, "1");
-        if (cursor == null) {
-            return true;
+    private static void upgradeToThirtyNine(SQLiteDatabase db) {
+        if (isColumnMissing(db, DataContract.Episodes.TABLE_NAME, DataContract.Episodes.COLUMN_DIRECTORS)) {
+            db.execSQL("ALTER TABLE " + DataContract.Episodes.TABLE_NAME +
+            " ADD COLUMN " + DataContract.Episodes.COLUMN_DIRECTORS + " TEXT;");
         }
-        boolean columnExists = cursor.getColumnIndex(column) != -1;
-        cursor.close();
-        return !columnExists;
+        if (isColumnMissing(db, DataContract.Episodes.TABLE_NAME, DataContract.Episodes.COLUMN_WRITERS)) {
+            db.execSQL("ALTER TABLE " + DataContract.Episodes.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.Episodes.COLUMN_WRITERS + " TEXT;");
+        }
+        if (isColumnMissing(db, DataContract.Episodes.TABLE_NAME, DataContract.Episodes.COLUMN_GUEST_STARS)) {
+            db.execSQL("ALTER TABLE " + DataContract.Episodes.TABLE_NAME +
+                    " ADD COLUMN " + DataContract.Episodes.COLUMN_GUEST_STARS + " TEXT;");
+        }
     }
 
-    private static boolean isTableMissing(SQLiteDatabase db, String table) {
-        Cursor cursor = db.query("sqlite_master", new String[]{"name"}, "type='table' AND name=?",
-                new String[]{table}, null, null, null, "1");
-        if (cursor == null) {
-            return true;
+    private static void upgradeToForty(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS casts");
+        db.execSQL("DROP TABLE IF EXISTS crew");
+        if (isTableMissing(db, DataContract.Credits.TABLE_NAME)) {
+            db.execSQL(SQL_CREATE_CREDITS_TABLE);
         }
-        boolean tableExists = cursor.getCount() > 0;
-        cursor.close();
-        return !tableExists;
+    }
+
+    private static void upgradeToFortyOne(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Seasons.TABLE_NAME);
+        db.execSQL(SQL_CREATE_SEASONS_TABLE);
     }
 }

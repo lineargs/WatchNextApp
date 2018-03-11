@@ -11,20 +11,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="@color/colorGrey"
             android:lineSpacingExtra="@dimen/line_spacing_extra"
-            android:minHeight="@dimen/text_view_min_height"
-            android:padding="@dimen/card_view_padding"
+            android:minHeight="@dimen/small_min_height"
+            android:padding="@dimen/padding_nine"
             android:text="@string/title_activity_main"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/colorBlack" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/colorWhite" />
 
         <ListView
             android:id="@+id/widget_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorGrey"
-            android:divider="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:divider="@color/colorGrey"
             android:dividerHeight="1px"
             android:gravity="center" />
     </LinearLayout>

@@ -4,16 +4,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +23,6 @@ import com.lineargs.watchnext.adapters.MainAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
-
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,23 +52,22 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         setupActionBar();
         setupNavDrawer();
         setupViews();
-        showSnackBar();
         if (isConnected()) {
-            WatchNextSyncAdapter.initializeMovieSyncAdapter(this);
+            WatchNextSyncAdapter.initializeSyncAdapter(this);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        showSnackBar();
-        super.onResume();
     }
 
     @OnClick(R.id.fab)
     public void searchFab() {
-        Intent fabIntent = new Intent(MainActivity.this, SearchActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent fabIntent = new Intent(MainActivity.this, SearchMainActivity.class);
         startIntent(fabIntent);
+    }
+
+    @OnClick(R.id.title_main_activity)
+    public void searchTextView() {
+        Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+        startActivity(txtIntent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void showData() {
@@ -88,7 +83,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     private void setupViews() {
         ButterKnife.bind(this);
         bundle = new Bundle();
-        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns());
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new MainAdapter(this, this);
@@ -100,26 +95,11 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         getSupportLoaderManager().initLoader(LOADER_ID, bundle, this);
     }
 
-    private int numberOfColumns() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int widthDivider = 800;
-        int width = displayMetrics.widthPixels;
-        int nColumns = width / widthDivider;
-        if (nColumns < 1) {
-            return 1;
-        }
-        return nColumns;
-    }
-
     @Override
-    protected void setupActionBar() {
-        super.setupActionBar();
-        setTitle(getString(R.string.title_activity_main));
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(getString(R.string.title_activity_main));
-        }
+    public void setDrawerIndicatorEnabled() {
+        super.setDrawerIndicatorEnabled();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_grey);
     }
 
     @Override
@@ -142,12 +122,9 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.search) {
-            Intent searchIntent = new Intent(this, SearchActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startIntent(searchIntent);
-            return true;
-        } else if (id == R.id.sort) {
-            showPopup();
+            Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+            startActivity(txtIntent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             return true;
         }
 
@@ -158,7 +135,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
      * Popup Menu item clicked
      */
     public void showPopup() {
-        View menu = findViewById(R.id.sort);
+        View menu = findViewById(R.id.main_sort);
         PopupMenu popupMenu = new PopupMenu(this, menu);
         popupMenu.inflate(R.menu.sort_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -182,18 +159,6 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             }
         });
         popupMenu.show();
-    }
-
-    /* The SnackBar in the parent activity uses the Drawer Layout id. In order to
-     * prevent the SnackBar to overlap the FAB, we override it here using the
-     * Coordinator Layout id.
-     */
-    @Override
-    public void showSnackBar() {
-        if (!isConnected()) {
-            Snackbar.make(findViewById(R.id.list_coordinator_layout), getString(R.string.snackbar_no_connection), Snackbar.LENGTH_INDEFINITE)
-                    .show();
-        }
     }
 
     @Override
@@ -242,7 +207,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
          * TYPE: Movie = 0 / Serie = 1
          */
         if (isSeries(uri)) {
-            Intent intent = new Intent(this, TVDetailsActivity.class);
+            Intent intent = new Intent(this, SeriesDetailsActivity.class);
             intent.setData(uri);
             intent.putExtra(FAB_ID, 1);
             startIntent(intent);
@@ -253,6 +218,11 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             startIntent(intent);
         }
 
+    }
+
+    @Override
+    public void onSortClick() {
+        showPopup();
     }
 
     private boolean isSeries(Uri uri) {

@@ -20,8 +20,8 @@
         android:id="@+id/crew_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorBlack"
         android:padding="@dimen/small_padding"
+        android:textColor="@color/colorBlack"
         tools:text="@string/tools_person_name" />
 
     <TextView

@@ -216,5 +216,7 @@ public class SeriesDetails {
         return credits;
     }
 
-    public Videos getVideos() {return videos;}
+    public Videos getVideos() {
+        return videos;
+    }
 }

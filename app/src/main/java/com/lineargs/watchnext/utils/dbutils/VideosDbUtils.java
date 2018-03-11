@@ -21,7 +21,7 @@ public class VideosDbUtils {
      * Builds ContentValues[] used for our ContentResolver
      *
      * @param videos Object used to get the values from our API response
-     * @param id      The movie / serie ID
+     * @param id     The movie / serie ID
      * @return The {@link ContentValues}
      */
     public static ContentValues[] getVideosContentValues(Videos videos, String id) {

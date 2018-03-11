@@ -25,8 +25,8 @@ public class SerieDetailTest {
     private static final Uri URI = DataContract.PopularSerieEntry.buildSerieUriWithId(1418);
 
     @Rule
-    public IntentsTestRule<TVDetailsActivity> tvDetailsActivityIntentsTestRule =
-            new IntentsTestRule<>(TVDetailsActivity.class, false, false);
+    public IntentsTestRule<SeriesDetailsActivity> tvDetailsActivityIntentsTestRule =
+            new IntentsTestRule<>(SeriesDetailsActivity.class, false, false);
 
     @Test
     public void checkSerieName() {

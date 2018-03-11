@@ -4,8 +4,8 @@ import android.content.ContentValues;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.retrofit.credits.Cast;
-import com.lineargs.watchnext.utils.retrofit.credits.Crew;
 import com.lineargs.watchnext.utils.retrofit.credits.Credits;
+import com.lineargs.watchnext.utils.retrofit.credits.Crew;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ import java.util.List;
 public class CreditDbUtils {
 
     /* Final variable for our poster and backdrop path*/
-    private static final String IMAGE_SMALL_BASE = "http://image.tmdb.org/t/p/w370/";
+    private static final String IMAGE_SMALL_BASE = "http://image.tmdb.org/t/p/w500/";
 
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
      * @param credits List used to get the values from our API response
-     * @param id    The ID of the movie / serie
+     * @param id      The ID of the movie / serie
      * @return The {@link ContentValues}
      */
     public static ContentValues[] getCastContentValues(Credits credits, String id) {
@@ -34,11 +34,11 @@ public class CreditDbUtils {
 
         for (Cast cast : casts) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(DataContract.CreditCast.COLUMN_MOVIE_ID, id);
-            contentValues.put(DataContract.CreditCast.COLUMN_CHARACTER_NAME, cast.getCharacter());
-            contentValues.put(DataContract.CreditCast.COLUMN_NAME, cast.getName());
-            contentValues.put(DataContract.CreditCast.COLUMN_PERSON_ID, cast.getId());
-            contentValues.put(DataContract.CreditCast.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(cast.getProfilePath()));
+            contentValues.put(DataContract.Credits.COLUMN_MOVIE_ID, id);
+            contentValues.put(DataContract.Credits.COLUMN_CHARACTER_NAME, cast.getCharacter());
+            contentValues.put(DataContract.Credits.COLUMN_NAME, cast.getName());
+            contentValues.put(DataContract.Credits.COLUMN_PERSON_ID, cast.getId());
+            contentValues.put(DataContract.Credits.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(cast.getProfilePath()));
             values[i] = contentValues;
             i++;
         }
@@ -50,7 +50,7 @@ public class CreditDbUtils {
      * Builds ContentValues[] used for our ContentResolver
      *
      * @param credits List used to get the values from our API response
-     * @param id    The ID of the movie / serie
+     * @param id      The ID of the movie / serie
      * @return The {@link ContentValues}
      */
     @SuppressWarnings("unused")
@@ -61,13 +61,12 @@ public class CreditDbUtils {
 
         for (Crew crew : crews) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(DataContract.CreditCrew.COLUMN_MOVIE_ID, id);
-            contentValues.put(DataContract.CreditCrew.COLUMN_CREDIT_ID, crew.getCreditId());
-            contentValues.put(DataContract.CreditCrew.COLUMN_NAME, crew.getName());
-            contentValues.put(DataContract.CreditCrew.COLUMN_CREW_ID, crew.getId());
-            contentValues.put(DataContract.CreditCrew.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(crew.getProfilePath()));
-            contentValues.put(DataContract.CreditCrew.COLUMN_DEPARTMENT, crew.getDepartment());
-            contentValues.put(DataContract.CreditCrew.COLUMN_JOB, crew.getJob());
+            contentValues.put(DataContract.Credits.COLUMN_MOVIE_ID, id);
+            contentValues.put(DataContract.Credits.COLUMN_NAME, crew.getName());
+            contentValues.put(DataContract.Credits.COLUMN_PERSON_ID, crew.getId());
+            contentValues.put(DataContract.Credits.COLUMN_PROFILE_PATH, IMAGE_SMALL_BASE + String.valueOf(crew.getProfilePath()));
+            contentValues.put(DataContract.Credits.COLUMN_JOB, crew.getJob());
+            contentValues.put(DataContract.Credits.COLUMN_TYPE, 1);
             values[i] = contentValues;
             i++;
         }

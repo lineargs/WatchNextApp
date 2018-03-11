@@ -17,7 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/toolbar" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_eight">
+
+            <include layout="@layout/toolbar_main" />
+            </android.support.v7.widget.CardView>
 
         </android.support.design.widget.AppBarLayout>
 

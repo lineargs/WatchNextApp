@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.CreditDbUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.ReviewsDbUtils;
@@ -17,6 +18,7 @@ import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,20 +30,16 @@ class MovieSyncTask {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String APPEND_TO_RESPONSE = "videos,reviews,credits";
-    private static String id;
-    private static Uri mUri;
-
     private static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
-
     private static final MovieApiService MOVIE_API_SERVICE = retrofit.create(MovieApiService.class);
+    private static String id;
+    private static Uri mUri;
 
     static void syncMovieDetail(final Context context, final Uri uri) {
-        String stringUri = uri.toString();
-        stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
-        mUri = Uri.parse(stringUri);
+        mUri = Utils.getBaseUri(uri);
         id = uri.getLastPathSegment();
         Call<MovieDetail> call = MOVIE_API_SERVICE.getMovieDetail(id, BuildConfig.MOVIE_DATABASE_API_KEY, APPEND_TO_RESPONSE);
         call.enqueue(new Callback<MovieDetail>() {
@@ -111,7 +109,7 @@ class MovieSyncTask {
             if (context != null) {
                 ContentResolver contentResolver = context.getContentResolver();
                 if (contentValues != null && contentValues.length != 0) {
-                    contentResolver.bulkInsert(DataContract.CreditCast.CONTENT_URI, contentValues);
+                    contentResolver.bulkInsert(DataContract.Credits.CONTENT_URI_CAST, contentValues);
                 }
 
             }
@@ -132,7 +130,7 @@ class MovieSyncTask {
             if (context != null) {
                 ContentResolver contentResolver = context.getContentResolver();
                 if (contentValues != null && contentValues.length != 0) {
-                    contentResolver.bulkInsert(DataContract.CreditCrew.CONTENT_URI, contentValues);
+                    contentResolver.bulkInsert(DataContract.Credits.CONTENT_URI_CREW, contentValues);
                 }
 
             }

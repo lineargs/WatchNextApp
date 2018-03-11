@@ -3,8 +3,6 @@ package com.lineargs.watchnext.utils.retrofit.people;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
  * Created by goranminov on 29/11/2017.
  * <p>
@@ -61,7 +59,9 @@ public class Person {
         return placeOfBirth;
     }
 
-    public String getBirthday() {return birthday;}
+    public String getBirthday() {
+        return birthday;
+    }
 
     public String getProfilePath() {
         return profilePath;

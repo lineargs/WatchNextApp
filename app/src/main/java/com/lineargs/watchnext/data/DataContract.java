@@ -214,26 +214,37 @@ public class DataContract {
         }
     }
 
-    /* Inner class that defines the table contents of the casts table */
-    public static final class CreditCast implements BaseColumns {
+    /* Inner class that defines the table contents of the credits table */
+    public static final class Credits implements BaseColumns {
 
         /* The base CONTENT_URI used to query the casts table from the content provider */
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+        public static final Uri CONTENT_URI_CAST = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_CREDIT_CAST)
                 .build();
+        public static final Uri CONTENT_URI_CREW = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_CREDIT_CREW)
+                .build();
 
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
-
-        /*The cast details as returned by API*/
+        static final String CONTENT_TYPE_CAST = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
+        static final String CONTENT_ITEM_TYPE_CAST = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CAST;
+        static final String CONTENT_TYPE_CREW = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
+        static final String CONTENT_ITEM_TYPE_CREW = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
+        /*The credits details as returned by API*/
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_PERSON_ID = "person_id";
         public static final String COLUMN_CHARACTER_NAME = "character_name";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_JOB = "job";
+        /*
+         * We use one table for cast and crew for better performance.
+         * We check the data in that row if it is crew or cast by
+         * checking the type column
+         * CAST=0 / CREW=1 */
+        public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_PROFILE_PATH = "profile_path";
 
         /* Used internally as the name of our casts table. */
-        static final String TABLE_NAME = "casts";
+        static final String TABLE_NAME = "credits";
 
         /**
          * Builds a URI that adds the cast id to the end of the casts content URI path.
@@ -243,14 +254,26 @@ public class DataContract {
          * @return Uri to query details about a single cast entry
          */
         public static Uri buildCastUriWithId(long id) {
-            return CONTENT_URI.buildUpon()
+            return CONTENT_URI_CAST.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+        /**
+         * Builds a URI that adds the crew id to the end of the crew content URI path.
+         * This is used to query details about a single crew entry by id.
+         *
+         * @param id Crew ID
+         * @return Uri to query details about a single crew entry
+         */
+        public static Uri buildCrewUriWithId(long id) {
+            return CONTENT_URI_CREW.buildUpon()
                     .appendPath(Long.toString(id))
                     .build();
         }
     }
 
     /* Inner class that defines the table contents of the crew movies table */
-    public static final class CreditCrew implements BaseColumns {
+    public static final class CreditCr implements BaseColumns {
 
         /* The base CONTENT_URI used to query the crew table from the content provider */
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
@@ -393,16 +416,16 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
 
-        /* *************************************
-         * We use the Popular Movies column names
-         * ************************************* */
-
         /*
          * We add this column for better implementation in our Favorites activity
          * where we check if the data in that row is movie or series
          * The value for movie is 0, and for series is 1
          */
         public static final String COLUMN_TYPE = "type";
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
 
         /* Used internally as the name of our favorites table. */
         static final String TABLE_NAME = "favorites";
@@ -479,7 +502,7 @@ public class DataContract {
          * @param id Serie ID
          * @return Uri to query details about a single entry
          */
-        public static Uri buildSearchUriWithId(long id) {
+        static Uri buildSearchUriWithId(long id) {
             return CONTENT_URI.buildUpon()
                     .appendPath(Long.toString(id))
                     .build();
@@ -625,6 +648,9 @@ public class DataContract {
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_VOTE_COUNT = "vote_count";
+        public static final String COLUMN_DIRECTORS = "directors";
+        public static final String COLUMN_WRITERS = "writers";
+        public static final String COLUMN_GUEST_STARS = "guest_stars";
 
         /* Used internally as the name of our table. */
         static final String TABLE_NAME = "episodes";

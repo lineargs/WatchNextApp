@@ -1,27 +1,21 @@
 <resources>
-
     <!-- Main -->
-    <string name="app_name">WatchNext</string>
-    <string name="nav_header_text">Watch Next</string>
     <string name="main_text_view">Once you add a favorite, you will see it listed here.</string>
-    <string name="empty_image_content_description">Conversation image for empty view</string>
-
+    <string name="main_date">Released on: %s</string>
 
     <!-- Settings -->
     <string name="pref_theme_grey_label">Grey</string>
     <string name="pref_theme_blue_grey_label">Blue Grey</string>
-    <string name="pref_theme_key" translatable="false">app_theme</string>
-    <string name="pref_theme_grey_key" translatable="false">theme_grey</string>
-    <string name="pref_theme_blue_grey_key" translatable="false">theme_blue_grey</string>
     <string name="pref_theme_title">Themes</string>
+    <string name="pref_season_number_title">Season number format</string>
     <string name="pref_title_adult_search">Adult search</string>
     <string name="pref_description_adult_search_off">Enabling will make adult content available in the search
     </string>
     <string name="pref_description_adult_search_on">Disabling will make adult content unavailable in the search
     </string>
-    <string name="adult_search" translatable="false">adult_search</string>
     <string name="pref_about_title">About</string>
-    <string name="pref_about_key" translatable="false">about_key</string>
+    <string name="pref_notifications">Notifications</string>
+    <string name="nav_feedback">Send feedback</string>
 
     <!-- Search -->
     <string name="search_label">WatchNext</string>
@@ -29,11 +23,11 @@
     <string name="menu_search">Search</string>
     <string name="settings_description">Search for latest movies and series</string>
     <string name="search_query_hint">Search The MovieDb</string>
-    <string name="search_empty_text_movie">Please use the search to look up for a movie.\n\nPowered by THE MOVIE DB</string>
-    <string name="search_empty_text_serie">Please use the search to look up for a serie.\n\nPowered by THE MOVIE DB</string>
+    <string name="search_empty_text_movie">Please use the search to look up for a movie.  Powered by THE MOVIE DB</string>
+    <string name="search_empty_text_serie">Please use the search to look up for a serie.  Powered by THE MOVIE DB</string>
 
     <!-- Sort Menu -->
-    <string name="sort_by">Sort By</string>
+    <string name="sort_by">Sort by</string>
     <string name="sort_menu_title">Title</string>
     <string name="sort_menu_highest_rated">Highest Rated</string>
     <string name="sort_menu_lowest_rated">Lowest Rated</string>
@@ -71,52 +65,36 @@
         <item quantity="one">%d Episode</item>
         <item quantity="other">%d Episodes</item>
     </plurals>
-    <string name="episode_cover_poster_description">Current episode poster</string>
-    <string name="season_cover_poster_description">Current season poster</string>
     <string name="seasons_empty_text">No seasons found</string>
     <string name="seasons_text_view_button">Seasons</string>
-    <string name="serie_content_description">Serie poster</string>
-
-    <!-- Provider and SyncAdapter -->
-    <string name="content_authority" translatable="false">com.lineargs.watchnext</string>
-    <string name="sync_account_type" translatable="false">lineargs.watchnext.com</string>
-    <string name="sync_account_name" translatable="false">WatchNext Sync</string>
-
+    <string name="guest_stars">Guest Stars</string>
+    <string name="directors">Directors</string>
+    <string name="writers">Writers</string>
+    <string name="season_specials">Specials</string>
 
     <!-- Credits -->
-    <string name="text_not_available">N / A</string>
     <string name="cast_empty_text">No cast found</string>
     <string name="crew_empty_text">No crew found</string>
     <string name="biography_text">Biography</string>
-    <string name="person_content_description">Person photo</string>
+    <string name="biography_not_available">There is no biography available for now. That\'s all we know.</string>
     <string name="cast_text_view">Cast</string>
     <string name="more_text_view">more</string>
     <string name="crew_text_view">Crew</string>
 
     <!-- Share -->
     <string name="menu_share">Share</string>
-    <string name="you_tube" translatable="false">http://www.youtube.com/watch?v=%s</string>
-    <string name="share_movie" translatable="false">https://www.themoviedb.org/movie/%s #WatchNext</string>
-    <string name="share_serie" translatable="false">https://www.themoviedb.org/tv/%s #WatchNext</string>
+    <string name="feedback">"%1s %2s, Android %3s  Please send your feedback below this line  "</string>
 
     <!-- Videos -->
     <string name="videos_empty_text">No videos found</string>
     <string name="videos_text_view_button">Videos</string>
-    <string name="play_circle_content_description">Circle play image</string>
-    <string name="you_tube_image_content_description">YouTube video poster</string>
-    <string name="you_tube_image" translatable="false">https://img.youtube.com/vi/%s/0.jpg</string>
 
     <!-- Reviews -->
     <string name="review_empty_text">No reviews found</string>
     <string name="reviews_text_view_button">Reviews</string>
-    <string name="link_image_content_description">Link image</string>
 
     <!-- Common -->
     <string name="overview_text">overview</string>
-    <string name="movie_poster_content_description">Movie poster</string>
-    <string name="star_image_content_description">Star image</string>
-    <string name="date_pattern" translatable="false">dd MMM yyyy</string>
-    <string name="nav_icon_content_description">Application icon</string>
     <string name="runtime">%s min</string>
     <string name="status_text">Status</string>
     <string name="production_companies">Production companies</string>
@@ -129,6 +107,56 @@
     <!-- Notification -->
     <string name="notification_dismiss">Dismiss</string>
     <string name="notification_text">Airing today: %s</string>
+
+    <!-- About -->
+    <string name="about_version">vCode %1$d : vName %2$s : vDatabase %3$d</string>
+    <string name="open_source_text">The application is open source at https://lineargs.github.io/WatchNextApp</string>
+    <string name="text_not_available">N / A</string>
+    <string name="libraries">Libraries</string>
+
+    <!-- Statistics -->
+    <string name="title_activity_statistics">Statistics</string>
+    <string name="movies_count">movies</string>
+    <string name="series_count">series</string>
+
+    <!-- NON TRANSLATABLE -->
+    <!-- Main -->
+    <string name="app_name" translatable="false">WatchNext</string>
+    <string name="nav_header_text" translatable="false">Watch Next</string>
+
+    <!-- Settings -->
+    <string name="pref_theme_key" translatable="false">app_theme</string>
+    <string name="pref_theme_grey_key" translatable="false">theme_grey</string>
+    <string name="pref_theme_blue_grey_key" translatable="false">theme_blue_grey</string>
+    <string name="pref_season_number_key" translatable="false">season_number</string>
+    <string name="pref_season_number_SO_key" translatable="false">capital_with_zero</string>
+    <string name="pref_season_number_S_key" translatable="false">capital_no_zero</string>
+    <string name="pref_season_number_so_key" translatable="false">lower_with_zero</string>
+    <string name="pref_season_number_s_key" translatable="false">lower_no_zero</string>
+    <string name="pref_season_number_SO_label" translatable="false">S01E01</string>
+    <string name="pref_season_number_S_label" translatable="false">S1E1</string>
+    <string name="pref_season_number_so_label" translatable="false">s01e01</string>
+    <string name="pref_season_number_s_label" translatable="false">s1e1</string>
+    <string name="adult_search" translatable="false">adult_search</string>
+    <string name="pref_about_key" translatable="false">about_key</string>
+    <string name="pref_locale_key" translatable="false">locale</string>
+    <string name="pref_notifications_key" translatable="false">notifications</string>
+
+    <!-- Provider and SyncAdapter -->
+    <string name="content_authority" translatable="false">com.lineargs.watchnext</string>
+    <string name="sync_account_type" translatable="false">lineargs.watchnext.com</string>
+    <string name="sync_account_name" translatable="false">WatchNext Sync</string>
+
+    <!-- Share -->
+    <string name="you_tube" translatable="false">http://www.youtube.com/watch?v=%s</string>
+    <string name="share_movie" translatable="false">https://www.themoviedb.org/movie/%s #WatchNext</string>
+    <string name="share_serie" translatable="false">https://www.themoviedb.org/tv/%s #WatchNext</string>
+
+    <!-- Videos -->
+    <string name="you_tube_image" translatable="false">https://img.youtube.com/vi/%s/0.jpg</string>
+
+    <!-- Common -->
+    <string name="date_pattern" translatable="false">dd MMM yyyy</string>
 
     <!-- Tools -->
     <string name="tools_episode_title" translatable="false">Episode Title</string>
@@ -144,45 +172,58 @@
     <string name="tools_season_title" translatable="false">Season 12345</string>
     <string name="tools_season_date" translatable="false">29 Oct 1988</string>
     <string name="tools_season_episodes" translatable="false">24 Episodes</string>
-    <string name="tools_runtime">135 mins</string>
-    <string name="tools_companies">Warner Bros</string>
-
-    <!-- Content Description -->
-    <string name="toolbar_content_description">Toolbar navigation</string>
-    <string name="movie_title_content_description">The title of the movie</string>
-    <string name="main_fab_content_description">Click to search for a movie so can add it to the favorites</string>
-    <string name="search_view_content_description">Search for movies</string>
-    <string name="tab_popular_content_description">Click for popular</string>
-    <string name="tab_top_rated_content_description">Click to see the Top Rated</string>
-    <string name="tab_upcoming_content_description">Click to see the Upcoming Movies</string>
-    <string name="tab_on_the_air_content_description">Click to see the On The Air Series</string>
-    <string name="notification_fab_content_description">Click to schedule reminder for the current episode</string>
-    <string name="star_fab_content_description">Click to add or remove from the favorites</string>
-    <string name="videos_text_button_content_description">Click for videos</string>
-    <string name="review_text_button_content_description">Click for reviews</string>
-    <string name="seasons_text_button_content_description">Click for seasons</string>
-    <string name="cast_more_content_description">Click for all the cast</string>
-    <string name="crew_more_content_description">Click for all the crew</string>
-    <string name="nav_favorite_content_description">Click for favorites</string>
-    <string name="nav_movies_content_description">Click to explore movies</string>
-    <string name="nav_series_content_description">Click to explore all series</string>
-    <string name="nav_theaters_content_description">Click for movies in theaters</string>
-    <string name="nav_settings_content_description">Click for application settings</string>
-    <string name="sort_content_description">Click for sorting the favorites</string>
-    <string name="action_share_content_description">Click to share</string>
-    <string name="sort_title_content_description">Sort By Title</string>
-    <string name="sort_highest_rated_content_description">Sort By Highest Rated</string>
-    <string name="sort_lowest_rated_content_description">Sort By Lowest Rated</string>
-    <string name="navigation_back_content_description">Go back</string>
+    <string name="tools_runtime" translatable="false">135 mins</string>
+    <string name="tools_companies" translatable="false">Warner Bros</string>
 
     <!-- About -->
-    <string name="about_version">Version 1.01 (Database version 38)</string>
-    <string name="the_tmdb">The TMDb</string>
-    <string name="tmdb_notice">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
-    <string name="tmdb_terms">TMDb Terms</string>
-    <string name="tmdb_api_terms">TMDb API Terms</string>
+    <string name="the_tmdb" translatable="false">The TMDb</string>
+    <string name="tmdb_notice" translatable="false">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
+    <string name="tmdb_terms" translatable="false">TMDb Terms</string>
+    <string name="tmdb_api_terms" translatable="false">TMDb API Terms</string>
     <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
     <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
-    <string name="open_source_text">This application is open source at https://github.com/lineargs/WatchNextApp</string>
+    <string name="library_link">website</string>
+
+    <!-- Content Description -->
+    <!-- We do not translate yet the content description until
+         we implement fully functional accessibility app -->
+    <string name="toolbar_content_description" translatable="false">Toolbar navigation</string>
+    <string name="movie_title_content_description" translatable="false">The title of the movie</string>
+    <string name="main_fab_content_description" translatable="false">Click to search for a movie so can add it to the favorites</string>
+    <string name="search_view_content_description" translatable="false">Search for movies</string>
+    <string name="tab_popular_content_description" translatable="false">Click for popular</string>
+    <string name="tab_top_rated_content_description" translatable="false">Click to see the Top Rated</string>
+    <string name="tab_upcoming_content_description" translatable="false">Click to see the Upcoming Movies</string>
+    <string name="tab_on_the_air_content_description" translatable="false">Click to see the On The Air Series</string>
+    <string name="notification_fab_content_description" translatable="false">Click to schedule reminder for the current episode</string>
+    <string name="star_fab_content_description" translatable="false">Click to add or remove from the favorites</string>
+    <string name="videos_text_button_content_description" translatable="false">Click for videos</string>
+    <string name="review_text_button_content_description" translatable="false">Click for reviews</string>
+    <string name="seasons_text_button_content_description" translatable="false">Click for seasons</string>
+    <string name="cast_more_content_description" translatable="false">Click for all the cast</string>
+    <string name="crew_more_content_description" translatable="false">Click for all the crew</string>
+    <string name="nav_favorite_content_description" translatable="false">Click for favorites</string>
+    <string name="nav_movies_content_description" translatable="false">Click to explore movies</string>
+    <string name="nav_series_content_description" translatable="false">Click to explore all series</string>
+    <string name="nav_theaters_content_description" translatable="false">Click for movies in theaters</string>
+    <string name="nav_settings_content_description" translatable="false">Click for application settings</string>
+    <string name="sort_content_description" translatable="false">Click for sorting the favorites</string>
+    <string name="action_share_content_description" translatable="false">Click to share</string>
+    <string name="sort_title_content_description" translatable="false">Sort By Title</string>
+    <string name="sort_highest_rated_content_description" translatable="false">Sort By Highest Rated</string>
+    <string name="sort_lowest_rated_content_description" translatable="false">Sort By Lowest Rated</string>
+    <string name="navigation_back_content_description" translatable="false">Go back</string>
+    <string name="movie_poster_content_description" translatable="false">Movie poster</string>
+    <string name="star_image_content_description" translatable="false">Star image</string>
+    <string name="nav_icon_content_description" translatable="false">Application icon</string>
+    <string name="play_circle_content_description" translatable="false">Circle play image</string>
+    <string name="you_tube_image_content_description" translatable="false">YouTube video poster</string>
+    <string name="link_image_content_description" translatable="false">Link image</string>
+    <string name="person_content_description" translatable="false">Person photo</string>
+    <string name="serie_content_description" translatable="false">Serie poster</string>
+    <string name="empty_image_content_description" translatable="false">Conversation image for empty view</string>
+    <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
+    <string name="season_cover_poster_description" translatable="false">Current season poster</string>
+    <string name="runtime_of_all_movies">Runtime of all movies</string>
 
 </resources>

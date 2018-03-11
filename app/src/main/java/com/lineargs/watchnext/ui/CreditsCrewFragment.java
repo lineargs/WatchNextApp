@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCrewAdapter;
-import com.lineargs.watchnext.data.CrewQuery;
+import com.lineargs.watchnext.data.CeditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 
 import butterknife.BindView;
@@ -26,10 +26,9 @@ import butterknife.Unbinder;
 
 /**
  * Created by goranminov on 21/12/2017.
- *
+ * <p>
  * A fragment loading and showing list of cast members for now.
  * We will use same class to implement crew.
- *
  */
 
 public class CreditsCrewFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCrewAdapter.OnClick {
@@ -96,7 +95,7 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
             case LOADER_ID:
                 return new CursorLoader(getContext(),
                         mUri,
-                        CrewQuery.CREW_PROJECTION,
+                        CeditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);

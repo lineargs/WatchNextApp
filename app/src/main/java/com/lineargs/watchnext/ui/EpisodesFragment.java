@@ -43,7 +43,8 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
     ProgressBar mProgressBar;
     private EpisodesAdapter mAdapter;
     private Unbinder unbinder;
-    private String seasonId = "", serieId = "", number = "";
+    private String seasonId = "", serieId = "";
+    int number = -1;
 
     public EpisodesFragment() {
     }
@@ -56,7 +57,7 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
         this.serieId = serieId;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 

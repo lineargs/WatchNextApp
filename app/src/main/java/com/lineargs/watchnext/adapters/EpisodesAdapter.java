@@ -6,10 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
@@ -87,8 +89,18 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         AppCompatTextView releaseDate;
         @BindView(R.id.overview)
         AppCompatTextView overview;
-        @BindView(R.id.cover_poster)
-        ImageView poster;
+        @BindView(R.id.guest_stars)
+        AppCompatTextView guestStars;
+        @BindView(R.id.directors)
+        AppCompatTextView directors;
+        @BindView(R.id.writers)
+        AppCompatTextView writers;
+        @BindView(R.id.guest_stars_container)
+        LinearLayout guestStarsContainer;
+        @BindView(R.id.directors_container)
+        LinearLayout directorsContainer;
+        @BindView(R.id.writers_container)
+        LinearLayout writersContainer;
         @BindView(R.id.notification_fab)
         FloatingActionButton notification;
 
@@ -103,6 +115,21 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             voteAverage.setText(cursor.getString(EpisodesQuery.VOTE_AVERAGE));
             releaseDate.setText(cursor.getString(EpisodesQuery.RELEASE_DATE));
             overview.setText(cursor.getString(EpisodesQuery.OVERVIEW));
+            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.GUEST_STARS))) {
+                guestStarsContainer.setVisibility(View.GONE);
+            } else {
+                guestStars.setText(cursor.getString(EpisodesQuery.GUEST_STARS));
+            }
+            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.DIRECTORS))) {
+                directorsContainer.setVisibility(View.GONE);
+            } else {
+                directors.setText(cursor.getString(EpisodesQuery.DIRECTORS));
+            }
+            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.WRITERS))) {
+                writersContainer.setVisibility(View.GONE);
+            } else {
+                writers.setText(cursor.getString(EpisodesQuery.WRITERS));
+            }
             ServiceUtils.loadPicasso(stillPath.getContext(), cursor.getString(EpisodesQuery.STILL_PATH))
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerInside()

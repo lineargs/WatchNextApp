@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.CreditDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.VideosDbUtils;
@@ -32,9 +33,7 @@ class SerieDetailTask {
 
     static void syncSeasons(final Context context, final Uri uri) {
 
-        String stringUri = uri.toString();
-        stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
-        mUri = Uri.parse(stringUri);
+        mUri = Utils.getBaseUri(uri);
         id = uri.getLastPathSegment();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -54,7 +53,7 @@ class SerieDetailTask {
                     ContentValues updateValues = SerieDbUtils.updateSeries(response.body());
                     UpdateSeries updateSeries = new UpdateSeries(context);
                     updateSeries.execute(updateValues);
-                    ContentValues[] seasonValues = SerieDbUtils.getSeasons(response.body(), id);
+                    ContentValues[] seasonValues = SerieDbUtils.getSeasons(context, response.body(), id);
                     InsertSeasons insertSeasons = new InsertSeasons(context);
                     insertSeasons.execute(seasonValues);
                     ContentValues[] castValues = CreditDbUtils.getCastContentValues(response.body().getCredits(), id);
@@ -129,7 +128,7 @@ class SerieDetailTask {
             if (context != null) {
                 ContentResolver contentResolver = context.getContentResolver();
                 if (contentValues != null && contentValues.length != 0) {
-                    contentResolver.bulkInsert(DataContract.CreditCast.CONTENT_URI, contentValues);
+                    contentResolver.bulkInsert(DataContract.Credits.CONTENT_URI_CAST, contentValues);
                 }
 
             }

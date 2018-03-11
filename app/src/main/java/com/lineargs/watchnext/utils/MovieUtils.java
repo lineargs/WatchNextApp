@@ -28,6 +28,11 @@ public class MovieUtils {
         return date;
     }
 
+    public static String getMainNormalizedDate (String date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        return simpleDateFormat.format(date);
+    }
+
     /**
      * @param vote The vote average String received from the API
      * @return The same String concatenated

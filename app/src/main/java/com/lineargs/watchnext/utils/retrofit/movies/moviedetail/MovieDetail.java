@@ -1,10 +1,11 @@
 package com.lineargs.watchnext.utils.retrofit.movies.moviedetail;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.lineargs.watchnext.utils.retrofit.credits.Credits;
 import com.lineargs.watchnext.utils.retrofit.videos.Videos;
+
+import java.util.List;
 
 public class MovieDetail {
 

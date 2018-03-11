@@ -1,0 +1,76 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+android {
+    signingConfigs {
+        config {
+            if (rootProject.file('keystore.properties').exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(rootProject.file('keystore.properties')))
+
+                keyAlias = props['keyAlias']
+                keyPassword = props['keyPassword']
+                storeFile = file(props['storeFile'])
+                storePassword = props['storePassword']
+            }
+        }
+    }
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+    defaultConfig {
+        applicationId "com.lineargs.watchnext"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        buildConfigField 'String', 'MOVIE_DATABASE_API_KEY', TMDbApiKey
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+    }
+}
+
+dependencies {
+    /* Support Library developer.android.com/topic/libraries/support-library/revisions.html */
+    implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    implementation "com.android.support:design:${versions.supportLibrary}"
+    implementation "com.android.support:preference-v7:${versions.supportLibrary}"
+    implementation "com.android.support:support-vector-drawable:${versions.supportLibrary}"
+    implementation "com.android.support:cardview-v7:${versions.supportLibrary}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    /* We use this import for Material Preference theme */
+    implementation "com.android.support:preference-v14:${versions.supportLibrary}"
+    /* Firebase firebase.google.com/docs/android/setup#available_libraries*/
+    implementation "com.google.firebase:firebase-crash:${versions.firebaseCore}"
+    implementation "com.google.firebase:firebase-core:${versions.firebaseCore}"
+    /* github.com/firebase/firebase-jobdispatcher-android/blob/master/README.md */
+    implementation "com.firebase:firebase-jobdispatcher:${versions.firebaseJob}"
+    /* Crashlytics docs.fabric.io/android/changelog.html */
+    implementation("com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}@aar") {
+        transitive = true
+    }
+    /* Butterknife github.com/JakeWharton/butterknife/blob/master/CHANGELOG.md */
+    implementation "com.jakewharton:butterknife:${versions.butterknife}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${versions.butterknife}"
+    /* Retrofit github.com/square/retrofit/blob/master/CHANGELOG.md */
+    implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
+    implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
+    /* Picasso github.com/square/picasso/blob/master/CHANGELOG.md */
+    implementation "com.squareup.picasso:picasso:${versions.picasso}"
+    /* Espresso developer.android.com/topic/libraries/testing-support-library/release-notes.html*/
+    implementation "com.android.support.test.espresso:espresso-idling-resource:${versions.espresso}"
+    /* Testing only dependencies */
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation "com.android.support:support-annotations:${versions.supportLibrary}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:${versions.espresso}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${versions.espresso}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:${versions.espresso}"
+}
+
+apply plugin: 'com.google.gms.google-services'

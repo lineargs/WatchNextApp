@@ -25,11 +25,11 @@ public interface SeriesApiService {
     Call<SeriesDetails> getDetails(
             @Path("tv_id") String id,
             @Query("api_key") String apiKey,
-            @Query ("append_to_response") String appendToResponse);
+            @Query("append_to_response") String appendToResponse);
 
     @GET("tv/{tv_id}/season/{season_number}")
     Call<SeasonDetails> getSeason(
             @Path("tv_id") String id,
-            @Path("season_number") String seasonNumber,
+            @Path("season_number") int seasonNumber,
             @Query("api_key") String apiKey);
 }

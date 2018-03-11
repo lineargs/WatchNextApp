@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -81,8 +80,6 @@ public class WidgetService extends RemoteViewsService {
                     R.layout.widget_app);
 
             Intent fillIntent = new Intent();
-
-            fillIntent.setData(DataContract.Favorites.CONTENT_URI);
 
             views.setOnClickFillInIntent(R.id.widget_row, fillIntent);
 

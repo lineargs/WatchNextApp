@@ -1,19 +1,25 @@
 package com.lineargs.watchnext.utils.dbutils;
 
 import android.content.ContentValues;
-import android.util.Log;
+import android.content.Context;
+import android.text.TextUtils;
 
+import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Episode;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Genre;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionCompany;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Season;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.SeriesDetails;
 
 import java.text.ParseException;
 import java.util.List;
+
+import static com.lineargs.watchnext.utils.Utils.buildCompaniesString;
+import static com.lineargs.watchnext.utils.Utils.buildDirectorsString;
+import static com.lineargs.watchnext.utils.Utils.buildGenresString;
+import static com.lineargs.watchnext.utils.Utils.buildGuestStarsString;
+import static com.lineargs.watchnext.utils.Utils.buildWritersString;
 
 /**
  * Created by goranminov on 11/11/2017.
@@ -49,8 +55,8 @@ public class SerieDbUtils {
                 e.printStackTrace();
             }
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + seriesResult.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
 
@@ -82,8 +88,8 @@ public class SerieDbUtils {
                 e.printStackTrace();
             }
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + seriesResult.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
 
@@ -115,8 +121,8 @@ public class SerieDbUtils {
                 e.printStackTrace();
             }
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + seriesResult.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
             contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
 
@@ -148,8 +154,8 @@ public class SerieDbUtils {
             e.printStackTrace();
         }
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + result.getPosterPath());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + result.getBackdropPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + result.getPosterPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + result.getBackdropPath());
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, result.getOriginalLanguage());
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, result.getOriginalName());
 
@@ -164,7 +170,7 @@ public class SerieDbUtils {
      * @param details Object used to get the values from our API response
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getSeasons(SeriesDetails details, String serieId) {
+    public static ContentValues[] getSeasons(Context context, SeriesDetails details, String serieId) {
         int i = 0;
         String name = details.getName();
         List<Season> seasons = details.getSeasons();
@@ -182,8 +188,9 @@ public class SerieDbUtils {
                     e.printStackTrace();
                 }
             }
-            contentValues.put(DataContract.Seasons.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + season.getPosterPath());
+            contentValues.put(DataContract.Seasons.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + season.getPosterPath());
             contentValues.put(DataContract.Seasons.COLUMN_SEASON_NUMBER, season.getSeasonNumber());
+
             values[i] = contentValues;
             i++;
         }
@@ -213,12 +220,15 @@ public class SerieDbUtils {
                     e.printStackTrace();
                 }
             }
-            contentValues.put(DataContract.Episodes.COLUMN_STILL_PATH, IMAGE_SMALL_BASE + episode.getStillPath());
+            contentValues.put(DataContract.Episodes.COLUMN_STILL_PATH, IMAGE_MEDIUM_BASE + episode.getStillPath());
             contentValues.put(DataContract.Episodes.COLUMN_EPISODE_NUMBER, episode.getEpisodeNumber());
             contentValues.put(DataContract.Episodes.COLUMN_NAME, episode.getName());
             contentValues.put(DataContract.Episodes.COLUMN_OVERVIEW, episode.getOverview());
             contentValues.put(DataContract.Episodes.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(episode.getVoteAverage())));
             contentValues.put(DataContract.Episodes.COLUMN_VOTE_COUNT, episode.getVoteCount());
+            contentValues.put(DataContract.Episodes.COLUMN_GUEST_STARS, buildGuestStarsString(episode.getGuestStars()));
+            contentValues.put(DataContract.Episodes.COLUMN_DIRECTORS, buildDirectorsString(episode.getCrew()));
+            contentValues.put(DataContract.Episodes.COLUMN_WRITERS, buildWritersString(episode.getCrew()));
             values[i] = contentValues;
             i++;
         }
@@ -243,39 +253,5 @@ public class SerieDbUtils {
                 buildGenresString(result.getGenres()));
 
         return contentValues;
-    }
-
-    private static String buildCompaniesString(List<ProductionCompany> companies) {
-
-        if (companies == null || companies.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < companies.size(); i++) {
-            ProductionCompany company = companies.get(i);
-            stringBuilder.append(company.getName());
-            if (i + 1 < companies.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    private static String buildGenresString(List<Genre> genres) {
-
-        if (genres == null || genres.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < genres.size(); i++) {
-            Genre genre = genres.get(i);
-            stringBuilder.append(genre.getName());
-            if (i + 1 < genres.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
     }
 }

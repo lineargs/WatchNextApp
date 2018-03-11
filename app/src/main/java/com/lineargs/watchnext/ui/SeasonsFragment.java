@@ -25,7 +25,6 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SeasonsQuery;
-import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +39,7 @@ import butterknife.Unbinder;
 public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SeasonsAdapter.OnClickListener {
 
     static final String SEASON_ID = "season_id", SEASON_NUMBER = "season_number",
-            SERIE_ID = "serie_id", SEASON_TITLE = "season_title", EPISODES = "episodes";
+            SERIE_ID = "serie_id", EPISODES = "episodes";
     private static final int LOADER_ID = 112;
     @BindView(R.id.seasons_recycler_view)
     RecyclerView mRecyclerView;
@@ -152,7 +151,7 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
 
     //TODO Too many things going on here
     @Override
-    public void OnClick(String seasonId, String seasonNumber, String serieId, String seasonTitle, String episodes) {
+    public void OnClick(String seasonId, int seasonNumber, String serieId, String episodes) {
         if (isTablet(getContext())) {
             Intent intent = new Intent(getContext(), SeasonActivity.class);
             Uri uri = DataContract.Seasons.buildSeasonUriWithId(Long.parseLong(serieId));
@@ -163,7 +162,6 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
             intent.putExtra(SEASON_ID, seasonId);
             intent.putExtra(SEASON_NUMBER, seasonNumber);
             intent.putExtra(SERIE_ID, serieId);
-            intent.putExtra(SEASON_TITLE, seasonTitle);
             intent.putExtra(EPISODES, episodes);
             startActivity(intent);
         }

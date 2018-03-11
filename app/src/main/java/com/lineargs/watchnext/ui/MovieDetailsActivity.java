@@ -16,7 +16,6 @@ public class MovieDetailsActivity extends BaseTopActivity {
         setContentView(R.layout.activity_movie_detail);
         setupActionBar();
         setupNavDrawer();
-        showSnackBar();
         setupFragment(savedInstanceState);
     }
 

@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCastAdapter;
-import com.lineargs.watchnext.data.CastQuery;
+import com.lineargs.watchnext.data.CeditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 
 import butterknife.BindView;
@@ -92,7 +92,7 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
             case LOADER_ID:
                 return new CursorLoader(getContext(),
                         mUri,
-                        CastQuery.CAST_PROJECTION,
+                        CeditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);

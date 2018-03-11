@@ -10,9 +10,9 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -31,7 +31,7 @@ import com.lineargs.watchnext.ui.NotificationActivity;
 
 public class NotificationUtils extends ContextWrapper {
 
-
+    private static NotificationManager manager;
     private static final String EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID = "episode_reminder_channel";
     private static final String EPISODES_CHANNEL = "Episodes";
     private static final String SERIES_CHANNEL_GROUP = "Series";
@@ -39,42 +39,28 @@ public class NotificationUtils extends ContextWrapper {
 
     public NotificationUtils(Context base) {
         super(base);
-    }
 
-    public static void clearNotification(Context context, int id) {
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            notificationManager.cancel(id);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID,
+                    EPISODES_CHANNEL, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setLightColor(Color.YELLOW);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationChannelGroup channelGroup = new NotificationChannelGroup(SERIE_ID, SERIES_CHANNEL_GROUP);
+            getManager().createNotificationChannelGroup(channelGroup);
+            notificationChannel.setGroup(SERIE_ID);
+            getManager().createNotificationChannel(notificationChannel);
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static NotificationChannel setEpisodeNotificationChannel() {
-        NotificationChannel notificationChannel = new NotificationChannel(EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID,
-                EPISODES_CHANNEL, NotificationManager.IMPORTANCE_HIGH);
-        notificationChannel.setGroup(SERIE_ID);
-        return notificationChannel;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static NotificationChannelGroup setSeriesNotificationChannelGroup() {
-        return new NotificationChannelGroup(SERIE_ID, SERIES_CHANNEL_GROUP);
+    public static void clearNotification(int id) {
+        manager.cancel(id);
     }
 
     public static void episodeReminder(String text, int id, String title, Context context) {
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannelGroup(setSeriesNotificationChannelGroup());
-                notificationManager.createNotificationChannel(setEpisodeNotificationChannel());
-            }
-        }
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorGrey))
-                .setSmallIcon(R.drawable.icon_tv_black)
+                .setSmallIcon(smallIcon())
                 .setLargeIcon(largeIcon(context))
                 .setContentTitle(title)
                 .setContentText(context.getString(R.string.notification_text, text))
@@ -86,9 +72,7 @@ public class NotificationUtils extends ContextWrapper {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         }
-        if (notificationManager != null) {
-            notificationManager.notify(id, notificationBuilder.build());
-        }
+        manager.notify(id, notificationBuilder.build());
     }
 
     private static PendingIntent contentIntent(int id, Context context) {
@@ -114,7 +98,18 @@ public class NotificationUtils extends ContextWrapper {
                 (R.drawable.icon_cancel_black, context.getString(R.string.notification_dismiss), ignoreReminderPendingIntent);
     }
 
+    private static int smallIcon() {
+        return R.drawable.icon_tv_black;
+    }
+
     private static Bitmap largeIcon(Context context) {
         return BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_tv_black);
+    }
+
+    private NotificationManager getManager() {
+        if (manager == null) {
+            manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return manager;
     }
 }

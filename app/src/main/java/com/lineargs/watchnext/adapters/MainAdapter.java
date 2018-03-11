@@ -31,6 +31,8 @@ import butterknife.ButterKnife;
 
 public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final int VIEW_TYPE_SORT = 0;
+    private final int VIEW_TYPE_MAIN = 1;
     private OnItemClickListener callback;
     private Context context;
     private Cursor cursor;
@@ -53,10 +55,20 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View movieView = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_main, parent, false);
-        return new MainViewHolder(movieView);
+        switch (viewType) {
+            case VIEW_TYPE_SORT:
+                View sortView = LayoutInflater
+                        .from(context)
+                        .inflate(R.layout.item_sort, parent, false);
+                return new SortViewHolder(sortView);
+            case VIEW_TYPE_MAIN:
+                View mainView = LayoutInflater
+                        .from(context)
+                        .inflate(R.layout.item_main, parent, false);
+                return new MainViewHolder(mainView);
+            default:
+                throw new IllegalArgumentException("Invalid view type, value of" + viewType);
+        }
     }
 
     /**
@@ -69,8 +81,22 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        MainViewHolder mainViewHolder = (MainViewHolder) holder;
-        mainViewHolder.bindViews(context, position);
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_SORT:
+                bindSortView((SortViewHolder) holder);
+                break;
+            case VIEW_TYPE_MAIN:
+                bindMainViews((MainViewHolder) holder, context, position - 1);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return VIEW_TYPE_SORT;
+        } else {
+            return VIEW_TYPE_MAIN;
+        }
     }
 
     /**
@@ -83,7 +109,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (cursor == null) {
             return 0;
         }
-        return cursor.getCount();
+        return 1 + cursor.getCount();
     }
 
     /**
@@ -118,6 +144,35 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnItemClickListener {
         void onItemSelected(Uri uri);
+        void onSortClick();
+    }
+
+    private void bindSortView(final SortViewHolder holder){}
+
+    private void bindMainViews(final MainViewHolder holder, final Context context, int position) {
+        cursor.moveToPosition(position);
+        final long id = cursor.getInt(Query.ID);
+
+        holder.star.setImageDrawable(VectorDrawableCompat.create
+                (context.getResources(), R.drawable.icon_star_black, context.getTheme()));
+        holder.star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = DataContract.PopularMovieEntry.buildMovieUriWithId(id);
+                if (isFavorite(context, id)) {
+                    DbUtils.removeFromFavorites(context, uri);
+                    Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                }
+            }
+        });
+        holder.title.setText(cursor.getString(Query.TITLE));
+        holder.date.setText(context.getString(R.string.main_date, cursor.getString(Query.RELEASE_DATE)));
+        holder.vote.setText(cursor.getString(Query.VOTE_AVERAGE));
+        Picasso.with(holder.poster.getContext())
+                .load(cursor.getString(Query.POSTER_PATH))
+                .fit()
+                .into(holder.poster);
     }
 
     /*
@@ -131,46 +186,44 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         AppCompatTextView title;
         @BindView(R.id.main_date)
         TextView date;
+        @BindView(R.id.main_vote)
+        AppCompatTextView vote;
         @BindView(R.id.main_star_image)
         ImageView star;
 
         MainViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            if (callback != null) view.setOnClickListener(this);
-        }
-
-        void bindViews(final Context context, int position) {
-            cursor.moveToPosition(position);
-            final long id = cursor.getInt(Query.ID);
-
-            star.setImageDrawable(VectorDrawableCompat.create
-                    (context.getResources(), R.drawable.icon_star_black, context.getTheme()));
-            star.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Uri uri = DataContract.PopularMovieEntry.buildMovieUriWithId(id);
-                    if (isFavorite(context, id)) {
-                        DbUtils.removeFromFavorites(context, uri);
-                        Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-                        notifyDataSetChanged();
-                    }
-                }
-            });
-            title.setText(cursor.getString(Query.TITLE));
-            date.setText(cursor.getString(Query.RELEASE_DATE));
-            Picasso.with(poster.getContext())
-                    .load(cursor.getString(Query.POSTER_PATH))
-                    .fit()
-                    .into(poster);
+            if (callback != null) {
+                view.setOnClickListener(this);
+            }
         }
 
         @Override
         public void onClick(View v) {
-            cursor.moveToPosition(getAdapterPosition());
+            cursor.moveToPosition(getAdapterPosition() - 1);
             Uri uri = DataContract.Favorites.buildFavoritesUriWithId(
                     Long.parseLong(cursor.getString(Query.ID)));
             callback.onItemSelected(uri);
+        }
+    }
+
+    class SortViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @BindView(R.id.main_sort)
+        AppCompatTextView sort;
+
+        SortViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+            if (callback != null) {
+                view.setOnClickListener(this);
+            }
+        }
+
+        @Override
+        public void onClick(View view) {
+            callback.onSortClick();
         }
     }
 }

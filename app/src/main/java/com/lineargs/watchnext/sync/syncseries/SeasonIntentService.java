@@ -19,7 +19,7 @@ public class SeasonIntentService extends IntentService {
         if (intent.hasExtra(ID) && intent.hasExtra(SEASON_NUMBER)
                 && intent.hasExtra(SEASON_ID)) {
             String id = intent.getStringExtra(ID);
-            String seasonNumber = intent.getStringExtra(SEASON_NUMBER);
+            int seasonNumber = intent.getIntExtra(SEASON_NUMBER, -1);
             String seasonId = intent.getStringExtra(SEASON_ID);
             SeasonTask.syncEpisodes(this, id, seasonNumber, seasonId);
         }
