@@ -27,6 +27,7 @@ import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.view.View.GONE;
 
@@ -151,6 +152,11 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
 
     public void dismiss() {
         ActivityCompat.finishAfterTransition(this);
+    }
+
+    @OnClick(R.id.scrim)
+    public void scrimView() {
+        dismiss();
     }
 
     private void searchFor(String query) {
