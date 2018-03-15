@@ -18,7 +18,7 @@
         android:layout_gravity="center"
         android:contentDescription="@string/nav_icon_content_description"
         android:paddingTop="@dimen/nav_text_padding"
-        app:srcCompat="@drawable/ic_launcher" />
+        app:srcCompat="@drawable/ic_launcher_new" />
 
     <android.support.v7.widget.AppCompatTextView
         style="@style/TextAppearance.AppCompat.Medium"
