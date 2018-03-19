@@ -37,6 +37,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -217,17 +218,28 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @BindView(R.id.name)
         AppCompatTextView name;
-        @BindView(R.id.still_path) ImageView stillPath;
-        @BindView(R.id.vote_average) AppCompatTextView voteAverage;
-        @BindView(R.id.release_date) AppCompatTextView releaseDate;
-        @BindView(R.id.overview) AppCompatTextView overview;
-        @BindView(R.id.guest_stars) AppCompatTextView guestStars;
-        @BindView(R.id.directors) AppCompatTextView directors;
-        @BindView(R.id.writers) AppCompatTextView writers;
-        @BindView(R.id.guest_stars_container) LinearLayout guestStarsContainer;
-        @BindView(R.id.directors_container) LinearLayout directorsContainer;
-        @BindView(R.id.writers_container) LinearLayout writersContainer;
-        @BindView(R.id.notification_fab) FloatingActionButton notification;
+        @BindView(R.id.still_path)
+        ImageView stillPath;
+        @BindView(R.id.vote_average)
+        AppCompatTextView voteAverage;
+        @BindView(R.id.release_date)
+        AppCompatTextView releaseDate;
+        @BindView(R.id.overview)
+        AppCompatTextView overview;
+        @BindView(R.id.guest_stars)
+        AppCompatTextView guestStars;
+        @BindView(R.id.directors)
+        AppCompatTextView directors;
+        @BindView(R.id.writers)
+        AppCompatTextView writers;
+        @BindView(R.id.guest_stars_container)
+        LinearLayout guestStarsContainer;
+        @BindView(R.id.directors_container)
+        LinearLayout directorsContainer;
+        @BindView(R.id.writers_container)
+        LinearLayout writersContainer;
+        @BindView(R.id.notification_fab)
+        FloatingActionButton notification;
         private Unbinder unbinder;
 
 
@@ -240,10 +252,10 @@ public class EpisodesActivity extends BaseTopActivity implements
          */
         public static PlaceholderFragment newInstance(String name, String stillPath, String vote, String releaseDate,
                                                       String overview, int id, String title, String guestStars,
-                                                      String directors, String writers) {
+                                                      String directors, String writers, ArrayList details) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putString(ARG_NAME, name);
+            args.putString(ARG_NAME, String.valueOf(details.get(0)));
             args.putString(ARG_STILL_PATH, stillPath);
             args.putString(ARG_VOTE, vote);
             args.putString(ARG_DATE, releaseDate);
@@ -351,7 +363,9 @@ public class EpisodesActivity extends BaseTopActivity implements
         @Override
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
+            ArrayList<String> details = new ArrayList<>();
             String name = mCursor.getString(EpisodesQuery.NAME);
+            details.add(name);
             String stillPath = mCursor.getString(EpisodesQuery.STILL_PATH);
             String vote = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);
             String date = mCursor.getString(EpisodesQuery.RELEASE_DATE);
@@ -364,7 +378,7 @@ public class EpisodesActivity extends BaseTopActivity implements
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, id, title,
-                    guestStars, directors, writers);
+                    guestStars, directors, writers, details);
         }
 
         @Override
