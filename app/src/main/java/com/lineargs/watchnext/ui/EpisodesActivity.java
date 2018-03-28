@@ -3,7 +3,6 @@ package com.lineargs.watchnext.ui;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -37,7 +36,6 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -137,6 +135,7 @@ public class EpisodesActivity extends BaseTopActivity implements
         });
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -160,7 +159,7 @@ public class EpisodesActivity extends BaseTopActivity implements
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 if (data != null && data.getCount() != 0) {
@@ -184,7 +183,7 @@ public class EpisodesActivity extends BaseTopActivity implements
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mSectionsPagerAdapter.swapCursor(null);
         mSectionsPagerAdapter.swapBackCursor(null);
     }
@@ -206,15 +205,7 @@ public class EpisodesActivity extends BaseTopActivity implements
          * fragment.
          */
         private static final String ARG_DETAILS = "details";
-        private static final String ARG_STILL_PATH = "still_path";
-        private static final String ARG_VOTE = "vote";
-        private static final String ARG_DATE = "date";
-        private static final String ARG_OVERVIEW = "overview";
-        private static final String ARG_ID = "id";
         private static final String ARG_TITLE = "title";
-        private static final String ARG_GUEST_STARS = "guest_stars";
-        private static final String ARG_DIRECTORS = "directors";
-        private static final String ARG_WRITERS = "writers";
 
         @BindView(R.id.name)
         AppCompatTextView name;
@@ -251,21 +242,11 @@ public class EpisodesActivity extends BaseTopActivity implements
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(String stillPath, String vote, String releaseDate,
-                                                      String overview, int id, String title, String guestStars,
-                                                      String directors, String writers, String[] details) {
+        public static PlaceholderFragment newInstance(String title, String[] details) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putStringArray(ARG_DETAILS, details);
-            args.putString(ARG_STILL_PATH, stillPath);
-            args.putString(ARG_VOTE, vote);
-            args.putString(ARG_DATE, releaseDate);
-            args.putString(ARG_OVERVIEW, overview);
-            args.putInt(ARG_ID, id);
             args.putString(ARG_TITLE, title);
-            args.putString(ARG_GUEST_STARS, guestStars);
-            args.putString(ARG_DIRECTORS, directors);
-            args.putString(ARG_WRITERS, writers);
             fragment.setArguments(args);
             return fragment;
         }
@@ -275,34 +256,35 @@ public class EpisodesActivity extends BaseTopActivity implements
             View rootView = inflater.inflate(R.layout.fragment_episodes, container, false);
             unbinder = ButterKnife.bind(this, rootView);
             details = getArguments().getStringArray(ARG_DETAILS);
+
             if (details != null) {
                 name.setText(details[0]);
+                voteAverage.setText(details[2]);
+                releaseDate.setText(details[3]);
+                overview.setText(details[4]);
+                if (TextUtils.isEmpty(details[6])) {
+                    guestStarsContainer.setVisibility(GONE);
+                } else {
+                    guestStars.setText(details[6]);
+                }
+                if (TextUtils.isEmpty(details[7])) {
+                    directorsContainer.setVisibility(GONE);
+                } else {
+                    directors.setText(details[7]);
+                }
+                if (TextUtils.isEmpty(details[8])) {
+                    writersContainer.setVisibility(GONE);
+                } else {
+                    writers.setText(details[8]);
+                }
+                if (airedAlready(details[3])) {
+                    notification.setVisibility(GONE);
+                }
+                ServiceUtils.loadPicasso(stillPath.getContext(), details[1])
+                        .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
+                        .centerInside()
+                        .into(stillPath);
             }
-            voteAverage.setText(getArguments().getString(ARG_VOTE));
-            releaseDate.setText(getArguments().getString(ARG_DATE));
-            overview.setText(getArguments().getString(ARG_OVERVIEW));
-            if (TextUtils.isEmpty(getArguments().getString(ARG_GUEST_STARS))) {
-                guestStarsContainer.setVisibility(GONE);
-            } else {
-                guestStars.setText(getArguments().getString(ARG_GUEST_STARS));
-            }
-            if (TextUtils.isEmpty(getArguments().getString(ARG_DIRECTORS))) {
-                directorsContainer.setVisibility(GONE);
-            } else {
-                directors.setText(getArguments().getString(ARG_DIRECTORS));
-            }
-            if (TextUtils.isEmpty(getArguments().getString(ARG_WRITERS))) {
-                writersContainer.setVisibility(GONE);
-            } else {
-                writers.setText(getArguments().getString(ARG_WRITERS));
-            }
-            if (airedAlready(getArguments().getString(ARG_DATE))) {
-                notification.setVisibility(GONE);
-            }
-            ServiceUtils.loadPicasso(stillPath.getContext(), getArguments().getString(ARG_STILL_PATH))
-                    .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
-                    .centerInside()
-                    .into(stillPath);
             return rootView;
         }
 
@@ -342,9 +324,9 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @OnClick(R.id.notification_fab)
         public void setNotification() {
-            int intervalSeconds = getSeconds(System.currentTimeMillis(), getArguments().getString(ARG_DATE));
+            int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
             if (intervalSeconds != 0 && details != null) {
-                ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, getArguments().getInt(ARG_ID),
+                ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
                         getArguments().getString(ARG_TITLE), details[0]);
                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
             }
@@ -366,21 +348,21 @@ public class EpisodesActivity extends BaseTopActivity implements
         @Override
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
-            String [] details = new String[1];
+            String [] details = new String[9];
             details[0] = mCursor.getString(EpisodesQuery.NAME);
-            String stillPath = mCursor.getString(EpisodesQuery.STILL_PATH);
-            String vote = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);
-            String date = mCursor.getString(EpisodesQuery.RELEASE_DATE);
-            String overview = mCursor.getString(EpisodesQuery.OVERVIEW);
-            int id = mCursor.getInt(EpisodesQuery.EPISODE_ID);
+            details[1] = mCursor.getString(EpisodesQuery.STILL_PATH);
+            details[2] = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);
+            details[3] = mCursor.getString(EpisodesQuery.RELEASE_DATE);
+            details[4] = mCursor.getString(EpisodesQuery.OVERVIEW);
+            details[5] = mCursor.getString(EpisodesQuery.EPISODE_ID);
+            details[6] = mCursor.getString(EpisodesQuery.GUEST_STARS);
+            details[7] = mCursor.getString(EpisodesQuery.DIRECTORS);
+            details[8] = mCursor.getString(EpisodesQuery.WRITERS);
+
             String title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
-            String guestStars = mCursor.getString(EpisodesQuery.GUEST_STARS);
-            String directors = mCursor.getString(EpisodesQuery.DIRECTORS);
-            String writers = mCursor.getString(EpisodesQuery.WRITERS);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(stillPath, vote, date, overview, id, title,
-                    guestStars, directors, writers, details);
+            return PlaceholderFragment.newInstance(title, details);
         }
 
         @Override
