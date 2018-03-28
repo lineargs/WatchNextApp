@@ -37,6 +37,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -204,7 +205,7 @@ public class EpisodesActivity extends BaseTopActivity implements
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private static final String ARG_NAME = "name";
+        private static final String ARG_DETAILS = "details";
         private static final String ARG_STILL_PATH = "still_path";
         private static final String ARG_VOTE = "vote";
         private static final String ARG_DATE = "date";
@@ -217,18 +218,30 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @BindView(R.id.name)
         AppCompatTextView name;
-        @BindView(R.id.still_path) ImageView stillPath;
-        @BindView(R.id.vote_average) AppCompatTextView voteAverage;
-        @BindView(R.id.release_date) AppCompatTextView releaseDate;
-        @BindView(R.id.overview) AppCompatTextView overview;
-        @BindView(R.id.guest_stars) AppCompatTextView guestStars;
-        @BindView(R.id.directors) AppCompatTextView directors;
-        @BindView(R.id.writers) AppCompatTextView writers;
-        @BindView(R.id.guest_stars_container) LinearLayout guestStarsContainer;
-        @BindView(R.id.directors_container) LinearLayout directorsContainer;
-        @BindView(R.id.writers_container) LinearLayout writersContainer;
-        @BindView(R.id.notification_fab) FloatingActionButton notification;
+        @BindView(R.id.still_path)
+        ImageView stillPath;
+        @BindView(R.id.vote_average)
+        AppCompatTextView voteAverage;
+        @BindView(R.id.release_date)
+        AppCompatTextView releaseDate;
+        @BindView(R.id.overview)
+        AppCompatTextView overview;
+        @BindView(R.id.guest_stars)
+        AppCompatTextView guestStars;
+        @BindView(R.id.directors)
+        AppCompatTextView directors;
+        @BindView(R.id.writers)
+        AppCompatTextView writers;
+        @BindView(R.id.guest_stars_container)
+        LinearLayout guestStarsContainer;
+        @BindView(R.id.directors_container)
+        LinearLayout directorsContainer;
+        @BindView(R.id.writers_container)
+        LinearLayout writersContainer;
+        @BindView(R.id.notification_fab)
+        FloatingActionButton notification;
         private Unbinder unbinder;
+        private String[] details;
 
 
         public PlaceholderFragment() {
@@ -238,12 +251,12 @@ public class EpisodesActivity extends BaseTopActivity implements
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(String name, String stillPath, String vote, String releaseDate,
+        public static PlaceholderFragment newInstance(String stillPath, String vote, String releaseDate,
                                                       String overview, int id, String title, String guestStars,
-                                                      String directors, String writers) {
+                                                      String directors, String writers, String[] details) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putString(ARG_NAME, name);
+            args.putStringArray(ARG_DETAILS, details);
             args.putString(ARG_STILL_PATH, stillPath);
             args.putString(ARG_VOTE, vote);
             args.putString(ARG_DATE, releaseDate);
@@ -261,8 +274,10 @@ public class EpisodesActivity extends BaseTopActivity implements
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_episodes, container, false);
             unbinder = ButterKnife.bind(this, rootView);
-
-            name.setText(getArguments().getString(ARG_NAME));
+            details = getArguments().getStringArray(ARG_DETAILS);
+            if (details != null) {
+                name.setText(details[0]);
+            }
             voteAverage.setText(getArguments().getString(ARG_VOTE));
             releaseDate.setText(getArguments().getString(ARG_DATE));
             overview.setText(getArguments().getString(ARG_OVERVIEW));
@@ -328,9 +343,9 @@ public class EpisodesActivity extends BaseTopActivity implements
         @OnClick(R.id.notification_fab)
         public void setNotification() {
             int intervalSeconds = getSeconds(System.currentTimeMillis(), getArguments().getString(ARG_DATE));
-            if (intervalSeconds != 0) {
+            if (intervalSeconds != 0 && details != null) {
                 ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, getArguments().getInt(ARG_ID),
-                        getArguments().getString(ARG_TITLE), getArguments().getString(ARG_NAME));
+                        getArguments().getString(ARG_TITLE), details[0]);
                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
             }
         }
@@ -351,7 +366,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         @Override
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
-            String name = mCursor.getString(EpisodesQuery.NAME);
+            String [] details = new String[1];
+            details[0] = mCursor.getString(EpisodesQuery.NAME);
             String stillPath = mCursor.getString(EpisodesQuery.STILL_PATH);
             String vote = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);
             String date = mCursor.getString(EpisodesQuery.RELEASE_DATE);
@@ -363,8 +379,8 @@ public class EpisodesActivity extends BaseTopActivity implements
             String writers = mCursor.getString(EpisodesQuery.WRITERS);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(name, stillPath, vote, date, overview, id, title,
-                    guestStars, directors, writers);
+            return PlaceholderFragment.newInstance(stillPath, vote, date, overview, id, title,
+                    guestStars, directors, writers, details);
         }
 
         @Override
