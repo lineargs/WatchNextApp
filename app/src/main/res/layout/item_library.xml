@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
+    android:background="?colorPrimaryDark"
     android:foreground="?android:selectableItemBackground">
 
     <TextView
@@ -14,6 +14,7 @@
         android:layout_marginLeft="@dimen/padding_six"
         android:layout_marginStart="@dimen/padding_six"
         android:gravity="center_vertical"
+        android:textColor="@color/colorWhite"
         android:minHeight="@dimen/text_view_min_height"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
@@ -22,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/library_name"
+        android:textColor="@color/colorWhite"
         android:layout_marginEnd="@dimen/padding_six"
         android:layout_marginLeft="@dimen/padding_six"
         android:layout_marginStart="@dimen/padding_six"
@@ -36,12 +38,12 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/library_description"
         android:text="@string/library_link"
-        android:textColor="?colorPrimary" />
+        android:textColor="@color/colorWhite" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/library_link"
-        android:background="?colorPrimary"/>
+        android:background="@color/colorWhite"/>
 
 </RelativeLayout>
