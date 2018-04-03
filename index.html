@@ -1,0 +1,279 @@
+<!doctype html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>WatchNext</title>
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="images/favicon.png">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+    <link rel="canonical" href="http://www.example.com/">
+    -->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-amber.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+  </head>
+  <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+          <h3>WatchNext: Movies and Series Guide</h3>
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+          <p>Simple application to track and explore all the information from your favourite movies and series</p>
+        </div>
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+          <a href="#overview" class="mdl-layout__tab is-active">Overview</a>
+          <a href="#privacypolicy" class="mdl-layout__tab">Privacy Policy</a>
+          <a href="#tandc" class="mdl-layout__tab">Terms &amp Conditions</a>
+          <a href="#licence" class="mdl-layout__tab">Licence</a>
+          <a class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add" target="_blank" href="https://github.com/lineargs/WatchNextApp">
+            <img src="images/github.svg" alt="github" class="github-logo">
+            <span class="visuallyhidden">Add</span>
+          </a>
+        </div>
+      </header>
+      <main class="mdl-layout__content">
+        <div class="mdl-layout__tab-panel is-active" id="overview">
+          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--grey-800 mdl-color-text--white">
+            	<img src="images/icon.png" width="200">
+            </header>
+            <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+              <div class="mdl-card__supporting-text">
+                <h4>Features</h4>
+
+<ul class="mdl-list">
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+    <i class="material-icons mdl-list__item-icon">movie</i>
+    Explore all the details from the Popular, Top Rated and Upcoming Movies
+</span>
+  </li>
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+    <i class="material-icons mdl-list__item-icon">tv</i>
+    Explore all the details from the Popular, Top Rated and On The Air Series
+  </span>
+  </li>
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+    <i class="material-icons mdl-list__item-icon">explore</i>
+    See the Movies showing in the Theaters
+  </span>
+  </li>
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+    <i class="material-icons mdl-list__item-icon">search</i>
+    Search for Movies and Series
+  </span>
+  </li>
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+    <i class="material-icons mdl-list__item-icon">favorite</i>
+    Add them to your Favourites list
+  </span>
+  </li>
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+    <i class="material-icons mdl-list__item-icon">notifications</i>
+    Manually schedule notification for any upcoming Episodes
+  </span>
+  </li>
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+    <i class="material-icons mdl-list__item-icon">palette</i>
+    Choose from Grey / Blue Grey Theme
+  </span>
+  </li>
+</ul>
+          </section>
+          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+              <div class="mdl-card__supporting-text">
+                <h4>Get it</h4>
+                <a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' target="_blank"><img alt='Get it on Google Play' src='images/google_play.png'/></a>
+                <a href='https://www.amazon.com/gp/product/B0787D5ZZJ/ref=mas_pm_watchnext' target="_blank"><img alt='Available at Amazon' src='images/amazon.png'/></a>
+              </div>
+            </div>
+          </section>
+          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+              <div class="mdl-card__supporting-text">
+                <h4>Powered by</h4>
+                <img src="images/powered_by.png">
+                <h6>
+                This product uses the TMDb API but is not endorsed or certified by TMDb.
+              </h6>
+              </div>
+              <div class="mdl-card__actions">
+                <a href="https://www.themoviedb.org/documentation/api/terms-of-use" target="_blank" class="mdl-button">API Terms of use</a>
+              </div>
+            </div>
+          </section>
+          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+              <div class="mdl-card__supporting-text">
+                <h4>Credits</h4>
+                <h6>
+                Big thanks to Cristina Martin Cruz for creating the designs.
+              </h6>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="mdl-layout__tab-panel" id="privacypolicy">
+          <section class="section--center mdl-grid">
+            <div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+              <div class="mdl-card__supporting-text">
+              <h2>Privacy Policy</h2>
+             <p> Goran Minov built the WatchNext app as an Open Source app. This SERVICE is provided by Goran Minov at no cost and is intended for use as is.
+                  </p> <p>This page is used to inform website visitors regarding my policies with the collection, use, and
+                    disclosure of Personal Information if anyone decided to use my Service.
+                  </p> <p>If you choose to use my Service, then you agree to the collection and use of information in relation
+                    to this policy. The Personal Information that I collect is used for providing and improving the
+                    Service. I will not use or share your information with anyone except as described
+                    in this Privacy Policy.
+                  </p> <p>The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible
+                    at WatchNext unless otherwise defined in this Privacy Policy.
+                  </p> <p><strong>Information Collection and Use</strong></p> <p>For a better experience, while using our Service, I may require you to provide us with certain
+                    personally identifiable information. The information that I request is retained on your device and is not collected by me in any way
+                  </p> <p>The app does use third party services that may collect information used to identify you.</p> <div><p>Link to privacy policy of third party service providers used by the app</p> <ul><li><a href="https://www.google.com/policies/privacy/" target="_blank">Google Play Services</a></li> <!----> <li><a href="https://firebase.google.com/policies/analytics" target="_blank">Firebase Analytics</a></li> <!----> <li><a href="http://try.crashlytics.com/terms/privacy-policy.pdf" target="_blank">Crashlytics</a></li> <!----></ul></div> <p><strong>Log Data</strong></p> <p> I want to inform you that whenever you use my Service, in a case of an
+                    error in the app I collect data and information (through third party products) on your phone
+                    called Log Data. This Log Data may include information such as your device Internet Protocol (“IP”) address,
+                    device name, operating system version, the configuration of the app when utilizing my Service,
+                    the time and date of your use of the Service, and other statistics.
+                  </p> <p><strong>Cookies</strong></p> <p>Cookies are files with small amount of data that is commonly used an anonymous unique identifier. These
+                    are sent to your browser from the website that you visit and are stored on your device internal memory.
+                  </p> <p>This Service does not use these “cookies” explicitly. However, the app may use third party code and libraries
+                    that use “cookies” to collection information and to improve their services. You have the option to either
+                    accept or refuse these cookies and know when a cookie is being sent to your device. If you choose to
+                    refuse our cookies, you may not be able to use some portions of this Service.
+                  </p> <p><strong>Service Providers</strong></p> <p> I may employ third-party companies and individuals due to the following reasons:</p> <ul><li>To facilitate our Service;</li> <li>To provide the Service on our behalf;</li> <li>To perform Service-related services; or</li> <li>To assist us in analyzing how our Service is used.</li></ul> <p> I want to inform users of this Service that these third parties have access to your
+                    Personal Information. The reason is to perform the tasks assigned to them on our behalf. However, they
+                    are obligated not to disclose or use the information for any other purpose.
+                  </p> <p><strong>Security</strong></p> <p> I value your trust in providing us your Personal Information, thus we are striving
+                    to use commercially acceptable means of protecting it. But remember that no method of transmission over
+                    the internet, or method of electronic storage is 100% secure and reliable, and I cannot guarantee
+                    its absolute security.
+                  </p> <p><strong>Links to Other Sites</strong></p> <p>This Service may contain links to other sites. If you click on a third-party link, you will be directed
+                    to that site. Note that these external sites are not operated by me. Therefore, I strongly
+                    advise you to review the Privacy Policy of these websites. I have no control over
+                    and assume no responsibility for the content, privacy policies, or practices of any third-party sites
+                    or services.
+                  </p> <p><strong>Children’s Privacy</strong></p> <p>These Services do not address anyone under the age of 13. I do not knowingly collect
+                    personally identifiable information from children under 13. In the case I discover that a child
+                    under 13 has provided me with personal information, I immediately delete this from
+                    our servers. If you are a parent or guardian and you are aware that your child has provided us with personal
+                    information, please contact me so that I will be able to do necessary actions.
+                  </p> <p><strong>Changes to This Privacy Policy</strong></p> <p> I may update our Privacy Policy from time to time. Thus, you are advised to review
+                    this page periodically for any changes. I will notify you of any changes by posting
+                    the new Privacy Policy on this page. These changes are effective immediately after they are posted on
+                    this page.
+                  </p> <p><strong>Contact Us</strong></p> <p>If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact
+                    me.
+                  </p>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="mdl-layout__tab-panel" id="tandc">
+          <section class="section--center mdl-grid">
+            <div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+              <div class="mdl-card__supporting-text">
+              <h2>Terms &amp; Conditions</h2>
+              <p>By downloading or using the app, these terms will automatically apply to you – you should make sure therefore that you read them carefully before using the app. You’re not allowed to copy, or modify the app, any part of the app, or our trademarks in any way. The app itself, and all the trade marks, copyright, database rights and other intellectual property rights related to it, still belong to Goran Minov.</p> <p>Goran Minov is committed to ensuring that the app is as useful and efficient as possible. For that reason, we reserve the right to make changes to the app or to charge for its services, at any time and for any reason. We will never charge you for the app or its services without making it very clear to you exactly what you’re paying for.</p> <p>The WatchNext app stores and processes personal data that you have provided to us, in order to provide my Service. It’s your responsibility to keep your phone and access to the app secure. We therefore recommend that you do not root your phone, which is the process of removing software restrictions and limitations imposed by the official operating system of your device. It could make your phone vulnerable to malware/viruses/malicious programs, compromise your phone’s security features and it could mean that the WatchNext app won’t work properly or at all. </p> <p>You should be aware that there are certain things that Goran Minov will not take responsibility for. Certain functions of the app will require the app to have an active internet connection. The connection can be Wi-Fi, or provided by your mobile network provider, but Goran Minov cannot take responsibility for the app not working at full functionality if you don’t have access to Wi-Fi, and you don’t have any of your data allowance left.</p><p></p><p>If you’re using the app outside of an area with Wi-Fi, you should remember that your terms of the agreement with your mobile network provider will still apply. As a result, you may be charged by your mobile provider for the cost of data for the duration of the connection while accessing the app, or other third party charges. In using the app, you’re accepting responsibility for any such charges, including roaming data charges if you use the app outside of your home territory (i.e. region or country) without turning off data roaming. If you are not the bill payer for the device on which you’re using the app, please be aware that we assume that you have received permission from the bill payer for using the app.</p> <p>Along the same lines, Goran Minov cannot always take responsibility for the way you use the app i.e. You need to make sure that your device stays charged – if it runs out of battery and you can’t turn it on to avail the Service, Goran Minov cannot accept responsibility</p> <p>With respect to Goran Minov’s responsibility for your use of the app, when you’re using the app, it’s important to bear in mind that although we endeavour to ensure that it is updated and correct at all times, we do rely on third parties to provide information to us so that we can make it available to you. Goran Minov accepts no liability for any loss, direct or indirect, you experience as a result of relying wholly on this functionality of the app.</p> <p>At some point, we may wish to update the app. The app is currently available on Android – the requirements for the system (and for any additional systems we decide to extend the availability of the app to) may change, and you’ll need to download the updates if you want to keep using the app. Goran Minov does not promise that it will always update the app so that it is relevant to you and/or works with the Android version that you have installed on your device. However, you promise to always accept updates to the application when offered to you, We may also wish to stop providing the app, and may terminate use of it at any time without giving notice of termination to you. Unless we tell you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must stop using the app, and (if needed) delete it from your device.</p> <p><strong>Changes to This Terms and Conditions</strong></p> <p> I may update our Terms and Conditions from time to time. Thus, you are advised to review
+                      this page periodically for any changes. I will notify you of any changes by posting
+                      the new Terms and Conditions on this page. These changes are effective immediately after they are posted on
+                      this page.
+                    </p>
+                    <p><strong>Contact Us</strong></p> <p>If you have any questions or suggestions about my Terms and Conditions, do not hesitate to contact
+                      me.
+                    </p>
+              </div>
+          </div>
+      </section>
+  </div>
+  <div class="mdl-layout__tab-panel" id="licence">
+          <section class="section--center mdl-grid">
+            <div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+              <div class="mdl-card__supporting-text">
+              <h4>MIT Licence</h4>
+
+<h6>Copyright (c) 2017 Goran Minov</h6>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+        <footer class="mdl-mega-footer">
+          <div class="mdl-mega-footer--middle-section">
+          	<p class="footer-brand center"> Crafted with <i class="material-icons mdl-list__item-icon">favorites</i> by <a href="https://github.com/lineargs" target="_blank">Goran Minov</a>
+          		and <a href="https://www.instagram.com/rolling.miss/"
+          		target="_blank">Cristina Martin Cruz </a></p>
+          </div>
+          <div class="mdl-mega-footer--bottom-section">
+              <p class="footer-white center">Copyright 2018 Goran Minov</p>
+          </div>
+        </footer>
+      </main>
+    </div>
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  </body>
+</html>
