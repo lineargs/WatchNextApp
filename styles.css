@@ -198,6 +198,10 @@ html, body {
 .footer-brand.center {
   text-align: center;
 }
+.footer-white.center {
+  text-align: center;
+  color: #fff;
+}
 .mdl-demo section.section--center .section__text:not(:last-child) {
   border-bottom: 1px solid rgba(0,0,0,.13);
 }
