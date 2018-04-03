@@ -195,6 +195,9 @@ html, body {
   padding: 64px 0;
   margin: 0 -8px -8px -8px;
 }
+.footer-brand.center {
+  text-align: center;
+}
 .mdl-demo section.section--center .section__text:not(:last-child) {
   border-bottom: 1px solid rgba(0,0,0,.13);
 }
