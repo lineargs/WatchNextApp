@@ -70,7 +70,7 @@
     <string name="pref_notifications">Notifications</string>
     <string name="guest_stars">Guest Stars</string>
     <string name="directors">Directed by</string>
-    <string name="writers">Writers</string>
+    <string name="writers">Written by</string>
     <string name="biography_not_available">There is no biography available for now. That\'s all we know.</string>
     <string name="main_date">Released on: %s</string>
     <string name="nav_feedback">Send feedback</string>
