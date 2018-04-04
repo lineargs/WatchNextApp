@@ -72,8 +72,7 @@
         <item quantity="other">%d Епизоди</item>
     </plurals>
     <string name="pref_notifications">Известувања</string>
-    <string name="directors">Директори</string>
-    <string name="writers">Писатели</string>
+    <string name="directors">Режирано од</string>
     <string name="guest_stars">Sвезди</string>
     <string name="biography_not_available">Засега нема достапна биографија. Тоа е сè што знаеме.</string>
     <string name="main_date">Објавен на: %s</string>
@@ -87,4 +86,5 @@
     <string name="runtime_of_all_movies">Траење на сите филмови</string>
     <string name="season_specials">Посебни епизоди</string>
     <string name="pref_season_number_title">Број на сезона формат</string>
+    <string name="writers">Напишано од</string>
 </resources>
