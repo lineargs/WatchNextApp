@@ -109,7 +109,7 @@
     <string name="notification_text">Airing today: %s</string>
 
     <!-- About -->
-    <string name="about_version">%1$d Build %2$s</string>
+    <string name="about_version">Build %s</string>
     <string name="open_source_text">The application is open source at https://lineargs.github.io/WatchNextApp</string>
     <string name="text_not_available">N / A</string>
     <string name="libraries">Libraries</string>
@@ -224,6 +224,6 @@
     <string name="empty_image_content_description" translatable="false">Conversation image for empty view</string>
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
-    <string name="runtime_of_all_movies">Runtime of all movies</string>
+    <string name="runtime_of_all_movies" translatable="false">Runtime of all movies</string>
 
 </resources>

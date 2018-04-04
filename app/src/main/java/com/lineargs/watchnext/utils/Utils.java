@@ -40,8 +40,7 @@ public final class Utils {
     }
 
     public static String versionString(Context context) {
-        return context.getString(R.string.about_version, versionCode(context), versionName(context),
-                DataDbHelper.DATABASE_VERSION);
+        return context.getString(R.string.about_version, versionName(context));
     }
 
     public static Uri getBaseUri (Uri uri) {
