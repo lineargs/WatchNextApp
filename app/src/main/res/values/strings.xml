@@ -113,6 +113,7 @@
     <string name="open_source_text">The application is open source at https://lineargs.github.io/WatchNextApp</string>
     <string name="text_not_available">N / A</string>
     <string name="libraries">Libraries</string>
+    <string name="library_link">website</string>
 
     <!-- Statistics -->
     <string name="title_activity_statistics">Statistics</string>
@@ -182,7 +183,6 @@
     <string name="tmdb_api_terms" translatable="false">TMDb API Terms</string>
     <string name="tmdb_terms_link" translatable="false">https://www.themoviedb.org/terms-of-use</string>
     <string name="tmdb_api_terms_link" translatable="false">https://www.themoviedb.org/documentation/api/terms-of-use</string>
-    <string name="library_link">website</string>
 
     <!-- Content Description -->
     <!-- We do not translate yet the content description until
