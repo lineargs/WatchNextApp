@@ -72,7 +72,7 @@
         <item quantity="other">%d Епизоди</item>
     </plurals>
     <string name="pref_notifications">Известувања</string>
-    <string name="directors">Директори</string>
+    <string name="directors">Режирано од</string>
     <string name="writers">Писатели</string>
     <string name="guest_stars">Sвезди</string>
     <string name="biography_not_available">Засега нема достапна биографија. Тоа е сè што знаеме.</string>
