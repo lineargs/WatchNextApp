@@ -2,8 +2,7 @@ WatchNext
 =========
 Simple application to track and explore all the information from your favourite movies and series.
 
-<a href='https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png'><img alt='WatchNext Logo' src='https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png'/></a>
-
+<a href='https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png'><img alt='WatchNext Logo' src='https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png' height="200"/></a> 
 - Explore all the details from the Popular, Top Rated and Upcoming Movies.
 - Explore all the details from the Popular, Top Rated and On The Air Series. 
 - See the Movies showing in the Theaters.
@@ -12,12 +11,12 @@ Simple application to track and explore all the information from your favourite 
 - Manually schedule notification for any upcoming Episodes.
 - Choose from Grey / Blue Grey Theme
 
-<a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="90"/></a> <a href='https://www.amazon.com/gp/product/B0787D5ZZJ/ref=mas_pm_watchnext'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="90"/></a>
 
 Powered By
 ----------
 
-<a href='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png'><img alt='The TMDb' src='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png'/></a>
+<a href='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png'><img alt='The TMDb' src='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png' height="90"/></a>
 
 
 License
