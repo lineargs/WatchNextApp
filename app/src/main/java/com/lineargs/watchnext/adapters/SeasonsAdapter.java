@@ -72,8 +72,6 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     class SeasonsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.title)
         AppCompatTextView title;
-        @BindView(R.id.seasons_date)
-        AppCompatTextView date;
         @BindView(R.id.seasons_episodes)
         AppCompatTextView episodes;
         @BindView(R.id.poster_path)
@@ -89,10 +87,8 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Resources resources = context.getResources();
             cursor.moveToPosition(position);
             title.setText(SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER)));
-            date.setText(cursor.getString(SeasonsQuery.RELEASE_DATE));
             String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
             episodes.setText(episodesCount);
-
             Picasso.with(poster.getContext())
                     .load(cursor.getString(SeasonsQuery.POSTER_PATH))
                     .centerCrop()

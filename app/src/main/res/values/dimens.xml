@@ -73,5 +73,5 @@
     <dimen name="cast_layout_width">120dp</dimen>
     <dimen name="main_poster_width">100dp</dimen>
     <dimen name="main_poster_height">130dp</dimen>
-
+    <dimen name="seasons_poster_height">200dp</dimen>
 </resources>
