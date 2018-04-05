@@ -11,7 +11,7 @@ Simple application to track and explore all the information from your favourite 
 - Manually schedule notification for any upcoming Episodes.
 - Choose from Grey / Blue Grey Theme
 
-<a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="90"/></a> <a href='https://www.amazon.com/gp/product/B0787D5ZZJ/ref=mas_pm_watchnext'><img alt='Available on Amazon' src='https://github.com/lineargs/WatchNextApp/blob/master/amazon.png' height="70"/></a>
+<a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="90"/></a> <a href='https://www.amazon.com/gp/product/B0787D5ZZJ/ref=mas_pm_watchnext'><img alt='Available on Amazon' src='https://github.com/lineargs/WatchNextApp/blob/master/amazon.png' height="60"/></a>
 
 Powered By
 ----------
