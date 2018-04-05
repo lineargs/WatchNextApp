@@ -9,10 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.tools.SeasonTools;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +24,7 @@ import butterknife.ButterKnife;
  * <p>
  * See {@link MainAdapter}
  */
+//TODO Create style for the textviews for clearer implementation
 
 public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -31,11 +34,12 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public SeasonsAdapter(@NonNull Context context, OnClickListener listener) {
         this.context = context;
-        callback = listener;
+        this.callback = listener;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_seasons, parent, false);
@@ -43,7 +47,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SeasonsViewHolder viewHolder = (SeasonsViewHolder) holder;
         viewHolder.bindViews(context, position);
     }
@@ -69,10 +73,10 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     class SeasonsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.title)
         AppCompatTextView title;
-        @BindView(R.id.seasons_date)
-        AppCompatTextView date;
         @BindView(R.id.seasons_episodes)
         AppCompatTextView episodes;
+        @BindView(R.id.poster_path)
+        ImageView poster;
 
         SeasonsViewHolder(View view) {
             super(view);
@@ -84,9 +88,13 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Resources resources = context.getResources();
             cursor.moveToPosition(position);
             title.setText(SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER)));
-            date.setText(cursor.getString(SeasonsQuery.RELEASE_DATE));
             String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
             episodes.setText(episodesCount);
+            Picasso.with(poster.getContext())
+                    .load(cursor.getString(SeasonsQuery.POSTER_PATH))
+                    .centerCrop()
+                    .fit()
+                    .into(poster);
         }
 
         @Override

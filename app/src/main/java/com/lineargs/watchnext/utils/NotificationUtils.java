@@ -31,11 +31,11 @@ import com.lineargs.watchnext.ui.NotificationActivity;
 
 public class NotificationUtils extends ContextWrapper {
 
-    private static NotificationManager manager;
     private static final String EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID = "episode_reminder_channel";
     private static final String EPISODES_CHANNEL = "Episodes";
     private static final String SERIES_CHANNEL_GROUP = "Series";
     private static final String ID = "id", SERIE_ID = "serie_id";
+    private static NotificationManager manager;
 
     public NotificationUtils(Context base) {
         super(base);

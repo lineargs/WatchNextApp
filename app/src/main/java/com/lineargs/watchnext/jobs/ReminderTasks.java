@@ -1,7 +1,5 @@
 package com.lineargs.watchnext.jobs;
 
-import android.content.Context;
-
 import com.lineargs.watchnext.utils.NotificationUtils;
 
 /**

@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataDbHelper;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Crew;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.GuestStar;
 import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Genre;
@@ -15,7 +14,8 @@ import java.util.List;
 
 public final class Utils {
 
-    private Utils() {}
+    private Utils() {
+    }
 
     private static String versionName(Context context) {
         String version;
@@ -43,7 +43,7 @@ public final class Utils {
         return context.getString(R.string.about_version, versionName(context));
     }
 
-    public static Uri getBaseUri (Uri uri) {
+    public static Uri getBaseUri(Uri uri) {
         String stringUri = uri.toString();
         stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
         return Uri.parse(stringUri);

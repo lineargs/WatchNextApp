@@ -28,7 +28,7 @@ public class MovieUtils {
         return date;
     }
 
-    public static String getMainNormalizedDate (String date) {
+    public static String getMainNormalizedDate(String date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         return simpleDateFormat.format(date);
     }

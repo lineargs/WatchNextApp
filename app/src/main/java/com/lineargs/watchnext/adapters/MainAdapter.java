@@ -142,12 +142,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return favorite;
     }
 
-    public interface OnItemClickListener {
-        void onItemSelected(Uri uri);
-        void onSortClick();
+    private void bindSortView(final SortViewHolder holder) {
     }
-
-    private void bindSortView(final SortViewHolder holder){}
 
     private void bindMainViews(final MainViewHolder holder, final Context context, int position) {
         cursor.moveToPosition(position);
@@ -173,6 +169,12 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .load(cursor.getString(Query.POSTER_PATH))
                 .fit()
                 .into(holder.poster);
+    }
+
+    public interface OnItemClickListener {
+        void onItemSelected(Uri uri);
+
+        void onSortClick();
     }
 
     /*

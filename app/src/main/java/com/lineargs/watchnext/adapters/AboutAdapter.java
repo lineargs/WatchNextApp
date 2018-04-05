@@ -19,22 +19,6 @@ import butterknife.OnClick;
 
 public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int VIEW_TYPE_ABOUT = 0;
-    private final int VIEW_TYPE_HEADER = 1;
-    private final int VIEW_TYPE_LIBRARY = 2;
-
-    private final Context context;
-    OnWebsiteClick onClick;
-
-    public AboutAdapter(Context context, OnWebsiteClick click) {
-        this.context = context;
-        onClick = click;
-    }
-
-    public interface OnWebsiteClick {
-        void onClick(String link);
-    }
-
     private static final Library[] library = {
             new Library("Android support libraries",
                     "The Android Support Library offers backward-compatible versions of a number of features that are not built into the framework",
@@ -55,6 +39,16 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     "Library for scheduling background jobs in your Android app",
                     "https://github.com/firebase/firebase-jobdispatcher-android")
     };
+    private final int VIEW_TYPE_ABOUT = 0;
+    private final int VIEW_TYPE_HEADER = 1;
+    private final int VIEW_TYPE_LIBRARY = 2;
+    private final Context context;
+    OnWebsiteClick onClick;
+
+    public AboutAdapter(Context context, OnWebsiteClick click) {
+        this.context = context;
+        onClick = click;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -116,6 +110,22 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.description.setText(library.description);
     }
 
+    public interface OnWebsiteClick {
+        void onClick(String link);
+    }
+
+    private static class Library {
+        final String name;
+        final String description;
+        final String link;
+
+        Library(String name, String description, String link) {
+            this.name = name;
+            this.description = description;
+            this.link = link;
+        }
+    }
+
     class LibraryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.library_name)
@@ -164,18 +174,6 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         HeaderHolder(View view) {
             super(view);
-        }
-    }
-
-    private static class Library {
-        final String name;
-        final String description;
-        final String link;
-
-        Library(String name, String description, String link) {
-            this.name = name;
-            this.description = description;
-            this.link = link;
         }
     }
 }
