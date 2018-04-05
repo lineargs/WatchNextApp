@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?selectableItemBackground"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="@dimen/small_card_view_corner_radius"
     app:cardElevation="@dimen/card_view_elevation"
@@ -22,37 +22,64 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/empty_image_content_description" />
+            android:contentDescription="@string/empty_image_content_description"
+            tools:src="@drawable/ic_launcher_new" />
+
+        <View
+            android:id="@+id/scrim"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/scrim" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/details"
+            style="@style/DetailText.Seasons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/poster_path"
+            android:layout_marginLeft="@dimen/card_view_padding"
+            android:layout_marginStart="@dimen/card_view_padding"
+            android:text="@string/view_details" />
+
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/title"
             style="@style/TitleTextCenterVertical"
+            android:textColor="@color/colorWhite"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/text_view_min_height"
+            android:paddingLeft="@dimen/card_view_padding"
+            android:paddingStart="@dimen/card_view_padding"
+            android:paddingRight="@dimen/card_view_padding"
+            android:paddingEnd="@dimen/card_view_padding"
+            android:layout_alignBottom="@+id/poster_path"
             android:layout_alignParentLeft="true"
-            android:visibility="gone"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/seasons_date"
-            android:layout_toStartOf="@+id/seasons_date"
+            android:layout_toLeftOf="@+id/seasons_episodes"
+            android:layout_toStartOf="@+id/seasons_episodes"
             tools:text="@string/tools_season_title" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/seasons_date"
-            style="@style/DetailText"
+            style="@style/DetailText.Seasons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             tools:text="@string/tools_season_date" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/seasons_episodes"
             style="@style/DetailText"
-            android:layout_width="match_parent"
-            android:visibility="gone"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/poster_path"
+            android:paddingLeft="@dimen/card_view_padding"
+            android:paddingStart="@dimen/card_view_padding"
+            android:paddingRight="@dimen/card_view_padding"
+            android:paddingEnd="@dimen/card_view_padding"
+            android:textColor="@color/colorWhite"
             tools:text="@string/tools_season_episodes" />
 
     </RelativeLayout>

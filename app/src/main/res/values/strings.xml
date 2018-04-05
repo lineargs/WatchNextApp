@@ -225,5 +225,6 @@
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
     <string name="runtime_of_all_movies">Runtime of all movies</string>
+    <string name="view_details">view details</string>
 
 </resources>

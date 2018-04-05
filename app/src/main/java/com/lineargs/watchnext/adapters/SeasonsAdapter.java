@@ -9,10 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.tools.SeasonTools;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +76,8 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         AppCompatTextView date;
         @BindView(R.id.seasons_episodes)
         AppCompatTextView episodes;
+        @BindView(R.id.poster_path)
+        ImageView poster;
 
         SeasonsViewHolder(View view) {
             super(view);
@@ -88,6 +92,12 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             date.setText(cursor.getString(SeasonsQuery.RELEASE_DATE));
             String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
             episodes.setText(episodesCount);
+
+            Picasso.with(poster.getContext())
+                    .load(cursor.getString(SeasonsQuery.POSTER_PATH))
+                    .centerCrop()
+                    .fit()
+                    .into(poster);
         }
 
         @Override

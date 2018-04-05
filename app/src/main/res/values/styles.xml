@@ -24,8 +24,14 @@
         <item name="android:textColor">@color/colorBlack</item>
     </style>
 
-    <style name="DetailText.About" parent="DetailText">
+    <style name="DetailText.About">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle</item>
+    </style>
+
+    <style name="DetailText.Seasons">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?colorPrimaryDark</item>
     </style>
 
     <style name="SmallHeightDetailText" parent="android:Widget.TextView">
