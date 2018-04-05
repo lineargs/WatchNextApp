@@ -2,9 +2,7 @@ package com.lineargs.watchnext.utils.dbutils;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;

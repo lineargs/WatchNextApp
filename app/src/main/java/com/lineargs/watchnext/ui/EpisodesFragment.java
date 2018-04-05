@@ -41,10 +41,10 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
     RecyclerView mRecyclerView;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+    int number = -1;
     private EpisodesAdapter mAdapter;
     private Unbinder unbinder;
     private String seasonId = "", serieId = "";
-    int number = -1;
 
     public EpisodesFragment() {
     }

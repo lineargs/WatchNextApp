@@ -1,7 +1,5 @@
 package com.lineargs.watchnext.ui;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.StatsUtils;
 
 import butterknife.BindView;

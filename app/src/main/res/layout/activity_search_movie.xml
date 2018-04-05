@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <!-- we use this scrim view rather than a semi-opaque window background so that we can
      overlap it's enter/exit animation with content animations i.e. circular reveal/hide
@@ -12,8 +12,8 @@
         android:id="@+id/scrim"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/scrim"
-        android:alpha="0" />
+        android:alpha="0"
+        android:background="@color/scrim" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/search_panel"
@@ -52,10 +52,10 @@
                 android:id="@+id/search_results"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:clipToPadding="false"
                 android:divider="@null"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
                 android:visibility="gone"
                 tools:visibility="visible" />
 

@@ -358,7 +358,7 @@ public class DataProvider extends ContentProvider {
                         DataContract.Credits.TABLE_NAME,
                         projection,
                         DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
-                        + DataContract.Credits.COLUMN_TYPE + " = ? ",
+                                + DataContract.Credits.COLUMN_TYPE + " = ? ",
                         new String[]{uri.getLastPathSegment(), "0"},
                         null,
                         null,
@@ -379,7 +379,7 @@ public class DataProvider extends ContentProvider {
                         DataContract.Credits.TABLE_NAME,
                         projection,
                         DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
-                        + DataContract.Credits.COLUMN_TYPE + " = ? ",
+                                + DataContract.Credits.COLUMN_TYPE + " = ? ",
                         new String[]{uri.getLastPathSegment(), "1"},
                         null,
                         null,

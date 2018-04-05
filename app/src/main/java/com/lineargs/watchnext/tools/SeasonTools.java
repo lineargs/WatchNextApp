@@ -9,12 +9,11 @@ import java.text.NumberFormat;
 
 /**
  * Created by goranminov on 01/03/2018.
- *
  */
 
 public class SeasonTools {
 
-    public static String getSeasonString (Context context, int seasonNumber) {
+    public static String getSeasonString(Context context, int seasonNumber) {
         if (seasonNumber == 0) {
             return context.getString(R.string.season_specials);
         } else {
@@ -41,10 +40,10 @@ public class SeasonTools {
                 }
                 result += numberFormat.format(episode);
             }
-        } else if (context.getString(R.string.pref_season_number_S_key).equals(format)){
+        } else if (context.getString(R.string.pref_season_number_S_key).equals(format)) {
             result = "S" + result + "E";
             result += numberFormat.format(episode);
-        } else if (context.getString(R.string.pref_season_number_so_key).equals(format)){
+        } else if (context.getString(R.string.pref_season_number_so_key).equals(format)) {
             if (season < 10) {
                 result = numberFormat.format(0) + result;
             }
@@ -55,7 +54,7 @@ public class SeasonTools {
                 }
                 result += numberFormat.format(episode);
             }
-        } else if (context.getString(R.string.pref_season_number_s_key).equals(format)){
+        } else if (context.getString(R.string.pref_season_number_s_key).equals(format)) {
             result = "s" + result + "e";
             result += numberFormat.format(episode);
         }

@@ -6,6 +6,6 @@
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
     android:theme="?attr/actionBarTheme"
-    app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
     app:layout_scrollFlags="scroll|enterAlways"
-    app:popupTheme="?attr/actionBarPopupTheme" />
+    app:popupTheme="?attr/actionBarPopupTheme"
+    app:titleTextAppearance="@style/TextAppearance.ToolbarTitle" />

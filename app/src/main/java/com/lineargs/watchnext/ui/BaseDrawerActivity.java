@@ -45,10 +45,10 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    private Handler handler;
     ConnectivityBroadcastReceiver connectivityBroadcastReceiver;
     IntentFilter connectivityIntentFilter;
     Snackbar snackbar;
+    private Handler handler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

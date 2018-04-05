@@ -30,7 +30,6 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
-import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
 import com.lineargs.watchnext.data.CeditsQuery;
 import com.lineargs.watchnext.data.DataContract;

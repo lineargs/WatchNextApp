@@ -18,7 +18,6 @@ import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
 import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail;
 
 import java.lang.ref.WeakReference;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;

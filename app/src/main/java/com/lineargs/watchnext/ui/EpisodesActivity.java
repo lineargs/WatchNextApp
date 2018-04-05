@@ -51,10 +51,14 @@ public class EpisodesActivity extends BaseTopActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 667, BACK_LOADER_ID = 888;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindView(R.id.container) ViewPager viewPager;
-    @BindView(R.id.tabs) TabLayout tabs;
-    @BindView(R.id.cover_poster) ImageView seasonPoster;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.container)
+    ViewPager viewPager;
+    @BindView(R.id.tabs)
+    TabLayout tabs;
+    @BindView(R.id.cover_poster)
+    ImageView seasonPoster;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -348,7 +352,7 @@ public class EpisodesActivity extends BaseTopActivity implements
         @Override
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
-            String [] details = new String[9];
+            String[] details = new String[9];
             details[0] = mCursor.getString(EpisodesQuery.NAME);
             details[1] = mCursor.getString(EpisodesQuery.STILL_PATH);
             details[2] = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);

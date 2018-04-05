@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="?colorPrimaryDark"
     android:orientation="vertical"
-    android:padding="@dimen/padding_six"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:padding="@dimen/padding_six">
 
     <android.support.v7.widget.AppCompatTextView
         style="@style/TitleTextCenterVertical"
         android:layout_width="match_parent"
-        android:textColor="@color/colorWhite"
         android:layout_height="wrap_content"
-        android:text="@string/app_name" />
+        android:text="@string/app_name"
+        android:textColor="@color/colorWhite" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/version_text"
@@ -26,17 +26,17 @@
         style="@style/DetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorWhite"
         android:layout_marginBottom="@dimen/padding_six"
         android:autoLink="web"
-        android:text="@string/open_source_text" />
+        android:text="@string/open_source_text"
+        android:textColor="@color/colorWhite" />
 
     <android.support.v7.widget.AppCompatTextView
         style="@style/DetailText"
         android:layout_width="match_parent"
-        android:textColor="@color/colorWhite"
         android:layout_height="wrap_content"
-        android:text="@string/tmdb_notice" />
+        android:text="@string/tmdb_notice"
+        android:textColor="@color/colorWhite" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,8 +72,9 @@
                 android:textColor="@color/colorWhite" />
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorWhite"/>
+        android:background="@color/colorWhite" />
 </LinearLayout>

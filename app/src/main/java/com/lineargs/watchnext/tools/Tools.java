@@ -10,9 +10,10 @@ import com.lineargs.watchnext.utils.Utils;
 
 public class Tools {
 
-    private Tools(){}
+    private Tools() {
+    }
 
-    private static String getDeviceInfo (Context context) {
+    private static String getDeviceInfo(Context context) {
         return context.getString(R.string.feedback, Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE);
     }
 
