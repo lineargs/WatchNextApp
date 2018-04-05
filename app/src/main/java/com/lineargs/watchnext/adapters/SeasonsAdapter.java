@@ -31,11 +31,12 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public SeasonsAdapter(@NonNull Context context, OnClickListener listener) {
         this.context = context;
-        callback = listener;
+        this.callback = listener;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_seasons, parent, false);
@@ -43,7 +44,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SeasonsViewHolder viewHolder = (SeasonsViewHolder) holder;
         viewHolder.bindViews(context, position);
     }

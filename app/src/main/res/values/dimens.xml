@@ -49,6 +49,7 @@
     <dimen name="landscape_card_view_padding">80dp</dimen>
     <dimen name="card_view_padding_top">32dp</dimen>
     <dimen name="card_view_corner_radius">8dp</dimen>
+    <dimen name="small_card_view_corner_radius">2dp</dimen>
 
     <!-- Recycler View -->
     <dimen name="search_recycler_view_padding">8dp</dimen>
