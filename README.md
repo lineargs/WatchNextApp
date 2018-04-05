@@ -17,7 +17,7 @@ Simple application to track and explore all the information from your favourite 
 Powered By
 ----------
 
-<a href='https://github.com/lineargs/WatchNextApp/blob/master/408x161-powered-by-rectangle-blue.png'><img alt='The TMDb' src='https://github.com/lineargs/WatchNextApp/blob/master/408x161-powered-by-rectangle-blue.png'/></a>
+<a href='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png'><img alt='The TMDb' src='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png'/></a>
 
 
 License
