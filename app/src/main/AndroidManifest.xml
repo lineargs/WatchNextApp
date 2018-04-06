@@ -101,6 +101,10 @@
         <activity
             android:name=".ui.StatisticsActivity"
             android:label="@string/title_activity_statistics" />
+        <activity
+            android:name=".ui.PictureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/FullscreenTheme" />
 
         <!-- Content Provider -->
         <provider
@@ -179,11 +183,6 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".ui.PictureActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_picture"
-            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>
