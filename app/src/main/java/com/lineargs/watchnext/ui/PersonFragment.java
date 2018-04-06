@@ -31,6 +31,8 @@ import butterknife.Unbinder;
 public class PersonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 455;
+    public static final String STILL_PATH = "still_path";
+
     @BindView(R.id.name)
     AppCompatTextView name;
     @BindView(R.id.still_path)
@@ -48,6 +50,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     private Uri mUri;
     private String id = "";
     private Unbinder unbinder;
+    private Cursor cursor;
 
     public PersonFragment() {
     }
@@ -106,6 +109,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
                 if (data != null && data.getCount() != 0) {
                     data.moveToFirst();
                     loadViews(data);
+                    cursor = data;
                     showData();
                 }
                 break;
@@ -126,7 +130,9 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
 
     @OnClick(R.id.still_path)
     public void openFullscreen() {
-        startActivity(new Intent(getActivity(), PictureActivity.class));
+        Intent fullscreen = new Intent(getActivity(), PictureActivity.class);
+        fullscreen.putExtra(STILL_PATH, cursor.getString(PersonQuery.PROFILE_PATH));
+        startActivity(fullscreen);
     }
 
     private void loadViews(Cursor cursor) {
