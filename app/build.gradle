@@ -57,6 +57,7 @@ dependencies {
     }
     /* Butterknife github.com/JakeWharton/butterknife/blob/master/CHANGELOG.md */
     implementation "com.jakewharton:butterknife:${versions.butterknife}"
+    implementation 'com.android.support:support-v4:27.1.0'
     annotationProcessor "com.jakewharton:butterknife-compiler:${versions.butterknife}"
     /* Retrofit github.com/square/retrofit/blob/master/CHANGELOG.md */
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
