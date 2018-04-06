@@ -6,6 +6,7 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="background">@color/colorYellowTransparent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <!-- Grey App Theme -->

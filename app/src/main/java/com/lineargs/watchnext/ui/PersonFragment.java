@@ -5,10 +5,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
@@ -132,7 +134,11 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     public void openFullscreen() {
         Intent fullscreen = new Intent(getActivity(), PictureActivity.class);
         fullscreen.putExtra(STILL_PATH, cursor.getString(PersonQuery.PROFILE_PATH));
-        startActivity(fullscreen);
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(getActivity(),
+                        photo,
+                        ViewCompat.getTransitionName(photo));
+        startActivity(fullscreen, optionsCompat.toBundle());
     }
 
     private void loadViews(Cursor cursor) {
