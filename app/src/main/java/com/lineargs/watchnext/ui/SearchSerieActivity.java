@@ -108,9 +108,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
 
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        if (searchManager != null) {
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        }
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         mSearchView.setIconified(false);
         mSearchView.setQueryHint(getString(R.string.search_query_hint));
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
