@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -54,7 +54,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
     private SearchTVAdapter mResultsAdapter;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serie);
         handler = new Handler();
@@ -108,7 +108,9 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
 
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        if (searchManager != null) {
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
         mSearchView.setIconified(false);
         mSearchView.setQueryHint(getString(R.string.search_query_hint));
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -192,6 +194,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
         mSearchResults.setVisibility(View.VISIBLE);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -208,7 +211,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 mResultsAdapter.swapCursor(data);
@@ -221,7 +224,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mResultsAdapter.swapCursor(null);
     }
 }
