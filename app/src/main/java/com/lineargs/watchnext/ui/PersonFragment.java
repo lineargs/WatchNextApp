@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.lineargs.watchnext.PictureActivity;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.PersonQuery;
 import com.lineargs.watchnext.sync.syncpeople.PersonSyncUtils;

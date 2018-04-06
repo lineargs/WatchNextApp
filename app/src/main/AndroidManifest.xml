@@ -180,7 +180,7 @@
         </service>
 
         <activity
-            android:name=".PictureActivity"
+            android:name=".ui.PictureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_picture"
             android:theme="@style/FullscreenTheme"></activity>
