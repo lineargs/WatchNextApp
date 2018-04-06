@@ -1,5 +1,6 @@
 package com.lineargs.watchnext.ui;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.lineargs.watchnext.PictureActivity;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.PersonQuery;
 import com.lineargs.watchnext.sync.syncpeople.PersonSyncUtils;
@@ -24,6 +26,7 @@ import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class PersonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -81,6 +84,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
         mProgressBar.setVisibility(View.INVISIBLE);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -97,7 +101,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 if (data != null && data.getCount() != 0) {
@@ -112,13 +116,18 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.still_path)
+    public void openFullscreen() {
+        startActivity(new Intent(getActivity(), PictureActivity.class));
     }
 
     private void loadViews(Cursor cursor) {
