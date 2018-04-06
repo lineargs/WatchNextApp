@@ -37,7 +37,6 @@ import static android.view.View.GONE;
  * Search Activity used to search for series on the Db website
  */
 
-//TODO For future implementations refactor the enter and exit transition
 public class SearchSerieActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_QUERY = "query";
