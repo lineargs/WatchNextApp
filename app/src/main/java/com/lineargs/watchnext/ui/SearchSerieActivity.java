@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -37,7 +37,6 @@ import static android.view.View.GONE;
  * Search Activity used to search for series on the Db website
  */
 
-//TODO For future implementations refactor the enter and exit transition
 public class SearchSerieActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_QUERY = "query";
@@ -55,7 +54,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
     private SearchTVAdapter mResultsAdapter;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_serie);
         handler = new Handler();
@@ -193,6 +192,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
         mSearchResults.setVisibility(View.VISIBLE);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -209,7 +209,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 mResultsAdapter.swapCursor(data);
@@ -222,7 +222,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mResultsAdapter.swapCursor(null);
     }
 }

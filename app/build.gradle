@@ -39,6 +39,7 @@ android {
 dependencies {
     /* Support Library developer.android.com/topic/libraries/support-library/revisions.html */
     implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    implementation "com.android.support:support-v4:${versions.supportLibrary}"
     implementation "com.android.support:design:${versions.supportLibrary}"
     implementation "com.android.support:preference-v7:${versions.supportLibrary}"
     implementation "com.android.support:support-vector-drawable:${versions.supportLibrary}"

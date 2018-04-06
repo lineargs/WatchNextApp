@@ -5,14 +5,14 @@ buildscript {
     //for every major version and 100 patch levels for every minor version
     def versionMajor = 1
     def versionMinor = 2
-    def versionPatch = 8
+    def versionPatch = 9
 
     ext.versions = [
             'minSdk': 16,
             'compileSdk': 27,
             'targetSdk': 27,
             'buildTools': '27.0.3',
-            'supportLibrary': '27.1.0',
+            'supportLibrary': '27.1.1',
             'butterknife': '8.8.1',
             'retrofit': '2.3.0',
             'picasso': '2.5.2',

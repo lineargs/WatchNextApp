@@ -226,5 +226,6 @@
     <string name="empty_image_content_description" translatable="false">Conversation image for empty view</string>
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
+    <string name="still_path_transition" translatable="false">still_path_transition</string>
 
 </resources>

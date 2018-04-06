@@ -1,13 +1,16 @@
 package com.lineargs.watchnext.ui;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
@@ -24,11 +27,14 @@ import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class PersonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 455;
+    public static final String STILL_PATH = "still_path";
+
     @BindView(R.id.name)
     AppCompatTextView name;
     @BindView(R.id.still_path)
@@ -46,6 +52,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     private Uri mUri;
     private String id = "";
     private Unbinder unbinder;
+    private Cursor cursor;
 
     public PersonFragment() {
     }
@@ -81,6 +88,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
         mProgressBar.setVisibility(View.INVISIBLE);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -97,12 +105,13 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 if (data != null && data.getCount() != 0) {
                     data.moveToFirst();
                     loadViews(data);
+                    cursor = data;
                     showData();
                 }
                 break;
@@ -112,13 +121,24 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.still_path)
+    public void openFullscreen() {
+        Intent fullscreen = new Intent(getActivity(), PictureActivity.class);
+        fullscreen.putExtra(STILL_PATH, cursor.getString(PersonQuery.PROFILE_PATH));
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(getActivity(),
+                        photo,
+                        ViewCompat.getTransitionName(photo));
+        startActivity(fullscreen, optionsCompat.toBundle());
     }
 
     private void loadViews(Cursor cursor) {
