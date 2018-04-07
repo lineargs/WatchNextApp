@@ -61,7 +61,7 @@
     <string name="no_app_available">Нема достапни апликации</string>
     <string name="notification_dismiss">Откажи</string>
     <string name="notification_text">Се прикажува денес: %s</string>
-    <string name="about_version">%1$d Код %2$s</string>
+    <string name="about_version">Верзија на код %s</string>
     <string name="open_source_text">Апликацијата е со отворен код на https://lineargs.github.io/WatchNextApp</string>
     <string name="title_activity_credits_cast">Актери</string>
     <string name="cast_empty_text">Не се пронајдени актери</string>
