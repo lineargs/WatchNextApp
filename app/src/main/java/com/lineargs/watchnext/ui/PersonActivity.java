@@ -36,6 +36,9 @@ public class PersonActivity extends BaseActivity {
                     .add(R.id.frame_layout_person, fragment)
                     .commit();
         }
+        if (savedInstanceState != null) {
+            name = savedInstanceState.getString(CreditsCastFragment.NAME);
+        }
         setupActionBar();
     }
 
@@ -54,5 +57,11 @@ public class PersonActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CreditsCastFragment.NAME, name);
     }
 }
