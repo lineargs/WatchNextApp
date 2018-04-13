@@ -33,7 +33,7 @@ import butterknife.Unbinder;
 
 public class CreditsCrewFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCrewAdapter.OnClick {
 
-    static final String ID = "id";
+    static final String ID = "id", NAME = "name";
     private static final int LOADER_ID = 333;
     @BindView(R.id.credits_crew_recycler_view)
     RecyclerView mRecyclerView;
@@ -121,7 +121,7 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
     }
 
     @Override
-    public void onPersonClick(String id) {
+    public void onPersonClick(String id, String name) {
 
         /* If the device is tablet use the frame layout
          * to inject a view
@@ -138,6 +138,7 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
             intent.putExtra(ID, id);
+            intent.putExtra(NAME, name);
             startActivity(intent);
         }
     }

@@ -46,14 +46,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/name"
-                        style="@style/TitleTextCenterVertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/title_height"
-                        android:maxLines="2"
-                        tools:text="@string/tools_person_name" />
-
                     <ImageView
                         android:id="@+id/still_path"
                         android:layout_width="match_parent"

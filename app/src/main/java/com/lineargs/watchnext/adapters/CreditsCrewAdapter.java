@@ -61,7 +61,7 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface OnClick {
-        void onPersonClick(String id);
+        void onPersonClick(String id, String name);
     }
 
     class CreditsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -93,7 +93,8 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
             String id = cursor.getString(CeditsQuery.PERSON_ID);
-            callBack.onPersonClick(id);
+            String name = cursor.getString(CeditsQuery.NAME);
+            callBack.onPersonClick(id, name);
         }
     }
 }

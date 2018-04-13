@@ -228,4 +228,7 @@
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
     <string name="still_path_transition" translatable="false">still_path_transition</string>
 
+    <string name="sync_complete" translatable="false">Sync Complete</string>
+    <string name="updated_content_text" translatable="false">The app content has been updated. Come and check out the new and updated movies and series.</string>
+
 </resources>

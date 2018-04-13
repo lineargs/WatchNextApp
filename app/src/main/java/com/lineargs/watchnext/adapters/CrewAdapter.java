@@ -63,7 +63,7 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface OnClick {
-        void onCrewClick(String id);
+        void onCrewClick(String id, String name);
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -98,7 +98,8 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
             String id = cursor.getString(CeditsQuery.PERSON_ID);
-            onClick.onCrewClick(id);
+            String name = cursor.getString(CeditsQuery.NAME);
+            onClick.onCrewClick(id, name);
         }
     }
 }

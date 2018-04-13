@@ -53,7 +53,7 @@ import butterknife.Unbinder;
 public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick, CrewAdapter.OnClick {
 
 
-    static final String ID = "id", TITLE = "title";
+    static final String ID = "id", TITLE = "title", NAME = "name";
     private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333, CREW_LOADER_ID = 445;
     private static final String URI = "uri";
     @Nullable
@@ -446,33 +446,37 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     }
 
     @Override
-    public void onPersonClick(String id) {
+    public void onPersonClick(String id, String name) {
         if (mDualPane) {
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(ID, id);
+            intent.putExtra(NAME, name);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
             intent.putExtra(ID, id);
+            intent.putExtra(NAME, name);
             startActivity(intent);
         }
     }
 
     @Override
-    public void onCrewClick(String id) {
+    public void onCrewClick(String id, String name) {
         if (mDualPane) {
             Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
             Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(ID, id);
+            intent.putExtra(NAME, name);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
             intent.putExtra(ID, id);
+            intent.putExtra(NAME, name);
             startActivity(intent);
         }
     }
