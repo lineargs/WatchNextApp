@@ -34,7 +34,7 @@ buildscript {
         // can be updated quickly in response to Android tooling updates
 
         // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
-        classpath 'io.fabric.tools:gradle:1.25.1'
+        classpath 'io.fabric.tools:gradle:1.25.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
