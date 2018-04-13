@@ -35,8 +35,6 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     private static final int LOADER_ID = 455;
     public static final String STILL_PATH = "still_path";
 
-    @BindView(R.id.name)
-    AppCompatTextView name;
     @BindView(R.id.still_path)
     ImageView photo;
     @BindView(R.id.biography)
@@ -142,7 +140,6 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void loadViews(Cursor cursor) {
-        name.setText(cursor.getString(PersonQuery.NAME));
         ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(PersonQuery.PROFILE_PATH))
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
