@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -96,10 +97,22 @@ public class PictureActivity extends AppCompatActivity {
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
+        supportPostponeEnterTransition();
 
         Picasso.with(mContentView.getContext())
                 .load(getIntent().getStringExtra(PersonFragment.STILL_PATH))
-                .into(mContentView);
+                .noFade()
+                .into(mContentView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        supportStartPostponedEnterTransition();
+                    }
+
+                    @Override
+                    public void onError() {
+                        supportStartPostponedEnterTransition();
+                    }
+                });
 
 
         // Set up the user interaction to manually show or hide the system UI.
