@@ -14,7 +14,7 @@ buildscript {
             'buildTools': '27.0.3',
             'supportLibrary': '27.1.1',
             'butterknife': '8.8.1',
-            'retrofit': '2.3.0',
+            'retrofit': '2.4.0',
             'picasso': '2.5.2',
             'crashlytics': '2.8.0',
             'firebaseCore': '15.0.0',
