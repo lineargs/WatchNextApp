@@ -362,17 +362,19 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onPersonClick(String id) {
+    public void onPersonClick(String id, String name) {
         if (mDualPane) {
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
             intent.putExtra(MovieDetailsFragment.ID, id);
+            intent.putExtra(MovieDetailsFragment.NAME, name);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
             intent.putExtra(MovieDetailsFragment.ID, id);
+            intent.putExtra(MovieDetailsFragment.NAME, name);
             startActivity(intent);
         }
     }

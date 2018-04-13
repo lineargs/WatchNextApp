@@ -63,7 +63,7 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface OnClick {
-        void onPersonClick(String id);
+        void onPersonClick(String id, String name);
     }
 
     class CastViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -97,7 +97,8 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
             String id = cursor.getString(CeditsQuery.PERSON_ID);
-            callback.onPersonClick(id);
+            String name = cursor.getString(CeditsQuery.NAME);
+            callback.onPersonClick(id, name);
         }
     }
 }
