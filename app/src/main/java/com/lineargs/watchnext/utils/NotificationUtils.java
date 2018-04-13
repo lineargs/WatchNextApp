@@ -21,6 +21,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.jobs.ReminderIntentService;
 import com.lineargs.watchnext.jobs.ReminderTasks;
+import com.lineargs.watchnext.ui.MainActivity;
 import com.lineargs.watchnext.ui.NotificationActivity;
 
 /**
@@ -32,9 +33,12 @@ import com.lineargs.watchnext.ui.NotificationActivity;
 public class NotificationUtils extends ContextWrapper {
 
     private static final String EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID = "episode_reminder_channel";
+    private static final String SYNC_ADAPTER_CHANNEL_ID = "sync_adapter_channel";
     private static final String EPISODES_CHANNEL = "Episodes";
+    private static final String SYNC_ADAPTER_CHANNEL = "Adapter";
     private static final String SERIES_CHANNEL_GROUP = "Series";
-    private static final String ID = "id", SERIE_ID = "serie_id";
+    private static final String ADAPTER_CHANNEL_GROUP = "Sync";
+    private static final String ID = "id", SERIE_ID = "serie_id", SYNC_ID = "sync_id";
     private static NotificationManager manager;
 
     public NotificationUtils(Context base) {
@@ -45,10 +49,22 @@ public class NotificationUtils extends ContextWrapper {
                     EPISODES_CHANNEL, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setLightColor(Color.YELLOW);
             notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            NotificationChannel syncNotificationChannel = new NotificationChannel(SYNC_ADAPTER_CHANNEL_ID,
+                    SYNC_ADAPTER_CHANNEL, NotificationManager.IMPORTANCE_LOW);
+            syncNotificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
             NotificationChannelGroup channelGroup = new NotificationChannelGroup(SERIE_ID, SERIES_CHANNEL_GROUP);
+            NotificationChannelGroup syncChannelGroup = new NotificationChannelGroup(SYNC_ID, ADAPTER_CHANNEL_GROUP);
+
             getManager().createNotificationChannelGroup(channelGroup);
+            getManager().createNotificationChannelGroup(syncChannelGroup);
+
             notificationChannel.setGroup(SERIE_ID);
+            syncNotificationChannel.setGroup(SYNC_ID);
+
             getManager().createNotificationChannel(notificationChannel);
+            getManager().createNotificationChannel(syncNotificationChannel);
         }
     }
 
@@ -69,8 +85,28 @@ public class NotificationUtils extends ContextWrapper {
                 .setContentIntent(contentIntent(id, context))
                 .addAction(dismissNotification(context, id))
                 .setAutoCancel(true);
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        }
+        manager.notify(id, notificationBuilder.build());
+    }
+
+    public static void syncReminder(int id, Context context) {
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, SYNC_ADAPTER_CHANNEL_ID)
+                .setColor(ContextCompat.getColor(context, R.color.colorBlack))
+                .setSmallIcon(reminderSmallIcon())
+                .setLargeIcon(reminderLargeIcon(context))
+                .setContentTitle(context.getString(R.string.sync_complete))
+                .setDefaults(Notification.DEFAULT_LIGHTS)
+                .setContentText(context.getString(R.string.updated_content_text))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(context.getString(R.string.updated_content_text)))
+                .setContentIntent(reminderContentIntent(id, context))
+                .addAction(dismissNotification(context, id))
+                .setAutoCancel(true);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
         }
         manager.notify(id, notificationBuilder.build());
     }
@@ -82,6 +118,14 @@ public class NotificationUtils extends ContextWrapper {
         stackBuilder.addNextIntent(startActivity);
         Uri uri = DataContract.Episodes.buildEpisodeUriWithId(id);
         startActivity.setData(uri);
+        return stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private static PendingIntent reminderContentIntent(int id, Context context) {
+        Intent startActivity = new Intent(context, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(startActivity);
         return stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -104,6 +148,12 @@ public class NotificationUtils extends ContextWrapper {
 
     private static Bitmap largeIcon(Context context) {
         return BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_tv_black);
+    }
+
+    private static int reminderSmallIcon() { return R.drawable.app_icon_black; }
+
+    private static Bitmap reminderLargeIcon(Context context) {
+        return BitmapFactory.decodeResource(context.getResources(), R.drawable.app_icon_black);
     }
 
     private NotificationManager getManager() {

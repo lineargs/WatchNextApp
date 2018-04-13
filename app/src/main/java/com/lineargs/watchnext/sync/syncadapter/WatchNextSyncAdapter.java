@@ -17,6 +17,7 @@ import android.util.Log;
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.NotificationUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
 import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
@@ -51,6 +52,8 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String PATH_UPCOMING = "upcoming";
     private static final String PATH_THEATER = "now_playing";
     private static final String PATH_ON_THE_AIR = "on_the_air";
+
+    private static final int REMINDER_ID = 29101988;
 
     private static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -262,6 +265,8 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
             }
         });
+
+        NotificationUtils.syncReminder(REMINDER_ID, getContext());
     }
 
     static class InsertPopularMovies extends AsyncTask<ContentValues, Void, Void> {
