@@ -80,7 +80,7 @@ public final class ServiceUtils {
 
     public static void setUpImdbButton(final String imdbId, final View imdbButton) {
         if (imdbButton != null) {
-            if (!TextUtils.isEmpty(imdbId)) {
+            if (!imdbId.equals("0")) {
                 imdbButton.setEnabled(true);
                 imdbButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -95,7 +95,7 @@ public final class ServiceUtils {
     }
 
     private static void openImdb(String imdbId, Context context) {
-        if (context == null || TextUtils.isEmpty(imdbId)) {
+        if (context == null || imdbId.equals("0")) {
             return;
         }
 
@@ -109,7 +109,7 @@ public final class ServiceUtils {
         }
 
         if (Utils.tryStartActivity(context, intent, false)) {
-            //Track action
+            //TODO Track action
         } else {
             openLink(context, IMDB_TITLE_URL + imdbId);
         }
