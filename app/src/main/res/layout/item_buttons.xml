@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    style="?android:attr/buttonBarStyle"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one_dimen"
+        android:layout_marginTop="@dimen/appbar_padding_top"
+        android:background="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/google"
+        android:enabled="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/button_min_height"
+        style="?android:attr/buttonBarButtonStyle"
+        android:drawableLeft="@drawable/icon_google"
+        android:drawableStart="@drawable/icon_google"
+        android:text="@string/search"/>
+
+    <Button
+        android:id="@+id/google_play"
+        android:enabled="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/button_min_height"
+        style="?android:attr/buttonBarButtonStyle"
+        android:drawableLeft="@drawable/icon_googleplay"
+        android:drawableStart="@drawable/icon_googleplay"
+        android:text="@string/google_play"/>
+
+    <Button
+        android:id="@+id/youtube"
+        android:enabled="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/button_min_height"
+        style="?android:attr/buttonBarButtonStyle"
+        android:drawableLeft="@drawable/icon_youtube"
+        android:drawableStart="@drawable/icon_youtube"
+        android:text="@string/youtube"/>
+
+    <Button
+        android:id="@+id/imdb"
+        android:enabled="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/button_min_height"
+        style="?android:attr/buttonBarButtonStyle"
+        android:drawableLeft="@drawable/icon_imdb"
+        android:drawableStart="@drawable/icon_imdb"
+        android:text="@string/imdb"/>
+
+</LinearLayout>

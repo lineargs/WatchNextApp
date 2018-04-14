@@ -11,9 +11,10 @@
     android:layout_margin="@dimen/padding_six"
     app:cardCornerRadius="@dimen/small_card_view_corner_radius">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/review_author"
@@ -23,8 +24,6 @@
         android:paddingStart="@dimen/padding_eight"
         android:paddingRight="@dimen/padding_eight"
         android:paddingEnd="@dimen/padding_eight"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:gravity="center_vertical"
         android:lineSpacingExtra="@dimen/line_spacing_extra"
         android:minHeight="@dimen/text_view_min_height"
@@ -39,7 +38,8 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/padding_sixteen"
         android:paddingStart="@dimen/padding_sixteen"
-        android:layout_below="@+id/review_author"
+        android:paddingRight="@dimen/padding_sixteen"
+        android:paddingEnd="@dimen/padding_sixteen"
         android:autoLink="web"
         android:gravity="center_vertical"
         android:lineSpacingExtra="@dimen/line_spacing_extra"
@@ -51,7 +51,6 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dimen"
-        android:layout_below="@+id/review_content"
         android:layout_marginTop="@dimen/appbar_padding_top"
         android:background="@android:color/darker_gray" />
 
@@ -60,10 +59,9 @@
             style="@style/DetailText.Seasons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/divider"
             android:layout_marginLeft="@dimen/card_view_padding"
             android:layout_marginStart="@dimen/card_view_padding"
             android:text="@string/open_in_browser" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -51,7 +51,7 @@
     <string name="videos_empty_text">No videos found</string>
     <string name="videos_text_view_button">Videos</string>
     <string name="review_empty_text">No comments found</string>
-    <string name="reviews_text_view_button">Reviews</string>
+    <string name="reviews_text_view_button">Comments</string>
     <string name="overview_text">overview</string>
     <string name="runtime">%s min</string>
     <string name="status_text">Status</string>
@@ -85,4 +85,5 @@
     <string name="pref_season_number_title">Season number format</string>
     <string name="view_details">view details</string>
     <string name="open_in_browser">Open in browser</string>
+    <string name="search">search</string>
 </resources>
