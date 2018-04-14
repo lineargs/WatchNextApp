@@ -33,7 +33,7 @@
     <style name="DetailText.Seasons">
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?android:attr/colorPrimaryDark</item>
+        <item name="android:textColor">?colorPrimaryDark</item>
     </style>
 
     <style name="SmallHeightDetailText" parent="android:Widget.TextView">
@@ -54,11 +54,11 @@
     </style>
 
     <style name="HeaderTextPrimary" parent="HeaderText">
-        <item name="android:textColor">?android:attr/colorPrimary</item>
+        <item name="android:textColor">?colorPrimary</item>
     </style>
 
     <style name="HeaderTextAccent" parent="HeaderText">
-        <item name="android:textColor">?android:attr/colorAccent</item>
+        <item name="android:textColor">?colorAccent</item>
     </style>
-
+    
 </resources>

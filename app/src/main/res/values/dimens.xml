@@ -70,6 +70,7 @@
     <dimen name="padding_eight">8dp</dimen>
     <dimen name="padding_nine">9dp</dimen>
     <dimen name="padding_twelve">12dp</dimen>
+    <dimen name="padding_sixteen">16dp</dimen>
 
     <!-- Tools -->
     <dimen name="tools_layout_width">100dp</dimen>
