@@ -25,6 +25,7 @@
     <string name="search_query_hint">Search The MovieDb</string>
     <string name="search_empty_text_movie">Please use the search to look up for a movie.  Powered by THE MOVIE DB</string>
     <string name="search_empty_text_serie">Please use the search to look up for a serie.  Powered by THE MOVIE DB</string>
+    <string name="search">search</string>
 
     <!-- Sort Menu -->
     <string name="sort_by">Sort by</string>
@@ -150,11 +151,16 @@
     <string name="content_authority" translatable="false">com.lineargs.watchnext</string>
     <string name="sync_account_type" translatable="false">lineargs.watchnext.com</string>
     <string name="sync_account_name" translatable="false">WatchNext Sync</string>
+    <string name="sync_complete" translatable="false">Sync Complete</string>
+    <string name="updated_content_text" translatable="false">The app content has been updated. Come and check out the new and updated movies and series.</string>
 
     <!-- Share -->
     <string name="you_tube" translatable="false">http://www.youtube.com/watch?v=%s</string>
     <string name="share_movie" translatable="false">https://www.themoviedb.org/movie/%s #WatchNext</string>
     <string name="share_serie" translatable="false">https://www.themoviedb.org/tv/%s #WatchNext</string>
+    <string name="imdb" translatable="false">imdb</string>
+    <string name="youtube" translatable="false">you tube</string>
+    <string name="google_play" translatable="false">google play</string>
 
     <!-- Videos -->
     <string name="you_tube_image" translatable="false">https://img.youtube.com/vi/%s/0.jpg</string>
@@ -228,12 +234,5 @@
     <string name="episode_cover_poster_description" translatable="false">Current episode poster</string>
     <string name="season_cover_poster_description" translatable="false">Current season poster</string>
     <string name="still_path_transition" translatable="false">still_path_transition</string>
-
-    <string name="sync_complete" translatable="false">Sync Complete</string>
-    <string name="updated_content_text" translatable="false">The app content has been updated. Come and check out the new and updated movies and series.</string>
-    <string name="search">search</string>
-    <string name="imdb">imdb</string>
-    <string name="youtube">you tube</string>
-    <string name="google_play">google play</string>
 
 </resources>
