@@ -266,7 +266,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        NotificationUtils.syncReminder(REMINDER_ID, getContext());
+//        NotificationUtils.syncReminder(REMINDER_ID, getContext());
     }
 
     static class InsertPopularMovies extends AsyncTask<ContentValues, Void, Void> {
