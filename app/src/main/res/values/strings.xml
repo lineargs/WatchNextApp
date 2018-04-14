@@ -231,5 +231,9 @@
 
     <string name="sync_complete" translatable="false">Sync Complete</string>
     <string name="updated_content_text" translatable="false">The app content has been updated. Come and check out the new and updated movies and series.</string>
+    <string name="search">search</string>
+    <string name="imdb">imdb</string>
+    <string name="youtube">you tube</string>
+    <string name="google_play">google play</string>
 
 </resources>
