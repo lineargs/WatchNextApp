@@ -33,7 +33,7 @@
     <string name="sort_menu_lowest_rated">Lowest Rated</string>
 
     <!-- Titles and subtitles -->
-    <string name="title_activity_review">Reviews</string>
+    <string name="title_activity_review">Comments</string>
     <string name="title_activity_credits_cast">Cast</string>
     <string name="title_activity_credits_crew">Crew</string>
     <string name="title_activity_tabbed_movies">Movies</string>
@@ -43,7 +43,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="subtitle_activity_videos">Videos</string>
     <string name="subtitle_activity_seasons">Seasons</string>
-    <string name="subtitle_activity_reviews">Reviews</string>
+    <string name="subtitle_activity_reviews">Comments</string>
     <string name="tab_popular">Popular</string>
     <string name="tab_top_rated">Top Rated</string>
     <string name="tab_on_the_air">On The Air</string>
@@ -90,9 +90,10 @@
     <string name="videos_empty_text">No videos found</string>
     <string name="videos_text_view_button">Videos</string>
 
-    <!-- Reviews -->
-    <string name="review_empty_text">No reviews found</string>
-    <string name="reviews_text_view_button">Reviews</string>
+    <!-- Comments -->
+    <string name="review_empty_text">No comments found</string>
+    <string name="reviews_text_view_button">Comments</string>
+    <string name="open_in_browser">Open in browser</string>
 
     <!-- Common -->
     <string name="overview_text">overview</string>
@@ -200,7 +201,7 @@
     <string name="notification_fab_content_description" translatable="false">Click to schedule reminder for the current episode</string>
     <string name="star_fab_content_description" translatable="false">Click to add or remove from the favorites</string>
     <string name="videos_text_button_content_description" translatable="false">Click for videos</string>
-    <string name="review_text_button_content_description" translatable="false">Click for reviews</string>
+    <string name="review_text_button_content_description" translatable="false">Click for comments</string>
     <string name="seasons_text_button_content_description" translatable="false">Click for seasons</string>
     <string name="cast_more_content_description" translatable="false">Click for all the cast</string>
     <string name="crew_more_content_description" translatable="false">Click for all the crew</string>

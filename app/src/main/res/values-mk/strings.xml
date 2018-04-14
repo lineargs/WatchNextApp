@@ -29,12 +29,12 @@
     <string name="search_query_hint">The MovieDb пребарување</string>
     <string name="sort_menu_highest_rated">Највисоко оценети</string>
     <string name="sort_menu_lowest_rated">Најниско оценети</string>
-    <string name="title_activity_review">Прегледи</string>
+    <string name="title_activity_review">Коментари</string>
     <string name="title_activity_credits_crew">Екипаж</string>
     <string name="search_empty_text_movie">Please use the search to look up for a movie. Powered by THE MOVIE DB</string>
     <string name="search_empty_text_serie">Please use the search to look up for a serie. Powered by THE MOVIE DB</string>
     <string name="title_activity_settings">Подесувања</string>
-    <string name="subtitle_activity_reviews">Прегледи</string>
+    <string name="subtitle_activity_reviews">Коментари</string>
     <string name="tab_top_rated">Најдобро Оценети</string>
     <string name="tab_on_the_air">Во етер</string>
     <string name="tab_upcoming">Претстојни</string>
@@ -51,7 +51,7 @@
     <string name="menu_share">Сподели</string>
     <string name="videos_empty_text">Не се пронајдени видеа</string>
     <string name="videos_text_view_button">Видеа</string>
-    <string name="review_empty_text">Не се пронајдени прегледи</string>
+    <string name="review_empty_text">Не се пронајдени коментари</string>
     <string name="reviews_text_view_button">Прегледи</string>
     <string name="overview_text">Преглед</string>
     <string name="status_text">Статус</string>
@@ -88,4 +88,5 @@
     <string name="pref_season_number_title">Број на сезона формат</string>
     <string name="writers">Напишано од</string>
     <string name="view_details">види повеќе</string>
+    <string name="open_in_browser">Отвори во прелистувач</string>
 </resources>

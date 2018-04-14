@@ -60,25 +60,5 @@
     <style name="HeaderTextAccent" parent="HeaderText">
         <item name="android:textColor">?colorAccent</item>
     </style>
-
-    <!-- TextView as a Button -->
-    <style name="TextButton" parent="android:Widget.TextView">
-        <item name="android:background">?selectableItemBackground</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:lineSpacingExtra">@dimen/line_spacing_extra</item>
-        <item name="android:minHeight">@dimen/text_view_min_height</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextButtonPrimary" parent="TextButton">
-        <item name="android:textColor">?colorPrimary</item>
-    </style>
-
-    <style name="TextButtonAccent" parent="TextButton">
-        <item name="android:textColor">?colorAccent</item>
-    </style>
-
+    
 </resources>
