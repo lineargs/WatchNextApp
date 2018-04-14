@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
@@ -21,6 +23,12 @@ import com.squareup.picasso.RequestCreator;
  */
 
 public final class ServiceUtils {
+
+    private static final String IMDB_APP_TITLE_URI_POSTFIX = "/";
+
+    private static final String IMDB_APP_TITLE_URI = "imdb:///title/";
+
+    public static final String IMDB_TITLE_URL = "http://imdb.com/title/";
 
     /**
      * The class is never initialized
@@ -68,5 +76,42 @@ public final class ServiceUtils {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         }
         context.startActivity(intent);
+    }
+
+    public static void setUpImdbButton(final String imdbId, final View imdbButton) {
+        if (imdbButton != null) {
+            if (!TextUtils.isEmpty(imdbId)) {
+                imdbButton.setEnabled(true);
+                imdbButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openImdb(imdbId, v.getContext());
+                    }
+                });
+            } else {
+                imdbButton.setEnabled(false);
+            }
+        }
+    }
+
+    private static void openImdb(String imdbId, Context context) {
+        if (context == null || TextUtils.isEmpty(imdbId)) {
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(IMDB_APP_TITLE_URI + imdbId
+                + IMDB_APP_TITLE_URI_POSTFIX));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        }
+
+        if (Utils.tryStartActivity(context, intent, false)) {
+            //Track action
+        } else {
+            openLink(context, IMDB_TITLE_URL + imdbId);
+        }
     }
 }

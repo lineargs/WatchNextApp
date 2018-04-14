@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -82,6 +83,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     AppCompatTextView mEmptyCrew;
     @BindView(R.id.crew_progress_bar)
     ProgressBar mCrewProgressBar;
+    @BindView(R.id.imdb)
+    Button imdbButton;
     private Uri mUri;
     private CastAdapter mCastAdapter;
     private CrewAdapter mCrewAdapter;
@@ -90,6 +93,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private String title = "";
     private Unbinder unbinder;
     private long id;
+    private String imdb;
     private boolean mDualPane;
 
     public MovieDetailsFragment() {
@@ -370,6 +374,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private void imageLoad(Cursor cursor) {
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
+        imdb = cursor.getString(Query.IMDB_ID);
+        ServiceUtils.setUpImdbButton(imdb, imdbButton);
         if (isFavorite(getContext(), id)) {
             starFab.setImageDrawable(starImage());
         } else {

@@ -1,8 +1,12 @@
 package com.lineargs.watchnext.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Crew;
@@ -134,5 +138,25 @@ public final class Utils {
             }
         }
         return stringBuilder.toString();
+    }
+
+    public static boolean tryStartActivity(Context context, Intent intent, boolean displayError) {
+        boolean handled = false;
+
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            try {
+                context.startActivity(intent);
+                handled = true;
+            } catch (ActivityNotFoundException | SecurityException e) {
+                Log.i("Utils", "Failed to launch intent", e);
+            }
+
+        }
+        
+        if (displayError && !handled) {
+            Toast.makeText(context, R.string.no_app_available, Toast.LENGTH_LONG).show();
+        }
+
+        return handled;
     }
 }

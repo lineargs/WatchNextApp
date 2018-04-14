@@ -63,6 +63,8 @@
 
                         <include layout="@layout/fragment_crew" />
 
+                        <include layout="@layout/item_buttons" />
+
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
