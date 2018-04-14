@@ -33,7 +33,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
-import com.lineargs.watchnext.data.CeditsQuery;
+import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
@@ -243,7 +243,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         uri,
-                        CeditsQuery.CREDITS_PROJECTION,
+                        CreditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);
@@ -251,7 +251,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 Uri crewUri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         crewUri,
-                        CeditsQuery.CREDITS_PROJECTION,
+                        CreditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);

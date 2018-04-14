@@ -6,7 +6,7 @@ package com.lineargs.watchnext.data;
  * See {@link Query}
  */
 
-public interface CeditsQuery {
+public interface CreditsQuery {
 
     String[] CREDITS_PROJECTION = new String[]{
             DataContract.Credits.COLUMN_PERSON_ID,

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CeditsQuery;
+import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;
@@ -80,9 +80,9 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         void bindViews(int position) {
             cursor.moveToPosition(position);
-            name.setText(cursor.getString(CeditsQuery.NAME));
-            job.setText(cursor.getString(CeditsQuery.JOB));
-            ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(CeditsQuery.PROFILE_PATH))
+            name.setText(cursor.getString(CreditsQuery.NAME));
+            job.setText(cursor.getString(CreditsQuery.JOB));
+            ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
@@ -92,8 +92,8 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CeditsQuery.PERSON_ID);
-            String name = cursor.getString(CeditsQuery.NAME);
+            String id = cursor.getString(CreditsQuery.PERSON_ID);
+            String name = cursor.getString(CreditsQuery.NAME);
             callBack.onPersonClick(id, name);
         }
     }

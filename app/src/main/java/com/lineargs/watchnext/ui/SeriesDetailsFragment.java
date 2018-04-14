@@ -31,7 +31,7 @@ import android.widget.Toast;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
-import com.lineargs.watchnext.data.CeditsQuery;
+import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
@@ -224,7 +224,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
                 Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
                 return new CursorLoader(getContext(),
                         uri,
-                        CeditsQuery.CREDITS_PROJECTION,
+                        CreditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);

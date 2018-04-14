@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCrewAdapter;
-import com.lineargs.watchnext.data.CeditsQuery;
+import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 
 import butterknife.BindView;
@@ -95,7 +95,7 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
             case LOADER_ID:
                 return new CursorLoader(getContext(),
                         mUri,
-                        CeditsQuery.CREDITS_PROJECTION,
+                        CreditsQuery.CREDITS_PROJECTION,
                         null,
                         null,
                         null);
