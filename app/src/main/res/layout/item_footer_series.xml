@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?android:attr/buttonBarStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <android.support.v7.widget.AppCompatTextView
+    <Button
         android:id="@+id/videos"
-        style="@style/TextButtonPrimary"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:minHeight="@dimen/button_min_height"
         android:text="@string/videos_text_view_button" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <Button
         android:id="@+id/seasons"
-        style="@style/TextButtonAccent"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:minHeight="@dimen/button_min_height"
         android:text="@string/seasons_text_view_button" />
 </LinearLayout>
