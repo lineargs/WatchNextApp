@@ -45,6 +45,6 @@ public class AboutFragment extends Fragment implements AboutAdapter.OnWebsiteCli
 
     @Override
     public void onClick(String link) {
-        ServiceUtils.openLink(getActivity(), link);
+        ServiceUtils.openWeb(getActivity(), link);
     }
 }

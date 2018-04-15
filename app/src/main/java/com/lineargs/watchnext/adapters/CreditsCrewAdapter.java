@@ -32,8 +32,9 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.callBack = listener;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_credits_crew, parent, false);
@@ -41,7 +42,7 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         CreditsViewHolder viewHolder = (CreditsViewHolder) holder;
         viewHolder.bindViews(position);
     }

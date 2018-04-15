@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -69,7 +68,7 @@ public final class ServiceUtils {
         }
     }
 
-    public static void openLink(Context context, String link) {
+    public static void openWeb(Context context, String link) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(link));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -110,7 +109,7 @@ public final class ServiceUtils {
 
         if (!Utils.tryStartActivity(context, intent, false)) {
             //TODO Track action
-            openLink(context, IMDB_TITLE_URL + imdbId);
+            openWeb(context, IMDB_TITLE_URL + imdbId);
         }
     }
 }

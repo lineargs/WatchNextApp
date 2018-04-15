@@ -54,8 +54,9 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
      * @param viewType If the RecyclerView has more than one type of item.
      * @return A new TabbedViewHolder that holds the View for each item
      */
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_layout_tabbed, parent, false);
@@ -72,7 +73,7 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TabbedViewHolder tabbedViewHolder = (TabbedViewHolder) holder;
         bindViews(tabbedViewHolder, context, position);
     }

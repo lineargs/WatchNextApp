@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
  * <p>
  * See {@link MainAdapter}
  */
-//TODO Create style for the textviews for clearer implementation
 
 public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

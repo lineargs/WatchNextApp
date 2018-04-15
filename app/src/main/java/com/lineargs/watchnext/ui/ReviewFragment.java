@@ -136,7 +136,7 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void OnClick(String url) {
-        ServiceUtils.openLink(getActivity(), url);
+        ServiceUtils.openWeb(getActivity(), url);
     }
 
     @Override

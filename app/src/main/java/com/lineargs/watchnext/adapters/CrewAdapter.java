@@ -34,8 +34,9 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.onClick = onClick;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_crew, parent, false);
@@ -43,7 +44,7 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MovieViewHolder viewHolder = (MovieViewHolder) holder;
         viewHolder.bindViews(position);
     }

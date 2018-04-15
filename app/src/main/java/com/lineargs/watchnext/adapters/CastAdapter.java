@@ -34,8 +34,9 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.callback = listener;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_cast, parent, false);
@@ -43,7 +44,7 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         CastViewHolder viewHolder = (CastViewHolder) holder;
         viewHolder.bindViews(position);
     }

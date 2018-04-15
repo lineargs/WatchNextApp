@@ -53,8 +53,9 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param viewType If the RecyclerView has more than one type of item.
      * @return A new MainViewHolder that holds the View for each grid item
      */
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_SORT:
                 View sortView = LayoutInflater
@@ -80,7 +81,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_SORT:
                 bindSortView((SortViewHolder) holder);

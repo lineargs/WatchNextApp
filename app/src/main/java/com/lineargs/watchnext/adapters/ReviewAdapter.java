@@ -32,8 +32,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         callback = listener;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(context)
                 .inflate(R.layout.item_review, parent, false);
@@ -41,7 +42,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ReviewViewHolder viewHolder = (ReviewViewHolder) holder;
         viewHolder.bindViews(position);
     }

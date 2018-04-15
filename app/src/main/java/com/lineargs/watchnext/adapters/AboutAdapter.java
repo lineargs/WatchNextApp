@@ -1,6 +1,7 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,8 +51,9 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         onClick = click;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_ABOUT:
                 View about = LayoutInflater
@@ -75,7 +77,7 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_ABOUT:
                 bindAbout((AboutHolder) holder);
@@ -161,12 +163,12 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @OnClick(R.id.tmdb_terms)
         public void openTerms() {
-            ServiceUtils.openLink(context, context.getString(R.string.tmdb_terms_link));
+            ServiceUtils.openWeb(context, context.getString(R.string.tmdb_terms_link));
         }
 
         @OnClick(R.id.tmdb_api_terms)
         public void openTermsApi() {
-            ServiceUtils.openLink(context, context.getString(R.string.tmdb_api_terms_link));
+            ServiceUtils.openWeb(context, context.getString(R.string.tmdb_api_terms_link));
         }
     }
 
