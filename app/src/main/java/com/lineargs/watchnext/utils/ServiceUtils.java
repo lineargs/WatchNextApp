@@ -1,6 +1,7 @@
 package com.lineargs.watchnext.utils;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -111,5 +113,33 @@ public final class ServiceUtils {
             //TODO Track action
             openWeb(context, IMDB_TITLE_URL + imdbId);
         }
+
+
+    }
+
+    public static void setUpGoogleSearchButton(final String title, View button) {
+        if (button == null) {
+            return;
+        } else if (TextUtils.isEmpty(title)) {
+            button.setEnabled(false);
+            return;
+        }
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchGoogle(v.getContext(), title);
+            }
+        });
+    }
+
+    private static void searchGoogle(Context context, String title) {
+        Utils.openNewDocument(context, buildGoogleSearchIntent(title));
+    }
+
+    public static Intent buildGoogleSearchIntent(String title) {
+        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+        intent.putExtra(SearchManager.QUERY, title);
+        return intent;
     }
 }

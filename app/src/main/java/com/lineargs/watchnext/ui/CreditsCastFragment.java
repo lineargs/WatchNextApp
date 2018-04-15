@@ -66,8 +66,8 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
         if (getActivity().getIntent().getData() != null) {
             mUri = getActivity().getIntent().getData();
         }
-        if (getActivity().getIntent().hasExtra(MovieDetailsFragment.ID)) {
-            Long id = Long.valueOf(getActivity().getIntent().getStringExtra(MovieDetailsFragment.ID));
+        if (getActivity().getIntent().hasExtra(Constants.ID)) {
+            Long id = Long.valueOf(getActivity().getIntent().getStringExtra(Constants.ID));
             mDualUri = DataContract.Person.buildPersonUriWithId(id);
         }
 

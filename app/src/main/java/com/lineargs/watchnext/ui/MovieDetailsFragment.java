@@ -96,6 +96,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     ProgressBar mCrewProgressBar;
     @BindView(R.id.imdb)
     Button imdbButton;
+    @BindView(R.id.google)
+    Button googleButton;
 
     public MovieDetailsFragment() {
     }
@@ -379,6 +381,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         id = cursor.getInt(Query.ID);
         String imdb = cursor.getString(Query.IMDB_ID);
         ServiceUtils.setUpImdbButton(imdb, imdbButton);
+        ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         if (DbUtils.isFavorite(getContext(), id)) {
             starFab.setImageDrawable(Utils.starImage(getContext()));
         } else {
