@@ -24,6 +24,7 @@ import com.lineargs.watchnext.adapters.SearchAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
+import com.lineargs.watchnext.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +39,6 @@ import static android.view.View.GONE;
  */
 public class SearchMainActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String ARG_QUERY = "query";
     private static final int LOADER_ID = 223;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
@@ -165,7 +165,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         if (query == null) {
             query = "";
         }
-        args.putString(ARG_QUERY, query);
+        args.putString(Constants.ARG_QUERY, query);
 
         if (TextUtils.equals(query, mQuery)) {
             getSupportLoaderManager().initLoader(LOADER_ID, args, this);

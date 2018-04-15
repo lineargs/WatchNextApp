@@ -19,6 +19,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCrewAdapter;
 import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,15 +34,16 @@ import butterknife.Unbinder;
 
 public class CreditsCrewFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCrewAdapter.OnClick {
 
-    static final String ID = "id", NAME = "name";
     private static final int LOADER_ID = 333;
-    @BindView(R.id.credits_crew_recycler_view)
-    RecyclerView mRecyclerView;
+
     private CreditsCrewAdapter mAdapter;
     private Uri mUri;
     private Uri mDualUri = null;
     private Unbinder unbinder;
     private boolean mDualPane;
+
+    @BindView(R.id.credits_crew_recycler_view)
+    RecyclerView mRecyclerView;
 
     public void setmUri(Uri uri) {
         mUri = uri;
@@ -138,8 +140,8 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
             /* Else start activity*/
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-            intent.putExtra(ID, id);
-            intent.putExtra(NAME, name);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
             startActivity(intent);
         }
     }

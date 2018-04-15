@@ -25,6 +25,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SeasonsQuery;
+import com.lineargs.watchnext.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,8 +39,6 @@ import butterknife.Unbinder;
 
 public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SeasonsAdapter.OnClickListener {
 
-    static final String SEASON_ID = "season_id", SEASON_NUMBER = "season_number",
-            SERIE_ID = "serie_id", EPISODES = "episodes";
     private static final int LOADER_ID = 112;
     @BindView(R.id.seasons_recycler_view)
     RecyclerView mRecyclerView;
@@ -160,10 +159,10 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), EpisodesActivity.class);
-            intent.putExtra(SEASON_ID, seasonId);
-            intent.putExtra(SEASON_NUMBER, seasonNumber);
-            intent.putExtra(SERIE_ID, serieId);
-            intent.putExtra(EPISODES, episodes);
+            intent.putExtra(Constants.SEASON_ID, seasonId);
+            intent.putExtra(Constants.SEASON_NUMBER, seasonNumber);
+            intent.putExtra(Constants.SERIE_ID, serieId);
+            intent.putExtra(Constants.EPISODES, episodes);
             startActivity(intent);
         }
     }

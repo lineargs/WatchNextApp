@@ -35,6 +35,7 @@ import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
+import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
@@ -49,7 +50,6 @@ import butterknife.Unbinder;
 public class SeriesDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick {
 
 
-    private static final String URI = "uri";
     private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333;
     @Nullable
     @BindView(R.id.cover_poster)
@@ -89,7 +89,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            mUri = Uri.parse(savedInstanceState.getString(URI));
+            mUri = Uri.parse(savedInstanceState.getString(Constants.URI));
         }
         setHasOptionsMenu(true);
         View mRootView = inflater.inflate(R.layout.fragment_tv_detail, container, false);
@@ -148,7 +148,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString(URI, String.valueOf(mUri));
+        outState.putString(Constants.URI, String.valueOf(mUri));
     }
 
     private void startCastLoading() {
@@ -187,7 +187,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
         Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
-        intent.putExtra(MovieDetailsFragment.TITLE, title);
+        intent.putExtra(Constants.TITLE, title);
         startActivity(intent);
     }
 
@@ -197,7 +197,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         Intent intent = new Intent(getContext(), SeasonsActivity.class);
         Uri uri = DataContract.Seasons.buildSeasonUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
-        intent.putExtra(MovieDetailsFragment.TITLE, title);
+        intent.putExtra(Constants.TITLE, title);
         startActivity(intent);
     }
 
@@ -207,7 +207,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         Intent intent = new Intent(getContext(), VideosTvActivity.class);
         Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
-        intent.putExtra(MovieDetailsFragment.TITLE, title);
+        intent.putExtra(Constants.TITLE, title);
         startActivity(intent);
     }
 
@@ -330,14 +330,14 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
-            intent.putExtra(MovieDetailsFragment.ID, id);
-            intent.putExtra(MovieDetailsFragment.NAME, name);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-            intent.putExtra(MovieDetailsFragment.ID, id);
-            intent.putExtra(MovieDetailsFragment.NAME, name);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
             startActivity(intent);
         }
     }

@@ -38,6 +38,7 @@ import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
+import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
@@ -55,9 +56,7 @@ import butterknife.Unbinder;
 public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick, CrewAdapter.OnClick {
 
 
-    static final String ID = "id", TITLE = "title", NAME = "name";
     private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333, CREW_LOADER_ID = 445;
-    private static final String URI = "uri";
 
     private Uri mUri;
     private CastAdapter mCastAdapter;
@@ -109,7 +108,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            mUri = Uri.parse(savedInstanceState.getString(URI));
+            mUri = Uri.parse(savedInstanceState.getString(Constants.URI));
         }
         setHasOptionsMenu(true);
         View mRootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
@@ -180,7 +179,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString(URI, String.valueOf(mUri));
+        outState.putString(Constants.URI, String.valueOf(mUri));
     }
 
     private void startCastLoading() {
@@ -345,7 +344,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public void loadReviews() {
         Intent intent = new Intent(getContext(), ReviewActivity.class);
         intent.setData(DataContract.Review.buildReviewUriWithId(Long.parseLong(mUri.getLastPathSegment())));
-        intent.putExtra(TITLE, title);
+        intent.putExtra(Constants.TITLE, title);
         startActivity(intent);
     }
 
@@ -354,7 +353,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public void loadVideos() {
         Intent intent = new Intent(getContext(), VideosActivity.class);
         Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-        intent.putExtra(TITLE, title);
+        intent.putExtra(Constants.TITLE, title);
         intent.setData(uri);
         startActivity(intent);
     }
@@ -425,14 +424,14 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
-            intent.putExtra(ID, id);
-            intent.putExtra(NAME, name);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-            intent.putExtra(ID, id);
-            intent.putExtra(NAME, name);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
             startActivity(intent);
         }
     }
@@ -443,14 +442,14 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
             Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
-            intent.putExtra(ID, id);
-            intent.putExtra(NAME, name);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getContext(), PersonActivity.class);
             intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-            intent.putExtra(ID, id);
-            intent.putExtra(NAME, name);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
             startActivity(intent);
         }
     }

@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.utils.Constants;
 
 /**
  * Created by goranminov on 26/11/2017.
@@ -22,8 +23,8 @@ public class VideosActivity extends BaseTopActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videos);
-        if (getIntent().hasExtra(MovieDetailsFragment.TITLE)) {
-            title = getIntent().getStringExtra(MovieDetailsFragment.TITLE);
+        if (getIntent().hasExtra(Constants.TITLE)) {
+            title = getIntent().getStringExtra(Constants.TITLE);
         }
         setupActionBar();
         setupNavDrawer();

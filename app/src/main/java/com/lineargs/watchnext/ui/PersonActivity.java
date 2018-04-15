@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,18 +27,18 @@ public class PersonActivity extends BaseActivity {
         if (savedInstanceState == null && getIntent().getData() != null) {
             PersonFragment fragment = new PersonFragment();
             fragment.setmUri(getIntent().getData());
-            if (getIntent().hasExtra(CreditsCastFragment.ID)) {
-                fragment.setId(getIntent().getStringExtra(CreditsCastFragment.ID));
+            if (getIntent().hasExtra(Constants.ID)) {
+                fragment.setId(getIntent().getStringExtra(Constants.ID));
             }
-            if (getIntent().hasExtra(CreditsCastFragment.NAME)) {
-                name = getIntent().getStringExtra(CreditsCastFragment.NAME);
+            if (getIntent().hasExtra(Constants.NAME)) {
+                name = getIntent().getStringExtra(Constants.NAME);
             }
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.frame_layout_person, fragment)
                     .commit();
         }
         if (savedInstanceState != null) {
-            name = savedInstanceState.getString(CreditsCastFragment.NAME);
+            name = savedInstanceState.getString(Constants.NAME);
         }
         setupActionBar();
     }
@@ -62,6 +63,6 @@ public class PersonActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(CreditsCastFragment.NAME, name);
+        outState.putString(Constants.NAME, name);
     }
 }

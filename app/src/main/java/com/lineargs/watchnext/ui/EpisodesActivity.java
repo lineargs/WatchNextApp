@@ -31,6 +31,7 @@ import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 import com.lineargs.watchnext.tools.SeasonTools;
+import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
@@ -81,9 +82,9 @@ public class EpisodesActivity extends BaseTopActivity implements
         setContentView(R.layout.activity_episodes);
         ButterKnife.bind(this);
 
-        if (getIntent().hasExtra(SeasonsFragment.SEASON_NUMBER) && getIntent().hasExtra(SeasonsFragment.EPISODES)) {
-            title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(SeasonsFragment.SEASON_NUMBER, -1));
-            subtitle = getIntent().getStringExtra(SeasonsFragment.EPISODES);
+        if (getIntent().hasExtra(Constants.SEASON_NUMBER) && getIntent().hasExtra(Constants.EPISODES)) {
+            title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(Constants.SEASON_NUMBER, -1));
+            subtitle = getIntent().getStringExtra(Constants.EPISODES);
         }
 
         setupActionBar();
@@ -93,10 +94,10 @@ public class EpisodesActivity extends BaseTopActivity implements
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        if (getIntent().hasExtra(SeasonsFragment.SEASON_ID) && getIntent().hasExtra(SeasonsFragment.SERIE_ID) && getIntent().hasExtra(SeasonsFragment.SEASON_NUMBER)) {
-            String serieId = getIntent().getStringExtra(SeasonsFragment.SERIE_ID);
-            number = getIntent().getIntExtra(SeasonsFragment.SEASON_NUMBER, -1);
-            seasonId = getIntent().getStringExtra(SeasonsFragment.SEASON_ID);
+        if (getIntent().hasExtra(Constants.SEASON_ID) && getIntent().hasExtra(Constants.SERIE_ID) && getIntent().hasExtra(Constants.SEASON_NUMBER)) {
+            String serieId = getIntent().getStringExtra(Constants.SERIE_ID);
+            number = getIntent().getIntExtra(Constants.SEASON_NUMBER, -1);
+            seasonId = getIntent().getStringExtra(Constants.SEASON_ID);
             SeasonUtils.syncEpisodes(this, serieId, number, seasonId);
             startLoading();
         }
@@ -208,8 +209,6 @@ public class EpisodesActivity extends BaseTopActivity implements
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private static final String ARG_DETAILS = "details";
-        private static final String ARG_TITLE = "title";
 
         @BindView(R.id.name)
         AppCompatTextView name;
@@ -249,8 +248,8 @@ public class EpisodesActivity extends BaseTopActivity implements
         public static PlaceholderFragment newInstance(String title, String[] details) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putStringArray(ARG_DETAILS, details);
-            args.putString(ARG_TITLE, title);
+            args.putStringArray(Constants.ARG_QUERY, details);
+            args.putString(Constants.TITLE, title);
             fragment.setArguments(args);
             return fragment;
         }
@@ -260,7 +259,7 @@ public class EpisodesActivity extends BaseTopActivity implements
             View rootView = inflater.inflate(R.layout.fragment_episodes, container, false);
             unbinder = ButterKnife.bind(this, rootView);
             if (getArguments() != null) {
-                details = getArguments().getStringArray(ARG_DETAILS);
+                details = getArguments().getStringArray(Constants.ARG_QUERY);
             }
 
             if (details != null) {
@@ -334,7 +333,7 @@ public class EpisodesActivity extends BaseTopActivity implements
             if (intervalSeconds != 0 && details != null) {
                 if (getArguments() != null) {
                     ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
-                            getArguments().getString(ARG_TITLE), details[0]);
+                            getArguments().getString(Constants.TITLE), details[0]);
                 }
                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
             }

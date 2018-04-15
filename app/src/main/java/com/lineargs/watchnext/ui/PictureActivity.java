@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.utils.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -100,7 +101,7 @@ public class PictureActivity extends AppCompatActivity {
         supportPostponeEnterTransition();
 
         Picasso.with(mContentView.getContext())
-                .load(getIntent().getStringExtra(PersonFragment.STILL_PATH))
+                .load(getIntent().getStringExtra(Constants.STILL_PATH))
                 .noFade()
                 .into(mContentView, new Callback() {
                     @Override

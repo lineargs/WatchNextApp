@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.PersonQuery;
 import com.lineargs.watchnext.sync.syncpeople.PersonSyncUtils;
+import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import butterknife.BindView;
@@ -33,7 +34,6 @@ import butterknife.Unbinder;
 public class PersonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 455;
-    public static final String STILL_PATH = "still_path";
 
     @BindView(R.id.still_path)
     ImageView photo;
@@ -131,7 +131,7 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     @OnClick(R.id.still_path)
     public void openFullscreen() {
         Intent fullscreen = new Intent(getActivity(), PictureActivity.class);
-        fullscreen.putExtra(STILL_PATH, cursor.getString(PersonQuery.PROFILE_PATH));
+        fullscreen.putExtra(Constants.STILL_PATH, cursor.getString(PersonQuery.PROFILE_PATH));
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(getActivity(),
                         photo,
