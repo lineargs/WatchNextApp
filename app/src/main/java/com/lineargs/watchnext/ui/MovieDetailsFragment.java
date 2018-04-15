@@ -100,6 +100,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     Button googleButton;
     @BindView(R.id.youtube)
     Button youTubeButton;
+    @BindView(R.id.google_play)
+    Button googlePlayButton;
 
     public MovieDetailsFragment() {
     }
@@ -385,6 +387,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         ServiceUtils.setUpImdbButton(imdb, imdbButton);
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         ServiceUtils.setUpYouTubeButton(title, youTubeButton);
+        ServiceUtils.setUpGooglePlayButton(title, googlePlayButton);
         if (DbUtils.isFavorite(getContext(), id)) {
             starFab.setImageDrawable(Utils.starImage(getContext()));
         } else {

@@ -32,11 +32,11 @@ public final class ServiceUtils {
 
     private static final String IMDB_TITLE_URL = "http://imdb.com/title/";
 
-    private static final String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
-
     private static final String YOUTUBE_SEARCH = "http://www.youtube.com/results?search_query=%s";
 
     private static final String YOUTUBE_PACKAGE = "com.google.android.youtube";
+
+    private static final String PLAY_MOVIES = "https://play.google.com/store/search?q=%s&amp;c=movies";
 
     /**
      * The class is never initialized
@@ -191,6 +191,34 @@ public final class ServiceUtils {
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(String.format(YOUTUBE_SEARCH, Uri.encode(title))));
         }
+        return intent;
+    }
+
+    public static void setUpGooglePlayButton(final String title, View button) {
+        if (button == null) {
+            return;
+        } else if (TextUtils.isEmpty(title)) {
+            button.setEnabled(false);
+            return;
+        }
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchGooglePlay(v.getContext(), title);
+            }
+        });
+    }
+
+    private static void searchGooglePlay(Context context, String title) {
+        Utils.openNewDocument(context, buildGooglePlayIntent(title, context));
+    }
+
+    private static Intent buildGooglePlayIntent(String title, Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        String playStoreQuery = String.format(PLAY_MOVIES,
+                Uri.encode(title));
+        intent.setData(Uri.parse(playStoreQuery));
         return intent;
     }
 }
