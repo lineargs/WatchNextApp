@@ -166,6 +166,11 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.title.setText(cursor.getString(Query.TITLE));
         holder.date.setText(context.getString(R.string.main_date, cursor.getString(Query.RELEASE_DATE)));
         holder.vote.setText(cursor.getString(Query.VOTE_AVERAGE));
+        if (cursor.getString(Query.STATUS) == null) {
+            holder.status.setText(context.getString(R.string.main_status, context.getString(R.string.text_not_available)));
+        } else {
+            holder.status.setText(context.getString(R.string.main_status, cursor.getString(Query.STATUS)));
+        }
         Picasso.with(holder.poster.getContext())
                 .load(cursor.getString(Query.POSTER_PATH))
                 .fit()
@@ -193,6 +198,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         AppCompatTextView vote;
         @BindView(R.id.main_star_image)
         ImageView star;
+        @BindView(R.id.main_status)
+        AppCompatTextView status;
 
         MainViewHolder(View view) {
             super(view);

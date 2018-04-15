@@ -2,6 +2,7 @@
     <!-- Main -->
     <string name="main_text_view">Once you add a favorite, you will see it listed here.</string>
     <string name="main_date">Released on: %s</string>
+    <string name="main_status">Status: %s</string>
 
     <!-- Settings -->
     <string name="pref_theme_grey_label">Grey</string>
