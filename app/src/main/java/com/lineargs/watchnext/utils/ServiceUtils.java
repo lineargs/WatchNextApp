@@ -36,8 +36,6 @@ public final class ServiceUtils {
 
     private static final String YOUTUBE_PACKAGE = "com.google.android.youtube";
 
-    private static final String PLAY_MOVIES = "https://play.google.com/store/search?q=%s&amp;c=movies";
-
     /**
      * The class is never initialized
      */
@@ -216,7 +214,7 @@ public final class ServiceUtils {
 
     private static Intent buildGooglePlayIntent(String title, Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        String playStoreQuery = String.format(PLAY_MOVIES,
+        String playStoreQuery = String.format(context.getString(R.string.google_play_search),
                 Uri.encode(title));
         intent.setData(Uri.parse(playStoreQuery));
         return intent;
