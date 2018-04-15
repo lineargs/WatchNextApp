@@ -48,7 +48,7 @@ public class DbUtils {
     }
 
     /**
-     * Adds a movie in the favorites table on a request
+     * Adds a serie in the favorites table on a request
      *
      * @param context used to access our Cursor
      * @param uri     The Uri of the data to be added

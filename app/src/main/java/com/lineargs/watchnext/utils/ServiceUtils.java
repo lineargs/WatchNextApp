@@ -24,11 +24,11 @@ import com.squareup.picasso.RequestCreator;
 
 public final class ServiceUtils {
 
-    private static final String IMDB_APP_TITLE_URI_POSTFIX = "/";
+    private static final String IMDB_APP_POST_TITLE_URI = "/";
 
     private static final String IMDB_APP_TITLE_URI = "imdb:///title/";
 
-    public static final String IMDB_TITLE_URL = "http://imdb.com/title/";
+    private static final String IMDB_TITLE_URL = "http://imdb.com/title/";
 
     /**
      * The class is never initialized
@@ -101,16 +101,15 @@ public final class ServiceUtils {
 
         Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(IMDB_APP_TITLE_URI + imdbId
-                + IMDB_APP_TITLE_URI_POSTFIX));
+                + IMDB_APP_POST_TITLE_URI));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         } else {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         }
 
-        if (Utils.tryStartActivity(context, intent, false)) {
+        if (!Utils.tryStartActivity(context, intent, false)) {
             //TODO Track action
-        } else {
             openLink(context, IMDB_TITLE_URL + imdbId);
         }
     }
