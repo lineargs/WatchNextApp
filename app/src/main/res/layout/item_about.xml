@@ -51,10 +51,11 @@
 
             <Button
                 android:id="@+id/tmdb_terms"
-                style="?android:borderlessButtonStyle"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tmdb_terms"
+                android:minHeight="@dimen/button_min_height"
                 android:textColor="@color/colorWhite" />
         </LinearLayout>
 
@@ -65,16 +66,12 @@
 
             <Button
                 android:id="@+id/tmdb_api_terms"
-                style="?android:borderlessButtonStyle"
+                style="?android:attr/buttonBarButtonStyle"
+                android:minHeight="@dimen/button_min_height"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tmdb_api_terms"
                 android:textColor="@color/colorWhite" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorWhite" />
 </LinearLayout>
