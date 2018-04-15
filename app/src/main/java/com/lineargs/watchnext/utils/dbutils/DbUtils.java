@@ -92,4 +92,35 @@ public class DbUtils {
                 null,
                 selectionArgs);
     }
+
+    /* Used so we can save on bandwidth and network calls */
+    public static boolean checkForCredits(Context context, String id) {
+        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(id));
+        Cursor cursor = context.getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+        if (cursor == null) {
+            return false;
+        }
+        boolean contains = cursor.getCount() > 0;
+        cursor.close();
+        return contains;
+    }
+
+    public static boolean isFavorite(Context context, long id) {
+        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
+        Cursor cursor = context.getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+        if (cursor == null) {
+            return false;
+        }
+        boolean favorite = cursor.getCount() > 0;
+        cursor.close();
+        return favorite;
+    }
 }

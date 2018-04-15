@@ -117,7 +117,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         }
 
         if (mUri != null) {
-            if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
+            if (savedState == null && !DbUtils.checkForCredits(getContext(), mUri.getLastPathSegment())) {
                 SerieDetailUtils.syncSeasons(getContext(), mUri);
             }
             startCastLoading();
@@ -170,7 +170,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
 
     @OnClick(R.id.star_fab)
     public void starFabFavorite() {
-        if (isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
+        if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
             DbUtils.removeFromFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
             starFab.setImageDrawable(starBorderImage());
@@ -303,7 +303,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     private void imageLoad(Cursor cursor) {
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
-        if (isFavorite(getContext(), id)) {
+        if (DbUtils.isFavorite(getContext(), id)) {
             starFab.setImageDrawable(starImage());
         } else {
             starFab.setImageDrawable(starBorderImage());
@@ -320,37 +320,6 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
                     .fit()
                     .into(mBackdropPath);
         }
-    }
-
-
-    private boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean favorite = cursor.getCount() > 0;
-        cursor.close();
-        return favorite;
-    }
-
-    private boolean checkForCredits(Context context, String id) {
-        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(id));
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean contains = cursor.getCount() > 0;
-        cursor.close();
-        return contains;
     }
 
     private VectorDrawableCompat starImage() {

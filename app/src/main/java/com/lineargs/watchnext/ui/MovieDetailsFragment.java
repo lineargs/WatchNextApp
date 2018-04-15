@@ -143,7 +143,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         }
 
         if (mUri != null) {
-            if (savedState == null && !checkForCredits(getContext(), mUri.getLastPathSegment())) {
+            if (savedState == null && !DbUtils.checkForCredits(getContext(), mUri.getLastPathSegment())) {
                 MovieSyncUtils.syncMovieDetail(context, mUri);
             }
             startCastLoading();
@@ -426,22 +426,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         boolean favorite = cursor.getCount() > 0;
         cursor.close();
         return favorite;
-    }
-
-    /* Used so we can save on bandwith and network calls */
-    private boolean checkForCredits(Context context, String id) {
-        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(id));
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean contains = cursor.getCount() > 0;
-        cursor.close();
-        return contains;
     }
 
     private VectorDrawableCompat starImage() {
