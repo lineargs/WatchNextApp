@@ -27,4 +27,9 @@ public interface MovieApiService {
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse
     );
+
+    @GET("movie/{movie_id}")
+    Call<MovieDetail> updateMovie(
+            @Path("movie_id") String movieId,
+            @Query("api_key") String apiKey);
 }

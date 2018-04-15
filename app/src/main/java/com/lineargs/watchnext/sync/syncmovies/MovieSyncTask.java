@@ -37,7 +37,7 @@ class MovieSyncTask {
     private static String id;
     private static Uri mUri;
 
-    static void syncMovieDetail(final Context context, final Uri uri) {
+    static void syncFullMovieDetail(final Context context, final Uri uri) {
         mUri = Utils.getBaseUri(uri);
         id = uri.getLastPathSegment();
         Call<MovieDetail> call = MOVIE_API_SERVICE.getMovieDetail(id, BuildConfig.MOVIE_DATABASE_API_KEY, APPEND_TO_RESPONSE);
@@ -61,6 +61,30 @@ class MovieSyncTask {
                     ContentValues[] reviewsValues = ReviewsDbUtils.getReviewsContentValues(response.body().getReviews(), id);
                     InsertReviews insertReviews = new InsertReviews(context);
                     insertReviews.execute(reviewsValues);
+                } else if (response.errorBody() != null) {
+                    response.errorBody().close();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MovieDetail> call, @NonNull Throwable t) {
+
+            }
+        });
+    }
+
+    static void syncUpdateMovieDetail(final Context context, final Uri uri) {
+        mUri = Utils.getBaseUri(uri);
+        id = uri.getLastPathSegment();
+        Call<MovieDetail> call = MOVIE_API_SERVICE.updateMovie(id, BuildConfig.MOVIE_DATABASE_API_KEY);
+        call.enqueue(new Callback<MovieDetail>() {
+            @Override
+            public void onResponse(@NonNull Call<MovieDetail> call, @NonNull final Response<MovieDetail> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ContentValues updateValues = MovieDbUtils.updateMovie(response.body());
+                    UpdateMovie updateMovie = new UpdateMovie(context);
+                    updateMovie.execute(updateValues);
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
                 }

@@ -14,8 +14,12 @@ public class MovieSyncIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        if (intent.getData() != null && intent.hasExtra("UPDATE")) {
+            MovieSyncTask.syncUpdateMovieDetail(this, intent.getData());
+        }
+
         if (intent.getData() != null) {
-            MovieSyncTask.syncMovieDetail(this, intent.getData());
+            MovieSyncTask.syncFullMovieDetail(this, intent.getData());
         }
     }
 }

@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.utils.Utils;
 
 /**
  * Created by goranminov on 08/11/2017.
@@ -100,6 +101,22 @@ public class DbUtils {
                 null,
                 null,
                 null,
+                null);
+        if (cursor == null) {
+            return false;
+        }
+        boolean contains = cursor.getCount() > 0;
+        cursor.close();
+        return contains;
+    }
+
+    public static boolean checkForExtras(Context context, Uri uri) {
+        String id = uri.getLastPathSegment();
+        uri = Utils.getBaseUri(uri);
+        Cursor cursor = context.getContentResolver().query(uri,
+                null,
+                DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? AND " + DataContract.PopularMovieEntry.COLUMN_IMDB_ID + " = ? ",
+                new String[] {id, "0"},
                 null);
         if (cursor == null) {
             return false;

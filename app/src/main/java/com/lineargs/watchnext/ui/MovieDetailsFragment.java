@@ -39,6 +39,7 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
+import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
@@ -57,6 +58,17 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     static final String ID = "id", TITLE = "title", NAME = "name";
     private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333, CREW_LOADER_ID = 445;
     private static final String URI = "uri";
+
+    private Uri mUri;
+    private CastAdapter mCastAdapter;
+    private CrewAdapter mCrewAdapter;
+    private MovieDetailAdapter mAdapter;
+    private Handler handler;
+    private String title = "";
+    private Unbinder unbinder;
+    private long id;
+    private boolean dualPane;
+
     @Nullable
     @BindView(R.id.cover_poster)
     ImageView mPosterPath;
@@ -85,16 +97,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     ProgressBar mCrewProgressBar;
     @BindView(R.id.imdb)
     Button imdbButton;
-    private Uri mUri;
-    private CastAdapter mCastAdapter;
-    private CrewAdapter mCrewAdapter;
-    private MovieDetailAdapter mAdapter;
-    private Handler handler;
-    private String title = "";
-    private Unbinder unbinder;
-    private long id;
-    private String imdb;
-    private boolean mDualPane;
 
     public MovieDetailsFragment() {
     }
@@ -143,8 +145,10 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         }
 
         if (mUri != null) {
-            if (savedState == null && !DbUtils.checkForCredits(getContext(), mUri.getLastPathSegment())) {
-                MovieSyncUtils.syncMovieDetail(context, mUri);
+            if (savedState == null && !DbUtils.checkForCredits(context, mUri.getLastPathSegment())) {
+                MovieSyncUtils.syncFullMovieDetail(context, mUri);
+            } else if (savedState == null && DbUtils.checkForExtras(context, mUri)) {
+                MovieSyncUtils.syncUpdateMovieDetail(context, mUri);
             }
             startCastLoading();
             startCrewLoading();
@@ -159,8 +163,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View detailFrame = getActivity().findViewById(R.id.review_frame_layout);
-        mDualPane = detailFrame != null && detailFrame.getVisibility() == View.VISIBLE;
-        if (mDualPane && savedInstanceState == null) {
+        dualPane = detailFrame != null && detailFrame.getVisibility() == View.VISIBLE;
+        if (dualPane && savedInstanceState == null) {
             ReviewFragment reviewFragment = new ReviewFragment();
             reviewFragment.setmUri(DataContract.Review.buildReviewUriWithId(Long.parseLong(mUri.getLastPathSegment())));
             getFragmentManager().beginTransaction()
@@ -221,14 +225,14 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
      */
     @OnClick(R.id.star_fab)
     public void starFabFavorite() {
-        if (isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
+        if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
             DbUtils.removeFromFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(starBorderImage());
+            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         } else {
             DbUtils.addMovieToFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(starImage());
+            starFab.setImageDrawable(Utils.starImage(getContext()));
         }
     }
 
@@ -374,12 +378,12 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private void imageLoad(Cursor cursor) {
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
-        imdb = cursor.getString(Query.IMDB_ID);
+        String imdb = cursor.getString(Query.IMDB_ID);
         ServiceUtils.setUpImdbButton(imdb, imdbButton);
-        if (isFavorite(getContext(), id)) {
-            starFab.setImageDrawable(starImage());
+        if (DbUtils.isFavorite(getContext(), id)) {
+            starFab.setImageDrawable(Utils.starImage(getContext()));
         } else {
-            starFab.setImageDrawable(starBorderImage());
+            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         }
         if (mPosterPath != null) {
             Picasso.with(mPosterPath.getContext())
@@ -413,32 +417,11 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     }
 
-    private boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean favorite = cursor.getCount() > 0;
-        cursor.close();
-        return favorite;
-    }
 
-    private VectorDrawableCompat starImage() {
-        return VectorDrawableCompat.create(getContext().getResources(), R.drawable.icon_star_white, getContext().getTheme());
-    }
-
-    private VectorDrawableCompat starBorderImage() {
-        return VectorDrawableCompat.create(getContext().getResources(), R.drawable.icon_star_border_white, getContext().getTheme());
-    }
 
     @Override
     public void onPersonClick(String id, String name) {
-        if (mDualPane) {
+        if (dualPane) {
             Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
             Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);
@@ -456,7 +439,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onCrewClick(String id, String name) {
-        if (mDualPane) {
+        if (dualPane) {
             Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
             Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
             intent.setData(uri);

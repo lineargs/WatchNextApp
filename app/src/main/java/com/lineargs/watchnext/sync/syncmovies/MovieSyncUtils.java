@@ -7,9 +7,16 @@ import android.support.annotation.NonNull;
 
 public class MovieSyncUtils {
 
-    public static void syncMovieDetail(@NonNull Context context, Uri uri) {
+    public static void syncFullMovieDetail(@NonNull Context context, Uri uri) {
         Intent intent = new Intent(context, MovieSyncIntentService.class);
         intent.setData(uri);
+        context.startService(intent);
+    }
+
+    public static void syncUpdateMovieDetail(@NonNull Context context, Uri uri) {
+        Intent intent = new Intent(context, MovieSyncIntentService.class);
+        intent.setData(uri);
+        intent.putExtra("UPDATE", true);
         context.startService(intent);
     }
 }

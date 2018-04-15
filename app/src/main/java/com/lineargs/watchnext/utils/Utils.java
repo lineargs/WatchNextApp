@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -158,5 +159,13 @@ public final class Utils {
         }
 
         return handled;
+    }
+
+    public static VectorDrawableCompat starImage(Context context) {
+        return VectorDrawableCompat.create(context.getResources(), R.drawable.icon_star_white, context.getTheme());
+    }
+
+    public static VectorDrawableCompat starBorderImage(Context context) {
+        return VectorDrawableCompat.create(context.getResources(), R.drawable.icon_star_border_white, context.getTheme());
     }
 }
