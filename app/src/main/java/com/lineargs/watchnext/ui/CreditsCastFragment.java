@@ -86,6 +86,7 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
         }
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -102,7 +103,7 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 if (data != null && data.getCount() != 0) {
@@ -113,7 +114,7 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
 

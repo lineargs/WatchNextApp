@@ -1,8 +1,5 @@
 package com.lineargs.watchnext.ui;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.utils.NetworkUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +37,7 @@ public abstract class BaseMoviesFragment extends BaseFragment {
 
     public void setupViews(View view) {
         ButterKnife.bind(this, view);
-        if (isConnected()) {
+        if (NetworkUtils.isConnected(view.getContext())) {
             startLoading();
         }
     }
@@ -52,17 +50,5 @@ public abstract class BaseMoviesFragment extends BaseFragment {
     public void showData() {
         mProgressBar.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private boolean isConnected() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert connectivityManager != null;
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

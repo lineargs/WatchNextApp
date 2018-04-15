@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -193,6 +194,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         mSearchResults.setVisibility(View.VISIBLE);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -209,7 +211,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 mResultsAdapter.swapCursor(data);
@@ -222,7 +224,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mResultsAdapter.swapCursor(null);
     }
 }

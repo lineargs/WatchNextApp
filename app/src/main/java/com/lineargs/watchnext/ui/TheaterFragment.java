@@ -24,6 +24,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.utils.NetworkUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +59,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
         mRecyclerView.setHasFixedSize(true);
         mTheaterAdapter = new TheaterAdapter(getContext(), this);
         mRecyclerView.setAdapter(mTheaterAdapter);
-        if (isConnected()) {
+        if (NetworkUtils.isConnected(view.getContext())) {
             startLoading();
         }
         getLoaderManager().initLoader(LOADER_ID, null, this);
@@ -74,6 +75,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -90,7 +92,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 mTheaterAdapter.swapCursor(data);
@@ -105,7 +107,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mTheaterAdapter.swapCursor(null);
     }
 
@@ -121,17 +123,5 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    private boolean isConnected() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert connectivityManager != null;
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

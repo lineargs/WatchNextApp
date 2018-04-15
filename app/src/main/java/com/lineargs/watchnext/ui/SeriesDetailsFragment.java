@@ -36,6 +36,7 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
+import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
@@ -173,11 +174,11 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
             DbUtils.removeFromFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(starBorderImage());
+            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         } else {
             DbUtils.addTVToFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(starImage());
+            starFab.setImageDrawable(Utils.starImage(getContext()));
         }
     }
 
@@ -210,6 +211,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         startActivity(intent);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -234,7 +236,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case MAIN_LOADER_ID:
                 mAdapter.swapCursor(data);
@@ -264,7 +266,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
     }
 
@@ -304,9 +306,9 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
         if (DbUtils.isFavorite(getContext(), id)) {
-            starFab.setImageDrawable(starImage());
+            starFab.setImageDrawable(Utils.starImage(getContext()));
         } else {
-            starFab.setImageDrawable(starBorderImage());
+            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         }
         if (mPosterPath != null) {
             Picasso.with(mPosterPath.getContext())
@@ -320,14 +322,6 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
                     .fit()
                     .into(mBackdropPath);
         }
-    }
-
-    private VectorDrawableCompat starImage() {
-        return VectorDrawableCompat.create(getContext().getResources(), R.drawable.icon_star_white, getContext().getTheme());
-    }
-
-    private VectorDrawableCompat starBorderImage() {
-        return VectorDrawableCompat.create(getContext().getResources(), R.drawable.icon_star_border_white, getContext().getTheme());
     }
 
     @Override

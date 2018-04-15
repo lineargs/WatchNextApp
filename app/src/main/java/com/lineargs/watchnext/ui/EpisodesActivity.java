@@ -259,7 +259,9 @@ public class EpisodesActivity extends BaseTopActivity implements
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_episodes, container, false);
             unbinder = ButterKnife.bind(this, rootView);
-            details = getArguments().getStringArray(ARG_DETAILS);
+            if (getArguments() != null) {
+                details = getArguments().getStringArray(ARG_DETAILS);
+            }
 
             if (details != null) {
                 name.setText(details[0]);
@@ -330,8 +332,10 @@ public class EpisodesActivity extends BaseTopActivity implements
         public void setNotification() {
             int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
             if (intervalSeconds != 0 && details != null) {
-                ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
-                        getArguments().getString(ARG_TITLE), details[0]);
+                if (getArguments() != null) {
+                    ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
+                            getArguments().getString(ARG_TITLE), details[0]);
+                }
                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
             }
         }

@@ -251,7 +251,7 @@ public abstract class BaseDrawerActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+            if (action != null && action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
                 showSnackBar();
             }
         }

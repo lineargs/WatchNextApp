@@ -1,5 +1,6 @@
 package com.lineargs.watchnext.data;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;

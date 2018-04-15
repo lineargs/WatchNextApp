@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.utils.NetworkUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +44,7 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
 
     private void setupViews(View view) {
         unbinder = ButterKnife.bind(this, view);
-        if (isConnected()) {
+        if (NetworkUtils.isConnected(view.getContext())) {
             startLoading();
         }
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
@@ -52,6 +53,7 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
@@ -68,7 +70,7 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
                 if (data.getCount() != 0) {
@@ -83,7 +85,7 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         resetLoader(loader);
     }
 
@@ -101,14 +103,6 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
     private void showData() {
         progressBar.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private boolean isConnected() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert connectivityManager != null;
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 
     public abstract RecyclerView.Adapter getAdapter();
