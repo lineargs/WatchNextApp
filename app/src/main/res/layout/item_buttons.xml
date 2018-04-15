@@ -25,7 +25,6 @@
     <Button
         android:id="@+id/google_play"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/button_min_height"
         style="?android:attr/buttonBarButtonStyle"
@@ -37,7 +36,6 @@
         android:id="@+id/youtube"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:minHeight="@dimen/button_min_height"
         style="?android:attr/buttonBarButtonStyle"
         android:drawableLeft="@drawable/icon_youtube"

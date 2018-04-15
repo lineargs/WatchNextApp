@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -30,6 +31,12 @@ public final class ServiceUtils {
     private static final String IMDB_APP_TITLE_URI = "imdb:///title/";
 
     private static final String IMDB_TITLE_URL = "http://imdb.com/title/";
+
+    private static final String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
+
+    private static final String YOUTUBE_SEARCH = "http://www.youtube.com/results?search_query=%s";
+
+    private static final String YOUTUBE_PACKAGE = "com.google.android.youtube";
 
     /**
      * The class is never initialized
@@ -137,9 +144,53 @@ public final class ServiceUtils {
         Utils.openNewDocument(context, buildGoogleSearchIntent(title));
     }
 
-    public static Intent buildGoogleSearchIntent(String title) {
+    private static Intent buildGoogleSearchIntent(String title) {
         Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
         intent.putExtra(SearchManager.QUERY, title);
+        return intent;
+    }
+
+    public static void setUpYouTubeButton(final String title, View button) {
+        if (button == null) {
+            return;
+        } else if (TextUtils.isEmpty(title)) {
+            button.setEnabled(false);
+            return;
+        }
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchYouTube(v.getContext(), title);
+            }
+        });
+    }
+
+    private static void searchYouTube(Context context, String title) {
+        Utils.openNewDocument(context, buildYouTubeIntent(context, title));
+    }
+
+    private static Intent buildYouTubeIntent(Context context, String title) {
+        PackageManager packageManager = context.getPackageManager();
+        boolean hasYouTube;
+        try {
+            packageManager.getPackageInfo(YOUTUBE_PACKAGE, PackageManager.GET_ACTIVITIES);
+            hasYouTube = true;
+        } catch (PackageManager.NameNotFoundException notInstalled) {
+            hasYouTube = false;
+        }
+
+        Intent intent;
+        if (hasYouTube) {
+            // Directly search the YouTube app
+            intent = new Intent(Intent.ACTION_SEARCH);
+            intent.setPackage(YOUTUBE_PACKAGE);
+            intent.putExtra("query", title);
+        } else {
+            // Launch a web search
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(String.format(YOUTUBE_SEARCH, Uri.encode(title))));
+        }
         return intent;
     }
 }
