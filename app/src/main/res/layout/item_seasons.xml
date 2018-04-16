@@ -11,7 +11,7 @@
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="@dimen/small_card_view_corner_radius"
     app:cardElevation="@dimen/card_view_elevation"
-    app:cardUseCompatPadding="true">
+    android:layout_margin="@dimen/padding_six">
 
     <RelativeLayout
         android:layout_width="match_parent"
