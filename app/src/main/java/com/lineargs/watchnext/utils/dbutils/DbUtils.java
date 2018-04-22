@@ -42,6 +42,13 @@ public class DbUtils {
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, cursor.getString(Query.OVERVIEW));
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, cursor.getString(Query.ORIGINAL_LANGUAGE));
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, cursor.getString(Query.TITLE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_IMDB_ID, cursor.getString(Query.IMDB_ID));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_HOMEPAGE, cursor.getString(Query.HOMEPAGE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES, cursor.getString(Query.PRODUCTION_COMPANIES));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES, cursor.getString(Query.PRODUCTION_COUNTRIES));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, cursor.getString(Query.STATUS));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES, cursor.getString(Query.GENRES));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_RUNTIME, cursor.getInt(Query.RUNTIME));
         movieContentValues[0] = contentValues;
         context.getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI,
                 movieContentValues);
