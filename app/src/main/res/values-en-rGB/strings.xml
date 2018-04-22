@@ -85,6 +85,6 @@
     <string name="pref_season_number_title">Season number format</string>
     <string name="view_details">view details</string>
     <string name="open_in_browser">Open in browser</string>
-    <string name="search">search</string>
+    <string name="search">web search</string>
     <string name="main_status">Status: %s</string>
 </resources>

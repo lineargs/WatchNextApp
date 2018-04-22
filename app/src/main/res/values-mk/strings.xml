@@ -89,6 +89,6 @@
     <string name="writers">Напишано од</string>
     <string name="view_details">види повеќе</string>
     <string name="open_in_browser">Отвори во прелистувач</string>
-    <string name="search">пребарувај</string>
+    <string name="search">веб пребарување</string>
     <string name="main_status">Статус: %s</string>
 </resources>

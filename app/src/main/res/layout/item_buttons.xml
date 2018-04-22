@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:minHeight="@dimen/button_min_height"
         style="?android:attr/buttonBarButtonStyle"
-        android:drawableLeft="@drawable/icon_google"
-        android:drawableStart="@drawable/icon_google"
+        android:drawableLeft="@drawable/icon_search_grey"
+        android:drawableStart="@drawable/icon_search_grey"
         android:text="@string/search"/>
 
     <Button

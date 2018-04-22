@@ -26,7 +26,7 @@
     <string name="search_query_hint">Search The MovieDb</string>
     <string name="search_empty_text_movie">Please use the search to look up for a movie.  Powered by THE MOVIE DB</string>
     <string name="search_empty_text_serie">Please use the search to look up for a serie.  Powered by THE MOVIE DB</string>
-    <string name="search">search</string>
+    <string name="search">web search</string>
 
     <!-- Sort Menu -->
     <string name="sort_by">Sort by</string>
