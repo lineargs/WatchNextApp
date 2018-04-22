@@ -86,14 +86,18 @@ public final class ServiceUtils {
 
     public static void setUpImdbButton(final String imdbId, final View imdbButton) {
         if (imdbButton != null) {
-            if (!imdbId.equals("0")) {
-                imdbButton.setEnabled(true);
-                imdbButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openImdb(imdbId, v.getContext());
-                    }
-                });
+            if (imdbId != null) {
+                if (!imdbId.equals("0")) {
+                    imdbButton.setEnabled(true);
+                    imdbButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openImdb(imdbId, v.getContext());
+                        }
+                    });
+                } else {
+                    imdbButton.setEnabled(false);
+                }
             } else {
                 imdbButton.setEnabled(false);
             }
