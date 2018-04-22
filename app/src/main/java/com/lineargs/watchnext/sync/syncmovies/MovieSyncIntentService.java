@@ -2,6 +2,7 @@ package com.lineargs.watchnext.sync.syncmovies;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 public class MovieSyncIntentService extends IntentService {
 
@@ -16,10 +17,10 @@ public class MovieSyncIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent.getData() != null && intent.hasExtra("UPDATE")) {
             MovieSyncTask.syncUpdateMovieDetail(this, intent.getData());
-        }
-
-        if (intent.getData() != null) {
+            Log.e("TAG UPDATE", "UPDATE");
+        } else if (intent.getData() != null) {
             MovieSyncTask.syncFullMovieDetail(this, intent.getData());
+            Log.e("TAG NON UPDATE", "NON UPDATE");
         }
     }
 }
