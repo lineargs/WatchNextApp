@@ -1,6 +1,5 @@
 package com.lineargs.watchnext.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,7 +8,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -23,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -69,6 +68,12 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     RecyclerView mRecyclerView;
     @BindView(R.id.empty_cast)
     AppCompatTextView mEmptyCast;
+    @BindView(R.id.google)
+    Button googleButton;
+    @BindView(R.id.youtube)
+    Button youTubeButton;
+    @BindView(R.id.google_play)
+    Button googlePlayButton;
     private Uri mUri;
     private CastAdapter mCastAdapter;
     private TVDetailAdapter mAdapter;
@@ -92,7 +97,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
             mUri = Uri.parse(savedInstanceState.getString(Constants.URI));
         }
         setHasOptionsMenu(true);
-        View mRootView = inflater.inflate(R.layout.fragment_tv_detail, container, false);
+        View mRootView = inflater.inflate(R.layout.fragment_series_detail, container, false);
         setupViews(mRootView, savedInstanceState);
         return mRootView;
     }
@@ -305,6 +310,9 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     private void imageLoad(Cursor cursor) {
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
+        ServiceUtils.setUpGoogleSearchButton(title, googleButton);
+        ServiceUtils.setUpYouTubeButton(title, youTubeButton);
+        ServiceUtils.setUpGooglePlayButton(title, googlePlayButton);
         if (DbUtils.isFavorite(getContext(), id)) {
             starFab.setImageDrawable(Utils.starImage(getContext()));
         } else {

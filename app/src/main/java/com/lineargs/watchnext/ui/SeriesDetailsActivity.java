@@ -13,7 +13,7 @@ public class SeriesDetailsActivity extends BaseTopActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tv_detail);
+        setContentView(R.layout.activity_series_detail);
         setupActionBar();
         setupNavDrawer();
         setupFragment(savedInstanceState);

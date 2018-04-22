@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/cover_backdrop"
+        android:id="@+id/cover_poster"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/landscape_nexted_view_padding"
+        android:paddingTop="@dimen/portrait_nested_view_padding"
         android:scrollbars="none">
 
         <FrameLayout
@@ -56,6 +56,8 @@
                     <include layout="@layout/fragment_cast" />
 
                     <include layout="@layout/item_footer_series" />
+
+                    <include layout="@layout/item_buttons_series" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 

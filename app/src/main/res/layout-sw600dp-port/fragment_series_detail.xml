@@ -61,6 +61,8 @@
                             android:layout_height="wrap_content" />
 
                         <include layout="@layout/fragment_cast" />
+
+                        <include layout="@layout/item_buttons_series" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
