@@ -20,11 +20,20 @@ import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionComp
 
 import java.util.List;
 
+/**
+ * Helper Common Utility class
+ */
 public final class Utils {
 
+    //Prevents initialization
     private Utils() {
     }
 
+    /**
+     * Reads the version name from the app build.gradle file
+     * @param context Activity context
+     * @return version name String
+     */
     private static String versionName(Context context) {
         String version;
         try {
@@ -36,6 +45,11 @@ public final class Utils {
         return version;
     }
 
+    /**
+     * Reads the version code from the app build.gradle file
+     * @param context Activity context
+     * @return version code number
+     */
     private static int versionCode(Context context) {
         int version;
         try {
@@ -47,6 +61,11 @@ public final class Utils {
         return version;
     }
 
+    /**
+     *
+     * @param context Activity context
+     * @return String in following format: Build 1.2.23, used in About Activity
+     */
     public static String versionString(Context context) {
         return context.getString(R.string.about_version, versionName(context));
     }
