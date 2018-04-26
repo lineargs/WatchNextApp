@@ -1,5 +1,8 @@
 package com.lineargs.watchnext.utils;
 
+/**
+ * Helper class for providing Constants using in the Activities
+ */
 public final class Constants {
 
     public static final String ID = "id";

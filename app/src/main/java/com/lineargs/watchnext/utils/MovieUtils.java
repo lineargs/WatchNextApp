@@ -28,6 +28,11 @@ public class MovieUtils {
         return date;
     }
 
+    /**
+     * Helper method used in the Main Activity
+     * @param date The date read from the database
+     * @return Return the date formatted based on the Phone Locale
+     */
     public static String getMainNormalizedDate(String date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         return simpleDateFormat.format(date);
@@ -41,7 +46,13 @@ public class MovieUtils {
         return vote + " / 10";
     }
 
+    /**
+     * Method used to get default video poster from YouTube
+     * @param key Received from the MovieDb API
+     * @return The URL used to download that image using Picasso
+     */
     public static String getYouTubeImage(String key) {
+
         return "https://img.youtube.com/vi/" + key + "/0.jpg";
     }
 }
