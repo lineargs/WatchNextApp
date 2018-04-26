@@ -42,17 +42,33 @@ public final class ServiceUtils {
     private ServiceUtils() {
     }
 
+    /**
+     * Helper Picasso method
+     * @param context The view context
+     * @param path Image url
+     * @return RequestCreator
+     */
     @NonNull
     public static RequestCreator loadPicasso(Context context, String path) {
         return Picasso.with(context).load(path);
     }
 
+    /**
+     * Helper method for opening youtube videos via Intent
+     * @param context The activity context
+     * @param youTube Video url
+     */
     public static void openYouTube(Context context, String youTube) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(youTube));
         context.startActivity(intent);
     }
 
+    /**
+     * Helper method for building movie share Intent
+     * @param activity The activity used
+     * @param id The movieDb ID
+     */
     public static void shareMovie(Activity activity, String id) {
         ShareCompat.IntentBuilder intentBuilder = ShareCompat.IntentBuilder.from(activity)
                 .setText(activity.getString(R.string.share_movie, id))
@@ -64,6 +80,11 @@ public final class ServiceUtils {
         }
     }
 
+    /**
+     * Helper method for building series share Intent
+     * @param activity The activity used
+     * @param id The movieDb ID
+     */
     public static void shareSerie(Activity activity, String id) {
         ShareCompat.IntentBuilder intentBuilder = ShareCompat.IntentBuilder.from(activity)
                 .setText(activity.getString(R.string.share_serie, id))
@@ -75,6 +96,11 @@ public final class ServiceUtils {
         }
     }
 
+    /**
+     * Opens implicit Intent
+     * @param context The activity context
+     * @param link Websites link
+     */
     public static void openWeb(Context context, String link) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(link));
@@ -84,6 +110,13 @@ public final class ServiceUtils {
         context.startActivity(intent);
     }
 
+    /**
+     * Helper method for setting up the IMDB button used in the Movie Details Activity. If there is no button
+     * there is nothing to set up, if the ID is null or = 0 then the button is disabled as there is no
+     * point to open imdb
+     * @param imdbId IMDB ID
+     * @param imdbButton The view used for set up
+     */
     public static void setUpImdbButton(final String imdbId, final View imdbButton) {
         if (imdbButton != null) {
             if (imdbId != null) {
@@ -104,6 +137,11 @@ public final class ServiceUtils {
         }
     }
 
+    /**
+     * Opens the movie in the IMDB app or web page if there is no app installed on the device
+     * @param imdbId IMDB ID
+     * @param context Activity context
+     */
     private static void openImdb(String imdbId, Context context) {
         if (context == null || imdbId.equals("0")) {
             return;
@@ -126,6 +164,12 @@ public final class ServiceUtils {
 
     }
 
+    /**
+     * Helper method used for setting up the web search button. If there is no button there is nothing to
+     * set up, if the title is empty then there is no point launching implicit Intent to web search
+     * @param title Movie / Serie title
+     * @param button View for setting up
+     */
     public static void setUpGoogleSearchButton(final String title, View button) {
         if (button == null) {
             return;
@@ -142,16 +186,32 @@ public final class ServiceUtils {
         });
     }
 
+    /**
+     * Used to search the Web.
+     * @param context Activity context
+     * @param title Movie / Serie title
+     */
     private static void searchGoogle(Context context, String title) {
         Utils.openNewDocument(context, buildGoogleSearchIntent(title));
     }
 
+    /**
+     *
+     * @param title Movie / Serie title
+     * @return implicit Intent for performing web search
+     */
     private static Intent buildGoogleSearchIntent(String title) {
         Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
         intent.putExtra(SearchManager.QUERY, title);
         return intent;
     }
 
+    /**
+     * Helper method used for setting up the YouTube search button. If there is no button there is
+     * nothing to set up, if title is empty then there is no point performing the search
+     * @param title Movie / Serie title
+     * @param button View
+     */
     public static void setUpYouTubeButton(final String title, View button) {
         if (button == null) {
             return;
@@ -168,10 +228,22 @@ public final class ServiceUtils {
         });
     }
 
+    /**
+     * Tries to open and perform YouTube search. If there is an app installed will open the app otherwise will
+     * perform search in browser.
+     * @param context Activity context
+     * @param title Movie / Serie title
+     */
     private static void searchYouTube(Context context, String title) {
         Utils.openNewDocument(context, buildYouTubeIntent(context, title));
     }
 
+    /**
+     *
+     * @param context Activity context
+     * @param title Movie / Serie title
+     * @return Implicit Intent
+     */
     private static Intent buildYouTubeIntent(Context context, String title) {
         PackageManager packageManager = context.getPackageManager();
         boolean hasYouTube;
@@ -196,6 +268,12 @@ public final class ServiceUtils {
         return intent;
     }
 
+    /**
+     * Helper method used for setting up the Google Play Movie button. If there is no view there is nothing
+     * to set up, if the title is empty there is no point performing the search
+     * @param title Movie / Serie title
+     * @param button View
+     */
     public static void setUpGooglePlayButton(final String title, View button) {
         if (button == null) {
             return;
@@ -212,10 +290,22 @@ public final class ServiceUtils {
         });
     }
 
+    /**
+     * Tries to open the Google Play Movie app and performs search if there is an app installed, otherwise
+     * opens in browser
+     * @param context Activity context
+     * @param title Movie / Serie title
+     */
     private static void searchGooglePlay(Context context, String title) {
         Utils.openNewDocument(context, buildGooglePlayIntent(title, context));
     }
 
+    /**
+     *
+     * @param title Movie / Serie title
+     * @param context Activity context
+     * @return Implicit intent
+     */
     private static Intent buildGooglePlayIntent(String title, Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String playStoreQuery = String.format(context.getString(R.string.google_play_search),
