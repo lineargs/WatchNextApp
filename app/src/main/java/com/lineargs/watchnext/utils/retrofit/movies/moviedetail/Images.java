@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * Created by goranminov on 20/12/2017.
+ *
+ * JSON POJO class for our {@link retrofit2.converter.gson.GsonConverterFactory}
  */
 
 public class Images {

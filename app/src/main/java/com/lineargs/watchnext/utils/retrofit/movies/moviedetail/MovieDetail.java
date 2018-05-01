@@ -7,6 +7,10 @@ import com.lineargs.watchnext.utils.retrofit.videos.Videos;
 
 import java.util.List;
 
+/**
+ * JSON POJO class for our {@link retrofit2.converter.gson.GsonConverterFactory}
+ */
+
 public class MovieDetail {
 
     @SerializedName("backdrop_path")

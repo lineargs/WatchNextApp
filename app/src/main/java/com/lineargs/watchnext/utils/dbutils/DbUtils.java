@@ -120,6 +120,14 @@ public class DbUtils {
         return contains;
     }
 
+    /**
+     * Used to check whether the Movie in the table contains an IMDB ID. If contains that means that we have
+     * all the informations sync from the MovieDb API and we do not need to make a call so we can update the
+     * Movie information
+     * @param context The app context
+     * @param uri URI used to check in the db
+     * @return true / false
+     */
     public static boolean checkForExtras(Context context, Uri uri) {
         String id = uri.getLastPathSegment();
         uri = Utils.getBaseUri(uri);
@@ -136,6 +144,13 @@ public class DbUtils {
         return contains;
     }
 
+    /**
+     * Checks whether the Movie / Serie is added in the favourites db. Used so we can display the proper
+     * Drawable. Whether is star or borderStar image.
+     * @param context The app context
+     * @param id The Movie / Serie ID
+     * @return true / false
+     */
     public static boolean isFavorite(Context context, long id) {
         Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
         Cursor cursor = context.getContentResolver().query(uri,

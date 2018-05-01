@@ -70,12 +70,23 @@ public final class Utils {
         return context.getString(R.string.about_version, versionName(context));
     }
 
+    /**
+     * For better implementation while updating the Movie Details we extract the base URI from the one
+     * containing the ID
+     * @param uri containing the ID
+     * @return parsed URI without the ID
+     */
     public static Uri getBaseUri(Uri uri) {
         String stringUri = uri.toString();
         stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
         return Uri.parse(stringUri);
     }
 
+    /**
+     * Helper method used for building the Guest Stars String.
+     * @param guestStars List of type GuestStar
+     * @return String in following format: Keanu Reeves, Morgan Freeman, Jennifer Aniston
+     */
     public static String buildGuestStarsString(List<GuestStar> guestStars) {
 
         if (guestStars == null || guestStars.isEmpty()) {
@@ -93,6 +104,11 @@ public final class Utils {
         return stringBuilder.toString();
     }
 
+    /**
+     * Helper method used for building the Directors String
+     * @param crews List of type Crew
+     * @return String in following format: Director 1, Director 2, Director 3
+     */
     public static String buildDirectorsString(List<Crew> crews) {
         if (crews == null || crews.isEmpty()) {
             return null;
@@ -111,6 +127,11 @@ public final class Utils {
         return stringBuilder.toString();
     }
 
+    /**
+     * Helper method used for building the Writers String
+     * @param crews List of type Crew
+     * @return String in following format: Writer 1, Writer 2, Writer 3
+     */
     public static String buildWritersString(List<Crew> crews) {
         if (crews == null || crews.isEmpty()) {
             return null;
@@ -129,6 +150,11 @@ public final class Utils {
         return stringBuilder.toString();
     }
 
+    /**
+     * Helper method used for building Companies String
+     * @param companies List of type ProductionCompany
+     * @return String in following format: Google, Google, Google
+     */
     public static String buildCompaniesString(List<ProductionCompany> companies) {
 
         if (companies == null || companies.isEmpty()) {
@@ -146,6 +172,11 @@ public final class Utils {
         return stringBuilder.toString();
     }
 
+    /**
+     * Helper method used for building Genres String
+     * @param genres List of type Genre
+     * @return String in following format: Comedy, Horror, Fantasy
+     */
     public static String buildGenresString(List<Genre> genres) {
 
         if (genres == null || genres.isEmpty()) {
@@ -163,6 +194,14 @@ public final class Utils {
         return stringBuilder.toString();
     }
 
+    /**
+     * Helper method checking if we can find the package i.e. if the app where we try to launch the Intent
+     * has been installed on the phone.
+     * @param context The application context
+     * @param intent The Intent
+     * @param displayError Whether to display the error
+     * @return true / false
+     */
     public static boolean tryStartActivity(Context context, Intent intent, boolean displayError) {
         boolean handled = false;
 
@@ -183,14 +222,30 @@ public final class Utils {
         return handled;
     }
 
+    /**
+     * Helper method returning the Star Image Drawable
+     * @param context The app context
+     * @return The drawable
+     */
     public static VectorDrawableCompat starImage(Context context) {
         return VectorDrawableCompat.create(context.getResources(), R.drawable.icon_star_white, context.getTheme());
     }
 
+    /**
+     * Helper method returning the Star Border Image Drawable
+     * @param context The app context
+     * @return The drawable
+     */
     public static VectorDrawableCompat starBorderImage(Context context) {
         return VectorDrawableCompat.create(context.getResources(), R.drawable.icon_star_border_white, context.getTheme());
     }
 
+    /**
+     * Return value of this method is never used
+     * @param context The app context
+     * @param intent The Intent
+     * @return true / false
+     */
     public static boolean openNewDocument(@NonNull Context context, @NonNull Intent intent) {
         // launch as a new document (separate entry in task switcher)
         // or on older versions: clear from task stack when returning to app

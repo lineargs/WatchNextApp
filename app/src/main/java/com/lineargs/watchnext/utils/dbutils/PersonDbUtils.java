@@ -16,6 +16,7 @@ import java.text.ParseException;
 
 public class PersonDbUtils {
 
+    /* Static variables */
     private static final String IMAGE_MEDIUM_BASE = "http://image.tmdb.org/t/p/w500/";
     private static final String IMAGE_SMALL_BASE = "http://image.tmdb.org/t/p/w370/";
 
