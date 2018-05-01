@@ -209,6 +209,12 @@ public class MovieDbUtils {
         return contentValues;
     }
 
+    //TODO Make all the Companies from same List type
+    /**
+     * Helper method used for building Companies String
+     * @param companies List of type ProductionCompany
+     * @return String in following format: Google, Google, Google
+     */
     private static String buildCompaniesString(List<ProductionCompany> companies) {
 
         if (companies == null || companies.isEmpty()) {
@@ -226,6 +232,11 @@ public class MovieDbUtils {
         return stringBuilder.toString();
     }
 
+    /**
+     * Helper method used for building Countries String
+     * @param countries List of type ProductionCountry
+     * @return String in following format: Macedonia, England, United States
+     */
     private static String buildCountriesString(List<ProductionCountry> countries) {
 
         if (countries == null || countries.isEmpty()) {
@@ -243,6 +254,11 @@ public class MovieDbUtils {
         return stringBuilder.toString();
     }
 
+    /**
+     * Helper method used for building Genres String
+     * @param genres List of type Genre
+     * @return String in following format: Comedy, Horror, Fantasy
+     */
     private static String buildGenresString(List<Genre> genres) {
 
         if (genres == null || genres.isEmpty()) {
