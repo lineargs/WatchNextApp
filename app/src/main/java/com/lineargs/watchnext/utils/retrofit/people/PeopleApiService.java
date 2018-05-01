@@ -13,6 +13,12 @@ import retrofit2.http.Query;
 
 public interface PeopleApiService {
 
+    /**
+     * Method of type retrofit GET
+     * @param id The ID
+     * @param apiKey The API KEY
+     * @return The URL for the network call
+     */
     @GET("person/{person_id}")
     Call<Person> getPerson(
             @Path("person_id") String id,
