@@ -248,6 +248,24 @@ public final class ServiceUtils {
     }
 
     /**
+     * Helper method used for setting up the Videos button. If there is no button there is
+     * nothing to set up, if  MovieID does not exist in Videos table then there is no point opening
+     * empty activity
+     * @param context Activity context
+     * @param movieId MovieID
+     * @param button View
+     */
+    public static void setUpVideosButton(Context context, String movieId, View button) {
+        //TODO Refactor the statement
+        if (button == null) {
+            return;
+        } else if (!DbUtils.checkForVideos(context, movieId)) {
+            button.setEnabled(false);
+            return;
+        }
+    }
+
+    /**
      * Tries to open and perform YouTube search. If there is an app installed will open the app otherwise will
      * perform search in browser.
      * @param context Activity context
