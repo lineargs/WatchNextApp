@@ -12,7 +12,7 @@
         android:layout_height="@dimen/movie_poster_height_default"
         android:layout_centerInParent="true"
         android:contentDescription="@string/empty_image_content_description"
-        app:srcCompat="@drawable/icon_art_track_black" />
+        app:srcCompat="@drawable/icon_art_track_grey" />
 
     <TextView
         style="@style/TextAppearance.AppCompat.Subhead"

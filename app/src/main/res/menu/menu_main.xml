@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/sort_by"
-        android:icon="@drawable/icon_sort_black"
+        android:icon="@drawable/icon_sort_grey"
         android:orderInCategory="1"
         android:title="@string/sort_by"
         app:showAsAction="ifRoom" />
