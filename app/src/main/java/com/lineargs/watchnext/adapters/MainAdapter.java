@@ -31,8 +31,6 @@ import butterknife.ButterKnife;
 
 public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int VIEW_TYPE_SORT = 0;
-    private final int VIEW_TYPE_MAIN = 1;
     private OnItemClickListener callback;
     private Context context;
     private Cursor cursor;
@@ -56,20 +54,10 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case VIEW_TYPE_SORT:
-                View sortView = LayoutInflater
-                        .from(context)
-                        .inflate(R.layout.item_sort, parent, false);
-                return new SortViewHolder(sortView);
-            case VIEW_TYPE_MAIN:
-                View mainView = LayoutInflater
-                        .from(context)
-                        .inflate(R.layout.item_main, parent, false);
-                return new MainViewHolder(mainView);
-            default:
-                throw new IllegalArgumentException("Invalid view type, value of" + viewType);
-        }
+        View mainView = LayoutInflater
+                .from(context)
+                .inflate(R.layout.item_main, parent, false);
+        return new MainViewHolder(mainView);
     }
 
     /**
@@ -82,22 +70,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        switch (getItemViewType(position)) {
-            case VIEW_TYPE_SORT:
-                bindSortView((SortViewHolder) holder);
-                break;
-            case VIEW_TYPE_MAIN:
-                bindMainViews((MainViewHolder) holder, context, position - 1);
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {
-            return VIEW_TYPE_SORT;
-        } else {
-            return VIEW_TYPE_MAIN;
-        }
+        bindMainViews((MainViewHolder) holder, context, position);
     }
 
     /**
@@ -110,7 +83,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (cursor == null) {
             return 0;
         }
-        return 1 + cursor.getCount();
+        return cursor.getCount();
     }
 
     /**
@@ -141,9 +114,6 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         boolean favorite = cursor.getCount() > 0;
         cursor.close();
         return favorite;
-    }
-
-    private void bindSortView(final SortViewHolder holder) {
     }
 
     private void bindMainViews(final MainViewHolder holder, final Context context, int position) {
@@ -179,8 +149,6 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnItemClickListener {
         void onItemSelected(Uri uri);
-
-        void onSortClick();
     }
 
     /*
@@ -211,29 +179,10 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            cursor.moveToPosition(getAdapterPosition() - 1);
+            cursor.moveToPosition(getAdapterPosition());
             Uri uri = DataContract.Favorites.buildFavoritesUriWithId(
                     Long.parseLong(cursor.getString(Query.ID)));
             callback.onItemSelected(uri);
-        }
-    }
-
-    class SortViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        @BindView(R.id.main_sort)
-        AppCompatTextView sort;
-
-        SortViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-            if (callback != null) {
-                view.setOnClickListener(this);
-            }
-        }
-
-        @Override
-        public void onClick(View view) {
-            callback.onSortClick();
         }
     }
 }
