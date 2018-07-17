@@ -3,7 +3,9 @@ package com.lineargs.watchnext.utils.dbutils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
+import android.util.Log;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
@@ -140,6 +142,29 @@ public class DbUtils {
             return false;
         }
         boolean contains = cursor.getCount() > 0;
+        cursor.close();
+        return contains;
+    }
+
+    /**
+     * Used to check whether that particular MovieID contains inside the Review table. If contains that means that we have
+     * all the informations sync from the MovieDb API and we can enable the Comments button
+     * @param context The app context
+     * @param id MovieID used to check in the db
+     * @return true / false
+     */
+    public static boolean checkForComments(Context context, String id) {
+        Uri uri = DataContract.Review.CONTENT_URI;
+        Cursor cursor = context.getContentResolver().query(uri,
+                null,
+                DataContract.Review.COLUMN_MOVIE_ID + " = ? ",
+                new String[] {id},
+                null);
+        if (cursor == null) {
+            return false;
+        }
+        boolean contains = cursor.getCount() > 0;
+        Log.v("CURSOOOOOOR", DatabaseUtils.dumpCursorToString(cursor));
         cursor.close();
         return contains;
     }

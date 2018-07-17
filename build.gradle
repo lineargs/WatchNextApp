@@ -18,6 +18,7 @@ buildscript {
             'picasso': '2.5.2',
             'crashlytics': '2.8.0',
             'firebaseCore': '16.0.1',
+            'firebaseMessaging': '17.1.0',
             'firebaseJob': '0.8.5',
             'espresso': '3.0.2',
             'versionCode': versionMajor * 10000 + versionMinor * 100 + versionPatch,

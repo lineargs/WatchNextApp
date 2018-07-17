@@ -50,7 +50,7 @@ dependencies {
     /* Firebase firebase.google.com/docs/android/setup#available_libraries*/
     implementation "com.google.firebase:firebase-crash:${versions.firebaseCore}"
     implementation "com.google.firebase:firebase-core:${versions.firebaseCore}"
-    implementation "com.google.firebase:firebase-messaging:${versions.firebaseCore}"
+    implementation "com.google.firebase:firebase-messaging:${versions.firebaseMessaging}"
     /* github.com/firebase/firebase-jobdispatcher-android/blob/master/README.md */
     implementation "com.firebase:firebase-jobdispatcher:${versions.firebaseJob}"
     /* Crashlytics docs.fabric.io/android/changelog.html */

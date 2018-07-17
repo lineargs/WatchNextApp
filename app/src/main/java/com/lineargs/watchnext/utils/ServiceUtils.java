@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -226,6 +227,24 @@ public final class ServiceUtils {
                 searchYouTube(v.getContext(), title);
             }
         });
+    }
+
+    /**
+     * Helper method used for setting up the Comments button. If there is no button there is
+     * nothing to set up, if  MovieID does not exist in Review table then there is no point opening
+     * empty activity
+     * @param context Activity context
+     * @param movieId MovieID
+     * @param button View
+     */
+    public static void setUpCommentsButton(Context context, String movieId, View button) {
+        //TODO Refactor the statement
+        if (button == null) {
+            return;
+        } else if (!DbUtils.checkForComments(context, movieId)) {
+            button.setEnabled(false);
+            return;
+        }
     }
 
     /**
