@@ -19,7 +19,7 @@ buildscript {
             'crashlytics': '2.8.0',
             'firebaseCore': '16.0.1',
             'firebaseJob': '0.8.5',
-            'espresso': '3.0.1',
+            'espresso': '3.0.2',
             'versionCode': versionMajor * 10000 + versionMinor * 100 + versionPatch,
             'versionName': "${versionMajor}.${versionMinor}.${versionPatch}"
     ]
