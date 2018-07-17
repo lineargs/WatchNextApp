@@ -2,7 +2,8 @@ WatchNext
 =========
 Simple application to track and explore all the information from your favourite movies and series.
 
-<a href='https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png'><img alt='WatchNext Logo' src='https://github.com/lineargs/WatchNextApp/blob/master/app/src/main/ic_launcher-web.png' height="200"/></a> 
+<img src="app/src/main/ic_launcher-web.png" width="200" height="200"/>
+
 - Explore all the details from the Popular, Top Rated and Upcoming Movies.
 - Explore all the details from the Popular, Top Rated and On The Air Series. 
 - See the Movies showing in the Theaters.
