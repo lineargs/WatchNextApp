@@ -238,6 +238,12 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         return nColumns;
     }
 
+    /**
+     * Checks whether the entry is Movie / Serie in the favourites db. Used so we can open the appropriate
+     * Activity.
+     * @param uri The URI
+     * @return true / false
+     */
     private boolean isSeries(Uri uri) {
         String id = uri.getLastPathSegment();
         Cursor cursor = this.getContentResolver().query(DataContract.Favorites.CONTENT_URI,

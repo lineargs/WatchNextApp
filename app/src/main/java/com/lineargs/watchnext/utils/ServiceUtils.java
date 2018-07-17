@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -45,8 +46,9 @@ public final class ServiceUtils {
 
     /**
      * Helper Picasso method
+     *
      * @param context The view context
-     * @param path Image url
+     * @param path    Image url
      * @return RequestCreator
      */
     @NonNull
@@ -56,6 +58,7 @@ public final class ServiceUtils {
 
     /**
      * Helper method for opening youtube videos via Intent
+     *
      * @param context The activity context
      * @param youTube Video url
      */
@@ -67,8 +70,9 @@ public final class ServiceUtils {
 
     /**
      * Helper method for building movie share Intent
+     *
      * @param activity The activity used
-     * @param id The movieDb ID
+     * @param id       The movieDb ID
      */
     public static void shareMovie(Activity activity, String id) {
         ShareCompat.IntentBuilder intentBuilder = ShareCompat.IntentBuilder.from(activity)
@@ -83,8 +87,9 @@ public final class ServiceUtils {
 
     /**
      * Helper method for building series share Intent
+     *
      * @param activity The activity used
-     * @param id The movieDb ID
+     * @param id       The movieDb ID
      */
     public static void shareSerie(Activity activity, String id) {
         ShareCompat.IntentBuilder intentBuilder = ShareCompat.IntentBuilder.from(activity)
@@ -99,8 +104,9 @@ public final class ServiceUtils {
 
     /**
      * Opens implicit Intent
+     *
      * @param context The activity context
-     * @param link Websites link
+     * @param link    Websites link
      */
     public static void openWeb(Context context, String link) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -115,7 +121,8 @@ public final class ServiceUtils {
      * Helper method for setting up the IMDB button used in the Movie Details Activity. If there is no button
      * there is nothing to set up, if the ID is null or = 0 then the button is disabled as there is no
      * point to open imdb
-     * @param imdbId IMDB ID
+     *
+     * @param imdbId     IMDB ID
      * @param imdbButton The view used for set up
      */
     public static void setUpImdbButton(final String imdbId, final View imdbButton) {
@@ -140,7 +147,8 @@ public final class ServiceUtils {
 
     /**
      * Opens the movie in the IMDB app or web page if there is no app installed on the device
-     * @param imdbId IMDB ID
+     *
+     * @param imdbId  IMDB ID
      * @param context Activity context
      */
     private static void openImdb(String imdbId, Context context) {
@@ -150,7 +158,7 @@ public final class ServiceUtils {
 
         Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(IMDB_APP_TITLE_URI + imdbId
-                + IMDB_APP_POST_TITLE_URI));
+                        + IMDB_APP_POST_TITLE_URI));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         } else {
@@ -168,7 +176,8 @@ public final class ServiceUtils {
     /**
      * Helper method used for setting up the web search button. If there is no button there is nothing to
      * set up, if the title is empty then there is no point launching implicit Intent to web search
-     * @param title Movie / Serie title
+     *
+     * @param title  Movie / Serie title
      * @param button View for setting up
      */
     public static void setUpGoogleSearchButton(final String title, View button) {
@@ -189,15 +198,15 @@ public final class ServiceUtils {
 
     /**
      * Used to search the Web.
+     *
      * @param context Activity context
-     * @param title Movie / Serie title
+     * @param title   Movie / Serie title
      */
     private static void searchGoogle(Context context, String title) {
         Utils.openNewDocument(context, buildGoogleSearchIntent(title));
     }
 
     /**
-     *
      * @param title Movie / Serie title
      * @return implicit Intent for performing web search
      */
@@ -210,7 +219,8 @@ public final class ServiceUtils {
     /**
      * Helper method used for setting up the YouTube search button. If there is no button there is
      * nothing to set up, if title is empty then there is no point performing the search
-     * @param title Movie / Serie title
+     *
+     * @param title  Movie / Serie title
      * @param button View
      */
     public static void setUpYouTubeButton(final String title, View button) {
@@ -233,17 +243,14 @@ public final class ServiceUtils {
      * Helper method used for setting up the Comments button. If there is no button there is
      * nothing to set up, if  MovieID does not exist in Review table then there is no point opening
      * empty activity
+     *
      * @param context Activity context
      * @param movieId MovieID
-     * @param button View
+     * @param button  View
      */
     public static void setUpCommentsButton(Context context, String movieId, View button) {
-        //TODO Refactor the statement
-        if (button == null) {
-            return;
-        } else if (!DbUtils.checkForComments(context, movieId)) {
+        if (button != null && !DbUtils.checkForId(context, movieId, DataContract.Review.CONTENT_URI)) {
             button.setEnabled(false);
-            return;
         }
     }
 
@@ -251,34 +258,31 @@ public final class ServiceUtils {
      * Helper method used for setting up the Videos button. If there is no button there is
      * nothing to set up, if  MovieID does not exist in Videos table then there is no point opening
      * empty activity
+     *
      * @param context Activity context
      * @param movieId MovieID
-     * @param button View
+     * @param button  View
      */
     public static void setUpVideosButton(Context context, String movieId, View button) {
-        //TODO Refactor the statement
-        if (button == null) {
-            return;
-        } else if (!DbUtils.checkForVideos(context, movieId)) {
+        if (button != null && !DbUtils.checkForId(context, movieId, DataContract.Videos.CONTENT_URI)) {
             button.setEnabled(false);
-            return;
         }
     }
 
     /**
      * Tries to open and perform YouTube search. If there is an app installed will open the app otherwise will
      * perform search in browser.
+     *
      * @param context Activity context
-     * @param title Movie / Serie title
+     * @param title   Movie / Serie title
      */
     private static void searchYouTube(Context context, String title) {
         Utils.openNewDocument(context, buildYouTubeIntent(context, title));
     }
 
     /**
-     *
      * @param context Activity context
-     * @param title Movie / Serie title
+     * @param title   Movie / Serie title
      * @return Implicit Intent
      */
     private static Intent buildYouTubeIntent(Context context, String title) {
@@ -308,7 +312,8 @@ public final class ServiceUtils {
     /**
      * Helper method used for setting up the Google Play Movie button. If there is no view there is nothing
      * to set up, if the title is empty there is no point performing the search
-     * @param title Movie / Serie title
+     *
+     * @param title  Movie / Serie title
      * @param button View
      */
     public static void setUpGooglePlayButton(final String title, View button) {
@@ -330,16 +335,16 @@ public final class ServiceUtils {
     /**
      * Tries to open the Google Play Movie app and performs search if there is an app installed, otherwise
      * opens in browser
+     *
      * @param context Activity context
-     * @param title Movie / Serie title
+     * @param title   Movie / Serie title
      */
     private static void searchGooglePlay(Context context, String title) {
         Utils.openNewDocument(context, buildGooglePlayIntent(title, context));
     }
 
     /**
-     *
-     * @param title Movie / Serie title
+     * @param title   Movie / Serie title
      * @param context Activity context
      * @return Implicit intent
      */
