@@ -7,4 +7,11 @@
         android:orderInCategory="0"
         android:title="@string/search_label"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/sort_by"
+        android:icon="@drawable/icon_sort_black"
+        android:orderInCategory="1"
+        android:title="@string/sort_by"
+        app:showAsAction="ifRoom" />
 </menu>
