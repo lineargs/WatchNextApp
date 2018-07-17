@@ -14,7 +14,19 @@ Simple application to track and explore all the information from your favourite 
 
 <a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://github.com/lineargs/WatchNextApp/blob/master/google_play.png' height="70"/></a> <a href='https://www.amazon.com/gp/product/B0787D5ZZJ/ref=mas_pm_watchnext'><img alt='Available on Amazon' src='https://github.com/lineargs/WatchNextApp/blob/master/amazon.png' height="70"/></a>
 
-Powered By
+Phone screenshots
+-----------------
+<pre> <img src="screenshots/phone_drawer.png" width="280"/> <img src="screenshots/phone_main_empty.png" width="280"/> <img src="screenshots/phone_main_search.png" width="280"/> <img src="screenshots/phone_main.png" width="280"/> <img src="screenshots/phone_movie_detail.png" width="280"/> <img src="screenshots/phone_movie_search.png" width="280"/> <img src="screenshots/phone_series_detail.png" width="280"/> <img src="screenshots/phone_series_episode_detail.png" width="280"/> </pre>
+
+7-inch tablet screenshots
+-----------------
+<pre> <img src="screenshots/tablet_7_drawer.png" width="280"/> <img src="screenshots/tablet_7_main_empty.png" width="280"/> <img src="screenshots/tablet_7_main_search.png" width="280"/> <img src="screenshots/tablet_7_main.png" width="280"/> <img src="screenshots/tablet_7_movie_detail.png" width="280"/> <img src="screenshots/tablet_7_movie_search.png" width="280"/> <img src="screenshots/tablet_7_series_detail.png" width="280"/> <img src="screenshots/tablet_7_series_episode_detail.png" width="280"/> </pre>
+
+10-inch tablet screenshots
+-----------------
+<pre> <img src="screenshots/tablet_10_main_empty.png" width="280"/> <img src="screenshots/tablet_10_main_search.png" width="280"/> <img src="screenshots/tablet_10_main.png" width="280"/> <img src="screenshots/tablet_10_movie_detail.png" width="280"/> <img src="screenshots/tablet_10_movie_search.png" width="280"/> <img src="screenshots/tablet_10_series_detail.png" width="280"/> </pre>
+
+Powered by
 ----------
 
 <a href='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png'><img alt='The TMDb' src='https://github.com/lineargs/WatchNextApp/blob/master/powered_by.png' height="90"/></a>
