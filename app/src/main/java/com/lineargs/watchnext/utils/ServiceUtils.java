@@ -260,11 +260,11 @@ public final class ServiceUtils {
      * empty activity
      *
      * @param context Activity context
-     * @param movieId MovieID
+     * @param id The ID of the Movie / Series
      * @param button  View
      */
-    public static void setUpVideosButton(Context context, String movieId, View button) {
-        if (button != null && !DbUtils.checkForId(context, movieId, DataContract.Videos.CONTENT_URI)) {
+    public static void setUpVideosButton(Context context, String id, View button) {
+        if (button != null && !DbUtils.checkForId(context, id, DataContract.Videos.CONTENT_URI)) {
             button.setEnabled(false);
         }
     }
