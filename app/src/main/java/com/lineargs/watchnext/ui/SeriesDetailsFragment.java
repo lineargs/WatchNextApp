@@ -127,6 +127,8 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         if (mUri != null) {
             if (savedState == null && !DbUtils.checkForCredits(getContext(), mUri.getLastPathSegment())) {
                 SerieDetailUtils.syncSeasons(getContext(), mUri);
+            } else if (savedState == null) {
+                SerieDetailUtils.updateDetails(getContext(), mUri);
             }
             startCastLoading();
         }

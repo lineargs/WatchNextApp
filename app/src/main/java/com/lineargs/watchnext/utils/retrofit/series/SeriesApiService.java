@@ -27,6 +27,11 @@ public interface SeriesApiService {
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
+    @GET("tv/{tv_id}")
+    Call<SeriesDetails> updateDetails(
+            @Path("tv_id") String id,
+            @Query("api_key") String apiKey);
+
     @GET("tv/{tv_id}/season/{season_number}")
     Call<SeasonDetails> getSeason(
             @Path("tv_id") String id,
