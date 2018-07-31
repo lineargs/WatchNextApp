@@ -12,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,7 +84,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     private void setupViews() {
         ButterKnife.bind(this);
         bundle = new Bundle();
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new MainAdapter(this, this);
@@ -120,22 +121,25 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.search) {
-            Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
-            startActivity(txtIntent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+                startActivity(txtIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                return true;
+            case R.id.sort_by:
+                showPopup();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /* Here we are restarting the loader to sort the results, based on the
      * Popup Menu item clicked
      */
     public void showPopup() {
-        View menu = findViewById(R.id.main_sort);
+        View menu = findViewById(R.id.sort_by);
         PopupMenu popupMenu = new PopupMenu(this, menu);
         popupMenu.inflate(R.menu.sort_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -221,11 +225,25 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
 
     }
 
-    @Override
-    public void onSortClick() {
-        showPopup();
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        //Updated to 900 as per the newer device compatibility
+        int widthDivider = 900;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 1) {
+            return 1;
+        }
+        return nColumns;
     }
 
+    /**
+     * Checks whether the entry is Movie / Serie in the favourites db. Used so we can open the appropriate
+     * Activity.
+     * @param uri The URI
+     * @return true / false
+     */
     private boolean isSeries(Uri uri) {
         String id = uri.getLastPathSegment();
         Cursor cursor = this.getContentResolver().query(DataContract.Favorites.CONTENT_URI,

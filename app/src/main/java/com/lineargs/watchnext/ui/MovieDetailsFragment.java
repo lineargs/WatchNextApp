@@ -102,6 +102,10 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     Button youTubeButton;
     @BindView(R.id.google_play)
     Button googlePlayButton;
+    @BindView(R.id.reviews)
+    Button reviewsButton;
+    @BindView(R.id.videos)
+    Button videosButton;
 
     public MovieDetailsFragment() {
     }
@@ -384,6 +388,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
         String imdb = cursor.getString(Query.IMDB_ID);
+        ServiceUtils.setUpCommentsButton(getContext(), mUri.getLastPathSegment(), reviewsButton);
+        ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), videosButton);
         ServiceUtils.setUpImdbButton(imdb, imdbButton);
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         ServiceUtils.setUpYouTubeButton(title, youTubeButton);

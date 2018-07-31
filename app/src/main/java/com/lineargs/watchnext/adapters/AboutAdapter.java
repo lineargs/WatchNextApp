@@ -21,6 +21,7 @@ import butterknife.OnClick;
 public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final Library[] library = {
+            //TODO Move them to strings resources for translating
             new Library("Android support libraries",
                     "The Android Support Library offers backward-compatible versions of a number of features that are not built into the framework",
                     "https://developer.android.com/topic/libraries/support-library/index.html"),
@@ -38,7 +39,10 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     "https://firebase.google.com/docs/crashlytics/"),
             new Library("Firebase JobDispatcher",
                     "Library for scheduling background jobs in your Android app",
-                    "https://github.com/firebase/firebase-jobdispatcher-android")
+                    "https://github.com/firebase/firebase-jobdispatcher-android"),
+            new Library("Firebase Cloud Messaging",
+                    "Firebase Cloud Messaging (FCM) is a cross-platform messaging solution that lets you reliably deliver messages at no cost.",
+                    "https://firebase.google.com/docs/cloud-messaging/")
     };
     private final int VIEW_TYPE_ABOUT = 0;
     private final int VIEW_TYPE_HEADER = 1;

@@ -73,6 +73,39 @@ class SerieDetailTask {
         });
     }
 
+    static void updateSeasons(final Context context, final Uri uri) {
+
+        mUri = Utils.getBaseUri(uri);
+        id = uri.getLastPathSegment();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);
+
+        Call<SeriesDetails> call = seriesApiService.updateDetails(id, BuildConfig.MOVIE_DATABASE_API_KEY);
+
+        call.enqueue(new Callback<SeriesDetails>() {
+            @Override
+            public void onResponse(@NonNull Call<SeriesDetails> call, @NonNull Response<SeriesDetails> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    ContentValues updateValues = SerieDbUtils.updateSeries(response.body());
+                    UpdateSeries updateSeries = new UpdateSeries(context);
+                    updateSeries.execute(updateValues);
+                } else if (response.errorBody() != null) {
+                    response.errorBody().close();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SeriesDetails> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
     static class UpdateSeries extends AsyncTask<ContentValues, Void, Void> {
         private final WeakReference<Context> weakReference;
 
