@@ -13,6 +13,7 @@ buildscript {
             'targetSdk': 27,
             'buildTools': '27.0.3',
             'supportLibrary': '27.1.1',
+            'constraintLibrary': '1.1.2',
             'butterknife': '8.8.1',
             'retrofit': '2.4.0',
             'picasso': '2.5.2',
