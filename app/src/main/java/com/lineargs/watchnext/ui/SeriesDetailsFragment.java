@@ -74,6 +74,8 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     Button youTubeButton;
     @BindView(R.id.google_play)
     Button googlePlayButton;
+    @BindView(R.id.videos)
+    Button videosButton;
     private Uri mUri;
     private CastAdapter mCastAdapter;
     private TVDetailAdapter mAdapter;
@@ -310,6 +312,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     private void imageLoad(Cursor cursor) {
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
+        ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), videosButton);
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         ServiceUtils.setUpYouTubeButton(title, youTubeButton);
         ServiceUtils.setUpGooglePlayButton(title, googlePlayButton);
