@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,13 +36,16 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
 
     private static final int LOADER_ID = 333;
     @BindView(R.id.theater_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    private TheaterAdapter mTheaterAdapter;
+    RecyclerView recyclerView;
+    private TheaterAdapter theaterAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Unbinder unbinder;
 
     public TheaterFragment() {
+    }
+
+    public void setSwipeRefreshLayout (SwipeRefreshLayout swipeRefreshLayout) {
+        this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
     @Nullable
@@ -52,27 +56,26 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
         return rootView;
     }
 
-    private void setupViews(View view) {
+    private void setupViews(final View view) {
         unbinder = ButterKnife.bind(this, view);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
-        mTheaterAdapter = new TheaterAdapter(getContext(), this);
-        mRecyclerView.setAdapter(mTheaterAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        theaterAdapter = new TheaterAdapter(getContext(), this);
+        recyclerView.setAdapter(theaterAdapter);
         if (NetworkUtils.isConnected(view.getContext())) {
-            startLoading();
+            swipeRefreshLayout.setRefreshing(true);
         }
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkUtils.isConnected(view.getContext())) {
+                    swipeRefreshLayout.setRefreshing(true);
+                    getLoaderManager().restartLoader(LOADER_ID, null, TheaterFragment.this);
+                }
+            }
+        });
         getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
-    }
-
-    private void showData() {
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @NonNull
@@ -95,10 +98,10 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
-                mTheaterAdapter.swapCursor(data);
+                theaterAdapter.swapCursor(data);
                 if (data != null && data.getCount() != 0) {
                     data.moveToFirst();
-                    showData();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
                 break;
             default:
@@ -108,7 +111,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mTheaterAdapter.swapCursor(null);
+        theaterAdapter.swapCursor(null);
     }
 
     @Override

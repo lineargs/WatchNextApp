@@ -2,18 +2,26 @@ package com.lineargs.watchnext.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lineargs.watchnext.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TheaterActivity extends BaseTopActivity {
+
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_theater);
+        ButterKnife.bind(this);
         setupActionBar();
         setupNavDrawer();
         setupFragment(savedInstanceState);
@@ -22,6 +30,7 @@ public class TheaterActivity extends BaseTopActivity {
     private void setupFragment(Bundle savedInstance) {
         if (savedInstance == null) {
             TheaterFragment theaterFragment = new TheaterFragment();
+            theaterFragment.setSwipeRefreshLayout(swipeRefreshLayout);
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_movie_detail, theaterFragment).commit();
         }
     }

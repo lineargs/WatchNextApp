@@ -12,6 +12,21 @@
         android:layout_height="match_parent"
         tools:context="com.lineargs.watchnext.ui.TheaterActivity">
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:id="@+id/fragment_movie_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:layout="@layout/fragment_theater" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -19,13 +34,6 @@
             <include layout="@layout/toolbar_roboto" />
 
         </android.support.design.widget.AppBarLayout>
-
-        <FrameLayout
-            android:id="@+id/fragment_movie_detail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:layout="@layout/fragment_theater" />
 
     </android.support.design.widget.CoordinatorLayout>
 
