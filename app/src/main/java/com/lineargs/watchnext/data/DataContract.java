@@ -1,6 +1,5 @@
 package com.lineargs.watchnext.data;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -264,40 +263,6 @@ public class DataContract {
          */
         public static Uri buildCrewUriWithId(long id) {
             return CONTENT_URI_CREW.buildUpon()
-                    .appendPath(Long.toString(id))
-                    .build();
-        }
-    }
-
-    /* Inner class that defines the table contents of the crew movies table */
-    public static final class CreditCr implements BaseColumns {
-
-        /* The base CONTENT_URI used to query the crew table from the content provider */
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
-                .appendPath(PATH_CREDIT_CREW)
-                .build();
-        /*The crew details as returned by API*/
-        public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_CREDIT_ID = "credit_id";
-        public static final String COLUMN_DEPARTMENT = "department";
-        public static final String COLUMN_CREW_ID = "crew_id";
-        public static final String COLUMN_JOB = "job";
-        public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_PROFILE_PATH = "profile_path";
-        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
-        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
-        /* Used internally as the name of our crew table. */
-        static final String TABLE_NAME = "crew";
-
-        /**
-         * Builds a URI that adds the crew id to the end of the crew content URI path.
-         * This is used to query details about a single crew entry by id.
-         *
-         * @param id Crew ID
-         * @return Uri to query details about a single crew entry
-         */
-        public static Uri buildCrewUriWithId(long id) {
-            return CONTENT_URI.buildUpon()
                     .appendPath(Long.toString(id))
                     .build();
         }
