@@ -14,13 +14,16 @@ public class Reviews {
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
-    private int tmdb_id;
+    private int tmdbId;
 
     @ColumnInfo(name = "author")
     private String author;
 
     @ColumnInfo(name = "content")
     private String content;
+
+    @ColumnInfo(name = "url")
+    private String url;
 
     @NonNull
     public int getId() {
@@ -31,12 +34,12 @@ public class Reviews {
         this.id = id;
     }
 
-    public int getTmdb_id() {
-        return tmdb_id;
+    public int getTmdbId() {
+        return tmdbId;
     }
 
-    public void setTmdb_id(int tmdb_id) {
-        this.tmdb_id = tmdb_id;
+    public void setTmdbId(int tmdbId) {
+        this.tmdbId = tmdbId;
     }
 
     public String getAuthor() {
@@ -62,7 +65,4 @@ public class Reviews {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    @ColumnInfo(name = "url")
-    private String url;
 }

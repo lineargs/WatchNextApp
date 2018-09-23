@@ -14,7 +14,7 @@ public class Person {
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
-    private int tmdb_id;
+    private int tmdbId;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -23,10 +23,10 @@ public class Person {
     private String biography;
 
     @ColumnInfo(name = "place_of_birth")
-    private String place_of_birth;
+    private String placeOfBirth;
 
     @ColumnInfo(name = "profile_path")
-    private String profile_path;
+    private String profilePath;
 
     @ColumnInfo(name = "homepage")
     private String homepage;
@@ -40,12 +40,12 @@ public class Person {
         this.id = id;
     }
 
-    public int getTmdb_id() {
-        return tmdb_id;
+    public int getTmdbId() {
+        return tmdbId;
     }
 
-    public void setTmdb_id(int tmdb_id) {
-        this.tmdb_id = tmdb_id;
+    public void setTmdbId(int tmdbId) {
+        this.tmdbId = tmdbId;
     }
 
     public String getName() {
@@ -64,20 +64,20 @@ public class Person {
         this.biography = biography;
     }
 
-    public String getPlace_of_birth() {
-        return place_of_birth;
+    public String getPlaceOfBirth() {
+        return placeOfBirth;
     }
 
-    public void setPlace_of_birth(String place_of_birth) {
-        this.place_of_birth = place_of_birth;
+    public void setPlaceOfBirth(String placeOfBirth) {
+        this.placeOfBirth = placeOfBirth;
     }
 
-    public String getProfile_path() {
-        return profile_path;
+    public String getProfilePath() {
+        return profilePath;
     }
 
-    public void setProfile_path(String profile_path) {
-        this.profile_path = profile_path;
+    public void setProfilePath(String profilePath) {
+        this.profilePath = profilePath;
     }
 
     public String getHomepage() {

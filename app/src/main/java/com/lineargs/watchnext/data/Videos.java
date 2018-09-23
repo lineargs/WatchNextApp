@@ -14,7 +14,7 @@ public class Videos {
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
-    private int tmdb_id;
+    private int tmdbId;
 
     @ColumnInfo(name = "key")
     private String key;
@@ -34,12 +34,12 @@ public class Videos {
         this.id = id;
     }
 
-    public int getTmdb_id() {
-        return tmdb_id;
+    public int getTmdbId() {
+        return tmdbId;
     }
 
-    public void setTmdb_id(int tmdb_id) {
-        this.tmdb_id = tmdb_id;
+    public void setTmdbId(int tmdbId) {
+        this.tmdbId = tmdbId;
     }
 
     public String getKey() {
