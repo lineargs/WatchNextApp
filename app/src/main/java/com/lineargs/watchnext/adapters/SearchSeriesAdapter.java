@@ -29,12 +29,12 @@ import butterknife.ButterKnife;
  * See {@link MainAdapter}
  */
 
-public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SearchSeriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private Cursor cursor;
 
-    public SearchTVAdapter(@NonNull Context context) {
+    public SearchSeriesAdapter(@NonNull Context context) {
         this.context = context;
     }
 

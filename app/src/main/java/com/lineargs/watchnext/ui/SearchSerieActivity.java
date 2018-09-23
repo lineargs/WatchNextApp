@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.SearchTVAdapter;
+import com.lineargs.watchnext.adapters.SearchSeriesAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
@@ -51,7 +51,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
     private String queryString;
     private Handler handler;
     private String mQuery = "";
-    private SearchTVAdapter mResultsAdapter;
+    private SearchSeriesAdapter mResultsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class SearchSerieActivity extends BaseTopActivity implements LoaderManage
         ButterKnife.bind(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mSearchResults.setLayoutManager(layoutManager);
-        mResultsAdapter = new SearchTVAdapter(this);
+        mResultsAdapter = new SearchSeriesAdapter(this);
         mSearchResults.setAdapter(mResultsAdapter);
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;

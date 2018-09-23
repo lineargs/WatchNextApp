@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.SearchAdapter;
+import com.lineargs.watchnext.adapters.SearchMoviesAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
@@ -41,16 +41,16 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
 
     private static final int LOADER_ID = 223;
     @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    ProgressBar progressBar;
     @BindView(R.id.search_view)
-    SearchView mSearchView;
+    SearchView searchView;
     @BindView(R.id.search_results)
-    RecyclerView mSearchResults;
+    RecyclerView searchResults;
     boolean adult;
     private String queryString;
     private Handler handler;
-    private String mQuery = "";
-    private SearchAdapter mResultsAdapter;
+    private String query = "";
+    private SearchMoviesAdapter resultsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,14 +62,14 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         setupSearchView();
         ButterKnife.bind(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mSearchResults.setLayoutManager(layoutManager);
-        mResultsAdapter = new SearchAdapter(this);
-        mSearchResults.setAdapter(mResultsAdapter);
+        searchResults.setLayoutManager(layoutManager);
+        resultsAdapter = new SearchMoviesAdapter(this);
+        searchResults.setAdapter(resultsAdapter);
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;
-        mQuery = query;
-        if (mSearchView != null) {
-            mSearchView.setQuery(query, false);
+        this.query = query;
+        if (searchView != null) {
+            searchView.setQuery(query, false);
         }
     }
 
@@ -85,7 +85,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         if (intent.hasExtra(SearchManager.QUERY)) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             if (!TextUtils.isEmpty(query)) {
-                mSearchView.setQuery(query, false);
+                searchView.setQuery(query, false);
                 searchFor(query);
             }
         }
@@ -107,14 +107,14 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         if (searchManager != null) {
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         }
-        mSearchView.setIconified(false);
-        mSearchView.setQueryHint(getString(R.string.search_query_hint));
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setIconified(false);
+        searchView.setQueryHint(getString(R.string.search_query_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mSearchView.clearFocus();
+                searchView.clearFocus();
                 return true;
             }
 
@@ -134,15 +134,15 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
                 return true;
             }
         });
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 dismiss();
                 return false;
             }
         });
-        if (!TextUtils.isEmpty(mQuery)) {
-            mSearchView.setQuery(mQuery, false);
+        if (!TextUtils.isEmpty(this.query)) {
+            searchView.setQuery(this.query, false);
         }
     }
 
@@ -167,13 +167,13 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         }
         args.putString(Constants.ARG_QUERY, query);
 
-        if (TextUtils.equals(query, mQuery)) {
+        if (TextUtils.equals(query, this.query)) {
             getSupportLoaderManager().initLoader(LOADER_ID, args, this);
         } else {
             SearchSyncUtils.syncSearchMovies(this, query, adult);
             startLoading();
         }
-        mQuery = query;
+        this.query = query;
     }
 
     @Override
@@ -185,13 +185,13 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mSearchResults.setVisibility(GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        searchResults.setVisibility(GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(GONE);
-        mSearchResults.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(GONE);
+        searchResults.setVisibility(View.VISIBLE);
     }
 
     @NonNull
@@ -214,7 +214,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_ID:
-                mResultsAdapter.swapCursor(data);
+                resultsAdapter.swapCursor(data);
                 if (data != null && data.getCount() != 0) {
                     data.moveToFirst();
                     showData();
@@ -225,6 +225,6 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mResultsAdapter.swapCursor(null);
+        resultsAdapter.swapCursor(null);
     }
 }
