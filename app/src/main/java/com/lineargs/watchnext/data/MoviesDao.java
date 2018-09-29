@@ -1,5 +1,6 @@
 package com.lineargs.watchnext.data;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -19,17 +20,17 @@ public interface MoviesDao {
     void deleteAll();
 
     @Query("SELECT * FROM movies WHERE type = 0 ORDER BY title ASC")
-    List<Movies> getPopularMovies();
+    LiveData<List<Movies>> getPopularMovies();
 
     @Query("SELECT * FROM movies WHERE type = 1 ORDER BY title ASC")
-    List<Movies> getTopratedMovies();
+    LiveData<List<Movies>> getTopratedMovies();
 
     @Query("SELECT * FROM movies WHERE type = 2 ORDER BY title ASC")
-    List<Movies> getUpcomingMovies();
+    LiveData<List<Movies>> getUpcomingMovies();
 
     @Query("SELECT * FROM movies WHERE type = 3 ORDER BY title ASC")
-    List<Movies> getTheatreMovies();
+    LiveData<List<Movies>> getTheatreMovies();
 
     @Query("SELECT * FROM movies ORDER BY title ASC")
-    List<Movies> getAllMovies();
+    LiveData<List<Movies>> getAllMovies();
 }
