@@ -17,7 +17,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             synchronized (WatchNextDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            WatchNextDatabase.class, "watchnextdb")
+                            WatchNextDatabase.class, "watchnext.db")
                             .build();
                 }
             }
