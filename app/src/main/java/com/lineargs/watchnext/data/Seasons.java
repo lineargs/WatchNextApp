@@ -22,6 +22,15 @@ public class Seasons {
     @ColumnInfo(name = "episode_count")
     private int episodeCount;
 
+    @ColumnInfo(name = "show_name")
+    private String showName;
+
+    @ColumnInfo(name = "poster_path")
+    private String posterPath;
+
+    @ColumnInfo(name = "season_number")
+    private String seasonNumber;
+
     @NonNull
     public int getId() {
         return id;
@@ -78,13 +87,4 @@ public class Seasons {
     public void setSeasonNumber(String seasonNumber) {
         this.seasonNumber = seasonNumber;
     }
-
-    @ColumnInfo(name = "show_name")
-    private String showName;
-
-    @ColumnInfo(name = "poster_path")
-    private String posterPath;
-
-    @ColumnInfo(name = "season_number")
-    private String seasonNumber;
 }
