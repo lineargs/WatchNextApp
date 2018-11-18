@@ -91,4 +91,6 @@
     <string name="open_in_browser">Отвори во прелистувач</string>
     <string name="search">веб пребарување</string>
     <string name="main_status">Статус: %s</string>
+    <string name="sync_in_progress">Ажурирање во тек</string>
+    <string name="sync_content_text">Превземање нови продатоци од The MovieDb</string>
 </resources>

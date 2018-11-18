@@ -87,4 +87,6 @@
     <string name="open_in_browser">Open in browser</string>
     <string name="search">web search</string>
     <string name="main_status">Status: %s</string>
+    <string name="sync_in_progress">Sync In Progress</string>
+    <string name="sync_content_text">Downloading new content from The MovieDb</string>
 </resources>

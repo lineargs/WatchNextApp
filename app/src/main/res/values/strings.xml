@@ -111,6 +111,8 @@
     <!-- Notification -->
     <string name="notification_dismiss">Dismiss</string>
     <string name="notification_text">Airing today: %s</string>
+    <string name="sync_in_progress">Sync In Progress</string>
+    <string name="sync_content_text">Downloading new content from The MovieDb</string>
 
     <!-- About -->
     <string name="about_version">Build %s</string>

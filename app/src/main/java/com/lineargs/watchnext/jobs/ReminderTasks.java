@@ -1,5 +1,7 @@
 package com.lineargs.watchnext.jobs;
 
+import android.content.Context;
+
 import com.lineargs.watchnext.utils.NotificationUtils;
 
 /**
@@ -12,9 +14,9 @@ public class ReminderTasks {
 
     public static final String ACTION_DISMISS_NOTIFICATION = "dismiss-notification";
 
-    static void executeTask(int id, String action) {
+    static void executeTask(int id, String action, Context context) {
         if (ACTION_DISMISS_NOTIFICATION.equals(action)) {
-            NotificationUtils.clearNotification(id);
+            NotificationUtils.clearNotification(id, context);
         }
     }
 }
