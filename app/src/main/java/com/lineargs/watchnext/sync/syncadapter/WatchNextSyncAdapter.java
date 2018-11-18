@@ -53,7 +53,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String PATH_THEATER = "now_playing";
     private static final String PATH_ON_THE_AIR = "on_the_air";
 
-    private static final int REMINDER_ID = 29101988;
+    private static final int SYNC_NOTIFICATION_ID = 29101988;
 
     private static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -118,6 +118,8 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
+
+        NotificationUtils.syncProgress(SYNC_NOTIFICATION_ID, getContext());
 
         final MovieApiService movieApiService = retrofit.create(MovieApiService.class);
 
@@ -266,7 +268,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-//        NotificationUtils.syncReminder(REMINDER_ID, getContext());
+        NotificationUtils.syncComplete(SYNC_NOTIFICATION_ID, getContext());
     }
 
     static class InsertPopularMovies extends AsyncTask<ContentValues, Void, Void> {
