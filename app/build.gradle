@@ -48,7 +48,7 @@ dependencies {
     /* We use this import for Material Preference theme */
     implementation "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
     /* Firebase firebase.google.com/docs/android/setup#available_libraries*/
-    implementation "com.google.firebase:firebase-crash:$rootProject.firebaseCoreVersion"
+    implementation "com.google.firebase:firebase-crash:$rootProject.firebaseCrashVersion"
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
     implementation "com.google.firebase:firebase-messaging:$rootProject.firebaseMessagingVersion"
     /* github.com/firebase/firebase-jobdispatcher-android/blob/master/README.md */
