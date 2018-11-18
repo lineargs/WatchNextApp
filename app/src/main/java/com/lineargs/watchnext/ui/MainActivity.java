@@ -24,6 +24,7 @@ import com.lineargs.watchnext.adapters.MainAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+import com.lineargs.watchnext.utils.NotificationUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

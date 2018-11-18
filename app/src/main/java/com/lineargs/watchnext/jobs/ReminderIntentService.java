@@ -1,6 +1,7 @@
 package com.lineargs.watchnext.jobs;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 
 /**
@@ -21,6 +22,6 @@ public class ReminderIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
         int id = intent.getIntExtra(ReminderFirebaseUtilities.ID, 0);
-        ReminderTasks.executeTask(id, action);
+        ReminderTasks.executeTask(id, action, getApplicationContext());
     }
 }

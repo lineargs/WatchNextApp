@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 
@@ -40,6 +41,7 @@ public class NotificationUtils extends ContextWrapper {
     private static final String ADAPTER_CHANNEL_GROUP = "Sync";
     private static final String ID = "id", SERIE_ID = "serie_id", SYNC_ID = "sync_id";
     private static NotificationManager manager;
+    private static NotificationManagerCompat managerCompat;
 
     public NotificationUtils(Context base) {
         super(base);
@@ -68,11 +70,18 @@ public class NotificationUtils extends ContextWrapper {
         }
     }
 
-    public static void clearNotification(int id) {
-        manager.cancel(id);
+    public static void clearNotification(int id, Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            managerCompat = NotificationManagerCompat.from(context);
+            managerCompat.cancel(id);
+        } else {
+            manager.cancel(id);
+        }
     }
 
     public static void episodeReminder(String text, int id, String title, Context context) {
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorGrey))
@@ -88,11 +97,15 @@ public class NotificationUtils extends ContextWrapper {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            notificationManagerCompat.notify(id, notificationBuilder.build());
+        } else {
+            manager.notify(id, notificationBuilder.build());
         }
-        manager.notify(id, notificationBuilder.build());
     }
 
-    public static void syncReminder(int id, Context context) {
+    public static void syncComplete(int id, Context context) {
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, SYNC_ADAPTER_CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorBlack))
@@ -107,9 +120,38 @@ public class NotificationUtils extends ContextWrapper {
                 .setAutoCancel(true);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
+            notificationManagerCompat.notify(id, notificationBuilder.build());
+        } else {
+            manager.notify(id, notificationBuilder.build());
         }
-        manager.notify(id, notificationBuilder.build());
     }
+
+    public static void syncProgress(int id, Context context) {
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, SYNC_ADAPTER_CHANNEL_ID)
+                .setColor(ContextCompat.getColor(context, R.color.colorBlack))
+                .setSmallIcon(reminderSmallIcon())
+                .setLargeIcon(reminderLargeIcon(context))
+                .setContentTitle(context.getString(R.string.sync_in_progress))
+                .setProgress(100, 0, true)
+                .setDefaults(Notification.DEFAULT_LIGHTS)
+                .setContentText(context.getString(R.string.sync_content_text))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(context.getString(R.string.sync_content_text)))
+                .setContentIntent(reminderContentIntent(id, context))
+                .addAction(dismissNotification(context, id))
+                .setOngoing(true)
+                .setAutoCancel(true);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
+            notificationManagerCompat.notify(id, notificationBuilder.build());
+        } else {
+            manager.notify(id, notificationBuilder.build());
+        }
+
+    }
+
 
     private static PendingIntent contentIntent(int id, Context context) {
         Intent startActivity = new Intent(context, NotificationActivity.class);
@@ -150,7 +192,9 @@ public class NotificationUtils extends ContextWrapper {
         return BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_tv_black);
     }
 
-    private static int reminderSmallIcon() { return R.drawable.app_icon_black; }
+    private static int reminderSmallIcon() {
+        return R.drawable.app_icon_black;
+    }
 
     private static Bitmap reminderLargeIcon(Context context) {
         return BitmapFactory.decodeResource(context.getResources(), R.drawable.app_icon_black);
@@ -161,5 +205,12 @@ public class NotificationUtils extends ContextWrapper {
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return manager;
+    }
+
+    private NotificationManagerCompat getCompatManager() {
+        if (managerCompat == null) {
+            managerCompat = NotificationManagerCompat.from(getApplicationContext());
+        }
+        return managerCompat;
     }
 }
