@@ -7,24 +7,29 @@ buildscript {
     def versionMinor = 2
     def versionPatch = 30
 
-    ext.versions = [
-            'minSdk': 16,
-            'compileSdk': 27,
-            'targetSdk': 27,
-            'buildTools': '27.0.3',
-            'supportLibrary': '27.1.1',
-            'constraintLibrary': '1.1.2',
-            'butterknife': '8.8.1',
-            'retrofit': '2.4.0',
-            'picasso': '2.5.2',
-            'crashlytics': '2.8.0',
-            'firebaseCore': '16.0.1',
-            'firebaseMessaging': '17.1.0',
-            'firebaseJob': '0.8.5',
-            'espresso': '3.0.2',
-            'versionCode': versionMajor * 10000 + versionMinor * 100 + versionPatch,
-            'versionName': "${versionMajor}.${versionMinor}.${versionPatch}"
-    ]
+    ext {
+        // App version
+        versionName = "${versionMajor}.${versionMinor}.${versionPatch}" // X.Y.Z; X = Major, Y = Minor, Z = Patch level
+        versionCode = versionMajor * 10000 + versionMinor * 100 + versionPatch //10101 XXYYZZ
+
+        // SDK and tools
+        minSdkVersion = 16
+        compileSdkVersion = 27
+        targetSdkVersion = 27
+        buildToolsVersion = '27.0.3'
+
+        // App dependencies
+        supportLibraryVersion = '27.1.1'
+        constraintLayoutVersion = '1.1.2'
+        butterknifeVersion = '8.8.1'
+        retrofitVersion = '2.4.0'
+        picassoVersion = '2.5.2'
+        fabricVersion = '2.8.0'
+        firebaseCoreVersion = '16.0.1'
+        firebaseMessagingVersion = '17.1.0'
+        firebaseJobVersion = '0.8.5'
+        espressoVersion = '3.0.2'
+    }
     repositories {
         google()
         jcenter()
