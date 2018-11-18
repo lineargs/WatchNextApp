@@ -41,7 +41,6 @@ public class NotificationUtils extends ContextWrapper {
     private static final String ADAPTER_CHANNEL_GROUP = "Sync";
     private static final String ID = "id", SERIE_ID = "serie_id", SYNC_ID = "sync_id";
     private static NotificationManager manager;
-    private static NotificationManagerCompat managerCompat;
 
     public NotificationUtils(Context base) {
         super(base);
@@ -72,7 +71,7 @@ public class NotificationUtils extends ContextWrapper {
 
     public static void clearNotification(int id, Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            managerCompat = NotificationManagerCompat.from(context);
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
             managerCompat.cancel(id);
         } else {
             manager.cancel(id);
@@ -205,12 +204,5 @@ public class NotificationUtils extends ContextWrapper {
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return manager;
-    }
-
-    private NotificationManagerCompat getCompatManager() {
-        if (managerCompat == null) {
-            managerCompat = NotificationManagerCompat.from(getApplicationContext());
-        }
-        return managerCompat;
     }
 }

@@ -47,13 +47,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-<<<<<<< HEAD
         jcenter()
-||||||| merged common ancestors
-=======
-        jcenter()
-
->>>>>>> 3ed9a8fa756155c0c49cfd4e5b34cdd568fe45df
     }
 }
 
