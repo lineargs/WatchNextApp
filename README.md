@@ -1,3 +1,8 @@
+🚧 Work in progress 👷‍♀️⛏👷🔧️👷🔧 🚧 WatchNext 2.0
+==================
+
+Rewriting WatchNext using [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/)
+
 WatchNext
 =========
 Simple application to track and explore all the information from your favourite movies and series.
@@ -16,15 +21,11 @@ Simple application to track and explore all the information from your favourite 
 
 Phone screenshots
 -----------------
-<pre> <img src="screenshots/phone_drawer.png" width="280"/> <img src="screenshots/phone_main_empty.png" width="280"/> <img src="screenshots/phone_main_search.png" width="280"/> <img src="screenshots/phone_main.png" width="280"/> <img src="screenshots/phone_movie_detail.png" width="280"/> <img src="screenshots/phone_movie_search.png" width="280"/> <img src="screenshots/phone_series_detail.png" width="280"/> <img src="screenshots/phone_series_episode_detail.png" width="280"/> </pre>
-
-7-inch tablet screenshots
------------------
-<pre> <img src="screenshots/tablet_7_drawer.png" width="280"/> <img src="screenshots/tablet_7_main_empty.png" width="280"/> <img src="screenshots/tablet_7_main_search.png" width="280"/> <img src="screenshots/tablet_7_main.png" width="280"/> <img src="screenshots/tablet_7_movie_detail.png" width="280"/> <img src="screenshots/tablet_7_movie_search.png" width="280"/> <img src="screenshots/tablet_7_series_detail.png" width="280"/> <img src="screenshots/tablet_7_series_episode_detail.png" width="280"/> </pre>
+<img src="screenshots/phone_drawer.png" width="280"/> <img src="screenshots/phone_main_search.png" width="280"/> <img src="screenshots/phone_series_detail.png" width="280"/>
 
 10-inch tablet screenshots
 -----------------
-<pre> <img src="screenshots/tablet_10_main_empty.png" width="280"/> <img src="screenshots/tablet_10_main_search.png" width="280"/> <img src="screenshots/tablet_10_main.png" width="280"/> <img src="screenshots/tablet_10_movie_detail.png" width="280"/> <img src="screenshots/tablet_10_movie_search.png" width="280"/> <img src="screenshots/tablet_10_series_detail.png" width="280"/> </pre>
+<img src="screenshots/tablet_10_main_search.png" width="280"/> <img src="screenshots/tablet_10_movie_detail.png" width="280"/> <img src="screenshots/tablet_10_movie_search.png" width="280"/>
 
 Powered by
 ----------
