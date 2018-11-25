@@ -115,7 +115,7 @@
             android:name=".sync.syncpeople.PersonSyncIntentService"
             android:exported="false" />
         <service
-            android:name=".jobs.ReminderIntentService"
+            android:name=".jobs.NotificationIntentService"
             android:exported="false" />
         <service
             android:name=".sync.syncmovies.MovieSyncIntentService"

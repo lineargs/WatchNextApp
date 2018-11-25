@@ -60,12 +60,15 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
+    public Context context;
+
     private static final int SYNC_INTERVAL = 60 * 60 * 24;
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 2;
     private static final String LOG_TAG = WatchNextSyncAdapter.class.getSimpleName();
 
     WatchNextSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        this.context = context;
     }
 
     private static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
@@ -119,7 +122,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        NotificationUtils.syncProgress(SYNC_NOTIFICATION_ID, getContext());
+        NotificationUtils.syncProgress(SYNC_NOTIFICATION_ID, context);
 
         final MovieApiService movieApiService = retrofit.create(MovieApiService.class);
 
@@ -268,7 +271,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         });
 
-        NotificationUtils.syncComplete(SYNC_NOTIFICATION_ID, getContext());
+        NotificationUtils.syncComplete(SYNC_NOTIFICATION_ID, context);
     }
 
     static class InsertPopularMovies extends AsyncTask<ContentValues, Void, Void> {
