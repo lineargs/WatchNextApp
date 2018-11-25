@@ -20,8 +20,8 @@ import android.support.v4.content.ContextCompat;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.jobs.ReminderIntentService;
-import com.lineargs.watchnext.jobs.ReminderTasks;
+import com.lineargs.watchnext.jobs.NotificationIntentService;
+import com.lineargs.watchnext.jobs.NotificationTasks;
 import com.lineargs.watchnext.ui.MainActivity;
 import com.lineargs.watchnext.ui.NotificationActivity;
 
@@ -70,12 +70,8 @@ public class NotificationUtils extends ContextWrapper {
     }
 
     public static void clearNotification(int id, Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
-            managerCompat.cancel(id);
-        } else {
-            manager.cancel(id);
-        }
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+        managerCompat.cancel(id);
     }
 
     public static void episodeReminder(String text, int id, String title, Context context) {
@@ -96,10 +92,8 @@ public class NotificationUtils extends ContextWrapper {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
-            notificationManagerCompat.notify(id, notificationBuilder.build());
-        } else {
-            manager.notify(id, notificationBuilder.build());
         }
+        notificationManagerCompat.notify(id, notificationBuilder.build());
     }
 
     public static void syncComplete(int id, Context context) {
@@ -119,10 +113,8 @@ public class NotificationUtils extends ContextWrapper {
                 .setAutoCancel(true);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
-            notificationManagerCompat.notify(id, notificationBuilder.build());
-        } else {
-            manager.notify(id, notificationBuilder.build());
         }
+        notificationManagerCompat.notify(id, notificationBuilder.build());
     }
 
     public static void syncProgress(int id, Context context) {
@@ -138,17 +130,12 @@ public class NotificationUtils extends ContextWrapper {
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setContentText(context.getString(R.string.sync_content_text))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(context.getString(R.string.sync_content_text)))
-                .setContentIntent(reminderContentIntent(id, context))
-                .addAction(dismissNotification(context, id))
                 .setOngoing(true)
                 .setAutoCancel(true);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
-            notificationManagerCompat.notify(id, notificationBuilder.build());
-        } else {
-            manager.notify(id, notificationBuilder.build());
         }
-
+        notificationManagerCompat.notify(id, notificationBuilder.build());
     }
 
 
@@ -171,8 +158,8 @@ public class NotificationUtils extends ContextWrapper {
     }
 
     private static NotificationCompat.Action dismissNotification(Context context, int id) {
-        Intent ignoreReminderIntent = new Intent(context, ReminderIntentService.class);
-        ignoreReminderIntent.setAction(ReminderTasks.ACTION_DISMISS_NOTIFICATION);
+        Intent ignoreReminderIntent = new Intent(context, NotificationIntentService.class);
+        ignoreReminderIntent.setAction(NotificationTasks.ACTION_DISMISS_NOTIFICATION);
         ignoreReminderIntent.putExtra(ID, id);
         PendingIntent ignoreReminderPendingIntent = PendingIntent.getService(
                 context,
@@ -201,7 +188,7 @@ public class NotificationUtils extends ContextWrapper {
 
     private NotificationManager getManager() {
         if (manager == null) {
-            manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
         return manager;
     }

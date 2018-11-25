@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.jobs;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 
 /**
@@ -10,11 +9,11 @@ import android.content.Intent;
  * See {@link IntentService}
  */
 
-public class ReminderIntentService extends IntentService {
+public class NotificationIntentService extends IntentService {
 
-    private final static String TAG = "CreditSyncIntentService";
+    private final static String TAG = "NotificationIntentService";
 
-    public ReminderIntentService() {
+    public NotificationIntentService() {
         super(TAG);
     }
 
@@ -22,6 +21,6 @@ public class ReminderIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
         int id = intent.getIntExtra(ReminderFirebaseUtilities.ID, 0);
-        ReminderTasks.executeTask(id, action, getApplicationContext());
+        NotificationTasks.executeTask(id, action, getApplicationContext());
     }
 }

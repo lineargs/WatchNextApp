@@ -10,7 +10,7 @@ import com.lineargs.watchnext.utils.NotificationUtils;
  * Helper class for our IntentService
  */
 
-public class ReminderTasks {
+public class NotificationTasks {
 
     public static final String ACTION_DISMISS_NOTIFICATION = "dismiss-notification";
 
