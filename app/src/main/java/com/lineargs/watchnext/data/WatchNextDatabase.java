@@ -27,7 +27,11 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             WatchNextDatabase.class, "watchnext.db")
-                            .addMigrations(MIGRATION_41_42)
+                            .addMigrations(
+                                    MIGRATION_41_42
+                                    //MIGRATION_42_43,
+                                    //MIGRATION_43_44
+                            )
                             .build();
                 }
             }
