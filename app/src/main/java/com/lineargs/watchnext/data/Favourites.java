@@ -61,6 +61,9 @@ public class Favourites {
     @ColumnInfo(name = "networks")
     private String networks;
 
+    @ColumnInfo(name = "favourite_type")
+    private int favouriteType;
+
     @NonNull
     public int getId() {
         return id;
@@ -191,5 +194,13 @@ public class Favourites {
 
     public void setNetworks(String networks) {
         this.networks = networks;
+    }
+
+    public int getFavouriteType() {
+        return favouriteType;
+    }
+
+    public void setFavouriteType(int favouriteType) {
+        this.favouriteType = favouriteType;
     }
 }

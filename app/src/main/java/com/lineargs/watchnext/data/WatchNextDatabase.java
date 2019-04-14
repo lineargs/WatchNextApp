@@ -7,6 +7,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 @Database(entities = {Credits.class, Episodes.class, Favourites.class,
         Movies.class, Person.class, Reviews.class,
@@ -19,6 +20,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
     private static final int VERSION_42_ROOM = 42;
 
+    private static final int VERSION_43 = 43;
+
     static final int DB_VERSION = VERSION_42_ROOM;
 
     static WatchNextDatabase getDatabase(final Context context) {
@@ -29,7 +32,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                             WatchNextDatabase.class, "watchnext.db")
                             .addMigrations(
                                     MIGRATION_41_42
-                                    //MIGRATION_42_43,
+//                                    MIGRATION_42_43
                                     //MIGRATION_43_44
                             )
                             .build();
@@ -62,7 +65,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                     "'name' TEXT, 'id' INTEGER NOT NULL, 'vote_count' INTEGER NOT NULL, PRIMARY KEY ('id'))");
 
             //Favourites table
-            database.execSQL("CREATE TABLE favourites ('tmdb_id' INTEGER NOT NULL, 'overview' TEXT NOT NULL, 'imdb_id' TEXT, " +
+            database.execSQL("CREATE TABLE favourites ('tmdb_id' INTEGER NOT NULL, 'overview' TEXT NOT NULL, " +
+                    "'favourite_type' INTEGER NOT NULL, 'imdb_id' TEXT, " +
                     "'runtime' INTEGER NOT NULL, 'title' TEXT NOT NULL, 'networks' TEXT, 'poster_path' TEXT, " +
                     "'backdrop_path' TEXT, 'release_date' TEXT, 'production_companies' TEXT, 'genres' TEXT, " +
                     "'vote_average' TEXT, 'production_countries' TEXT, 'id' INTEGER NOT NULL, 'homepage' TEXT, " +
@@ -73,8 +77,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                     "'runtime', 'title', 'poster_path', 'backdrop_path', 'release_date', 'production_companies', " +
                     "'genres', 'vote_average', 'production_countries', '_id', 'homepage', 'status' FROM favorites");
             database.execSQL("DROP TABLE favorites");
-            //TODO Add below statement in 42_43 Migration
-//            database.execSQL("ALTER TABLE favourites ADD COLUMN type INTEGER");
 
             //Movies table
             database.execSQL("DROP TABLE popularmovies");
@@ -121,6 +123,15 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             database.execSQL("DROP TABLE videos");
             database.execSQL("CREATE TABLE videos ('name' TEXT, 'tmdb_id' INTEGER NOT NULL, 'image' TEXT, " +
                     "'id' INTEGER NOT NULL, 'key' TEXT, PRIMARY KEY ('id'))");
+            Log.e("SUCCESS", "MIGRATION SUCCESS");
+        }
+    };
+
+    private static final Migration MIGRATION_42_43 = new Migration(VERSION_42_ROOM, VERSION_43) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE favourites ADD COLUMN 'fav_type' INTEGER");
+            Log.e("ALTER TABLE", "SUCCESS VERSION 43");
         }
     };
 
