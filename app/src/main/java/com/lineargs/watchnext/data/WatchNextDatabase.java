@@ -14,7 +14,7 @@ import android.util.Log;
         Seasons.class, Series.class, Videos.class}, version = WatchNextDatabase.DB_VERSION)
 public abstract class WatchNextDatabase extends RoomDatabase {
 
-    private static volatile WatchNextDatabase INSTANCE;
+    private static WatchNextDatabase INSTANCE;
 
     private static final int VERSION_41 = 41;
 
@@ -71,11 +71,11 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                     "'backdrop_path' TEXT, 'release_date' TEXT, 'production_companies' TEXT, 'genres' TEXT, " +
                     "'vote_average' TEXT, 'production_countries' TEXT, 'id' INTEGER NOT NULL, 'homepage' TEXT, " +
                     "'status' TEXT, PRIMARY KEY ('id'))");
-            database.execSQL("INSERT INTO favourites ('tmdb_id', 'overview', 'imdb_id', 'runtime', 'title', " +
-                    "'poster_path', 'backdrop_path', 'release_date', 'production_companies', 'genres', 'vote_average', " +
-                    "'production_countries', 'id', 'homepage', 'status') SELECT 'movie_id', 'overview', 'imdb_id', " +
-                    "'runtime', 'title', 'poster_path', 'backdrop_path', 'release_date', 'production_companies', " +
-                    "'genres', 'vote_average', 'production_countries', '_id', 'homepage', 'status' FROM favorites");
+            database.execSQL("INSERT INTO favourites (tmdb_id, overview, favourite_type, imdb_id, runtime, title, " +
+                    "poster_path, backdrop_path, release_date, production_companies, genres, vote_average, " +
+                    "production_countries, homepage, status) SELECT movie_id, overview, type, imdb_id, " +
+                    "runtime, title, poster_path, backdrop_path, release_date, production_companies, " +
+                    "genres, vote_average, production_countries, homepage, status FROM favorites");
             database.execSQL("DROP TABLE favorites");
 
             //Movies table
@@ -138,4 +138,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     public abstract MoviesDao moviesDao();
 
     public abstract SeriesDao seriesDao();
+
+    public abstract FavouritesDao favouritesDao();
 }

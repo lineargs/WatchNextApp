@@ -10,8 +10,10 @@ public class WatchNextRepository {
 
     private MoviesDao moviesDao;
     private SeriesDao seriesDao;
+    private FavouritesDao favouritesDao;
     private LiveData<List<Movies>> movies;
     private LiveData<List<Series>> series;
+    private LiveData<List<Favourites>> favourites;
 
     WatchNextRepository(Application application) {
         WatchNextDatabase database = WatchNextDatabase.getDatabase(application);
@@ -19,6 +21,8 @@ public class WatchNextRepository {
         movies = moviesDao.getAllMovies();
         seriesDao = database.seriesDao();
         series = seriesDao.getAllSeries();
+        favouritesDao = database.favouritesDao();
+        favourites = favouritesDao.getAllFavourites();
     }
 
     public LiveData<List<Movies>> getMovies() {
@@ -28,6 +32,8 @@ public class WatchNextRepository {
     public LiveData<List<Series>> getSeries() {
         return series;
     }
+
+    public LiveData<List<Favourites>> getFavourites() {return favourites;}
 
     public void insertMovies(Movies movies) {
         new insertMoviesTask(moviesDao).execute(movies);

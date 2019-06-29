@@ -3,32 +3,22 @@ package com.lineargs.watchnext.ui;
 import android.app.ActivityOptions;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Movies;
+import com.lineargs.watchnext.data.Favourites;
 import com.lineargs.watchnext.data.MoviesViewModel;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
 import java.util.List;
@@ -37,11 +27,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class TheaterFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        TheaterAdapter.OnItemClickListener {
+public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnItemClickListener {
 
     private MoviesViewModel moviesViewModel;
-    private static final int LOADER_ID = 333;
     @BindView(R.id.theater_recycler_view)
     RecyclerView recyclerView;
     private TheaterAdapter theaterAdapter;
@@ -51,7 +39,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
     public TheaterFragment() {
     }
 
-    public void setSwipeRefreshLayout (SwipeRefreshLayout swipeRefreshLayout) {
+    public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
         this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
@@ -74,10 +62,12 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
             swipeRefreshLayout.setRefreshing(true);
         }
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-        moviesViewModel.getMovies().observe(this, new Observer<List<Movies>>() {
+        //TODO Change the observer for Theater Movies type, Movies with type == 3
+        moviesViewModel.getFavourites().observe(this, new Observer<List<Favourites>>() {
             @Override
-            public void onChanged(@Nullable List<Movies> movies) {
-                theaterAdapter.setMovies(movies);
+            public void onChanged(@Nullable List<Favourites> favourites) {
+                theaterAdapter.setMovies(favourites);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -85,47 +75,9 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
             public void onRefresh() {
                 if (NetworkUtils.isConnected(view.getContext())) {
                     swipeRefreshLayout.setRefreshing(true);
-                    getLoaderManager().restartLoader(LOADER_ID, null, TheaterFragment.this);
                 }
             }
         });
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        DataContract.TheaterMovieEntry.CONTENT_URI,
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-//                theaterAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-//        theaterAdapter.swapCursor(null);
     }
 
     @Override
