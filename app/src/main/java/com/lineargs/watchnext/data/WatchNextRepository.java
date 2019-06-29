@@ -11,29 +11,55 @@ public class WatchNextRepository {
     private MoviesDao moviesDao;
     private SeriesDao seriesDao;
     private FavouritesDao favouritesDao;
-    private LiveData<List<Movies>> movies;
-    private LiveData<List<Series>> series;
+    private LiveData<List<Movies>> allMovies;
+    private LiveData<List<Movies>> popularMovies;
+    private LiveData<List<Movies>> topRatedMovies;
+    private LiveData<List<Movies>> upcomingMovies;
+    private LiveData<List<Movies>> theatreMovies;
+    private LiveData<List<Series>> allSeries;
     private LiveData<List<Favourites>> favourites;
 
     WatchNextRepository(Application application) {
         WatchNextDatabase database = WatchNextDatabase.getDatabase(application);
         moviesDao = database.moviesDao();
-        movies = moviesDao.getAllMovies();
+        allMovies = moviesDao.getAllMovies();
+        popularMovies = moviesDao.getPopularMovies();
+        topRatedMovies = moviesDao.getTopRatedMovies();
+        upcomingMovies = moviesDao.getUpcomingMovies();
+        theatreMovies = moviesDao.getTheatreMovies();
         seriesDao = database.seriesDao();
-        series = seriesDao.getAllSeries();
+        allSeries = seriesDao.getAllSeries();
         favouritesDao = database.favouritesDao();
         favourites = favouritesDao.getAllFavourites();
     }
 
-    public LiveData<List<Movies>> getMovies() {
-        return movies;
+    public LiveData<List<Movies>> getAllMovies() {
+        return allMovies;
     }
 
-    public LiveData<List<Series>> getSeries() {
-        return series;
+    public LiveData<List<Movies>> getPopularMovies() {
+        return popularMovies;
     }
 
-    public LiveData<List<Favourites>> getFavourites() {return favourites;}
+    public LiveData<List<Movies>> getTopRatedMovies() {
+        return topRatedMovies;
+    }
+
+    public LiveData<List<Movies>> getUpcomingMovies() {
+        return upcomingMovies;
+    }
+
+    public LiveData<List<Movies>> getTheatreMovies() {
+        return theatreMovies;
+    }
+
+    public LiveData<List<Series>> getAllSeries() {
+        return allSeries;
+    }
+
+    public LiveData<List<Favourites>> getFavourites() {
+        return favourites;
+    }
 
     public void insertMovies(Movies movies) {
         new insertMoviesTask(moviesDao).execute(movies);

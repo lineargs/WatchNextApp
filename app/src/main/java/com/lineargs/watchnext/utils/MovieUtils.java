@@ -30,6 +30,7 @@ public class MovieUtils {
 
     /**
      * Helper method used in the Main Activity
+     *
      * @param date The date read from the database
      * @return Return the date formatted based on the Phone Locale
      */
@@ -48,6 +49,7 @@ public class MovieUtils {
 
     /**
      * Method used to get default video poster from YouTube
+     *
      * @param key Received from the MovieDb API
      * @return The URL used to download that image using Picasso
      */

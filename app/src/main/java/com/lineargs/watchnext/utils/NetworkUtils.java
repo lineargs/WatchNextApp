@@ -7,10 +7,12 @@ import android.net.NetworkInfo;
 public final class NetworkUtils {
 
     //This class is never initialized
-    private NetworkUtils(){}
+    private NetworkUtils() {
+    }
 
     /**
      * Method used to check whether the device is connected to internet
+     *
      * @param context The activity context
      * @return Whether the device is connected or not
      */

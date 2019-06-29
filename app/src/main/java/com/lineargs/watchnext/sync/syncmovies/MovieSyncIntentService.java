@@ -2,7 +2,6 @@ package com.lineargs.watchnext.sync.syncmovies;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 public class MovieSyncIntentService extends IntentService {
 

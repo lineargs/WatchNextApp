@@ -17,7 +17,8 @@ public interface MovieApiService {
 
     /**
      * Method of type retrofit GET
-     * @param path The movie path
+     *
+     * @param path   The movie path
      * @param apiKey The API KEY
      * @param region The region from where we access the app
      * @return The URL for the network call
@@ -30,8 +31,9 @@ public interface MovieApiService {
 
     /**
      * Method of type retrofit GET
-     * @param movieId The ID
-     * @param apiKey The API KEY
+     *
+     * @param movieId          The ID
+     * @param apiKey           The API KEY
      * @param appendToResponse The appendToResponse parameters
      * @return The URL for the network Call
      */
@@ -44,8 +46,9 @@ public interface MovieApiService {
 
     /**
      * Method of type retrofit GET
+     *
      * @param movieId The ID
-     * @param apiKey The API KEY
+     * @param apiKey  The API KEY
      * @return The URL for the network Call
      */
     @GET("movie/{movie_id}")

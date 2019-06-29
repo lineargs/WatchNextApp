@@ -10,7 +10,6 @@ public class Episodes {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
@@ -25,10 +24,8 @@ public class Episodes {
     @ColumnInfo(name = "release_date")
     private String releaseDate;
 
-    @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "overview")
     private String overview;
 
     @ColumnInfo(name = "season_number")
@@ -40,10 +37,8 @@ public class Episodes {
     @ColumnInfo(name = "vote_average")
     private String voteAverage;
 
-    @ColumnInfo(name = "directors")
     private String directors;
 
-    @ColumnInfo(name = "writers")
     private String writers;
 
     @ColumnInfo(name = "guest_stars")

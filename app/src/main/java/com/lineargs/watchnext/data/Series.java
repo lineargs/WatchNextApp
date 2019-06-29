@@ -10,7 +10,6 @@ public class Series {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
     private int id;
 
     @NonNull
@@ -21,7 +20,6 @@ public class Series {
     private String voteAverage;
 
     @NonNull
-    @ColumnInfo(name = "title")
     private String title;
 
     @ColumnInfo(name = "poster_path")
@@ -31,32 +29,25 @@ public class Series {
     private String backdropPath;
 
     @NonNull
-    @ColumnInfo(name = "overview")
     private String overview;
 
     @ColumnInfo(name = "release_date")
     private String releaseDate;
 
-    @ColumnInfo(name = "homepage")
     private String homepage;
 
     @ColumnInfo(name = "production_companies")
     private String productionCompanies;
 
-    @ColumnInfo(name = "networks")
     private String networks;
 
-    @ColumnInfo(name = "runtime")
     private int runtime;
 
-    @ColumnInfo(name = "status")
     private String status;
 
-    @ColumnInfo(name = "genres")
     private String genres;
 
     @NonNull
-    @ColumnInfo(name = "type")
     private int type;
 
     public int getId() {

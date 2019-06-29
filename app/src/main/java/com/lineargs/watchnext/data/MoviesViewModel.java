@@ -14,18 +14,20 @@ public class MoviesViewModel extends AndroidViewModel {
 
     private LiveData<List<Favourites>> favourites;
 
-    public MoviesViewModel (Application application) {
+    public MoviesViewModel(Application application) {
         super(application);
         repository = new WatchNextRepository(application);
-        movies = repository.getMovies();
+        movies = repository.getAllMovies();
         favourites = repository.getFavourites();
     }
 
-    public LiveData<List<Movies>> getMovies() {
+    public LiveData<List<Movies>> getAllMovies() {
         return movies;
     }
 
-    public LiveData<List<Favourites>> getFavourites() {return favourites;}
+    public LiveData<List<Favourites>> getFavourites() {
+        return favourites;
+    }
 
 //    public void insert(Movies movies) {repository.insertMovies(movies);}
 }

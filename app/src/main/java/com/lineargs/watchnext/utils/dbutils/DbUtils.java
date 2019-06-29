@@ -3,9 +3,7 @@ package com.lineargs.watchnext.utils.dbutils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
-import android.util.Log;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
@@ -126,8 +124,9 @@ public class DbUtils {
      * Used to check whether the Movie in the table contains an IMDB ID. If contains that means that we have
      * all the informations sync from the MovieDb API and we do not need to make a call so we can update the
      * Movie information
+     *
      * @param context The app context
-     * @param uri URI used to check in the db
+     * @param uri     URI used to check in the db
      * @return true / false
      */
     public static boolean checkForExtras(Context context, Uri uri) {
@@ -136,7 +135,7 @@ public class DbUtils {
         Cursor cursor = context.getContentResolver().query(uri,
                 null,
                 DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? AND " + DataContract.PopularMovieEntry.COLUMN_IMDB_ID + " = ? ",
-                new String[] {id, "0"},
+                new String[]{id, "0"},
                 null);
         if (cursor == null) {
             return false;
@@ -149,8 +148,9 @@ public class DbUtils {
     /**
      * Used to check whether that particular MovieID contains inside the table. If contains that means that we have
      * all the information sync from the MovieDb API and we can enable the button
+     *
      * @param context The app context
-     * @param id MovieID used to check in the db
+     * @param id      MovieID used to check in the db
      * @return true / false
      */
     public static boolean checkForId(Context context, String id, Uri uri) {
@@ -159,7 +159,7 @@ public class DbUtils {
                 //Does not matter from where we will take the MovieId column as it is
                 //declared everywhere the same
                 DataContract.Review.COLUMN_MOVIE_ID + " = ? ",
-                new String[] {id},
+                new String[]{id},
                 null);
         if (cursor == null) {
             return false;
@@ -172,8 +172,9 @@ public class DbUtils {
     /**
      * Checks whether the Movie / Serie is added in the favourites db. Used so we can display the proper
      * Drawable. Whether is star or borderStar image.
+     *
      * @param context The app context
-     * @param id The Movie / Serie ID
+     * @param id      The Movie / Serie ID
      * @return true / false
      */
     public static boolean isFavorite(Context context, long id) {

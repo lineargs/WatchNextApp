@@ -12,6 +12,7 @@ public class StatsUtils {
 
     /**
      * Performs a search using Cursor in favourites table
+     *
      * @param context Activity context
      * @return Movie number in favourites
      */
@@ -31,6 +32,7 @@ public class StatsUtils {
 
     /**
      * Performs a search using Cursor in favourites table
+     *
      * @param context Activity context
      * @return Series number in favourites
      */

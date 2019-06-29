@@ -260,7 +260,7 @@ public final class ServiceUtils {
      * empty activity
      *
      * @param context Activity context
-     * @param id The ID of the Movie / Series
+     * @param id      The ID of the Movie / Series
      * @param button  View
      */
     public static void setUpVideosButton(Context context, String id, View button) {

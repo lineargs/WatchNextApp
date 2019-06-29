@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Created by goranminov on 20/12/2017.
- *
+ * <p>
  * JSON POJO class for our {@link retrofit2.converter.gson.GsonConverterFactory}
  */
 

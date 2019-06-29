@@ -10,7 +10,6 @@ public class Credits {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
@@ -19,16 +18,13 @@ public class Credits {
     @ColumnInfo(name = "person_id")
     private int personId;
 
-    @ColumnInfo(name = "name")
     private String name;
 
     @ColumnInfo(name = "character_name")
     private String characterName;
 
-    @ColumnInfo(name = "job")
     private String job;
 
-    @ColumnInfo(name = "type")
     private int type;
 
     @ColumnInfo(name = "profile_path")

@@ -10,7 +10,6 @@ public class Movies {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
     private int id;
 
     @NonNull
@@ -21,7 +20,6 @@ public class Movies {
     private String voteAverage;
 
     @NonNull
-    @ColumnInfo(name = "title")
     private String title;
 
     @ColumnInfo(name = "poster_path")
@@ -31,7 +29,6 @@ public class Movies {
     private String backdropPath;
 
     @NonNull
-    @ColumnInfo(name = "overview")
     private String overview;
 
     @ColumnInfo(name = "release_date")
@@ -40,7 +37,6 @@ public class Movies {
     @ColumnInfo(name = "imdb_id")
     private String imdbId;
 
-    @ColumnInfo(name = "homepage")
     private String homepage;
 
     @ColumnInfo(name = "production_companies")
@@ -49,17 +45,13 @@ public class Movies {
     @ColumnInfo(name = "production_countries")
     private String productionCountries;
 
-    @ColumnInfo(name = "runtime")
     private int runtime;
 
-    @ColumnInfo(name = "status")
     private String status;
 
-    @ColumnInfo(name = "genres")
     private String genres;
 
     @NonNull
-    @ColumnInfo(name = "type")
     private int type;
 
     public int getId() {

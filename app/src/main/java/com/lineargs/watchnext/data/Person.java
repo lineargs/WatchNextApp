@@ -10,16 +10,13 @@ public class Person {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
     private int tmdbId;
 
-    @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "biography")
     private String biography;
 
     @ColumnInfo(name = "place_of_birth")
@@ -28,7 +25,6 @@ public class Person {
     @ColumnInfo(name = "profile_path")
     private String profilePath;
 
-    @ColumnInfo(name = "homepage")
     private String homepage;
 
     @NonNull

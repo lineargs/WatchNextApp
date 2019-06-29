@@ -210,8 +210,10 @@ public class MovieDbUtils {
     }
 
     //TODO Make all the Companies from same List type
+
     /**
      * Helper method used for building Companies String
+     *
      * @param companies List of type ProductionCompany
      * @return String in following format: Google, Google, Google
      */
@@ -234,6 +236,7 @@ public class MovieDbUtils {
 
     /**
      * Helper method used for building Countries String
+     *
      * @param countries List of type ProductionCountry
      * @return String in following format: Macedonia, England, United States
      */
@@ -256,6 +259,7 @@ public class MovieDbUtils {
 
     /**
      * Helper method used for building Genres String
+     *
      * @param genres List of type Genre
      * @return String in following format: Comedy, Horror, Fantasy
      */

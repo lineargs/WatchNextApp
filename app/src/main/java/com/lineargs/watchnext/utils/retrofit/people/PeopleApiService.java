@@ -15,7 +15,8 @@ public interface PeopleApiService {
 
     /**
      * Method of type retrofit GET
-     * @param id The ID
+     *
+     * @param id     The ID
      * @param apiKey The API KEY
      * @return The URL for the network call
      */

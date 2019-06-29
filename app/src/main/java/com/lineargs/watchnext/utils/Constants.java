@@ -25,5 +25,6 @@ public final class Constants {
 
     public static final String EPISODES = "episodes";
 
-    private Constants() {}
+    private Constants() {
+    }
 }

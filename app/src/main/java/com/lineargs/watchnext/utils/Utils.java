@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,6 +30,7 @@ public final class Utils {
 
     /**
      * Reads the version name from the app build.gradle file
+     *
      * @param context Activity context
      * @return version name String
      */
@@ -47,6 +47,7 @@ public final class Utils {
 
     /**
      * Reads the version code from the app build.gradle file
+     *
      * @param context Activity context
      * @return version code number
      */
@@ -62,7 +63,6 @@ public final class Utils {
     }
 
     /**
-     *
      * @param context Activity context
      * @return String in following format: Build 1.2.23, used in About Activity
      */
@@ -73,6 +73,7 @@ public final class Utils {
     /**
      * For better implementation while updating the Movie Details we extract the base URI from the one
      * containing the ID
+     *
      * @param uri containing the ID
      * @return parsed URI without the ID
      */
@@ -84,6 +85,7 @@ public final class Utils {
 
     /**
      * Helper method used for building the Guest Stars String.
+     *
      * @param guestStars List of type GuestStar
      * @return String in following format: Keanu Reeves, Morgan Freeman, Jennifer Aniston
      */
@@ -106,6 +108,7 @@ public final class Utils {
 
     /**
      * Helper method used for building the Directors String
+     *
      * @param crews List of type Crew
      * @return String in following format: Director 1, Director 2, Director 3
      */
@@ -129,6 +132,7 @@ public final class Utils {
 
     /**
      * Helper method used for building the Writers String
+     *
      * @param crews List of type Crew
      * @return String in following format: Writer 1, Writer 2, Writer 3
      */
@@ -152,6 +156,7 @@ public final class Utils {
 
     /**
      * Helper method used for building Companies String
+     *
      * @param companies List of type ProductionCompany
      * @return String in following format: Google, Google, Google
      */
@@ -174,6 +179,7 @@ public final class Utils {
 
     /**
      * Helper method used for building Genres String
+     *
      * @param genres List of type Genre
      * @return String in following format: Comedy, Horror, Fantasy
      */
@@ -197,8 +203,9 @@ public final class Utils {
     /**
      * Helper method checking if we can find the package i.e. if the app where we try to launch the Intent
      * has been installed on the phone.
-     * @param context The application context
-     * @param intent The Intent
+     *
+     * @param context      The application context
+     * @param intent       The Intent
      * @param displayError Whether to display the error
      * @return true / false
      */
@@ -214,7 +221,7 @@ public final class Utils {
             }
 
         }
-        
+
         if (displayError && !handled) {
             Toast.makeText(context, R.string.no_app_available, Toast.LENGTH_LONG).show();
         }
@@ -224,6 +231,7 @@ public final class Utils {
 
     /**
      * Helper method returning the Star Image Drawable
+     *
      * @param context The app context
      * @return The drawable
      */
@@ -233,6 +241,7 @@ public final class Utils {
 
     /**
      * Helper method returning the Star Border Image Drawable
+     *
      * @param context The app context
      * @return The drawable
      */
@@ -242,8 +251,9 @@ public final class Utils {
 
     /**
      * Return value of this method is never used
+     *
      * @param context The app context
-     * @param intent The Intent
+     * @param intent  The Intent
      * @return true / false
      */
     public static boolean openNewDocument(@NonNull Context context, @NonNull Intent intent) {

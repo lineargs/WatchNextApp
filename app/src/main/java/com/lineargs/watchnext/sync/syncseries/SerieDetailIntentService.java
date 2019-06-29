@@ -2,7 +2,6 @@ package com.lineargs.watchnext.sync.syncseries;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.net.Uri;
 
 public class SerieDetailIntentService extends IntentService {
 

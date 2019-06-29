@@ -10,19 +10,15 @@ public class Videos {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
     private int tmdbId;
 
-    @ColumnInfo(name = "key")
     private String key;
 
-    @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "image")
     private String image;
 
     @NonNull

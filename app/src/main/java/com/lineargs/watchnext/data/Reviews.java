@@ -10,19 +10,15 @@ public class Reviews {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "tmdb_id")
     private int tmdbId;
 
-    @ColumnInfo(name = "author")
     private String author;
 
-    @ColumnInfo(name = "content")
     private String content;
 
-    @ColumnInfo(name = "url")
     private String url;
 
     @NonNull
