@@ -45,6 +45,7 @@ public class Movies {
     @ColumnInfo(name = "production_countries")
     private String productionCountries;
 
+    @NonNull
     private int runtime;
 
     private String status;
@@ -53,6 +54,28 @@ public class Movies {
 
     @NonNull
     private int type;
+
+    public Movies(@NonNull int tmdbId, String voteAverage, @NonNull String title,
+                  String posterPath, String backdropPath, @NonNull String overview,
+                  String releaseDate, String imdbId, String homepage,
+                  String productionCompanies, String productionCountries,
+                  @NonNull int runtime, String status, String genres, @NonNull int type) {
+        this.tmdbId = tmdbId;
+        this.voteAverage = voteAverage;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.imdbId = imdbId;
+        this.homepage = homepage;
+        this.productionCompanies = productionCompanies;
+        this.productionCountries = productionCountries;
+        this.runtime = runtime;
+        this.status = status;
+        this.genres = genres;
+        this.type = type;
+    }
 
     public int getId() {
         return id;

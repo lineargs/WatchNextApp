@@ -61,7 +61,7 @@ public class WatchNextRepository {
         return favourites;
     }
 
-    public void insertMovies(Movies movies) {
+    public void insertMovie(Movies movies) {
         new insertMoviesTask(moviesDao).execute(movies);
     }
 

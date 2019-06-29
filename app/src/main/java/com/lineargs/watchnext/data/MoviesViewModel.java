@@ -29,5 +29,7 @@ public class MoviesViewModel extends AndroidViewModel {
         return favourites;
     }
 
-//    public void insert(Movies movies) {repository.insertMovies(movies);}
+    public void insertMovie(Movies movies) {repository.insertMovie(movies);}
+
+    public void insertSerie(Series series) {repository.insertSeries(series);}
 }
