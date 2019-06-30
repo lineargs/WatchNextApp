@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -20,8 +21,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
     private static final int VERSION_42_ROOM = 42;
 
-    private static final int VERSION_43 = 43;
-
     static final int DB_VERSION = VERSION_42_ROOM;
 
     static WatchNextDatabase getDatabase(final Context context) {
@@ -30,6 +29,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             WatchNextDatabase.class, "watchnext.db")
+                            //TODO Remove this implementation, here only for testing
+                            .addCallback(callback)
                             .addMigrations(
                                     MIGRATION_41_42
 //                                    MIGRATION_42_43
@@ -127,13 +128,50 @@ public abstract class WatchNextDatabase extends RoomDatabase {
         }
     };
 
-    private static final Migration MIGRATION_42_43 = new Migration(VERSION_42_ROOM, VERSION_43) {
+    /**
+     * Testing purposes only
+     */
+    private static RoomDatabase.Callback callback = new RoomDatabase.Callback(){
         @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE favourites ADD COLUMN 'fav_type' INTEGER");
-            Log.e("ALTER TABLE", "SUCCESS VERSION 43");
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            new PopulateDbAsync(INSTANCE).execute();
         }
     };
+
+    /**
+     * Testing purposes only
+     * Populate the database in the background.
+     */
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+
+        private final MoviesDao dao;
+        Movies popularMovie = new Movies(1234, "","Popular","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+                "","","","","",
+                "","",120,"","",0);
+        Movies topMovie = new Movies(1234, "","TopRated","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+                "","","","","",
+                "","",120,"","",1);
+        Movies upcomingMovie = new Movies(1234, "","Upcoming","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+                "","","","","",
+                "","",120,"","",2);
+        Movies theatreMovie = new Movies(1234, "","Theatre","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+                "","","","","",
+                "","",120,"","",3);
+
+        PopulateDbAsync(WatchNextDatabase db) {
+            dao = db.moviesDao();
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            dao.insert(popularMovie);
+            dao.insert(topMovie);
+            dao.insert(upcomingMovie);
+            dao.insert(theatreMovie);
+            return null;
+        }
+    }
 
     public abstract MoviesDao moviesDao();
 
