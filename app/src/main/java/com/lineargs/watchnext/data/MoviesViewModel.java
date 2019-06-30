@@ -28,10 +28,6 @@ public class MoviesViewModel extends AndroidViewModel {
 
     }
 
-    public LiveData<Movies> getMovie(int tmdbId) {
-        return repository.getMovie(tmdbId);
-    }
-
     public LiveData<List<Movies>> getPopularMovies() {
         return popularMovies;
     }

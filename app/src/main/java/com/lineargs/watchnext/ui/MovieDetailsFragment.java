@@ -30,6 +30,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
+import com.lineargs.watchnext.data.MovieDetailsViewModel;
 import com.lineargs.watchnext.data.Movies;
 import com.lineargs.watchnext.data.MoviesViewModel;
 import com.lineargs.watchnext.data.Query;
@@ -58,7 +59,7 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     private Unbinder unbinder;
     private long id;
     private boolean dualPane;
-    private MoviesViewModel moviesViewModel;
+    private MovieDetailsViewModel movieViewModel;
 
     @Nullable
     @BindView(R.id.cover_poster)
@@ -143,13 +144,13 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
             starFab.setVisibility(View.GONE);
         }
 
-        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
+        movieViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
         Log.e("ID: ", String.valueOf(tmdbId));
-        moviesViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
+        movieViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
             @Override
-            public void onChanged(@Nullable Movies movies) {
-                movieDetailAdapter.swapMovie(movies);
-                imageLoad(movies);
+            public void onChanged(@Nullable Movies movie) {
+                movieDetailAdapter.swapMovie(movie);
+                imageLoad(movie);
             }
         });
 
