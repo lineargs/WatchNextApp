@@ -11,30 +11,28 @@ public class WatchNextRepository {
     private MoviesDao moviesDao;
     private SeriesDao seriesDao;
     private FavouritesDao favouritesDao;
-    private LiveData<List<Movies>> allMovies;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
     private LiveData<List<Movies>> theatreMovies;
-    private LiveData<List<Series>> allSeries;
+    private LiveData<List<Series>> popularSeries;
+    private LiveData<List<Series>> topRatedSeries;
+    private LiveData<List<Series>> onTheAirSeries;
     private LiveData<List<Favourites>> favourites;
 
     WatchNextRepository(Application application) {
         WatchNextDatabase database = WatchNextDatabase.getDatabase(application);
         moviesDao = database.moviesDao();
-        allMovies = moviesDao.getAllMovies();
         popularMovies = moviesDao.getPopularMovies();
         topRatedMovies = moviesDao.getTopRatedMovies();
         upcomingMovies = moviesDao.getUpcomingMovies();
         theatreMovies = moviesDao.getTheatreMovies();
         seriesDao = database.seriesDao();
-        allSeries = seriesDao.getAllSeries();
+        onTheAirSeries = seriesDao.getOnTheAirSeries();
+        topRatedSeries = seriesDao.getTopratedSeries();
+        popularSeries = seriesDao.getPopularSeries();
         favouritesDao = database.favouritesDao();
         favourites = favouritesDao.getAllFavourites();
-    }
-
-    public LiveData<List<Movies>> getAllMovies() {
-        return allMovies;
     }
 
     public LiveData<List<Movies>> getPopularMovies() {
@@ -53,9 +51,11 @@ public class WatchNextRepository {
         return theatreMovies;
     }
 
-    public LiveData<List<Series>> getAllSeries() {
-        return allSeries;
-    }
+    public LiveData<List<Series>> getPopularSeries() {return popularSeries;}
+
+    public LiveData<List<Series>> getTopRatedSeries() {return topRatedSeries;}
+
+    public LiveData<List<Series>> getOnTheAirSeries() {return onTheAirSeries;}
 
     public LiveData<List<Favourites>> getFavourites() {
         return favourites;

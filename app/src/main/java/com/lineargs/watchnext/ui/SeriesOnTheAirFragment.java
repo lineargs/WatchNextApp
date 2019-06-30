@@ -1,16 +1,24 @@
 package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeriesOnTheAirAdapter;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.Favourites;
+import com.lineargs.watchnext.data.MoviesViewModel;
+import com.lineargs.watchnext.data.Series;
+import com.lineargs.watchnext.data.SeriesViewModel;
+
+import java.util.List;
 
 /**
  * Created by goranminov on 04/11/2017.
@@ -37,18 +45,13 @@ public class SeriesOnTheAirFragment extends SeriesListFragment implements Series
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public Uri getLoaderUri() {
-        return DataContract.OnTheAirSerieEntry.CONTENT_URI;
+    public void getObserver(SeriesViewModel viewModel) {
+        viewModel.getOnTheAirSeries().observe(this, new Observer<List<Series>>() {
+            @Override
+            public void onChanged(@Nullable List<Series> onTheAirSeries) {
+                adapter.setOnTheAirSeries(onTheAirSeries);
+            }
+        });
     }
 }
 

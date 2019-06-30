@@ -1,5 +1,7 @@
 package com.lineargs.watchnext.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,16 +17,21 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.data.Favourites;
+import com.lineargs.watchnext.data.MoviesViewModel;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.data.SeriesViewModel;
 import com.lineargs.watchnext.utils.NetworkUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class SeriesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class SeriesListFragment extends BaseFragment {
 
-    private static final int LOADER_ID = 233;
+    private SeriesViewModel seriesViewModel;
     @BindView(R.id.tabbed_series_recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.progress_bar)
@@ -41,49 +48,11 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
 
     private void setupViews(View view) {
         unbinder = ButterKnife.bind(this, view);
-        if (NetworkUtils.isConnected(view.getContext())) {
-            startLoading();
-        }
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(getAdapter());
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        getLoaderUri(),
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data.getCount() != 0) {
-                    data.moveToFirst();
-                    swapData(data);
-                    showData();
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        resetLoader(loader);
+        seriesViewModel = ViewModelProviders.of(this).get(SeriesViewModel.class);
+        getObserver(seriesViewModel);
     }
 
     @Override
@@ -92,21 +61,7 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
         unbinder.unbind();
     }
 
-    private void startLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
-    }
-
-    private void showData() {
-        progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
-    }
-
     public abstract RecyclerView.Adapter getAdapter();
 
-    public abstract void resetLoader(Loader<Cursor> loader);
-
-    public abstract void swapData(Cursor data);
-
-    public abstract Uri getLoaderUri();
+    public abstract void getObserver(SeriesViewModel viewModel);
 }
