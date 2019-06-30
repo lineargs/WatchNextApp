@@ -23,7 +23,7 @@ public interface MoviesDao {
     LiveData<List<Movies>> getUpcomingMovies();
 
     @Query("SELECT * FROM movies WHERE type = 3 ORDER BY title ASC")
-    LiveData<List<Movies>> getTheatreMovies();
+    LiveData<List<Movies>> getTheaterMovies();
 
     @Query("SELECT * FROM movies WHERE tmdb_id LIKE :tmdbId")
     LiveData<Movies> getMovie(int tmdbId);

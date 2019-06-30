@@ -18,6 +18,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
 import com.lineargs.watchnext.data.Movies;
 import com.lineargs.watchnext.data.MoviesViewModel;
+import com.lineargs.watchnext.data.TheaterViewModel;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
@@ -60,11 +61,11 @@ public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnIt
         if (NetworkUtils.isConnected(view.getContext())) {
             swipeRefreshLayout.setRefreshing(true);
         }
-        final MoviesViewModel moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-        moviesViewModel.getTheatreMovies().observe(this, new Observer<List<Movies>>() {
+        final TheaterViewModel theaterViewModel = ViewModelProviders.of(this).get(TheaterViewModel.class);
+        theaterViewModel.getTheaterMovies().observe(this, new Observer<List<Movies>>() {
             @Override
-            public void onChanged(@Nullable List<Movies> theatreMovies) {
-                theaterAdapter.setTheatreMovies(theatreMovies);
+            public void onChanged(@Nullable List<Movies> theaterMovies) {
+                theaterAdapter.setTheatreMovies(theaterMovies);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
