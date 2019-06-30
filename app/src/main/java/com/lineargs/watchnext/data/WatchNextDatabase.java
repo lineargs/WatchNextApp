@@ -103,6 +103,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             //Search tables
             database.execSQL("DROP TABLE search");
             database.execSQL("DROP TABLE searchtv");
+            database.execSQL("CREATE TABLE search ('tmdb_id' INTEGER NOT NULL, 'id' INTEGER NOT NULL, 'title' TEXT NOT NULL, " +
+                    "'poster_path' TEXT NOT NULL, PRIMARY KEY ('id'))");
 
             //Seasons table
             database.execSQL("DROP TABLE seasons");
