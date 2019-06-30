@@ -1,17 +1,20 @@
 package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MoviesUpcomingAdapter;
-import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.Movies;
+import com.lineargs.watchnext.data.MoviesViewModel;
+
+import java.util.List;
 
 /**
  * Created by goranminov on 03/11/2017.
@@ -19,30 +22,24 @@ import com.lineargs.watchnext.data.DataContract;
  * A fragment for our Tabbed Movies View Pager
  */
 
-public class MoviesUpcomingFragment extends MoviesListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        MoviesUpcomingAdapter.OnItemClickListener {
+public class MoviesUpcomingFragment extends MoviesListFragment implements MoviesUpcomingAdapter.OnItemClickListener {
 
-    private MoviesUpcomingAdapter mAdapter;
+    private MoviesUpcomingAdapter adapter;
 
     @Override
-    public RecyclerView.Adapter getAdapter() {
-        mAdapter = new MoviesUpcomingAdapter(getActivity(), this);
-        return mAdapter;
+    public RecyclerView.Adapter getAdapter(View view) {
+        adapter = new MoviesUpcomingAdapter(view.getContext(), this);
+        return adapter;
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    @Override
-    public Uri getLoaderUri() {
-        return DataContract.UpcomingMovieEntry.CONTENT_URI;
+    public void getObserver(MoviesViewModel viewModel) {
+        viewModel.getUpcomingMovies().observe(this, new Observer<List<Movies>>() {
+            @Override
+            public void onChanged(@Nullable List<Movies> movies) {
+                adapter.setUpcomingMovies(movies);
+            }
+        });
     }
 
     @Override

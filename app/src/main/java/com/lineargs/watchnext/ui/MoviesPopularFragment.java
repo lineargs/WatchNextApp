@@ -1,16 +1,20 @@
 package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.Loader;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MoviesPopularAdapter;
-import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.Movies;
+import com.lineargs.watchnext.data.MoviesViewModel;
+
+import java.util.List;
 
 /**
  * Created by goranminov on 03/11/2017.
@@ -21,27 +25,22 @@ import com.lineargs.watchnext.data.DataContract;
 public class MoviesPopularFragment extends MoviesListFragment implements MoviesPopularAdapter.OnItemClickListener {
 
 
-    private MoviesPopularAdapter mAdapter;
+    private MoviesPopularAdapter adapter;
 
     @Override
-    public RecyclerView.Adapter getAdapter() {
-        mAdapter = new MoviesPopularAdapter(getActivity(), this);
-        return mAdapter;
+    public RecyclerView.Adapter getAdapter(View view) {
+        adapter = new MoviesPopularAdapter(view.getContext(), this);
+        return adapter;
     }
 
     @Override
-    public Uri getLoaderUri() {
-        return DataContract.PopularMovieEntry.CONTENT_URI;
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+    public void getObserver(MoviesViewModel viewModel) {
+        viewModel.getPopularMovies().observe(this, new Observer<List<Movies>>() {
+            @Override
+            public void onChanged(@Nullable List<Movies> movies) {
+                adapter.setPopularMovies(movies);
+            }
+        });
     }
 
     @Override

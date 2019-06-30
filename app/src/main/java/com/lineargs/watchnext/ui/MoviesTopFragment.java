@@ -1,16 +1,20 @@
 package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.Loader;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MoviesTopAdapter;
-import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.Movies;
+import com.lineargs.watchnext.data.MoviesViewModel;
+
+import java.util.List;
 
 /**
  * Created by goranminov on 03/11/2017.
@@ -20,27 +24,22 @@ import com.lineargs.watchnext.data.DataContract;
 
 public class MoviesTopFragment extends MoviesListFragment implements MoviesTopAdapter.OnItemClickListener {
 
-    private MoviesTopAdapter mAdapter;
+    private MoviesTopAdapter adapter;
 
     @Override
-    public RecyclerView.Adapter getAdapter() {
-        mAdapter = new MoviesTopAdapter(getActivity(), this);
-        return mAdapter;
+    public RecyclerView.Adapter getAdapter(View view) {
+        adapter = new MoviesTopAdapter(view.getContext(), this);
+        return adapter;
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    @Override
-    public Uri getLoaderUri() {
-        return DataContract.TopRatedMovieEntry.CONTENT_URI;
+    public void getObserver(MoviesViewModel viewModel) {
+        viewModel.getTopRatedMovies().observe(this, new Observer<List<Movies>>() {
+            @Override
+            public void onChanged(@Nullable List<Movies> movies) {
+                adapter.setTopRatedMovies(movies);
+            }
+        });
     }
 
     @Override
