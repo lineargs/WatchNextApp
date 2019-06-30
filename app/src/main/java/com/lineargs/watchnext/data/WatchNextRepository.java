@@ -35,6 +35,10 @@ public class WatchNextRepository {
         favourites = favouritesDao.getAllFavourites();
     }
 
+    public LiveData<Movies> getMovie(int tmdbId) {
+        return moviesDao.getMovie(tmdbId);
+    }
+
     public LiveData<List<Movies>> getPopularMovies() {
         return popularMovies;
     }
@@ -51,11 +55,17 @@ public class WatchNextRepository {
         return theatreMovies;
     }
 
-    public LiveData<List<Series>> getPopularSeries() {return popularSeries;}
+    public LiveData<List<Series>> getPopularSeries() {
+        return popularSeries;
+    }
 
-    public LiveData<List<Series>> getTopRatedSeries() {return topRatedSeries;}
+    public LiveData<List<Series>> getTopRatedSeries() {
+        return topRatedSeries;
+    }
 
-    public LiveData<List<Series>> getOnTheAirSeries() {return onTheAirSeries;}
+    public LiveData<List<Series>> getOnTheAirSeries() {
+        return onTheAirSeries;
+    }
 
     public LiveData<List<Favourites>> getFavourites() {
         return favourites;

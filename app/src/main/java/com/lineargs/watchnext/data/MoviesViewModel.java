@@ -28,19 +28,34 @@ public class MoviesViewModel extends AndroidViewModel {
         upcomingMovies = repository.getUpcomingMovies();
         theatreMovies = repository.getTheatreMovies();
         favourites = repository.getFavourites();
+
     }
 
-    public LiveData<List<Movies>> getPopularMovies() {return popularMovies;}
+    public LiveData<Movies> getMovie(int tmdbId) {
+        return repository.getMovie(tmdbId);
+    }
 
-    public LiveData<List<Movies>> getTopRatedMovies() {return topRatedMovies;}
+    public LiveData<List<Movies>> getPopularMovies() {
+        return popularMovies;
+    }
 
-    public LiveData<List<Movies>> getUpcomingMovies() {return upcomingMovies;}
+    public LiveData<List<Movies>> getTopRatedMovies() {
+        return topRatedMovies;
+    }
 
-    public LiveData<List<Movies>> getTheatreMovies() {return theatreMovies;}
+    public LiveData<List<Movies>> getUpcomingMovies() {
+        return upcomingMovies;
+    }
+
+    public LiveData<List<Movies>> getTheatreMovies() {
+        return theatreMovies;
+    }
 
     public LiveData<List<Favourites>> getFavourites() {
         return favourites;
     }
 
-    public void insertMovie(Movies movies) {repository.insertMovie(movies);}
+    public void insertMovie(Movies movies) {
+        repository.insertMovie(movies);
+    }
 }

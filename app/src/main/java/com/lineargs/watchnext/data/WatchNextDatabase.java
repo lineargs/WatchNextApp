@@ -146,16 +146,16 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final MoviesDao dao;
-        Movies popularMovie = new Movies(1234, "","Popular","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+        Movies popularMovie = new Movies(301527, "","Popular","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
                 "","","","","",
-                "","",120,"","",0);
-        Movies topMovie = new Movies(1234, "","TopRated","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
-                "","","","","",
-                "","",120,"","",1);
-        Movies upcomingMovie = new Movies(1234, "","Upcoming","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+                "","",120,"Status","Genres",0);
+        Movies topMovie = new Movies(301528, "10.0","TopRated","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+                "","Overview","Mon, 26th","","Homepage",
+                "Companies","Countries",120,"Status","Genres",1);
+        Movies upcomingMovie = new Movies(301529, "","Upcoming","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
                 "","","","","",
                 "","",120,"","",2);
-        Movies theatreMovie = new Movies(1234, "","Theatre","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
+        Movies theatreMovie = new Movies(301526, "","Theatre","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
                 "","","","","",
                 "","",120,"","",3);
 

@@ -125,7 +125,7 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
 
     /* Our OnClickListener*/
     public interface OnItemClickListener {
-        void onItemSelected(Uri uri);
+        void onItemSelected(int tmdbId);
     }
 
     /**

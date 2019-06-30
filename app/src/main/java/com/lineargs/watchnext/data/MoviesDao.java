@@ -13,12 +13,6 @@ public interface MoviesDao {
     @Insert
     void insert(Movies movies);
 
-    @Insert
-    void insertAll(List<Movies> movies);
-
-    @Query("DELETE FROM movies")
-    void deleteAll();
-
     @Query("SELECT * FROM movies WHERE type = 0 ORDER BY title ASC")
     LiveData<List<Movies>> getPopularMovies();
 
@@ -31,9 +25,6 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies WHERE type = 3 ORDER BY title ASC")
     LiveData<List<Movies>> getTheatreMovies();
 
-    @Query("SELECT * FROM movies WHERE tmdb_id = :tmdbId")
-    LiveData<Movies> getMovie(String tmdbId);
-
-    @Query("SELECT * FROM movies ORDER BY title ASC")
-    LiveData<List<Movies>> getAllMovies();
+    @Query("SELECT * FROM movies WHERE tmdb_id LIKE :tmdbId")
+    LiveData<Movies> getMovie(int tmdbId);
 }

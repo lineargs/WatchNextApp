@@ -67,8 +67,7 @@ public class TheaterAdapter extends BaseTabbedAdapter {
     protected void onViewClick(View view, int position) {
         if (movies != null) {
             Movies currentMovie = movies.get(position);
-            Uri uri = DataContract.TheaterMovieEntry.buildMovieUriWithId(currentMovie.getId());
-            callback.onItemSelected(uri);
+            callback.onItemSelected(currentMovie.getTmdbId());
         }
     }
 

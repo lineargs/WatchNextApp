@@ -4,7 +4,6 @@ import android.app.ActivityOptions;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +18,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
 import com.lineargs.watchnext.data.Movies;
 import com.lineargs.watchnext.data.MoviesViewModel;
+import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
 import java.util.List;
@@ -79,9 +79,9 @@ public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnIt
     }
 
     @Override
-    public void onItemSelected(Uri uri) {
+    public void onItemSelected(int tmdbId) {
         Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
-        intent.setData(uri);
+        intent.putExtra(Constants.ID, tmdbId);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
     }

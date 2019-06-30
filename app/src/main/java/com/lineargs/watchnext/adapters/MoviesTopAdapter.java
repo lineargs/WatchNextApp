@@ -41,10 +41,10 @@ public class MoviesTopAdapter extends BaseTabbedAdapter {
 
     @Override
     protected void onViewClick(View view, int position) {
-//        cursor.moveToPosition(position);
-//        Uri uri = DataContract.TopRatedMovieEntry.buildMovieUriWithId(
-//                Long.parseLong(cursor.getString(Query.ID)));
-//        callback.onItemSelected(uri);
+        if (movies != null) {
+            Movies currentMovie = movies.get(position);
+            callback.onItemSelected(currentMovie.getTmdbId());
+        }
     }
 
     @Override

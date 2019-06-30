@@ -1,22 +1,20 @@
 package com.lineargs.watchnext.ui;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,16 +25,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
-import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.Movies;
+import com.lineargs.watchnext.data.MoviesViewModel;
 import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
@@ -50,49 +46,46 @@ import butterknife.Optional;
 import butterknife.Unbinder;
 
 /**
- * A fragment using Loaders to show details for the movie.
+ * A fragment using Loaders to show details for the movieDetailAdapter.
  */
-public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick, CrewAdapter.OnClick {
+public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClick, CrewAdapter.OnClick {
 
-
-    private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333, CREW_LOADER_ID = 445;
-
-    private Uri mUri;
-    private CastAdapter mCastAdapter;
-    private CrewAdapter mCrewAdapter;
-    private MovieDetailAdapter mAdapter;
-    private Handler handler;
+    private int tmdbId;
+    private CastAdapter castAdapter;
+    private CrewAdapter crewAdapter;
+    private MovieDetailAdapter movieDetailAdapter;
     private String title = "";
     private Unbinder unbinder;
     private long id;
     private boolean dualPane;
+    private MoviesViewModel moviesViewModel;
 
     @Nullable
     @BindView(R.id.cover_poster)
-    ImageView mPosterPath;
+    ImageView posterPath;
     @Nullable
     @BindView(R.id.cover_backdrop)
-    ImageView mBackdropPath;
+    ImageView backdropPath;
     @BindView(R.id.star_fab)
     FloatingActionButton starFab;
     @BindView(R.id.cast_recycler_view)
-    RecyclerView mCastRecyclerView;
+    RecyclerView castRecyclerView;
     @BindView(R.id.movie_details_recycler_view)
-    RecyclerView mRecyclerView;
+    RecyclerView recyclerView;
     @BindView(R.id.cast_progress_bar)
-    ProgressBar mCastProgressBar;
+    ProgressBar castProgressBar;
     @BindView(R.id.cast_linear_layout)
-    LinearLayout mCastLayout;
+    LinearLayout castLayout;
     @BindView(R.id.empty_cast)
-    AppCompatTextView mEmptyCast;
+    AppCompatTextView emptyCast;
     @BindView(R.id.crew_recycler_view)
-    RecyclerView mCrewRecyclerView;
+    RecyclerView crewRecyclerView;
     @BindView(R.id.crew_linear_layout)
-    LinearLayout mCrewLayout;
+    LinearLayout crewLayout;
     @BindView(R.id.empty_crew)
-    AppCompatTextView mEmptyCrew;
+    AppCompatTextView emptyCrew;
     @BindView(R.id.crew_progress_bar)
-    ProgressBar mCrewProgressBar;
+    ProgressBar crewProgressBar;
     @BindView(R.id.imdb)
     Button imdbButton;
     @BindView(R.id.google)
@@ -111,15 +104,13 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public MovieDetailsFragment() {
     }
 
-    public void setmUri(Uri uri) {
-        mUri = uri;
-    }
+    public void setTmdbId(int tmdbId) {this.tmdbId = tmdbId;}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            mUri = Uri.parse(savedInstanceState.getString(Constants.URI));
+            tmdbId = savedInstanceState.getInt(Constants.ID);
         }
         setHasOptionsMenu(true);
         View mRootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
@@ -130,43 +121,47 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     private void setupViews(Context context, View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
-        handler = new Handler();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        layoutManager.setAutoMeasureEnabled(true);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new MovieDetailAdapter(context);
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
+        movieDetailAdapter = new MovieDetailAdapter(context);
+        recyclerView.setAdapter(movieDetailAdapter);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mCastRecyclerView.setLayoutManager(mLayoutManager);
-        mCastRecyclerView.setHasFixedSize(true);
-        mCastAdapter = new CastAdapter(context, this);
-        mCastRecyclerView.setAdapter(mCastAdapter);
+        castRecyclerView.setLayoutManager(mLayoutManager);
+        castRecyclerView.setHasFixedSize(true);
+        castAdapter = new CastAdapter(context, this);
+        castRecyclerView.setAdapter(castAdapter);
 
         LinearLayoutManager crewManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mCrewRecyclerView.setLayoutManager(crewManager);
-        mCrewRecyclerView.setHasFixedSize(true);
-        mCrewAdapter = new CrewAdapter(context, this);
-        mCrewRecyclerView.setAdapter(mCrewAdapter);
+        crewRecyclerView.setLayoutManager(crewManager);
+        crewRecyclerView.setHasFixedSize(true);
+        crewAdapter = new CrewAdapter(context, this);
+        crewRecyclerView.setAdapter(crewAdapter);
 
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
             starFab.setVisibility(View.GONE);
         }
 
-        if (mUri != null) {
-            if (savedState == null && !DbUtils.checkForCredits(context, mUri.getLastPathSegment())) {
-                MovieSyncUtils.syncFullMovieDetail(context, mUri);
-            } else if (savedState == null && DbUtils.checkForExtras(context, mUri)) {
-                MovieSyncUtils.syncUpdateMovieDetail(context, mUri);
+        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
+        Log.e("ID: ", String.valueOf(tmdbId));
+        moviesViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
+            @Override
+            public void onChanged(@Nullable Movies movies) {
+                movieDetailAdapter.swapMovie(movies);
+                imageLoad(movies);
             }
-            startCastLoading();
-            startCrewLoading();
-        }
+        });
 
-        getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
-        getLoaderManager().initLoader(CAST_LOADER_ID, null, this);
-        getLoaderManager().initLoader(CREW_LOADER_ID, null, this);
+//        if (uri != null) {
+//            if (savedState == null && !DbUtils.checkForCredits(context, uri.getLastPathSegment())) {
+//                MovieSyncUtils.syncFullMovieDetail(context, uri);
+//            } else if (savedState == null && DbUtils.checkForExtras(context, uri)) {
+//                MovieSyncUtils.syncUpdateMovieDetail(context, uri);
+//            }
+//            startCastLoading();
+//            startCrewLoading();
+//        }
     }
 
     @Override
@@ -176,12 +171,12 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         dualPane = detailFrame != null && detailFrame.getVisibility() == View.VISIBLE;
         if (dualPane && savedInstanceState == null) {
             ReviewFragment reviewFragment = new ReviewFragment();
-            reviewFragment.setmUri(DataContract.Review.buildReviewUriWithId(Long.parseLong(mUri.getLastPathSegment())));
+//            reviewFragment.setmUri(DataContract.Review.buildReviewUriWithId(Long.parseLong(uri.getLastPathSegment())));
             getFragmentManager().beginTransaction()
                     .replace(R.id.review_frame_layout, reviewFragment)
                     .commit();
             VideosFragment videosFragment = new VideosFragment();
-            videosFragment.setmUri(DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment())));
+//            videosFragment.setmUri(DataContract.Videos.buildVideoUriWithId(Long.parseLong(uri.getLastPathSegment())));
             getFragmentManager().beginTransaction()
                     .replace(R.id.videos_frame_layout, videosFragment)
                     .commit();
@@ -190,43 +185,43 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString(Constants.URI, String.valueOf(mUri));
+        outState.putInt(Constants.ID, tmdbId);
     }
 
     private void startCastLoading() {
-        mCastProgressBar.setVisibility(View.VISIBLE);
-        mCastLayout.setVisibility(View.GONE);
-        mEmptyCast.setVisibility(View.GONE);
+        castProgressBar.setVisibility(View.VISIBLE);
+        castLayout.setVisibility(View.GONE);
+        emptyCast.setVisibility(View.GONE);
     }
 
     private void showCastData() {
-        mCastProgressBar.setVisibility(View.GONE);
-        mCastLayout.setVisibility(View.VISIBLE);
-        mEmptyCast.setVisibility(View.GONE);
+        castProgressBar.setVisibility(View.GONE);
+        castLayout.setVisibility(View.VISIBLE);
+        emptyCast.setVisibility(View.GONE);
     }
 
     private void showEmptyCast() {
-        mCastProgressBar.setVisibility(View.GONE);
-        mCastLayout.setVisibility(View.GONE);
-        mEmptyCast.setVisibility(View.VISIBLE);
+        castProgressBar.setVisibility(View.GONE);
+        castLayout.setVisibility(View.GONE);
+        emptyCast.setVisibility(View.VISIBLE);
     }
 
     private void startCrewLoading() {
-        mCrewProgressBar.setVisibility(View.VISIBLE);
-        mCrewLayout.setVisibility(View.GONE);
-        mEmptyCrew.setVisibility(View.GONE);
+        crewProgressBar.setVisibility(View.VISIBLE);
+        crewLayout.setVisibility(View.GONE);
+        emptyCrew.setVisibility(View.GONE);
     }
 
     private void showCrewData() {
-        mCrewProgressBar.setVisibility(View.GONE);
-        mCrewLayout.setVisibility(View.VISIBLE);
-        mEmptyCrew.setVisibility(View.GONE);
+        crewProgressBar.setVisibility(View.GONE);
+        crewLayout.setVisibility(View.VISIBLE);
+        emptyCrew.setVisibility(View.GONE);
     }
 
     private void showEmptyCrew() {
-        mCrewProgressBar.setVisibility(View.GONE);
-        mCrewLayout.setVisibility(View.GONE);
-        mEmptyCrew.setVisibility(View.VISIBLE);
+        crewProgressBar.setVisibility(View.GONE);
+        crewLayout.setVisibility(View.GONE);
+        emptyCrew.setVisibility(View.VISIBLE);
     }
 
     /* If the activity is opened from anywhere except the Main activity we have an option
@@ -235,113 +230,15 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
      */
     @OnClick(R.id.star_fab)
     public void starFabFavorite() {
-        if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
-            DbUtils.removeFromFavorites(getContext(), mUri);
-            Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
-        } else {
-            DbUtils.addMovieToFavorites(getContext(), mUri);
-            Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(Utils.starImage(getContext()));
-        }
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case MAIN_LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            case CAST_LOADER_ID:
-                Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-                return new CursorLoader(getContext(),
-                        uri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            case CREW_LOADER_ID:
-                Uri crewUri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-                return new CursorLoader(getContext(),
-                        crewUri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case MAIN_LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    imageLoad(data);
-                    mAdapter.swapCursor(data);
-                }
-                break;
-            case CAST_LOADER_ID:
-                mCastAdapter.swapCursor(data);
-                /* We use handler to manipulate with the user experience.
-                 * The Loaders are much faster than the load from Network, so
-                 * we delay the empty data show by calling the handler. Once
-                 * we will get the data from the Network, the Loader is calling again
-                 * onLoadFinished thanks to our Notify in the Adapter.
-                 * We cancel the handler call just so we will not show empty data by mistake after
-                 * populating the list.
-                 */
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    showCastData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmptyCast();
-                        }
-                    }, 7000);
-                }
-                break;
-            case CREW_LOADER_ID:
-                mCrewAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    showCrewData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmptyCrew();
-                        }
-                    }, 7000);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
+//        if (DbUtils.isFavorite(getContext(), Long.parseLong(uri.getLastPathSegment()))) {
+//            DbUtils.removeFromFavorites(getContext(), uri);
+//            Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
+//        starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+//        } else {
+//            DbUtils.addMovieToFavorites(getContext(), uri);
+//            Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
+//            starFab.setImageDrawable(Utils.starImage(getContext()));
+//        }
     }
 
     @Override
@@ -353,66 +250,66 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Optional
     @OnClick(R.id.reviews)
     public void loadReviews() {
-        Intent intent = new Intent(getContext(), ReviewActivity.class);
-        intent.setData(DataContract.Review.buildReviewUriWithId(Long.parseLong(mUri.getLastPathSegment())));
-        intent.putExtra(Constants.TITLE, title);
-        startActivity(intent);
+//        Intent intent = new Intent(getContext(), ReviewActivity.class);
+//        intent.setData(DataContract.Review.buildReviewUriWithId(Long.parseLong(uri.getLastPathSegment())));
+//        intent.putExtra(Constants.TITLE, title);
+//        startActivity(intent);
     }
 
     @Optional
     @OnClick(R.id.videos)
     public void loadVideos() {
-        Intent intent = new Intent(getContext(), VideosActivity.class);
-        Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-        intent.putExtra(Constants.TITLE, title);
-        intent.setData(uri);
-        startActivity(intent);
+//        Intent intent = new Intent(getContext(), VideosActivity.class);
+//        Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
+//        intent.putExtra(Constants.TITLE, title);
+//        intent.setData(uri);
+//        startActivity(intent);
     }
 
     @OnClick(R.id.cast_header_layout)
     public void loadCast() {
-        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-        intent.setData(uri);
-        startActivity(intent);
+//        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
+//        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
+//        intent.setData(uri);
+//        startActivity(intent);
     }
 
     @OnClick(R.id.crew_header_layout)
     public void loadCrew() {
-        Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
-        Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-        intent.setData(uri);
-        startActivity(intent);
+//        Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
+//        Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
+//        intent.setData(uri);
+//        startActivity(intent);
     }
 
-    private void imageLoad(Cursor cursor) {
-        title = cursor.getString(Query.TITLE);
-        id = cursor.getInt(Query.ID);
-        String imdb = cursor.getString(Query.IMDB_ID);
+    private void imageLoad(Movies movies) {
+        title = movies.getTitle();
+        id = movies.getTmdbId();
+        String imdb = movies.getImdbId();
         if (reviewsButton != null && videosButton != null) {
-            ServiceUtils.setUpCommentsButton(getContext(), mUri.getLastPathSegment(), reviewsButton);
-            ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), videosButton);
+//            ServiceUtils.setUpCommentsButton(getContext(), uri.getLastPathSegment(), reviewsButton);
+//            ServiceUtils.setUpVideosButton(getContext(), uri.getLastPathSegment(), videosButton);
         }
         ServiceUtils.setUpImdbButton(imdb, imdbButton);
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         ServiceUtils.setUpYouTubeButton(title, youTubeButton);
         ServiceUtils.setUpGooglePlayButton(title, googlePlayButton);
-        if (DbUtils.isFavorite(getContext(), id)) {
-            starFab.setImageDrawable(Utils.starImage(getContext()));
-        } else {
+//        if (DbUtils.isFavorite(getContext(), id)) {
+//            starFab.setImageDrawable(Utils.starImage(getContext()));
+//        } else {
             starFab.setImageDrawable(Utils.starBorderImage(getContext()));
-        }
-        if (mPosterPath != null) {
-            Picasso.with(mPosterPath.getContext())
-                    .load(cursor.getString(Query.POSTER_PATH))
+//        }
+        if (posterPath != null) {
+            Picasso.with(posterPath.getContext())
+                    .load(movies.getPosterPath())
                     .fit()
-                    .into(mPosterPath);
+                    .into(posterPath);
         }
-        if (mBackdropPath != null) {
-            Picasso.with(mBackdropPath.getContext())
-                    .load(cursor.getString(Query.BACKDROP_PATH))
+        if (backdropPath != null) {
+            Picasso.with(backdropPath.getContext())
+                    .load(movies.getBackdropPath())
                     .fit()
-                    .into(mBackdropPath);
+                    .into(backdropPath);
         }
     }
 
@@ -437,37 +334,37 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onPersonClick(String id, String name) {
-        if (dualPane) {
-            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-            Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-            intent.setData(uri);
-            intent.putExtra(Constants.ID, id);
-            intent.putExtra(Constants.NAME, name);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(getContext(), PersonActivity.class);
-            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-            intent.putExtra(Constants.ID, id);
-            intent.putExtra(Constants.NAME, name);
-            startActivity(intent);
-        }
+//        if (dualPane) {
+//            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
+//            Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
+//            intent.setData(uri);
+//            intent.putExtra(Constants.ID, id);
+//            intent.putExtra(Constants.NAME, name);
+//            startActivity(intent);
+//        } else {
+//            Intent intent = new Intent(getContext(), PersonActivity.class);
+//            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
+//            intent.putExtra(Constants.ID, id);
+//            intent.putExtra(Constants.NAME, name);
+//            startActivity(intent);
+//        }
     }
 
     @Override
     public void onCrewClick(String id, String name) {
-        if (dualPane) {
-            Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
-            Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-            intent.setData(uri);
-            intent.putExtra(Constants.ID, id);
-            intent.putExtra(Constants.NAME, name);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(getContext(), PersonActivity.class);
-            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-            intent.putExtra(Constants.ID, id);
-            intent.putExtra(Constants.NAME, name);
-            startActivity(intent);
-        }
+//        if (dualPane) {
+//            Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
+//            Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
+//            intent.setData(uri);
+//            intent.putExtra(Constants.ID, id);
+//            intent.putExtra(Constants.NAME, name);
+//            startActivity(intent);
+//        } else {
+//            Intent intent = new Intent(getContext(), PersonActivity.class);
+//            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
+//            intent.putExtra(Constants.ID, id);
+//            intent.putExtra(Constants.NAME, name);
+//            startActivity(intent);
+//        }
     }
 }

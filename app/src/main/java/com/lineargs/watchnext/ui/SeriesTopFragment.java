@@ -27,9 +27,9 @@ public class SeriesTopFragment extends SeriesListFragment implements SeriesTopAd
     private SeriesTopAdapter adapter;
 
     @Override
-    public void onItemSelected(Uri uri) {
+    public void onItemSelected(int tmdbId) {
         Intent intent = new Intent(getContext(), SeriesDetailsActivity.class);
-        intent.setData(uri);
+//        intent.setData(uri);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
     }

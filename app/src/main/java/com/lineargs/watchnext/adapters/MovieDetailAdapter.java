@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.data.Movies;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +23,7 @@ import butterknife.ButterKnife;
 public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor;
+    private Movies movie;
 
     public MovieDetailAdapter(@NonNull Context context) {
         this.context = context;
@@ -42,20 +41,20 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MovieViewHolder viewHolder = (MovieViewHolder) holder;
-        viewHolder.bindViews(position);
+        viewHolder.bindViews();
     }
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (movie == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return 1;
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapMovie(Movies movie) {
+        this.movie = movie;
         notifyDataSetChanged();
     }
 
@@ -82,16 +81,17 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ButterKnife.bind(this, view);
         }
 
-        void bindViews(int position) {
-            cursor.moveToPosition(position);
-            title.setText(cursor.getString(Query.TITLE));
-            releaseDate.setText(cursor.getString(Query.RELEASE_DATE));
-            overview.setText(cursor.getString(Query.OVERVIEW));
-            voteAverage.setText(cursor.getString(Query.VOTE_AVERAGE));
-            runtime.setText(context.getString(R.string.runtime, cursor.getString(Query.RUNTIME)));
-            companies.setText(cursor.getString(Query.PRODUCTION_COMPANIES));
-            countries.setText(cursor.getString(Query.PRODUCTION_COUNTRIES));
-            genres.setText(cursor.getString(Query.GENRES));
+        void bindViews() {
+            if (movie != null) {
+                title.setText(movie.getTitle());
+                releaseDate.setText(movie.getReleaseDate());
+                overview.setText(movie.getOverview());
+                voteAverage.setText(movie.getVoteAverage());
+                runtime.setText(String.valueOf(movie.getRuntime()));
+                companies.setText(movie.getProductionCompanies());
+                countries.setText(movie.getProductionCountries());
+                genres.setText(movie.getGenres());
+            }
         }
     }
 }
