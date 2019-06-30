@@ -3,7 +3,6 @@ package com.lineargs.watchnext.ui;
 import android.app.ActivityOptions;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,28 +15,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
-import com.lineargs.watchnext.data.Favourites;
 import com.lineargs.watchnext.data.Movies;
 import com.lineargs.watchnext.data.MoviesViewModel;
-import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 import com.lineargs.watchnext.utils.NetworkUtils;
-import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
-import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
-import com.lineargs.watchnext.utils.retrofit.movies.Result;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnItemClickListener {
 
@@ -73,11 +61,10 @@ public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnIt
             swipeRefreshLayout.setRefreshing(true);
         }
         final MoviesViewModel moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-        //TODO Change the observer for Theater Movies type, Movies with type == 3
-        moviesViewModel.getFavourites().observe(this, new Observer<List<Favourites>>() {
+        moviesViewModel.getTheatreMovies().observe(this, new Observer<List<Movies>>() {
             @Override
-            public void onChanged(@Nullable List<Favourites> favourites) {
-                theaterAdapter.setMovies(favourites);
+            public void onChanged(@Nullable List<Movies> theatreMovies) {
+                theaterAdapter.setTheatreMovies(theatreMovies);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

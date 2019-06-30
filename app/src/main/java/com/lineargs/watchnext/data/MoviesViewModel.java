@@ -16,6 +16,8 @@ public class MoviesViewModel extends AndroidViewModel {
 
     private LiveData<List<Movies>> upcomingMovies;
 
+    private LiveData<List<Movies>> theatreMovies;
+
     private LiveData<List<Favourites>> favourites;
 
     public MoviesViewModel(Application application) {
@@ -24,6 +26,7 @@ public class MoviesViewModel extends AndroidViewModel {
         popularMovies = repository.getPopularMovies();
         topRatedMovies = repository.getTopRatedMovies();
         upcomingMovies = repository.getUpcomingMovies();
+        theatreMovies = repository.getTheatreMovies();
         favourites = repository.getFavourites();
     }
 
@@ -32,6 +35,8 @@ public class MoviesViewModel extends AndroidViewModel {
     public LiveData<List<Movies>> getTopRatedMovies() {return topRatedMovies;}
 
     public LiveData<List<Movies>> getUpcomingMovies() {return upcomingMovies;}
+
+    public LiveData<List<Movies>> getTheatreMovies() {return theatreMovies;}
 
     public LiveData<List<Favourites>> getFavourites() {
         return favourites;

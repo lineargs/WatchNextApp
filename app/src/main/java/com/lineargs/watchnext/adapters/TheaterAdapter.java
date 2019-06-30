@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Favourites;
+import com.lineargs.watchnext.data.Movies;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class TheaterAdapter extends BaseTabbedAdapter {
 
-    private List<Favourites> movies;
+    private List<Movies> movies;
 
     public TheaterAdapter(@NonNull Context context, OnItemClickListener listener) {
         super(context, listener);
@@ -32,7 +32,7 @@ public class TheaterAdapter extends BaseTabbedAdapter {
     @Override
     protected void bindViews(final TabbedViewHolder holder, final Context context, int position) {
         if (movies != null) {
-            Favourites currentMovie = movies.get(position);
+            Movies currentMovie = movies.get(position);
             holder.title.setText(currentMovie.getTitle());
             //        if (isFavorite(context, id)) {
             holder.star.setImageDrawable(starImage());
@@ -60,15 +60,13 @@ public class TheaterAdapter extends BaseTabbedAdapter {
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerCrop()
                     .into(holder.poster);
-        } else {
-            holder.title.setText("No movies");
         }
     }
 
     @Override
     protected void onViewClick(View view, int position) {
         if (movies != null) {
-            Favourites currentMovie = movies.get(position);
+            Movies currentMovie = movies.get(position);
             Uri uri = DataContract.TheaterMovieEntry.buildMovieUriWithId(currentMovie.getId());
             callback.onItemSelected(uri);
         }
@@ -81,7 +79,7 @@ public class TheaterAdapter extends BaseTabbedAdapter {
         else return 0;
     }
 
-    public void setMovies(List<Favourites> movies) {
+    public void setTheatreMovies(List<Movies> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
