@@ -29,7 +29,7 @@ public class WatchNextRepository {
         theatreMovies = moviesDao.getTheaterMovies();
         seriesDao = database.seriesDao();
         onTheAirSeries = seriesDao.getOnTheAirSeries();
-        topRatedSeries = seriesDao.getTopratedSeries();
+        topRatedSeries = seriesDao.getTopRatedSeries();
         popularSeries = seriesDao.getPopularSeries();
         favouritesDao = database.favouritesDao();
         favourites = favouritesDao.getAllFavourites();

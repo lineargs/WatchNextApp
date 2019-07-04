@@ -23,7 +23,7 @@ public interface SeriesDao {
     LiveData<List<Series>> getPopularSeries();
 
     @Query("SELECT * FROM series WHERE type = 1 ORDER BY title ASC")
-    LiveData<List<Series>> getTopratedSeries();
+    LiveData<List<Series>> getTopRatedSeries();
 
     @Query("SELECT * FROM series WHERE type = 2 ORDER BY title ASC")
     LiveData<List<Series>> getOnTheAirSeries();

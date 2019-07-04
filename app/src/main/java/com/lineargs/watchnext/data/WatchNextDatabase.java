@@ -117,7 +117,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             database.execSQL("DROP TABLE popularseries");
             database.execSQL("DROP TABLE topseries");
             database.execSQL("CREATE TABLE series ('tmdb_id' INTEGER NOT NULL, 'overview' TEXT NOT NULL, " +
-                    "'runtime' INTEGER NOT NULL, 'title' TEXT NOT NULL, 'networks' TEXT, 'type' INTEGER NOT NULL, 'poster_path' TEXT, " +
+                    "'title' TEXT NOT NULL, 'networks' TEXT, 'type' INTEGER NOT NULL, 'poster_path' TEXT, " +
                     "'backdrop_path' TEXT, 'release_date' TEXT, 'production_companies' TEXT, 'genres' TEXT, " +
                     "'vote_average' TEXT, 'id' INTEGER NOT NULL, 'homepage' TEXT, " +
                     "'status' TEXT, PRIMARY KEY ('id'))");
@@ -148,6 +148,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final MoviesDao dao;
+        private final SeriesDao seriesDao;
         Movies popularMovie = new Movies(301527, "","Popular","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
                 "","","","","",
                 "","",120,"Status","Genres",0);
@@ -161,8 +162,19 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                 "","","","","",
                 "","",120,"","",3);
 
+        Series popularSeries = new Series(60735, "", "Popular", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
+                "", "", "", "", "",
+                "", "","", 0);
+        Series topRatedSeries = new Series(60735, "", "Top Rated", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
+                "", "", "", "", "",
+                "", "","", 1);
+        Series onTheAirSeries = new Series(60735, "", "On The Air", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
+                "", "", "", "", "",
+                "", "","", 2);
+
         PopulateDbAsync(WatchNextDatabase db) {
             dao = db.moviesDao();
+            seriesDao = db.seriesDao();
         }
 
         @Override
@@ -171,6 +183,9 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             dao.insert(topMovie);
             dao.insert(upcomingMovie);
             dao.insert(theatreMovie);
+            seriesDao.insert(popularSeries);
+            seriesDao.insert(topRatedSeries);
+            seriesDao.insert(onTheAirSeries);
             return null;
         }
     }
