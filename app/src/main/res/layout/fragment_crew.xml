@@ -5,24 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/crew_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/empty_crew"
-        style="@style/TitleTextCenter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="2"
-        android:text="@string/crew_empty_text"
-        android:visibility="invisible"
-        tools:visibility="visible" />
-
     <LinearLayout
         android:id="@+id/crew_linear_layout"
         android:layout_width="match_parent"

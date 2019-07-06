@@ -60,14 +60,10 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     FloatingActionButton starFab;
     @BindView(R.id.cast_recycler_view)
     RecyclerView mCastRecyclerView;
-    @BindView(R.id.cast_progress_bar)
-    ProgressBar mCastProgressBar;
     @BindView(R.id.cast_linear_layout)
     LinearLayout mCastLayout;
     @BindView(R.id.movie_details_recycler_view)
     RecyclerView mRecyclerView;
-    @BindView(R.id.empty_cast)
-    AppCompatTextView mEmptyCast;
     @BindView(R.id.google)
     Button googleButton;
     @BindView(R.id.youtube)
@@ -131,7 +127,6 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
             } else if (savedState == null) {
                 SerieDetailUtils.updateDetails(getContext(), mUri);
             }
-            startCastLoading();
         }
         getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
         getLoaderManager().initLoader(CAST_LOADER_ID, null, this);
@@ -159,24 +154,6 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString(Constants.URI, String.valueOf(mUri));
-    }
-
-    private void startCastLoading() {
-        mCastProgressBar.setVisibility(View.VISIBLE);
-        mCastLayout.setVisibility(View.GONE);
-        mEmptyCast.setVisibility(View.GONE);
-    }
-
-    private void showCastData() {
-        mCastProgressBar.setVisibility(View.GONE);
-        mCastLayout.setVisibility(View.VISIBLE);
-        mEmptyCast.setVisibility(View.GONE);
-    }
-
-    private void showEmptyCast() {
-        mCastProgressBar.setVisibility(View.GONE);
-        mCastLayout.setVisibility(View.GONE);
-        mEmptyCast.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.star_fab)
@@ -256,16 +233,14 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
                 }
                 break;
             case CAST_LOADER_ID:
-                mCastAdapter.swapCursor(data);
+//                mCastAdapter.swapCursor(data);
                 if (data != null && data.getCount() != 0) {
                     handler.removeCallbacksAndMessages(null);
                     data.moveToFirst();
-                    showCastData();
                 } else if (data != null && data.getCount() == 0) {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            showEmptyCast();
                         }
                     }, 7000);
                 }

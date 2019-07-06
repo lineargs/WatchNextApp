@@ -65,7 +65,7 @@ public class VideosFragment extends BaseFragment implements VideosAdapter.OnItem
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new VideosAdapter(getContext(), this);
+        mAdapter = new VideosAdapter(view.getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
         VideosViewModel videosViewModel = ViewModelProviders.of(this).get(VideosViewModel.class);
         videosViewModel.getVideos(tmdbId).observe(this, new Observer<List<Videos>>() {

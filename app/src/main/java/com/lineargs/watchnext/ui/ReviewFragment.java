@@ -56,7 +56,7 @@ public class ReviewFragment extends Fragment implements ReviewAdapter.OnClickLis
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new ReviewAdapter(getContext(), this);
+        mAdapter = new ReviewAdapter(view.getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
         ReviewsViewModel reviewsViewModel = ViewModelProviders.of(this).get(ReviewsViewModel.class);
         reviewsViewModel.getReviews(tmdbId).observe(this, new Observer<List<Reviews>>() {

@@ -28,12 +28,15 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
+import com.lineargs.watchnext.data.Credits;
 import com.lineargs.watchnext.data.MovieDetailsViewModel;
 import com.lineargs.watchnext.data.Movies;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,14 +50,11 @@ import butterknife.Unbinder;
 public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClick, CrewAdapter.OnClick {
 
     private int tmdbId;
-    private CastAdapter castAdapter;
-    private CrewAdapter crewAdapter;
     private MovieDetailAdapter movieDetailAdapter;
     private String title = "";
     private Unbinder unbinder;
     private long id;
     private boolean dualPane;
-    private MovieDetailsViewModel movieViewModel;
 
     @Nullable
     @BindView(R.id.cover_poster)
@@ -68,20 +68,12 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     RecyclerView castRecyclerView;
     @BindView(R.id.movie_details_recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.cast_progress_bar)
-    ProgressBar castProgressBar;
     @BindView(R.id.cast_linear_layout)
     LinearLayout castLayout;
-    @BindView(R.id.empty_cast)
-    AppCompatTextView emptyCast;
     @BindView(R.id.crew_recycler_view)
     RecyclerView crewRecyclerView;
     @BindView(R.id.crew_linear_layout)
     LinearLayout crewLayout;
-    @BindView(R.id.empty_crew)
-    AppCompatTextView emptyCrew;
-    @BindView(R.id.crew_progress_bar)
-    ProgressBar crewProgressBar;
     @BindView(R.id.imdb)
     Button imdbButton;
     @BindView(R.id.google)
@@ -128,26 +120,38 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         castRecyclerView.setLayoutManager(mLayoutManager);
         castRecyclerView.setHasFixedSize(true);
-        castAdapter = new CastAdapter(context, this);
+        final CastAdapter castAdapter = new CastAdapter(context, this);
         castRecyclerView.setAdapter(castAdapter);
 
         LinearLayoutManager crewManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         crewRecyclerView.setLayoutManager(crewManager);
         crewRecyclerView.setHasFixedSize(true);
-        crewAdapter = new CrewAdapter(context, this);
+        final CrewAdapter crewAdapter = new CrewAdapter(context, this);
         crewRecyclerView.setAdapter(crewAdapter);
 
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
             starFab.setVisibility(View.GONE);
         }
 
-        movieViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
+        MovieDetailsViewModel movieViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
         movieViewModel.getMovieDetails(String.valueOf(tmdbId));
         movieViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
             @Override
             public void onChanged(@Nullable Movies movie) {
                 movieDetailAdapter.swapMovie(movie);
                 imageLoad(movie);
+            }
+        });
+        movieViewModel.getCast(tmdbId).observe(this, new Observer<List<Credits>>() {
+            @Override
+            public void onChanged(@Nullable List<Credits> credits) {
+                castAdapter.swapCast(credits);
+            }
+        });
+        movieViewModel.getCrew(tmdbId).observe(this, new Observer<List<Credits>>() {
+            @Override
+            public void onChanged(@Nullable List<Credits> credits) {
+                crewAdapter.swapCrew(credits);
             }
         });
     }
@@ -219,10 +223,9 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 
     @OnClick(R.id.cast_header_layout)
     public void loadCast() {
-//        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-//        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
-//        intent.setData(uri);
-//        startActivity(intent);
+        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
+        intent.putExtra(Constants.ID, tmdbId);
+        startActivity(intent);
     }
 
     @OnClick(R.id.crew_header_layout)

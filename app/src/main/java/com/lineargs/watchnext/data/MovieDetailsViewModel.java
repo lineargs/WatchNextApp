@@ -69,6 +69,8 @@ public class MovieDetailsViewModel extends AndroidViewModel {
                     repository.updateMovie(movie);
                     repository.insertVideos(response.body().getVideos(), response.body().getId());
                     repository.insertReviews(response.body().getReviews(), response.body().getId());
+                    repository.insertCast(response.body().getCredits(), response.body().getId());
+                    repository.insertCrew(response.body().getCredits(), response.body().getId());
 
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
@@ -81,6 +83,9 @@ public class MovieDetailsViewModel extends AndroidViewModel {
             }
         });
     }
+
+    public LiveData<List<Credits>> getCast(int tmdbId) {return repository.getCast(tmdbId);}
+    public LiveData<List<Credits>> getCrew(int tmdbId) {return repository.getCrew(tmdbId);}
 
     /**
      * Helper method used for building Companies String

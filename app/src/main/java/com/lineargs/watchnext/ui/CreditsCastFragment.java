@@ -1,11 +1,14 @@
 package com.lineargs.watchnext.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,9 +20,13 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCastAdapter;
+import com.lineargs.watchnext.data.Credits;
 import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.CreditsViewModel;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.Constants;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,24 +36,16 @@ import butterknife.Unbinder;
  * A fragment loading and showing list of cast members for now.
  * We will use same class to implement crew.
  */
-public class CreditsCastFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCastAdapter.OnClick {
+public class CreditsCastFragment extends BaseFragment implements CreditsCastAdapter.OnClick {
 
-
-    private static final int LOADER_ID = 333;
-
+    private int tmdbId;
     private CreditsCastAdapter mAdapter;
-    private Uri mUri;
     private Uri mDualUri = null;
     private Unbinder unbinder;
     private boolean mDualPane;
 
     @BindView(R.id.credits_cast_recycler_view)
     RecyclerView mRecyclerView;
-
-
-    public void setmUri(Uri uri) {
-        mUri = uri;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -63,15 +62,18 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new CreditsCastAdapter(context, this);
         mRecyclerView.setAdapter(mAdapter);
-        if (getActivity().getIntent().getData() != null) {
-            mUri = getActivity().getIntent().getData();
-        }
-        if (getActivity().getIntent().hasExtra(Constants.ID)) {
-            Long id = Long.valueOf(getActivity().getIntent().getStringExtra(Constants.ID));
-            mDualUri = DataContract.Person.buildPersonUriWithId(id);
-        }
-
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        tmdbId = getActivity().getIntent().getIntExtra(Constants.ID, tmdbId);
+        CreditsViewModel creditsViewModel = ViewModelProviders.of(this).get(CreditsViewModel.class);
+        creditsViewModel.getCast(tmdbId).observe(this, new Observer<List<Credits>>() {
+            @Override
+            public void onChanged(@Nullable List<Credits> credits) {
+                mAdapter.swapCast(credits);
+            }
+        });
+//        if (getActivity().getIntent().hasExtra(Constants.ID)) {
+//            Long id = Long.valueOf(getActivity().getIntent().getStringExtra(Constants.ID));
+//            mDualUri = DataContract.Person.buildPersonUriWithId(id);
+//        }
     }
 
     @Override
@@ -88,38 +90,6 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
                     .add(R.id.frame_layout_person, fragment)
                     .commit();
         }
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                }
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     @Override

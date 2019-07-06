@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.Credits;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
 public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor;
+    private List<Credits> credits;
     private OnClick onClick;
 
     public CrewAdapter(@NonNull Context context, @NonNull OnClick onClick) {
@@ -51,15 +52,15 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (credits == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return credits.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapCrew(List<Credits> credits) {
+        this.credits = credits;
         notifyDataSetChanged();
     }
 
@@ -84,23 +85,25 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            crewName.setText(cursor.getString(CreditsQuery.NAME));
-            crewJob.setText(cursor.getString(CreditsQuery.JOB));
-            Picasso.with(profilePath.getContext())
-                    .load(cursor.getString(CreditsQuery.PROFILE_PATH))
-                    .centerCrop()
-                    .error(R.drawable.icon_person_grey)
-                    .fit()
-                    .into(profilePath);
+            if (credits != null) {
+                Credits credit = credits.get(position);
+                crewName.setText(credit.getName());
+                crewJob.setText(credit.getJob());
+                Picasso.with(profilePath.getContext())
+                        .load(credit.getProfilePath())
+                        .centerCrop()
+                        .error(R.drawable.icon_person_grey)
+                        .fit()
+                        .into(profilePath);
+            }
         }
 
         @Override
         public void onClick(View view) {
-            cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CreditsQuery.PERSON_ID);
-            String name = cursor.getString(CreditsQuery.NAME);
-            onClick.onCrewClick(id, name);
+//            cursor.moveToPosition(getAdapterPosition());
+//            String id = cursor.getString(CreditsQuery.PERSON_ID);
+//            String name = cursor.getString(CreditsQuery.NAME);
+//            onClick.onCrewClick(id, name);
         }
     }
 }
