@@ -202,10 +202,10 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     @Optional
     @OnClick(R.id.reviews)
     public void loadReviews() {
-//        Intent intent = new Intent(getContext(), ReviewActivity.class);
-//        intent.setData(DataContract.Review.buildReviewUriWithId(Long.parseLong(uri.getLastPathSegment())));
-//        intent.putExtra(Constants.TITLE, title);
-//        startActivity(intent);
+        Intent intent = new Intent(getContext(), ReviewActivity.class);
+        intent.putExtra(Constants.TITLE, title);
+        intent.putExtra(Constants.ID, tmdbId);
+        startActivity(intent);
     }
 
     @Optional

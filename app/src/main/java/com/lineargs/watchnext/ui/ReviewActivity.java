@@ -23,7 +23,7 @@ public class ReviewActivity extends BaseTopActivity {
         setupNavDrawer();
         if (savedInstanceState == null) {
             ReviewFragment reviewFragment = new ReviewFragment();
-            reviewFragment.setmUri(getIntent().getData());
+            reviewFragment.setTmdbId(getIntent().getIntExtra(Constants.ID, 0));
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.review_fragment, reviewFragment)
                     .commit();

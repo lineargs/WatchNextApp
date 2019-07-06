@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.lineargs.watchnext.utils.MovieUtils;
+import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ReviewsResult;
 import com.lineargs.watchnext.utils.retrofit.videos.VideosResult;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class WatchNextRepository {
     private MoviesDao moviesDao;
     private SeriesDao seriesDao;
     private VideosDao videosDao;
+    private ReviewsDao reviewsDao;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
@@ -37,6 +39,7 @@ public class WatchNextRepository {
         FavouritesDao favouritesDao = database.favouritesDao();
         favourites = favouritesDao.getAllFavourites();
         videosDao = database.videosDao();
+        reviewsDao = database.reviewsDao();
     }
 
     LiveData<Movies> getMovie(int tmdbId) {
@@ -79,6 +82,8 @@ public class WatchNextRepository {
         return videosDao.getVideos(tmdbId);
     }
 
+    public LiveData<List<Reviews>> getReviews(int tmdbId) {return reviewsDao.getReviews(tmdbId);}
+
     void insertMovie(Movies movies) {
         new InsertMoviesTask(moviesDao).execute(movies);
     }
@@ -93,6 +98,10 @@ public class WatchNextRepository {
 
     void insertVideos(com.lineargs.watchnext.utils.retrofit.videos.Videos videos, int tmdbId) {
         new InsertVideosTask(videosDao, tmdbId).execute(videos);
+    }
+
+    void insertReviews(com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews reviews, int tmdbId) {
+        new InsertReviewsTask(reviewsDao, tmdbId).execute(reviews);
     }
 
     private static class UpdateMovieTask extends AsyncTask<Movies, Void, Void> {
@@ -163,6 +172,32 @@ public class WatchNextRepository {
                 video.setKey(result.getKey());
                 video.setImage(MovieUtils.getYouTubeImage(result.getKey()));
                 videosDao.insert(video);
+            }
+            return null;
+        }
+    }
+
+    private static class InsertReviewsTask extends AsyncTask<com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews, Void, Void> {
+
+        private ReviewsDao reviewsDao;
+        private int tmdbId;
+
+        InsertReviewsTask(ReviewsDao dao, int tmdbId) {
+            reviewsDao = dao;
+            this.tmdbId = tmdbId;
+        }
+
+        @Override
+        protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews... reviews) {
+            com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews tmdbReviews = reviews[0];
+            List<ReviewsResult> resultList = tmdbReviews.getResults();
+            for (ReviewsResult result : resultList) {
+                Reviews review = new Reviews();
+                review.setTmdbId(tmdbId);
+                review.setAuthor(result.getAuthor());
+                review.setContent(result.getContent());
+                review.setUrl(result.getUrl());
+                reviewsDao.insert(review);
             }
             return null;
         }

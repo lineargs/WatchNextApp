@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.ReviewQuery;
+import com.lineargs.watchnext.data.Reviews;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +26,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private OnClickListener callback;
     private Context context;
-    private Cursor cursor;
+    private List<Reviews> reviews;
 
     public ReviewAdapter(@NonNull Context context, OnClickListener listener) {
         this.context = context;
@@ -49,15 +50,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (reviews == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return reviews.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapReviews(List<Reviews> reviews) {
+        this.reviews = reviews;
         notifyDataSetChanged();
     }
 
@@ -78,15 +79,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            author.setText(cursor.getString(ReviewQuery.AUTHOR));
-            content.setText(cursor.getString(ReviewQuery.CONTENT));
+            if (reviews != null) {
+                Reviews review = reviews.get(position);
+                author.setText(review.getAuthor());
+                content.setText(review.getContent());
+            }
         }
 
         @Override
         public void onClick(View view) {
-            cursor.moveToPosition(getAdapterPosition());
-            String url = cursor.getString(ReviewQuery.URL);
+            Reviews review = reviews.get(getAdapterPosition());
+            String url = review.getUrl();
             callback.OnClick(url);
         }
     }

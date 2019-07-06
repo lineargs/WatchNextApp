@@ -221,4 +221,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     public abstract FavouritesDao favouritesDao();
 
     public abstract VideosDao videosDao();
+
+    public abstract ReviewsDao reviewsDao();
 }

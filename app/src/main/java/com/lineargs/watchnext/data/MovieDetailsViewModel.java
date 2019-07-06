@@ -68,6 +68,7 @@ public class MovieDetailsViewModel extends AndroidViewModel {
                     movie.setStatus(response.body().getStatus());
                     repository.updateMovie(movie);
                     repository.insertVideos(response.body().getVideos(), response.body().getId());
+                    repository.insertReviews(response.body().getReviews(), response.body().getId());
 
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
