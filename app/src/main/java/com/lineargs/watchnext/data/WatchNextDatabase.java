@@ -149,18 +149,10 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
         private final MoviesDao dao;
         private final SeriesDao seriesDao;
-        Movies popularMovie = new Movies(301527, "","Popular","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
-                "","","","","",
-                "","",120,"Status","Genres",0);
-        Movies topMovie = new Movies(301528, "10.0","TopRated","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
-                "","Overview","Mon, 26th","","Homepage",
-                "Companies","Countries",120,"Status","Genres",1);
-        Movies upcomingMovie = new Movies(301529, "","Upcoming","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
-                "","","","","",
-                "","",120,"","",2);
-        Movies theatreMovie = new Movies(301526, "","Theatre","http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg",
-                "","","","","",
-                "","",120,"","",3);
+        Movies popularMovie = new Movies();
+        Movies topMovie = new Movies();
+        Movies upcomingMovie = new Movies();
+        Movies theatreMovie = new Movies();
 
         Series popularSeries = new Series(60735, "", "Popular", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
                 "", "", "", "", "",
@@ -179,9 +171,41 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
+            popularMovie.setTmdbId(301527);
+            popularMovie.setVoteAverage("");
+            popularMovie.setTitle("Popular");
+            popularMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            popularMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            popularMovie.setOverview("Overview");
+            popularMovie.setReleaseDate("");
+            popularMovie.setType(0);
             dao.insert(popularMovie);
+            topMovie.setTmdbId(301528);
+            topMovie.setVoteAverage("");
+            topMovie.setTitle("Top Rated");
+            topMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            topMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            topMovie.setOverview("Overview");
+            topMovie.setReleaseDate("");
+            topMovie.setType(1);
             dao.insert(topMovie);
+            upcomingMovie.setTmdbId(301529);
+            upcomingMovie.setVoteAverage("");
+            upcomingMovie.setTitle("Upcoming");
+            upcomingMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            upcomingMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            upcomingMovie.setOverview("Overview");
+            upcomingMovie.setReleaseDate("");
+            upcomingMovie.setType(2);
             dao.insert(upcomingMovie);
+            theatreMovie.setTmdbId(301526);
+            theatreMovie.setVoteAverage("");
+            theatreMovie.setTitle("Theater");
+            theatreMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            theatreMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            theatreMovie.setOverview("Overview");
+            theatreMovie.setReleaseDate("");
+            theatreMovie.setType(3);
             dao.insert(theatreMovie);
             seriesDao.insert(popularSeries);
             seriesDao.insert(topRatedSeries);

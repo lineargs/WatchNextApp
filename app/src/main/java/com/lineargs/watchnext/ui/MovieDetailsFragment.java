@@ -146,6 +146,7 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 
         movieViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
         Log.e("ID: ", String.valueOf(tmdbId));
+        movieViewModel.getMovieDetails(String.valueOf(tmdbId));
         movieViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
             @Override
             public void onChanged(@Nullable Movies movie) {

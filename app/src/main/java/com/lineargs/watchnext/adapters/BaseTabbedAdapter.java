@@ -84,25 +84,6 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
     /* Abstract method so we can implement in the child Adapter*/
     protected abstract void onViewClick(View view, int position);
 
-    /*
-     * Used in the child Adapters so we can check if the data contains
-     * in the favorites table before we display it
-     */
-    protected boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean favorite = cursor.getCount() > 0;
-        cursor.close();
-        return favorite;
-    }
-
     /**
      * Simple method that creates the drawable resource
      *

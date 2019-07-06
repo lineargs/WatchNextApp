@@ -1,12 +1,10 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Movies;
 import com.lineargs.watchnext.utils.ServiceUtils;
 

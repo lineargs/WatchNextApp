@@ -75,8 +75,29 @@ public class WatchNextRepository {
         new insertMoviesTask(moviesDao).execute(movies);
     }
 
+    public void updateMovie(Movies movies) {
+        new updateMovieTask(moviesDao).execute(movies);
+    }
+
     public void insertSeries(Series series) {
         new insertSeriesTask(seriesDao).execute(series);
+    }
+
+    private static class updateMovieTask extends AsyncTask<Movies, Void, Void> {
+
+        private MoviesDao moviesDao;
+
+        updateMovieTask(MoviesDao dao) {
+            moviesDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Movies... movies) {
+            Movies movie = movies[0];
+            moviesDao.updateMovie(movie.getTmdbId(), movie.getImdbId(), movie.getHomepage(), movie.getProductionCompanies(),
+                    movie.getProductionCountries(), movie.getGenres(), movie.getRuntime(), movie.getStatus());
+            return null;
+        }
     }
 
     private static class insertMoviesTask extends AsyncTask<Movies, Void, Void> {
