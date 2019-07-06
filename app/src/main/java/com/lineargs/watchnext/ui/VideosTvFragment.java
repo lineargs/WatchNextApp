@@ -111,7 +111,7 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
                 if (data != null && data.getCount() != 0) {
                     handler.removeCallbacksAndMessages(null);
                     data.moveToFirst();
-                    mAdapter.swapCursor(data);
+//                    mAdapter.swapCursor(data);
                     showData();
                 } else if (data != null && data.getCount() == 0) {
                     handler.postDelayed(new Runnable() {
@@ -130,7 +130,7 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+//        mAdapter.swapCursor(null);
     }
 
     @Override

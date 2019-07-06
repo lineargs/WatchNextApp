@@ -30,7 +30,7 @@ public class VideosActivity extends BaseTopActivity {
         setupNavDrawer();
         if (savedInstanceState == null) {
             VideosFragment videosFragment = new VideosFragment();
-            videosFragment.setmUri(getIntent().getData());
+            videosFragment.setTmdbId(getIntent().getIntExtra(Constants.ID, 0));
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.videos_fragment, videosFragment)
                     .commit();

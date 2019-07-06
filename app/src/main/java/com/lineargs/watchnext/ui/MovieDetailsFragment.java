@@ -4,9 +4,8 @@ package com.lineargs.watchnext.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,12 +30,9 @@ import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
 import com.lineargs.watchnext.data.MovieDetailsViewModel;
 import com.lineargs.watchnext.data.Movies;
-import com.lineargs.watchnext.data.MoviesViewModel;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
-import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -105,7 +100,9 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     public MovieDetailsFragment() {
     }
 
-    public void setTmdbId(int tmdbId) {this.tmdbId = tmdbId;}
+    public void setTmdbId(int tmdbId) {
+        this.tmdbId = tmdbId;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -115,12 +112,12 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         }
         setHasOptionsMenu(true);
         View mRootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        setupViews(getContext(), mRootView, savedInstanceState);
+        setupViews(getContext(), mRootView);
         return mRootView;
     }
 
 
-    private void setupViews(Context context, View view, Bundle savedState) {
+    private void setupViews(Context context, View view) {
         unbinder = ButterKnife.bind(this, view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -145,7 +142,6 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         }
 
         movieViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
-        Log.e("ID: ", String.valueOf(tmdbId));
         movieViewModel.getMovieDetails(String.valueOf(tmdbId));
         movieViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
             @Override
@@ -154,16 +150,6 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
                 imageLoad(movie);
             }
         });
-
-//        if (uri != null) {
-//            if (savedState == null && !DbUtils.checkForCredits(context, uri.getLastPathSegment())) {
-//                MovieSyncUtils.syncFullMovieDetail(context, uri);
-//            } else if (savedState == null && DbUtils.checkForExtras(context, uri)) {
-//                MovieSyncUtils.syncUpdateMovieDetail(context, uri);
-//            }
-//            startCastLoading();
-//            startCrewLoading();
-//        }
     }
 
     @Override
@@ -178,7 +164,7 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
                     .replace(R.id.review_frame_layout, reviewFragment)
                     .commit();
             VideosFragment videosFragment = new VideosFragment();
-//            videosFragment.setmUri(DataContract.Videos.buildVideoUriWithId(Long.parseLong(uri.getLastPathSegment())));
+            videosFragment.setTmdbId(tmdbId);
             getFragmentManager().beginTransaction()
                     .replace(R.id.videos_frame_layout, videosFragment)
                     .commit();
@@ -188,42 +174,6 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(Constants.ID, tmdbId);
-    }
-
-    private void startCastLoading() {
-        castProgressBar.setVisibility(View.VISIBLE);
-        castLayout.setVisibility(View.GONE);
-        emptyCast.setVisibility(View.GONE);
-    }
-
-    private void showCastData() {
-        castProgressBar.setVisibility(View.GONE);
-        castLayout.setVisibility(View.VISIBLE);
-        emptyCast.setVisibility(View.GONE);
-    }
-
-    private void showEmptyCast() {
-        castProgressBar.setVisibility(View.GONE);
-        castLayout.setVisibility(View.GONE);
-        emptyCast.setVisibility(View.VISIBLE);
-    }
-
-    private void startCrewLoading() {
-        crewProgressBar.setVisibility(View.VISIBLE);
-        crewLayout.setVisibility(View.GONE);
-        emptyCrew.setVisibility(View.GONE);
-    }
-
-    private void showCrewData() {
-        crewProgressBar.setVisibility(View.GONE);
-        crewLayout.setVisibility(View.VISIBLE);
-        emptyCrew.setVisibility(View.GONE);
-    }
-
-    private void showEmptyCrew() {
-        crewProgressBar.setVisibility(View.GONE);
-        crewLayout.setVisibility(View.GONE);
-        emptyCrew.setVisibility(View.VISIBLE);
     }
 
     /* If the activity is opened from anywhere except the Main activity we have an option
@@ -261,11 +211,10 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     @Optional
     @OnClick(R.id.videos)
     public void loadVideos() {
-//        Intent intent = new Intent(getContext(), VideosActivity.class);
-//        Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
-//        intent.putExtra(Constants.TITLE, title);
-//        intent.setData(uri);
-//        startActivity(intent);
+        Intent intent = new Intent(getContext(), VideosActivity.class);
+        intent.putExtra(Constants.ID, tmdbId);
+        intent.putExtra(Constants.TITLE, title);
+        startActivity(intent);
     }
 
     @OnClick(R.id.cast_header_layout)
@@ -288,10 +237,6 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         title = movies.getTitle();
         id = movies.getTmdbId();
         String imdb = movies.getImdbId();
-        if (reviewsButton != null && videosButton != null) {
-//            ServiceUtils.setUpCommentsButton(getContext(), uri.getLastPathSegment(), reviewsButton);
-//            ServiceUtils.setUpVideosButton(getContext(), uri.getLastPathSegment(), videosButton);
-        }
         ServiceUtils.setUpImdbButton(imdb, imdbButton);
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         ServiceUtils.setUpYouTubeButton(title, youTubeButton);
@@ -299,7 +244,7 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 //        if (DbUtils.isFavorite(getContext(), id)) {
 //            starFab.setImageDrawable(Utils.starImage(getContext()));
 //        } else {
-            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+        starFab.setImageDrawable(Utils.starBorderImage(getContext()));
 //        }
         if (posterPath != null) {
             Picasso.with(posterPath.getContext())

@@ -11,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.data.Videos;
 import com.lineargs.watchnext.data.VideosQuery;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +30,7 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private OnItemClick callback;
     private Context context;
-    private Cursor cursor;
+    private List<Videos> videos;
 
     public VideosAdapter(@NonNull Context context, OnItemClick listener) {
         this.context = context;
@@ -51,15 +54,15 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (videos == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return videos.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapVideos(List<Videos> videos) {
+        this.videos = videos;
         notifyDataSetChanged();
     }
 
@@ -80,19 +83,21 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            name.setText(cursor.getString(VideosQuery.NAME));
-            Picasso.with(photo.getContext())
-                    .load(cursor.getString(VideosQuery.IMG))
-                    .centerInside()
-                    .fit()
-                    .into(photo);
+            if (videos != null) {
+                Videos video = videos.get(position);
+                name.setText(video.getName());
+                Picasso.with(photo.getContext())
+                        .load(video.getImage())
+                        .centerInside()
+                        .fit()
+                        .into(photo);
+            }
         }
 
         @Override
         public void onClick(View view) {
-            cursor.moveToPosition(getAdapterPosition());
-            callback.OnClick(cursor.getString(VideosQuery.KEY));
+            Videos video = videos.get(getAdapterPosition());
+            callback.OnClick(video.getKey());
         }
     }
 }

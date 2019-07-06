@@ -1,10 +1,13 @@
 package com.lineargs.watchnext.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -18,8 +21,12 @@ import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
+import com.lineargs.watchnext.data.Videos;
 import com.lineargs.watchnext.data.VideosQuery;
+import com.lineargs.watchnext.data.VideosViewModel;
 import com.lineargs.watchnext.utils.ServiceUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,22 +36,16 @@ import butterknife.Unbinder;
  * Created by goranminov on 26/11/2017.
  */
 
-public class VideosFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, VideosAdapter.OnItemClick {
+public class VideosFragment extends BaseFragment implements VideosAdapter.OnItemClick {
 
-    private static final int LOADER_ID = 334;
+    private int tmdbId;
     @BindView(R.id.videos_recycler_view)
     RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.empty_videos)
-    AppCompatTextView mEmptyVideos;
-    private Uri mUri;
     private VideosAdapter mAdapter;
-    private Handler handler;
     private Unbinder unbinder;
 
-    public void setmUri(Uri uri) {
-        this.mUri = uri;
+    public void setTmdbId(int tmdbId) {
+        this.tmdbId = tmdbId;
     }
 
 
@@ -57,94 +58,24 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
 
     private void setupViews(View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
-        handler = new Handler();
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new VideosAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
+        VideosViewModel videosViewModel = ViewModelProviders.of(this).get(VideosViewModel.class);
+        videosViewModel.getVideos(tmdbId).observe(this, new Observer<List<Videos>>() {
+            @Override
+            public void onChanged(@Nullable List<Videos> videos) {
+                mAdapter.swapVideos(videos);
+            }
+        });
 
-        if (savedState == null) {
-            startLoading();
-        }
-
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyVideos.setVisibility(View.GONE);
-    }
-
-    private void showData() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mEmptyVideos.setVisibility(View.GONE);
-    }
-
-    private void showEmpty() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyVideos.setVisibility(View.VISIBLE);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        VideosQuery.VIDEO_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                    showData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmpty();
-                        }
-                    }, 3000);
-
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     @Override
     public void OnClick(String key) {
         ServiceUtils.openYouTube(getContext(), getString(R.string.you_tube, key));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
     }
 
     @Override

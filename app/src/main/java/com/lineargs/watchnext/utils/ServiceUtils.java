@@ -256,15 +256,13 @@ public final class ServiceUtils {
 
     /**
      * Helper method used for setting up the Videos button. If there is no button there is
-     * nothing to set up, if  MovieID does not exist in Videos table then there is no point opening
-     * empty activity
+     * nothing to set up.
      *
-     * @param context Activity context
-     * @param id      The ID of the Movie / Series
+     * @param videosListSize      The size of the Videos list returned from the database
      * @param button  View
      */
-    public static void setUpVideosButton(Context context, String id, View button) {
-        if (button != null && !DbUtils.checkForId(context, id, DataContract.Videos.CONTENT_URI)) {
+    public static void setUpVideosButton(int videosListSize, View button) {
+        if (button != null && videosListSize == 0) {
             button.setEnabled(false);
         }
     }

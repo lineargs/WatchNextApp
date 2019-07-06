@@ -4,13 +4,16 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.lineargs.watchnext.utils.MovieUtils;
+import com.lineargs.watchnext.utils.retrofit.videos.VideosResult;
+
 import java.util.List;
 
 public class WatchNextRepository {
 
     private MoviesDao moviesDao;
     private SeriesDao seriesDao;
-    private FavouritesDao favouritesDao;
+    private VideosDao videosDao;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
@@ -31,39 +34,40 @@ public class WatchNextRepository {
         onTheAirSeries = seriesDao.getOnTheAirSeries();
         topRatedSeries = seriesDao.getTopRatedSeries();
         popularSeries = seriesDao.getPopularSeries();
-        favouritesDao = database.favouritesDao();
+        FavouritesDao favouritesDao = database.favouritesDao();
         favourites = favouritesDao.getAllFavourites();
+        videosDao = database.videosDao();
     }
 
-    public LiveData<Movies> getMovie(int tmdbId) {
+    LiveData<Movies> getMovie(int tmdbId) {
         return moviesDao.getMovie(tmdbId);
     }
 
-    public LiveData<List<Movies>> getPopularMovies() {
+    LiveData<List<Movies>> getPopularMovies() {
         return popularMovies;
     }
 
-    public LiveData<List<Movies>> getTopRatedMovies() {
+    LiveData<List<Movies>> getTopRatedMovies() {
         return topRatedMovies;
     }
 
-    public LiveData<List<Movies>> getUpcomingMovies() {
+    LiveData<List<Movies>> getUpcomingMovies() {
         return upcomingMovies;
     }
 
-    public LiveData<List<Movies>> getTheatreMovies() {
+    LiveData<List<Movies>> getTheatreMovies() {
         return theatreMovies;
     }
 
-    public LiveData<List<Series>> getPopularSeries() {
+    LiveData<List<Series>> getPopularSeries() {
         return popularSeries;
     }
 
-    public LiveData<List<Series>> getTopRatedSeries() {
+    LiveData<List<Series>> getTopRatedSeries() {
         return topRatedSeries;
     }
 
-    public LiveData<List<Series>> getOnTheAirSeries() {
+    LiveData<List<Series>> getOnTheAirSeries() {
         return onTheAirSeries;
     }
 
@@ -71,23 +75,31 @@ public class WatchNextRepository {
         return favourites;
     }
 
-    public void insertMovie(Movies movies) {
-        new insertMoviesTask(moviesDao).execute(movies);
+    public LiveData<List<Videos>> getVideos(int tmdbId) {
+        return videosDao.getVideos(tmdbId);
     }
 
-    public void updateMovie(Movies movies) {
-        new updateMovieTask(moviesDao).execute(movies);
+    void insertMovie(Movies movies) {
+        new InsertMoviesTask(moviesDao).execute(movies);
+    }
+
+    void updateMovie(Movies movies) {
+        new UpdateMovieTask(moviesDao).execute(movies);
     }
 
     public void insertSeries(Series series) {
-        new insertSeriesTask(seriesDao).execute(series);
+        new InsertSeriesTask(seriesDao).execute(series);
     }
 
-    private static class updateMovieTask extends AsyncTask<Movies, Void, Void> {
+    void insertVideos(com.lineargs.watchnext.utils.retrofit.videos.Videos videos, int tmdbId) {
+        new InsertVideosTask(videosDao, tmdbId).execute(videos);
+    }
+
+    private static class UpdateMovieTask extends AsyncTask<Movies, Void, Void> {
 
         private MoviesDao moviesDao;
 
-        updateMovieTask(MoviesDao dao) {
+        UpdateMovieTask(MoviesDao dao) {
             moviesDao = dao;
         }
 
@@ -100,11 +112,11 @@ public class WatchNextRepository {
         }
     }
 
-    private static class insertMoviesTask extends AsyncTask<Movies, Void, Void> {
+    private static class InsertMoviesTask extends AsyncTask<Movies, Void, Void> {
 
         private MoviesDao moviesDao;
 
-        insertMoviesTask(MoviesDao dao) {
+        InsertMoviesTask(MoviesDao dao) {
             moviesDao = dao;
         }
 
@@ -115,17 +127,43 @@ public class WatchNextRepository {
         }
     }
 
-    private static class insertSeriesTask extends AsyncTask<Series, Void, Void> {
+    private static class InsertSeriesTask extends AsyncTask<Series, Void, Void> {
 
         private SeriesDao seriesDao;
 
-        insertSeriesTask(SeriesDao dao) {
+        InsertSeriesTask(SeriesDao dao) {
             seriesDao = dao;
         }
 
         @Override
         protected Void doInBackground(Series... series) {
             seriesDao.insert(series[0]);
+            return null;
+        }
+    }
+
+    private static class InsertVideosTask extends AsyncTask<com.lineargs.watchnext.utils.retrofit.videos.Videos, Void, Void> {
+
+        private VideosDao videosDao;
+        private int tmdbId;
+
+        InsertVideosTask(VideosDao dao, int tmdbId) {
+            videosDao = dao;
+            this.tmdbId = tmdbId;
+        }
+
+        @Override
+        protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.videos.Videos... videos) {
+            com.lineargs.watchnext.utils.retrofit.videos.Videos tmdbVideos = videos[0];
+            List<VideosResult> resultList = tmdbVideos.getResults();
+            for (VideosResult result : resultList) {
+                Videos video = new Videos();
+                video.setTmdbId(tmdbId);
+                video.setName(result.getName());
+                video.setKey(result.getKey());
+                video.setImage(MovieUtils.getYouTubeImage(result.getKey()));
+                videosDao.insert(video);
+            }
             return null;
         }
     }

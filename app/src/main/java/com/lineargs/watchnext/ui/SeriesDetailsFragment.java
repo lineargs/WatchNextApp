@@ -316,7 +316,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
         if (videosButton != null) {
-            ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), videosButton);
+//            ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), videosButton);
         }
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         ServiceUtils.setUpYouTubeButton(title, youTubeButton);
