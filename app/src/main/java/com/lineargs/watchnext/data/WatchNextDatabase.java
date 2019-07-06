@@ -126,6 +126,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             database.execSQL("DROP TABLE videos");
             database.execSQL("CREATE TABLE videos ('name' TEXT, 'tmdb_id' INTEGER NOT NULL, 'image' TEXT, " +
                     "'id' INTEGER NOT NULL, 'key' TEXT, PRIMARY KEY ('id'))");
+            database.execSQL("CREATE UNIQUE INDEX 'index_videos_key' ON videos ('key')");
+            database.execSQL("CREATE UNIQUE INDEX 'index_reviews_key' ON reviews ('url')");
             Log.e("SUCCESS", "MIGRATION SUCCESS");
         }
     };

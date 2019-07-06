@@ -24,6 +24,7 @@ import com.lineargs.watchnext.adapters.VideosAdapter;
 import com.lineargs.watchnext.data.Videos;
 import com.lineargs.watchnext.data.VideosQuery;
 import com.lineargs.watchnext.data.VideosViewModel;
+import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.util.List;
@@ -58,6 +59,9 @@ public class VideosFragment extends BaseFragment implements VideosAdapter.OnItem
 
     private void setupViews(View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
+        if (savedState != null) {
+            tmdbId = savedState.getInt(Constants.ID);
+        }
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -71,6 +75,11 @@ public class VideosFragment extends BaseFragment implements VideosAdapter.OnItem
             }
         });
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(Constants.ID, tmdbId);
     }
 
     @Override

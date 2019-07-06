@@ -16,6 +16,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ReviewAdapter;
 import com.lineargs.watchnext.data.Reviews;
 import com.lineargs.watchnext.data.ReviewsViewModel;
+import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.util.List;
@@ -49,6 +50,9 @@ public class ReviewFragment extends Fragment implements ReviewAdapter.OnClickLis
 
     private void setupViews(View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
+        if (savedState != null) {
+            tmdbId = savedState.getInt(Constants.ID);
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
@@ -66,6 +70,11 @@ public class ReviewFragment extends Fragment implements ReviewAdapter.OnClickLis
     @Override
     public void OnClick(String url) {
         ServiceUtils.openWeb(getActivity(), url);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(Constants.ID, tmdbId);
     }
 
     @Override
