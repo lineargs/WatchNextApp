@@ -13,6 +13,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeriesOnTheAirAdapter;
 import com.lineargs.watchnext.data.Series;
 import com.lineargs.watchnext.data.SeriesViewModel;
+import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SeriesOnTheAirFragment extends SeriesListFragment implements Series
     @Override
     public void onItemSelected(int tmdbId) {
         Intent intent = new Intent(getActivity(), SeriesDetailsActivity.class);
-//        intent.setData(uri);
+        intent.putExtra(Constants.ID, tmdbId);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
     }

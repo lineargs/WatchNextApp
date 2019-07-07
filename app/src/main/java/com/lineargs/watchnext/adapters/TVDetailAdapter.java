@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.data.Series;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,7 +19,7 @@ import butterknife.ButterKnife;
 public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor;
+    private Series series;
 
     public TVDetailAdapter(@NonNull Context context) {
         this.context = context;
@@ -41,15 +42,15 @@ public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (series == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return 1;
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapSeries(Series series) {
+        this.series = series;
         notifyDataSetChanged();
     }
 
@@ -73,13 +74,14 @@ public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            title.setText(cursor.getString(Query.TITLE));
-            releaseDate.setText(cursor.getString(Query.RELEASE_DATE));
-            overview.setText(cursor.getString(Query.OVERVIEW));
-            voteAverage.setText(cursor.getString(Query.VOTE_AVERAGE));
-            companies.setText(cursor.getString(Query.PRODUCTION_COMPANIES));
-            genres.setText(cursor.getString(Query.GENRES));
+            if (series != null) {
+                title.setText(series.getTitle());
+                releaseDate.setText(series.getReleaseDate());
+                overview.setText(series.getOverview());
+                voteAverage.setText(series.getVoteAverage());
+                companies.setText(series.getProductionCompanies());
+                genres.setText(series.getGenres());
+            }
         }
     }
 }

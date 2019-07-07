@@ -104,12 +104,12 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         }
         setHasOptionsMenu(true);
         View mRootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        setupViews(getContext(), mRootView);
+        setupViews(getContext(), mRootView, savedInstanceState);
         return mRootView;
     }
 
 
-    private void setupViews(Context context, View view) {
+    private void setupViews(Context context, View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -134,7 +134,9 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         }
 
         MovieDetailsViewModel movieViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
-        movieViewModel.getMovieDetails(String.valueOf(tmdbId));
+        if (savedState == null) {
+            movieViewModel.getMovieDetails(String.valueOf(tmdbId));
+        }
         movieViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
             @Override
             public void onChanged(@Nullable Movies movie) {
@@ -291,10 +293,10 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 //            intent.putExtra(Constants.NAME, name);
 //            startActivity(intent);
 //        } else {
-            Intent intent = new Intent(getContext(), PersonActivity.class);
-            intent.putExtra(Constants.ID, id);
-            intent.putExtra(Constants.NAME, name);
-            startActivity(intent);
+        Intent intent = new Intent(getContext(), PersonActivity.class);
+        intent.putExtra(Constants.ID, id);
+        intent.putExtra(Constants.NAME, name);
+        startActivity(intent);
 //        }
     }
 
@@ -308,10 +310,10 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 //            intent.putExtra(Constants.NAME, name);
 //            startActivity(intent);
 //        } else {
-            Intent intent = new Intent(getContext(), PersonActivity.class);
-            intent.putExtra(Constants.ID, id);
-            intent.putExtra(Constants.NAME, name);
-            startActivity(intent);
+        Intent intent = new Intent(getContext(), PersonActivity.class);
+        intent.putExtra(Constants.ID, id);
+        intent.putExtra(Constants.NAME, name);
+        startActivity(intent);
 //        }
     }
 }

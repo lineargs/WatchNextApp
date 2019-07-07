@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.utils.Constants;
 
 public class SeriesDetailsActivity extends BaseTopActivity {
 
@@ -28,7 +29,7 @@ public class SeriesDetailsActivity extends BaseTopActivity {
     private void setupFragment(Bundle savedState) {
         if (savedState == null) {
             SeriesDetailsFragment fragment = new SeriesDetailsFragment();
-            fragment.setmUri(getIntent().getData());
+            fragment.setTmdbId(getIntent().getIntExtra(Constants.ID, 0));
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_tv_detail, fragment).commit();
         }
     }

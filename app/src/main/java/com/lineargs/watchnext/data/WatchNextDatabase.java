@@ -156,16 +156,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
         Movies topMovie = new Movies();
         Movies upcomingMovie = new Movies();
         Movies theatreMovie = new Movies();
-
-        Series popularSeries = new Series(60735, "", "Popular", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
-                "", "", "", "", "",
-                "", "", "", 0);
-        Series topRatedSeries = new Series(60735, "", "Top Rated", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
-                "", "", "", "", "",
-                "", "", "", 1);
-        Series onTheAirSeries = new Series(60735, "", "On The Air", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
-                "", "", "", "", "",
-                "", "", "", 2);
+        Series popularSeries = new Series();
+        Series topSeries = new Series();
 
         PopulateDbAsync(WatchNextDatabase db) {
             dao = db.moviesDao();
@@ -210,9 +202,24 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             theatreMovie.setReleaseDate("");
             theatreMovie.setType(3);
             dao.insert(theatreMovie);
+            popularSeries.setTitle("Popular");
+            popularSeries.setReleaseDate("");
+            popularSeries.setPosterPath("http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg");
+            popularSeries.setBackdropPath("http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg");
+            popularSeries.setTmdbId(60735);
+            popularSeries.setVoteAverage("7.2");
+            popularSeries.setOverview("When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.");
+            popularSeries.setType(0);
+            topSeries.setTitle("Popular");
+            topSeries.setReleaseDate("");
+            topSeries.setPosterPath("http://image.tmdb.org/t/p/w500//x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
+            topSeries.setBackdropPath("http://image.tmdb.org/t/p/w500//x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
+            topSeries.setTmdbId(66732);
+            topSeries.setVoteAverage("10.0");
+            topSeries.setOverview("When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.");
+            topSeries.setType(1);
             seriesDao.insert(popularSeries);
-            seriesDao.insert(topRatedSeries);
-            seriesDao.insert(onTheAirSeries);
+            seriesDao.insert(topSeries);
             return null;
         }
     }

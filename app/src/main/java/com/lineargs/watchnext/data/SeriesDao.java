@@ -13,11 +13,10 @@ public interface SeriesDao {
     @Insert
     void insert(Series series);
 
-    @Insert
-    void insertAll(List<Series> series);
-
-    @Query("DELETE FROM series")
-    void deleteAll();
+    @Query("UPDATE series SET homepage = :homepage, production_companies = :productionCompanies, " +
+            "networks = :networks, status = :status, genres = :genres WHERE tmdb_id LIKE :tmdbId")
+    void updateSeries(int tmdbId, String homepage, String productionCompanies, String networks,
+                      String status, String genres);
 
     @Query("SELECT * FROM series WHERE type = 0 ORDER BY title ASC")
     LiveData<List<Series>> getPopularSeries();
@@ -28,6 +27,6 @@ public interface SeriesDao {
     @Query("SELECT * FROM series WHERE type = 2 ORDER BY title ASC")
     LiveData<List<Series>> getOnTheAirSeries();
 
-    @Query("SELECT * FROM series ORDER BY title ASC")
-    LiveData<List<Series>> getAllSeries();
+    @Query("SELECT * FROM series WHERE tmdb_id LIKE :tmdbId")
+    LiveData<Series> getSeries(int tmdbId);
 }

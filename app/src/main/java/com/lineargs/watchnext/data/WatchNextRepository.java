@@ -93,9 +93,13 @@ public class WatchNextRepository {
         return onTheAirSeries;
     }
 
-    public void insertSeries(Series series) {
+    void insertSeries(Series series) {
         new InsertSeriesTask(seriesDao).execute(series);
     }
+
+    void updateSeries(Series series) {new UpdateSeriesTask(seriesDao).execute(series);}
+
+    LiveData<Series> getSeries (int tmdbId) {return seriesDao.getSeries(tmdbId);}
 
     //Favourites
     public LiveData<List<Favourites>> getFavourites() {
@@ -103,7 +107,7 @@ public class WatchNextRepository {
     }
 
     //Videos
-    public LiveData<List<Videos>> getVideos(int tmdbId) {
+    LiveData<List<Videos>> getVideos(int tmdbId) {
         return videosDao.getVideos(tmdbId);
     }
 
@@ -188,6 +192,23 @@ public class WatchNextRepository {
         @Override
         protected Void doInBackground(Series... series) {
             seriesDao.insert(series[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateSeriesTask extends AsyncTask<Series, Void, Void> {
+
+        private SeriesDao seriesDao;
+
+        UpdateSeriesTask(SeriesDao seriesDao) {
+            this.seriesDao = seriesDao;
+        }
+        @Override
+        protected Void doInBackground(Series... series) {
+            Series serie = series[0];
+            seriesDao.updateSeries(serie.getTmdbId(), serie.getHomepage(),
+                    serie.getProductionCompanies(), serie.getNetworks(),
+                    serie.getStatus(), serie.getGenres());
             return null;
         }
     }

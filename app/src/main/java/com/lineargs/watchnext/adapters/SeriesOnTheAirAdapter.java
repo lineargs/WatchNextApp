@@ -59,10 +59,10 @@ public class SeriesOnTheAirAdapter extends BaseTabbedAdapter {
 
     @Override
     protected void onViewClick(View view, int position) {
-//        cursor.moveToPosition(position);
-//        Uri uri = DataContract.OnTheAirSerieEntry.buildSerieUriWithId(
-//                Long.parseLong(cursor.getString(Query.ID)));
-//        callback.onItemSelected(uri);
+        if (series != null) {
+            Series serie = series.get(position);
+            callback.onItemSelected(serie.getTmdbId());
+        }
     }
 
     @Override

@@ -48,24 +48,6 @@ public class Series {
     @NonNull
     private int type;
 
-    public Series(int tmdbId, String voteAverage, String title, String posterPath, String backdropPath,
-                  String overview, String releaseDate, String homepage, String productionCompanies,
-                  String networks, String status, String genres, int type) {
-        this.tmdbId = tmdbId;
-        this.voteAverage = voteAverage;
-        this.title = title;
-        this.posterPath = posterPath;
-        this.backdropPath = backdropPath;
-        this.overview = overview;
-        this.releaseDate = releaseDate;
-        this.homepage = homepage;
-        this.productionCompanies = productionCompanies;
-        this.networks = networks;
-        this.status = status;
-        this.genres = genres;
-        this.type = type;
-    }
-
     public int getId() {
         return id;
     }
