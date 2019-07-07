@@ -3,7 +3,6 @@ package com.lineargs.watchnext.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,8 +22,9 @@ import android.widget.LinearLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
+import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
-import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.data.Credits;
 import com.lineargs.watchnext.data.Series;
 import com.lineargs.watchnext.data.SeriesDetailsViewModel;
 import com.lineargs.watchnext.utils.Constants;
@@ -32,29 +32,33 @@ import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import butterknife.Unbinder;
 
-public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnClick {
+public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnClick, CrewAdapter.OnClick {
 
 
     @Nullable
     @BindView(R.id.cover_poster)
-    ImageView mPosterPath;
+    ImageView posterPath;
     @Nullable
     @BindView(R.id.cover_backdrop)
-    ImageView mBackdropPath;
+    ImageView backdropPath;
     @BindView(R.id.star_fab)
     FloatingActionButton starFab;
     @BindView(R.id.cast_recycler_view)
-    RecyclerView mCastRecyclerView;
+    RecyclerView castRecyclerView;
+    @BindView(R.id.crew_recycler_view)
+    RecyclerView crewRecyclerView;
     @BindView(R.id.cast_linear_layout)
-    LinearLayout mCastLayout;
+    LinearLayout castLayout;
     @BindView(R.id.movie_details_recycler_view)
-    RecyclerView mRecyclerView;
+    RecyclerView recyclerView;
     @BindView(R.id.google)
     Button googleButton;
     @BindView(R.id.youtube)
@@ -64,8 +68,6 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
     @Nullable
     @BindView(R.id.videos)
     Button videosButton;
-    private CastAdapter mCastAdapter;
-    private TVDetailAdapter mAdapter;
     private int tmdbId;
     private String title = "";
     private Unbinder unbinder;
@@ -94,16 +96,22 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
     private void setupViews(View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new TVDetailAdapter(view.getContext());
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
+        final TVDetailAdapter adapter = new TVDetailAdapter(view.getContext());
+        recyclerView.setAdapter(adapter);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mCastRecyclerView.setLayoutManager(mLayoutManager);
-        mCastRecyclerView.setHasFixedSize(true);
-        mCastAdapter = new CastAdapter(view.getContext(), this);
-        mCastRecyclerView.setAdapter(mCastAdapter);
+        castRecyclerView.setLayoutManager(mLayoutManager);
+        castRecyclerView.setHasFixedSize(true);
+        final CastAdapter castAdapter = new CastAdapter(view.getContext(), this);
+        castRecyclerView.setAdapter(castAdapter);
+
+        LinearLayoutManager crewManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        crewRecyclerView.setLayoutManager(crewManager);
+        crewRecyclerView.setHasFixedSize(true);
+        final CrewAdapter crewAdapter = new CrewAdapter(view.getContext(), this);
+        crewRecyclerView.setAdapter(crewAdapter);
 
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
             starFab.setVisibility(View.GONE);
@@ -115,8 +123,20 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         seriesDetailsViewModel.getSeries(tmdbId).observe(this, new Observer<Series>() {
             @Override
             public void onChanged(@Nullable Series series) {
-                mAdapter.swapSeries(series);
+                adapter.swapSeries(series);
                 imageLoad(series);
+            }
+        });
+        seriesDetailsViewModel.getCast(tmdbId).observe(this, new Observer<List<Credits>>() {
+            @Override
+            public void onChanged(@Nullable List<Credits> credits) {
+                castAdapter.swapCast(credits);
+            }
+        });
+        seriesDetailsViewModel.getCrew(tmdbId).observe(this, new Observer<List<Credits>>() {
+            @Override
+            public void onChanged(@Nullable List<Credits> credits) {
+                crewAdapter.swapCrew(credits);
             }
         });
     }
@@ -160,11 +180,16 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
 
     @OnClick(R.id.cast_header_layout)
     public void loadCast() {
-//        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-//        Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-//        intent.setData(uri);
-//        intent.putExtra(Constants.TITLE, title);
-//        startActivity(intent);
+        Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
+        intent.putExtra(Constants.ID, tmdbId);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.crew_header_layout)
+    public void loadCrew() {
+        Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
+        intent.putExtra(Constants.ID, tmdbId);
+        startActivity(intent);
     }
 
     @Optional
@@ -220,17 +245,17 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
 //        } else {
         starFab.setImageDrawable(Utils.starBorderImage(getContext()));
 //        }
-        if (mPosterPath != null) {
-            Picasso.with(mPosterPath.getContext())
+        if (posterPath != null) {
+            Picasso.with(posterPath.getContext())
                     .load(series.getPosterPath())
                     .fit()
-                    .into(mPosterPath);
+                    .into(posterPath);
         }
-        if (mBackdropPath != null) {
-            Picasso.with(mBackdropPath.getContext())
+        if (backdropPath != null) {
+            Picasso.with(backdropPath.getContext())
                     .load(series.getBackdropPath())
                     .fit()
-                    .into(mBackdropPath);
+                    .into(backdropPath);
         }
     }
 
@@ -244,12 +269,19 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
 //            intent.putExtra(Constants.NAME, name);
 //            startActivity(intent);
 //        } else {
-//            Intent intent = new Intent(getContext(), PersonActivity.class);
-//            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-//            intent.putExtra(Constants.ID, id);
-//            intent.putExtra(Constants.NAME, name);
-//            startActivity(intent);
+        Intent intent = new Intent(getContext(), PersonActivity.class);
+        intent.putExtra(Constants.ID, id);
+        intent.putExtra(Constants.NAME, name);
+        startActivity(intent);
 //        }
+    }
+
+    @Override
+    public void onCrewClick(String id, String name) {
+        Intent intent = new Intent(getContext(), PersonActivity.class);
+        intent.putExtra(Constants.ID, id);
+        intent.putExtra(Constants.NAME, name);
+        startActivity(intent);
     }
 }
 

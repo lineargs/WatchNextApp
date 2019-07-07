@@ -65,6 +65,8 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
                     series.setTmdbId(response.body().getId());
                     repository.updateSeries(series);
                     repository.insertVideos(response.body().getVideos(), response.body().getId());
+                    repository.insertCast(response.body().getCredits(), response.body().getId());
+                    repository.insertCrew(response.body().getCredits(), response.body().getId());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
                 }
@@ -78,7 +80,7 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Credits>> getCast(int tmdbId) {return repository.getCast(tmdbId);}
-//    public LiveData<List<Credits>> getCrew(int tmdbId) {return repository.getCrew(tmdbId);}
+    public LiveData<List<Credits>> getCrew(int tmdbId) {return repository.getCrew(tmdbId);}
 
     public LiveData<Series> getSeries(int tmdbId) {
         return repository.getSeries(tmdbId);

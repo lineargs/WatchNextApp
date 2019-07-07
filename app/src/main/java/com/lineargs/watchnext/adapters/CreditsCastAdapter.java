@@ -97,10 +97,12 @@ public class CreditsCastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View view) {
-//            cursor.moveToPosition(getAdapterPosition());
-//            String id = cursor.getString(CreditsQuery.PERSON_ID);
-//            String name = cursor.getString(CreditsQuery.NAME);
-//            callBack.onPersonClick(id, name);
+            if (credits != null) {
+                Credits credit = credits.get(getAdapterPosition());
+                String id = String.valueOf(credit.getPersonId());
+                String name = credit.getName();
+                callBack.onPersonClick(id, name);
+            }
         }
     }
 }

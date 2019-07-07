@@ -50,7 +50,6 @@ import butterknife.Unbinder;
 public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClick, CrewAdapter.OnClick {
 
     private int tmdbId;
-    private MovieDetailAdapter movieDetailAdapter;
     private String title = "";
     private Unbinder unbinder;
     private long id;
@@ -114,7 +113,7 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setNestedScrollingEnabled(false);
-        movieDetailAdapter = new MovieDetailAdapter(context);
+        final MovieDetailAdapter movieDetailAdapter = new MovieDetailAdapter(context);
         recyclerView.setAdapter(movieDetailAdapter);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);

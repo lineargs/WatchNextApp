@@ -18,7 +18,6 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCrewAdapter;
 import com.lineargs.watchnext.data.Credits;
 import com.lineargs.watchnext.data.CreditsViewModel;
-import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;
@@ -106,7 +105,6 @@ public class CreditsCrewFragment extends BaseFragment implements CreditsCrewAdap
         } else {
             /* Else start activity*/
             Intent intent = new Intent(getContext(), PersonActivity.class);
-            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
             intent.putExtra(Constants.ID, id);
             intent.putExtra(Constants.NAME, name);
             startActivity(intent);

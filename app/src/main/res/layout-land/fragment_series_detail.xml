@@ -55,6 +55,8 @@
 
                     <include layout="@layout/fragment_cast" />
 
+                    <include layout="@layout/fragment_crew" />
+
                     <include layout="@layout/item_footer_series" />
 
                     <include layout="@layout/item_buttons_series" />
