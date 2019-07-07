@@ -230,10 +230,9 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 
     @OnClick(R.id.crew_header_layout)
     public void loadCrew() {
-//        Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
-//        Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
-//        intent.setData(uri);
-//        startActivity(intent);
+        Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
+        intent.putExtra(Constants.ID, tmdbId);
+        startActivity(intent);
     }
 
     private void imageLoad(Movies movies) {
@@ -292,11 +291,10 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 //            intent.putExtra(Constants.NAME, name);
 //            startActivity(intent);
 //        } else {
-//            Intent intent = new Intent(getContext(), PersonActivity.class);
-//            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-//            intent.putExtra(Constants.ID, id);
-//            intent.putExtra(Constants.NAME, name);
-//            startActivity(intent);
+            Intent intent = new Intent(getContext(), PersonActivity.class);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
+            startActivity(intent);
 //        }
     }
 
@@ -310,11 +308,10 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 //            intent.putExtra(Constants.NAME, name);
 //            startActivity(intent);
 //        } else {
-//            Intent intent = new Intent(getContext(), PersonActivity.class);
-//            intent.setData(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
-//            intent.putExtra(Constants.ID, id);
-//            intent.putExtra(Constants.NAME, name);
-//            startActivity(intent);
+            Intent intent = new Intent(getContext(), PersonActivity.class);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
+            startActivity(intent);
 //        }
     }
 }

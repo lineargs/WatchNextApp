@@ -1,4 +1,4 @@
-package com.lineargs.watchnext.utils.retrofit.people;
+package com.lineargs.watchnext.api.person;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

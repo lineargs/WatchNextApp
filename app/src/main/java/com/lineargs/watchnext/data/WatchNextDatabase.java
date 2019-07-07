@@ -92,7 +92,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
             //Person table
             database.execSQL("DROP TABLE person");
-            database.execSQL("CREATE TABLE person ('place_of_birth' TEXT, 'tmdb_id' INTEGER NOT NULL, 'name' TEXT, " +
+            database.execSQL("CREATE TABLE person ('place_of_birth' TEXT, 'person_id' INTEGER NOT NULL, 'name' TEXT, " +
                     "'profile_path' TEXT, 'id' INTEGER NOT NULL, 'biography' TEXT, 'homepage' TEXT, PRIMARY KEY ('id'))");
 
             //Reviews table
@@ -128,6 +128,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                     "'id' INTEGER NOT NULL, 'key' TEXT, PRIMARY KEY ('id'))");
             database.execSQL("CREATE UNIQUE INDEX 'index_videos_key' ON videos ('key')");
             database.execSQL("CREATE UNIQUE INDEX 'index_reviews_key' ON reviews ('url')");
+            database.execSQL("CREATE UNIQUE INDEX 'index_person_key' ON person ('person_id')");
             Log.e("SUCCESS", "MIGRATION SUCCESS");
         }
     };
@@ -135,7 +136,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     /**
      * Testing purposes only
      */
-    private static RoomDatabase.Callback callback = new RoomDatabase.Callback(){
+    private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
@@ -158,13 +159,13 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
         Series popularSeries = new Series(60735, "", "Popular", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
                 "", "", "", "", "",
-                "", "","", 0);
+                "", "", "", 0);
         Series topRatedSeries = new Series(60735, "", "Top Rated", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
                 "", "", "", "", "",
-                "", "","", 1);
+                "", "", "", 1);
         Series onTheAirSeries = new Series(60735, "", "On The Air", "http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg",
                 "", "", "", "", "",
-                "", "","", 2);
+                "", "", "", 2);
 
         PopulateDbAsync(WatchNextDatabase db) {
             dao = db.moviesDao();
@@ -227,4 +228,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     public abstract ReviewsDao reviewsDao();
 
     public abstract CreditsDao creditsDao();
+
+    public abstract PersonDao personDao();
 }

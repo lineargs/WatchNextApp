@@ -4,7 +4,7 @@ import android.content.ContentValues;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
-import com.lineargs.watchnext.utils.retrofit.people.Person;
+import com.lineargs.watchnext.api.person.Person;
 
 import java.text.ParseException;
 

@@ -24,9 +24,8 @@ public class PersonActivity extends BaseActivity {
         setContentView(R.layout.activity_person);
 
         ButterKnife.bind(this);
-        if (savedInstanceState == null && getIntent().getData() != null) {
+        if (savedInstanceState == null) {
             PersonFragment fragment = new PersonFragment();
-            fragment.setmUri(getIntent().getData());
             if (getIntent().hasExtra(Constants.ID)) {
                 fragment.setId(getIntent().getStringExtra(Constants.ID));
             }

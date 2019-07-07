@@ -2,18 +2,20 @@ package com.lineargs.watchnext.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 
-@Entity(tableName = "person")
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "person", indices = @Index(value = "person_id", unique = true))
 public class Person {
 
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     private int id;
 
-    @ColumnInfo(name = "tmdb_id")
-    private int tmdbId;
+    @ColumnInfo(name = "person_id")
+    private int personId;
 
     private String name;
 
@@ -27,22 +29,17 @@ public class Person {
 
     private String homepage;
 
-    @NonNull
     public int getId() {
         return id;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public int getTmdbId() {
-        return tmdbId;
-    }
+    public int getPersonId() { return personId; }
 
-    public void setTmdbId(int tmdbId) {
-        this.tmdbId = tmdbId;
-    }
+    public void setPersonId(int personId) { this.personId = personId; }
 
     public String getName() {
         return name;

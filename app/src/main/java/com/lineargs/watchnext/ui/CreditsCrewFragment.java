@@ -1,14 +1,13 @@
 package com.lineargs.watchnext.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +16,12 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCrewAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.Credits;
+import com.lineargs.watchnext.data.CreditsViewModel;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.Constants;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,22 +34,16 @@ import butterknife.Unbinder;
  * We will use same class to implement crew.
  */
 
-public class CreditsCrewFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCrewAdapter.OnClick {
+public class CreditsCrewFragment extends BaseFragment implements CreditsCrewAdapter.OnClick {
 
-    private static final int LOADER_ID = 333;
-
+    private int tmdbId;
     private CreditsCrewAdapter mAdapter;
-    private Uri mUri;
     private Uri mDualUri = null;
     private Unbinder unbinder;
     private boolean mDualPane;
 
     @BindView(R.id.credits_crew_recycler_view)
     RecyclerView mRecyclerView;
-
-    public void setmUri(Uri uri) {
-        mUri = uri;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -64,15 +60,18 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new CreditsCrewAdapter(context, this);
         mRecyclerView.setAdapter(mAdapter);
-        if (getActivity().getIntent().getData() != null) {
-            mUri = getActivity().getIntent().getData();
-        }
-        if (getActivity().getIntent().hasExtra(Constants.ID)) {
-            Long id = Long.valueOf(getActivity().getIntent().getStringExtra(Constants.ID));
-            mDualUri = DataContract.Person.buildPersonUriWithId(id);
-        }
-
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        tmdbId = getActivity().getIntent().getIntExtra(Constants.ID, 0);
+        CreditsViewModel creditsViewModel = ViewModelProviders.of(this).get(CreditsViewModel.class);
+        creditsViewModel.getCrew(tmdbId).observe(this, new Observer<List<Credits>>() {
+            @Override
+            public void onChanged(@Nullable List<Credits> credits) {
+                mAdapter.swapCrew(credits);
+            }
+        });
+//        if (getActivity().getIntent().hasExtra(Constants.ID)) {
+//            Long id = Long.valueOf(getActivity().getIntent().getStringExtra(Constants.ID));
+//            mDualUri = DataContract.Person.buildPersonUriWithId(id);
+//        }
     }
 
     @Override
@@ -83,44 +82,12 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
         mDualPane = personFrame != null && personFrame.getVisibility() == View.VISIBLE;
         if (mDualPane && mDualUri != null && savedInstanceState == null) {
             PersonFragment fragment = new PersonFragment();
-            fragment.setmUri(mDualUri);
+//            fragment.setmUri(mDualUri);
             fragment.setId(mDualUri.getLastPathSegment());
             getFragmentManager().beginTransaction()
                     .add(R.id.frame_layout_person, fragment)
                     .commit();
         }
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                }
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     @Override
@@ -131,7 +98,7 @@ public class CreditsCrewFragment extends BaseFragment implements LoaderManager.L
          */
         if (mDualPane) {
             PersonFragment fragment = new PersonFragment();
-            fragment.setmUri(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
+//            fragment.setmUri(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
             fragment.setId(id);
             getFragmentManager().beginTransaction()
                     .replace(R.id.frame_layout_person, fragment)

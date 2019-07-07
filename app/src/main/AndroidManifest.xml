@@ -112,13 +112,7 @@
             android:name=".sync.syncseries.SeasonIntentService"
             android:exported="false" />
         <service
-            android:name=".sync.syncpeople.PersonSyncIntentService"
-            android:exported="false" />
-        <service
             android:name=".jobs.NotificationIntentService"
-            android:exported="false" />
-        <service
-            android:name=".sync.syncmovies.MovieSyncIntentService"
             android:exported="false" />
 
         <!-- Widget Service -->

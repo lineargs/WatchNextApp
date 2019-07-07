@@ -1,4 +1,4 @@
-package com.lineargs.watchnext.utils.retrofit.people;
+package com.lineargs.watchnext.api.person;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

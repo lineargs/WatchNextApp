@@ -22,6 +22,7 @@ public class WatchNextRepository {
     private VideosDao videosDao;
     private ReviewsDao reviewsDao;
     private CreditsDao creditsDao;
+    private PersonDao personDao;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
@@ -47,27 +48,34 @@ public class WatchNextRepository {
         videosDao = database.videosDao();
         reviewsDao = database.reviewsDao();
         creditsDao = database.creditsDao();
+        personDao = database.personDao();
     }
 
     //Movies
     LiveData<Movies> getMovie(int tmdbId) {
         return moviesDao.getMovie(tmdbId);
     }
+
     LiveData<List<Movies>> getPopularMovies() {
         return popularMovies;
     }
+
     LiveData<List<Movies>> getTopRatedMovies() {
         return topRatedMovies;
     }
+
     LiveData<List<Movies>> getUpcomingMovies() {
         return upcomingMovies;
     }
+
     LiveData<List<Movies>> getTheatreMovies() {
         return theatreMovies;
     }
+
     void insertMovie(Movies movies) {
         new InsertMoviesTask(moviesDao).execute(movies);
     }
+
     void updateMovie(Movies movies) {
         new UpdateMovieTask(moviesDao).execute(movies);
     }
@@ -76,12 +84,15 @@ public class WatchNextRepository {
     LiveData<List<Series>> getPopularSeries() {
         return popularSeries;
     }
+
     LiveData<List<Series>> getTopRatedSeries() {
         return topRatedSeries;
     }
+
     LiveData<List<Series>> getOnTheAirSeries() {
         return onTheAirSeries;
     }
+
     public void insertSeries(Series series) {
         new InsertSeriesTask(seriesDao).execute(series);
     }
@@ -95,26 +106,42 @@ public class WatchNextRepository {
     public LiveData<List<Videos>> getVideos(int tmdbId) {
         return videosDao.getVideos(tmdbId);
     }
+
     void insertVideos(com.lineargs.watchnext.utils.retrofit.videos.Videos videos, int tmdbId) {
         new InsertVideosTask(videosDao, tmdbId).execute(videos);
     }
 
     //Reviews
-     LiveData<List<Reviews>> getReviews(int tmdbId) {return reviewsDao.getReviews(tmdbId);}
+    LiveData<List<Reviews>> getReviews(int tmdbId) {
+        return reviewsDao.getReviews(tmdbId);
+    }
+
     void insertReviews(com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews reviews, int tmdbId) {
         new InsertReviewsTask(reviewsDao, tmdbId).execute(reviews);
     }
 
     //Credits
-    LiveData<List<Credits>> getCast(int tmdbId) {return creditsDao.getAllCast(tmdbId);}
-    LiveData<List<Credits>> getCrew(int tmdbId) {return creditsDao.getAllCrew(tmdbId);}
-    void insertCast(com.lineargs.watchnext.utils.retrofit.credits.Credits credits, int tmdbId){
+    LiveData<List<Credits>> getCast(int tmdbId) {
+        return creditsDao.getAllCast(tmdbId);
+    }
+
+    LiveData<List<Credits>> getCrew(int tmdbId) {
+        return creditsDao.getAllCrew(tmdbId);
+    }
+
+    void insertCast(com.lineargs.watchnext.utils.retrofit.credits.Credits credits, int tmdbId) {
         new InsertCastTask(creditsDao, tmdbId).execute(credits);
     }
 
-    void insertCrew(com.lineargs.watchnext.utils.retrofit.credits.Credits credits, int tmdbId){
+    void insertCrew(com.lineargs.watchnext.utils.retrofit.credits.Credits credits, int tmdbId) {
         new InsertCrewTask(creditsDao, tmdbId).execute(credits);
     }
+
+    //Person
+    void insertPerson(Person person) {
+        new InsertPersonTask(personDao).execute(person);
+    }
+    LiveData<Person> getPerson(int personId) { return personDao.getPerson(personId);}
 
     //Movies Tasks
     private static class UpdateMovieTask extends AsyncTask<Movies, Void, Void> {
@@ -229,11 +256,12 @@ public class WatchNextRepository {
             this.creditsDao = creditsDao;
             this.tmdbId = tmdbId;
         }
+
         @Override
         protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.credits.Credits... credits) {
             com.lineargs.watchnext.utils.retrofit.credits.Credits tmdbCredits = credits[0];
             List<Cast> castList = tmdbCredits.getCast();
-            for (Cast cast: castList) {
+            for (Cast cast : castList) {
                 Credits credit = new Credits();
                 credit.setTmdbId(tmdbId);
                 credit.setName(cast.getName());
@@ -256,11 +284,12 @@ public class WatchNextRepository {
             this.creditsDao = creditsDao;
             this.tmdbId = tmdbId;
         }
+
         @Override
         protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.credits.Credits... credits) {
             com.lineargs.watchnext.utils.retrofit.credits.Credits tmdbCredits = credits[0];
             List<Crew> crewList = tmdbCredits.getCrew();
-            for (Crew crew: crewList) {
+            for (Crew crew : crewList) {
                 Credits credit = new Credits();
                 credit.setTmdbId(tmdbId);
                 credit.setName(crew.getName());
@@ -270,6 +299,22 @@ public class WatchNextRepository {
                 credit.setType(1);
                 creditsDao.insertCredits(credit);
             }
+            return null;
+        }
+    }
+
+    //Person Tasks
+    private static class InsertPersonTask extends AsyncTask<Person, Void, Void> {
+
+        private PersonDao personDao;
+
+        InsertPersonTask(PersonDao personDao) {
+            this.personDao = personDao;
+        }
+
+        @Override
+        protected Void doInBackground(Person... people) {
+            personDao.insert(people[0]);
             return null;
         }
     }

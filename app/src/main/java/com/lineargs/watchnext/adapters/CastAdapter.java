@@ -99,10 +99,10 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-//            cursor.moveToPosition(getAdapterPosition());
-//            String id = cursor.getString(CreditsQuery.PERSON_ID);
-//            String name = cursor.getString(CreditsQuery.NAME);
-//            callback.onPersonClick(id, name);
+            Credits credit = credits.get(getAdapterPosition());
+            String id = String.valueOf(credit.getPersonId());
+            String name = credit.getName();
+            callback.onPersonClick(id, name);
         }
     }
 }

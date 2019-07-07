@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.data.Credits;
 import com.lineargs.watchnext.utils.ServiceUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +26,7 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private OnClick callBack;
     private Context context;
-    private Cursor cursor;
+    private List<Credits> credits;
 
     public CreditsCrewAdapter(@NonNull Context context, @NonNull OnClick listener) {
         this.context = context;
@@ -49,15 +50,15 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (credits == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return credits.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapCrew(List<Credits> credits) {
+        this.credits = credits;
         notifyDataSetChanged();
     }
 
@@ -80,22 +81,24 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            name.setText(cursor.getString(CreditsQuery.NAME));
-            job.setText(cursor.getString(CreditsQuery.JOB));
-            ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
-                    .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
-                    .centerCrop()
-                    .error(R.drawable.icon_person_grey)
-                    .into(photo);
+            if (credits != null) {
+                Credits crew = credits.get(position);
+                name.setText(crew.getName());
+                job.setText(crew.getJob());
+                ServiceUtils.loadPicasso(photo.getContext(), crew.getProfilePath())
+                        .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
+                        .centerCrop()
+                        .error(R.drawable.icon_person_grey)
+                        .into(photo);
+            }
         }
 
         @Override
         public void onClick(View view) {
-            cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CreditsQuery.PERSON_ID);
-            String name = cursor.getString(CreditsQuery.NAME);
-            callBack.onPersonClick(id, name);
+//            cursor.moveToPosition(getAdapterPosition());
+//            String id = cursor.getString(CreditsQuery.PERSON_ID);
+//            String name = cursor.getString(CreditsQuery.NAME);
+//            callBack.onPersonClick(id, name);
         }
     }
 }

@@ -17,4 +17,6 @@ public class CreditsViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Credits>> getCast (int tmdbId) {return repository.getCast(tmdbId);}
+
+    public LiveData<List<Credits>> getCrew (int tmdbId) {return repository.getCrew(tmdbId);}
 }

@@ -84,7 +84,7 @@ public class CreditsCastFragment extends BaseFragment implements CreditsCastAdap
         mDualPane = personFrame != null && personFrame.getVisibility() == View.VISIBLE;
         if (mDualPane && mDualUri != null && savedInstanceState == null) {
             PersonFragment fragment = new PersonFragment();
-            fragment.setmUri(mDualUri);
+//            fragment.setmUri(mDualUri);
             fragment.setId(mDualUri.getLastPathSegment());
             getFragmentManager().beginTransaction()
                     .add(R.id.frame_layout_person, fragment)
@@ -100,7 +100,7 @@ public class CreditsCastFragment extends BaseFragment implements CreditsCastAdap
          */
         if (mDualPane) {
             PersonFragment fragment = new PersonFragment();
-            fragment.setmUri(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
+//            fragment.setmUri(DataContract.Person.buildPersonUriWithId(Long.parseLong(id)));
             fragment.setId(id);
             getFragmentManager().beginTransaction()
                     .replace(R.id.frame_layout_person, fragment)
