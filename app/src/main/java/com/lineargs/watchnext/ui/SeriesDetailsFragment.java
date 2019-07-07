@@ -2,6 +2,7 @@ package com.lineargs.watchnext.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -111,7 +112,6 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         if (savedState == null) {
             seriesDetailsViewModel.getSeriesDetails(String.valueOf(tmdbId));
         }
-
         seriesDetailsViewModel.getSeries(tmdbId).observe(this, new Observer<Series>() {
             @Override
             public void onChanged(@Nullable Series series) {
@@ -180,11 +180,10 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
     @Optional
     @OnClick(R.id.videos)
     public void loadVideos() {
-//        Intent intent = new Intent(getContext(), VideosTvActivity.class);
-//        Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-//        intent.setData(uri);
-//        intent.putExtra(Constants.TITLE, title);
-//        startActivity(intent);
+        Intent intent = new Intent(getContext(), VideosActivity.class);
+        intent.putExtra(Constants.ID, tmdbId);
+        intent.putExtra(Constants.TITLE, title);
+        startActivity(intent);
     }
 
     @Override
