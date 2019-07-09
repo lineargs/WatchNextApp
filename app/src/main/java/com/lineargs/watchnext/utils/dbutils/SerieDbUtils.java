@@ -1,21 +1,16 @@
 package com.lineargs.watchnext.utils.dbutils;
 
 import android.content.ContentValues;
-import android.content.Context;
 
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
-import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Episode;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Season;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.SeriesDetails;
+import com.lineargs.watchnext.api.series.SeriesDetails;
+import com.lineargs.watchnext.api.series.seasondetails.Episode;
 
 import java.text.ParseException;
 import java.util.List;
 
-import static com.lineargs.watchnext.utils.Utils.buildCompaniesString;
 import static com.lineargs.watchnext.utils.Utils.buildDirectorsString;
-import static com.lineargs.watchnext.utils.Utils.buildGenresString;
 import static com.lineargs.watchnext.utils.Utils.buildGuestStarsString;
 import static com.lineargs.watchnext.utils.Utils.buildWritersString;
 
@@ -28,35 +23,33 @@ import static com.lineargs.watchnext.utils.Utils.buildWritersString;
 public class SerieDbUtils {
 
     /* Static variable for our poster and backdrop path*/
-    private static final String IMAGE_SMALL_BASE = "http://image.tmdb.org/t/p/w370/";
     private static final String IMAGE_MEDIUM_BASE = "http://image.tmdb.org/t/p/w500/";
-    private static final String IMAGE_ORIGINAL_BASE = "http://image.tmdb.org/t/p/original/";
 
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
-     * @param seriesResults List used to get the values from our API response
+     * @param seriesDetail List used to get the values from our API response
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getPopularContentValues(List<SeriesResult> seriesResults) {
+    public static ContentValues[] getPopularContentValues(List<SeriesDetails> seriesDetail) {
         int i = 0;
-        ContentValues[] values = new ContentValues[seriesResults.size()];
-        for (SeriesResult seriesResult : seriesResults) {
+        ContentValues[] values = new ContentValues[seriesDetail.size()];
+        for (SeriesDetails seriesDetails : seriesDetail) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesResult.getId());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesResult.getName());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesResult.getOverview());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesDetails.getId());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesDetails.getName());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesDetails.getOverview());
             try {
-                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesResult.getFirstAirDate()));
+                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesDetails.getFirstAirDate()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesDetails.getVoteAverage())));
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesDetails.getOriginalLanguage());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesDetails.getOriginalName());
 
             values[i] = contentValues;
             i++;
@@ -68,28 +61,28 @@ public class SerieDbUtils {
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
-     * @param seriesResults List used to get the values from our API response
+     * @param seriesDetail List used to get the values from our API response
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getTopContentValues(List<SeriesResult> seriesResults) {
+    public static ContentValues[] getTopContentValues(List<SeriesDetails> seriesDetail) {
         int i = 0;
-        ContentValues[] values = new ContentValues[seriesResults.size()];
-        for (SeriesResult seriesResult : seriesResults) {
+        ContentValues[] values = new ContentValues[seriesDetail.size()];
+        for (SeriesDetails seriesDetails : seriesDetail) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesResult.getId());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesResult.getName());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesResult.getOverview());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesDetails.getId());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesDetails.getName());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesDetails.getOverview());
             try {
-                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesResult.getFirstAirDate()));
+                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesDetails.getFirstAirDate()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesDetails.getVoteAverage())));
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesDetails.getOriginalLanguage());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesDetails.getOriginalName());
 
             values[i] = contentValues;
             i++;
@@ -101,28 +94,28 @@ public class SerieDbUtils {
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
-     * @param seriesResults List used to get the values from our API response
+     * @param seriesDetail List used to get the values from our API response
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getOnTheAirContentValues(List<SeriesResult> seriesResults) {
+    public static ContentValues[] getOnTheAirContentValues(List<SeriesDetails> seriesDetail) {
         int i = 0;
-        ContentValues[] values = new ContentValues[seriesResults.size()];
-        for (SeriesResult seriesResult : seriesResults) {
+        ContentValues[] values = new ContentValues[seriesDetail.size()];
+        for (SeriesDetails seriesDetails : seriesDetail) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesResult.getId());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesResult.getName());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesResult.getOverview());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesDetails.getId());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesDetails.getName());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesDetails.getOverview());
             try {
-                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesResult.getFirstAirDate()));
+                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesDetails.getFirstAirDate()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesDetails.getVoteAverage())));
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesDetails.getOriginalLanguage());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesDetails.getOriginalName());
 
             values[i] = contentValues;
             i++;
@@ -137,7 +130,7 @@ public class SerieDbUtils {
      * @param result Object used to get the values from our API response
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getSyncTV(SeriesResult result) {
+    public static ContentValues[] getSyncTV(SeriesDetails result) {
 
         ContentValues[] values = new ContentValues[1];
         ContentValues contentValues = new ContentValues();
@@ -158,40 +151,6 @@ public class SerieDbUtils {
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, result.getOriginalName());
 
         values[0] = contentValues;
-
-        return values;
-    }
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
-     * @param details Object used to get the values from our API response
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues[] getSeasons(Context context, SeriesDetails details, String serieId) {
-        int i = 0;
-        String name = details.getName();
-        List<Season> seasons = details.getSeasons();
-        ContentValues[] values = new ContentValues[seasons.size()];
-        for (Season season : seasons) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DataContract.Seasons.COLUMN_SHOW_NAME, name);
-            contentValues.put(DataContract.Seasons.COLUMN_SERIE_ID, serieId);
-            contentValues.put(DataContract.Seasons.COLUMN_SEASON_ID, season.getId());
-            contentValues.put(DataContract.Seasons.COLUMN_EPISODE_COUNT, season.getEpisodeCount());
-            if (season.getAirDate() != null) {
-                try {
-                    contentValues.put(DataContract.Seasons.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(season.getAirDate()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            contentValues.put(DataContract.Seasons.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + season.getPosterPath());
-            contentValues.put(DataContract.Seasons.COLUMN_SEASON_NUMBER, season.getSeasonNumber());
-
-            values[i] = contentValues;
-            i++;
-        }
 
         return values;
     }
@@ -232,24 +191,5 @@ public class SerieDbUtils {
         }
 
         return values;
-    }
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
-     * @param result Object used to get the values from our API response
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues updateSeries(SeriesDetails result) {
-
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, result.getStatus());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES,
-                buildCompaniesString(result.getProductionCompanies()));
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES,
-                buildGenresString(result.getGenres()));
-
-        return contentValues;
     }
 }

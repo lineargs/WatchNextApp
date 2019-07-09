@@ -152,7 +152,7 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
             getFragmentManager().beginTransaction()
                     .replace(R.id.seasons_frame_layout, fragment)
                     .commit();
-            VideosTvFragment videosFragment = new VideosTvFragment();
+            VideosFragment videosFragment = new VideosFragment();
 //            videosFragment.setmUri(DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment())));
             getFragmentManager().beginTransaction()
                     .replace(R.id.videos_frame_layout, videosFragment)

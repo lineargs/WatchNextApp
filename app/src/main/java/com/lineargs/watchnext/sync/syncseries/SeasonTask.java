@@ -9,8 +9,8 @@ import android.support.annotation.NonNull;
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesApiService;
-import com.lineargs.watchnext.utils.retrofit.series.seasondetails.SeasonDetails;
+import com.lineargs.watchnext.api.series.SeriesApiService;
+import com.lineargs.watchnext.api.series.seasondetails.SeasonDetails;
 
 import java.lang.ref.WeakReference;
 

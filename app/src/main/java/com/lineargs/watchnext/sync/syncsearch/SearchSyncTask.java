@@ -11,11 +11,11 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SearchDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
-import com.lineargs.watchnext.utils.retrofit.movies.Movies;
-import com.lineargs.watchnext.utils.retrofit.movies.Result;
-import com.lineargs.watchnext.utils.retrofit.search.SearchApiService;
-import com.lineargs.watchnext.utils.retrofit.series.Series;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
+import com.lineargs.watchnext.api.movies.Movies;
+import com.lineargs.watchnext.api.movies.Result;
+import com.lineargs.watchnext.api.search.SearchApiService;
+import com.lineargs.watchnext.api.series.Series;
+import com.lineargs.watchnext.api.series.SeriesDetails;
 
 import java.lang.ref.WeakReference;
 
@@ -110,11 +110,11 @@ class SearchSyncTask {
 
     static void syncSearchTV(final Context context, String id) {
 
-        Call<SeriesResult> call = SEARCH_API_SERVICE.getTV(id, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<SeriesDetails> call = SEARCH_API_SERVICE.getTV(id, BuildConfig.MOVIE_DATABASE_API_KEY);
 
-        call.enqueue(new Callback<SeriesResult>() {
+        call.enqueue(new Callback<SeriesDetails>() {
             @Override
-            public void onResponse(@NonNull Call<SeriesResult> call, @NonNull Response<SeriesResult> response) {
+            public void onResponse(@NonNull Call<SeriesDetails> call, @NonNull Response<SeriesDetails> response) {
 
                 if (response.isSuccessful() && response.body() != null) {
                     ContentValues[] values = SerieDbUtils.getSyncTV(response.body());
@@ -126,7 +126,7 @@ class SearchSyncTask {
             }
 
             @Override
-            public void onFailure(@NonNull Call<SeriesResult> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<SeriesDetails> call, @NonNull Throwable t) {
             }
         });
     }

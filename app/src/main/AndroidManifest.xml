@@ -72,7 +72,6 @@
         <activity android:name=".ui.CreditsCastActivity" />
         <activity android:name=".ui.CreditsCrewActivity" />
         <activity android:name=".ui.VideosActivity" />
-        <activity android:name=".ui.VideosTvActivity" />
         <activity android:name=".ui.SeasonsActivity" />
         <activity android:name=".ui.EpisodesActivity" />
         <activity android:name=".ui.PersonActivity" />
@@ -104,9 +103,6 @@
         <!-- Intent Services -->
         <service
             android:name=".sync.syncsearch.SearchSyncIntentService"
-            android:exported="false" />
-        <service
-            android:name=".sync.syncseries.SerieDetailIntentService"
             android:exported="false" />
         <service
             android:name=".sync.syncseries.SeasonIntentService"

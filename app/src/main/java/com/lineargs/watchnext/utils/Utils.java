@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -12,10 +11,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.utils.retrofit.series.seasondetails.Crew;
-import com.lineargs.watchnext.utils.retrofit.series.seasondetails.GuestStar;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Genre;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionCompany;
+import com.lineargs.watchnext.api.credits.Crew;
+import com.lineargs.watchnext.api.series.seasondetails.GuestStar;
 
 import java.util.List;
 
@@ -68,19 +65,6 @@ public final class Utils {
      */
     public static String versionString(Context context) {
         return context.getString(R.string.about_version, versionName(context));
-    }
-
-    /**
-     * For better implementation while updating the Movie Details we extract the base URI from the one
-     * containing the ID
-     *
-     * @param uri containing the ID
-     * @return parsed URI without the ID
-     */
-    public static Uri getBaseUri(Uri uri) {
-        String stringUri = uri.toString();
-        stringUri = stringUri.substring(0, stringUri.lastIndexOf('/'));
-        return Uri.parse(stringUri);
     }
 
     /**
@@ -155,52 +139,6 @@ public final class Utils {
     }
 
     /**
-     * Helper method used for building Companies String
-     *
-     * @param companies List of type ProductionCompany
-     * @return String in following format: Google, Google, Google
-     */
-    public static String buildCompaniesString(List<ProductionCompany> companies) {
-
-        if (companies == null || companies.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < companies.size(); i++) {
-            ProductionCompany company = companies.get(i);
-            stringBuilder.append(company.getName());
-            if (i + 1 < companies.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    /**
-     * Helper method used for building Genres String
-     *
-     * @param genres List of type Genre
-     * @return String in following format: Comedy, Horror, Fantasy
-     */
-    public static String buildGenresString(List<Genre> genres) {
-
-        if (genres == null || genres.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < genres.size(); i++) {
-            Genre genre = genres.get(i);
-            stringBuilder.append(genre.getName());
-            if (i + 1 < genres.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    /**
      * Helper method checking if we can find the package i.e. if the app where we try to launch the Intent
      * has been installed on the phone.
      *
@@ -262,7 +200,6 @@ public final class Utils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         } else {
-            //noinspection deprecation
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         }
 

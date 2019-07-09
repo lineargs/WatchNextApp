@@ -3,8 +3,8 @@ package com.lineargs.watchnext.utils.dbutils;
 import android.content.ContentValues;
 
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.utils.retrofit.movies.Result;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesResult;
+import com.lineargs.watchnext.api.movies.Result;
+import com.lineargs.watchnext.api.series.SeriesDetails;
 
 import java.util.List;
 
@@ -48,10 +48,10 @@ public class SearchDbUtils {
      * @param results List used to get the values from our API response
      * @return The {@link ContentValues}
      */
-    public static ContentValues[] getTVContentValues(List<SeriesResult> results) {
+    public static ContentValues[] getTVContentValues(List<SeriesDetails> results) {
         int i = 0;
         ContentValues[] values = new ContentValues[results.size()];
-        for (SeriesResult result : results) {
+        for (SeriesDetails result : results) {
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(DataContract.Search.COLUMN_MOVIE_ID, result.getId());

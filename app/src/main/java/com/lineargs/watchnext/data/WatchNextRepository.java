@@ -5,10 +5,10 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.lineargs.watchnext.utils.MovieUtils;
-import com.lineargs.watchnext.utils.retrofit.credits.Cast;
-import com.lineargs.watchnext.utils.retrofit.credits.Crew;
-import com.lineargs.watchnext.utils.retrofit.movies.moviedetail.ReviewsResult;
-import com.lineargs.watchnext.utils.retrofit.videos.VideosResult;
+import com.lineargs.watchnext.api.credits.Cast;
+import com.lineargs.watchnext.api.credits.Crew;
+import com.lineargs.watchnext.api.movies.ReviewsResult;
+import com.lineargs.watchnext.api.videos.VideoDetails;
 
 import java.util.List;
 
@@ -111,7 +111,7 @@ public class WatchNextRepository {
         return videosDao.getVideos(tmdbId);
     }
 
-    void insertVideos(com.lineargs.watchnext.utils.retrofit.videos.Videos videos, int tmdbId) {
+    void insertVideos(com.lineargs.watchnext.api.videos.Videos videos, int tmdbId) {
         new InsertVideosTask(videosDao, tmdbId).execute(videos);
     }
 
@@ -120,7 +120,7 @@ public class WatchNextRepository {
         return reviewsDao.getReviews(tmdbId);
     }
 
-    void insertReviews(com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews reviews, int tmdbId) {
+    void insertReviews(com.lineargs.watchnext.api.movies.Reviews reviews, int tmdbId) {
         new InsertReviewsTask(reviewsDao, tmdbId).execute(reviews);
     }
 
@@ -133,11 +133,11 @@ public class WatchNextRepository {
         return creditsDao.getAllCrew(tmdbId);
     }
 
-    void insertCast(com.lineargs.watchnext.utils.retrofit.credits.Credits credits, int tmdbId) {
+    void insertCast(com.lineargs.watchnext.api.credits.Credits credits, int tmdbId) {
         new InsertCastTask(creditsDao, tmdbId).execute(credits);
     }
 
-    void insertCrew(com.lineargs.watchnext.utils.retrofit.credits.Credits credits, int tmdbId) {
+    void insertCrew(com.lineargs.watchnext.api.credits.Credits credits, int tmdbId) {
         new InsertCrewTask(creditsDao, tmdbId).execute(credits);
     }
 
@@ -214,7 +214,7 @@ public class WatchNextRepository {
     }
 
     //Videos Tasks
-    private static class InsertVideosTask extends AsyncTask<com.lineargs.watchnext.utils.retrofit.videos.Videos, Void, Void> {
+    private static class InsertVideosTask extends AsyncTask<com.lineargs.watchnext.api.videos.Videos, Void, Void> {
 
         private VideosDao videosDao;
         private int tmdbId;
@@ -225,10 +225,10 @@ public class WatchNextRepository {
         }
 
         @Override
-        protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.videos.Videos... videos) {
-            com.lineargs.watchnext.utils.retrofit.videos.Videos tmdbVideos = videos[0];
-            List<VideosResult> resultList = tmdbVideos.getResults();
-            for (VideosResult result : resultList) {
+        protected Void doInBackground(com.lineargs.watchnext.api.videos.Videos... videos) {
+            com.lineargs.watchnext.api.videos.Videos tmdbVideos = videos[0];
+            List<VideoDetails> resultList = tmdbVideos.getResults();
+            for (VideoDetails result : resultList) {
                 Videos video = new Videos();
                 video.setTmdbId(tmdbId);
                 video.setName(result.getName());
@@ -241,7 +241,7 @@ public class WatchNextRepository {
     }
 
     //Reviews Tasks
-    private static class InsertReviewsTask extends AsyncTask<com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews, Void, Void> {
+    private static class InsertReviewsTask extends AsyncTask<com.lineargs.watchnext.api.movies.Reviews, Void, Void> {
 
         private ReviewsDao reviewsDao;
         private int tmdbId;
@@ -252,8 +252,8 @@ public class WatchNextRepository {
         }
 
         @Override
-        protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews... reviews) {
-            com.lineargs.watchnext.utils.retrofit.movies.moviedetail.Reviews tmdbReviews = reviews[0];
+        protected Void doInBackground(com.lineargs.watchnext.api.movies.Reviews... reviews) {
+            com.lineargs.watchnext.api.movies.Reviews tmdbReviews = reviews[0];
             List<ReviewsResult> resultList = tmdbReviews.getResults();
             for (ReviewsResult result : resultList) {
                 Reviews review = new Reviews();
@@ -268,7 +268,7 @@ public class WatchNextRepository {
     }
 
     //Credits Tasks
-    private static class InsertCastTask extends AsyncTask<com.lineargs.watchnext.utils.retrofit.credits.Credits, Void, Void> {
+    private static class InsertCastTask extends AsyncTask<com.lineargs.watchnext.api.credits.Credits, Void, Void> {
 
         private CreditsDao creditsDao;
         private int tmdbId;
@@ -279,8 +279,8 @@ public class WatchNextRepository {
         }
 
         @Override
-        protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.credits.Credits... credits) {
-            com.lineargs.watchnext.utils.retrofit.credits.Credits tmdbCredits = credits[0];
+        protected Void doInBackground(com.lineargs.watchnext.api.credits.Credits... credits) {
+            com.lineargs.watchnext.api.credits.Credits tmdbCredits = credits[0];
             List<Cast> castList = tmdbCredits.getCast();
             for (Cast cast : castList) {
                 Credits credit = new Credits();
@@ -296,7 +296,7 @@ public class WatchNextRepository {
         }
     }
 
-    private static class InsertCrewTask extends AsyncTask<com.lineargs.watchnext.utils.retrofit.credits.Credits, Void, Void> {
+    private static class InsertCrewTask extends AsyncTask<com.lineargs.watchnext.api.credits.Credits, Void, Void> {
 
         private CreditsDao creditsDao;
         private int tmdbId;
@@ -307,8 +307,8 @@ public class WatchNextRepository {
         }
 
         @Override
-        protected Void doInBackground(com.lineargs.watchnext.utils.retrofit.credits.Credits... credits) {
-            com.lineargs.watchnext.utils.retrofit.credits.Credits tmdbCredits = credits[0];
+        protected Void doInBackground(com.lineargs.watchnext.api.credits.Credits... credits) {
+            com.lineargs.watchnext.api.credits.Credits tmdbCredits = credits[0];
             List<Crew> crewList = tmdbCredits.getCrew();
             for (Crew crew : crewList) {
                 Credits credit = new Credits();

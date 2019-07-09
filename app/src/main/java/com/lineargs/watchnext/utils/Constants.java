@@ -11,8 +11,6 @@ public final class Constants {
 
     public static final String TITLE = "title";
 
-    public static final String URI = "uri";
-
     public static final String STILL_PATH = "still_path";
 
     public static final String ARG_QUERY = "query";

@@ -20,10 +20,10 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.NotificationUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
-import com.lineargs.watchnext.utils.retrofit.movies.MovieApiService;
-import com.lineargs.watchnext.utils.retrofit.movies.Movies;
-import com.lineargs.watchnext.utils.retrofit.series.Series;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesApiService;
+import com.lineargs.watchnext.api.movies.MovieApiService;
+import com.lineargs.watchnext.api.movies.Movies;
+import com.lineargs.watchnext.api.series.Series;
+import com.lineargs.watchnext.api.series.SeriesApiService;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;

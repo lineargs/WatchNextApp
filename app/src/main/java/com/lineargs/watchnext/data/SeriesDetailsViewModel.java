@@ -7,10 +7,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.lineargs.watchnext.BuildConfig;
-import com.lineargs.watchnext.utils.retrofit.series.SeriesApiService;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.Genre;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.ProductionCompany;
-import com.lineargs.watchnext.utils.retrofit.series.seriesdetails.SeriesDetails;
+import com.lineargs.watchnext.api.series.SeriesApiService;
+import com.lineargs.watchnext.api.series.seriesdetails.SeriesDetails;
 
 import java.util.List;
 
@@ -20,6 +18,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.lineargs.watchnext.utils.RoomUtils.buildCompaniesString;
+import static com.lineargs.watchnext.utils.RoomUtils.buildGenresString;
+
 public class SeriesDetailsViewModel extends AndroidViewModel {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
@@ -28,12 +29,12 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
     private WatchNextRepository repository;
     private MutableLiveData<Series> seriesDetails;
 
-    Retrofit retrofit = new Retrofit.Builder()
+    private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);
+    private SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);
 
     public SeriesDetailsViewModel(@NonNull Application application) {
         super(application);
@@ -84,51 +85,5 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
 
     public LiveData<Series> getSeries(int tmdbId) {
         return repository.getSeries(tmdbId);
-    }
-
-    /**
-     * Helper method used for building Companies String
-     *
-     * @param companies List of type ProductionCompany
-     * @return String in following format: Google, Google, Google
-     */
-    private static String buildCompaniesString(List<ProductionCompany> companies) {
-
-        if (companies == null || companies.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < companies.size(); i++) {
-            ProductionCompany company = companies.get(i);
-            stringBuilder.append(company.getName());
-            if (i + 1 < companies.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    /**
-     * Helper method used for building Genres String
-     *
-     * @param genres List of type Genre
-     * @return String in following format: Comedy, Horror, Fantasy
-     */
-    private static String buildGenresString(List<Genre> genres) {
-
-        if (genres == null || genres.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < genres.size(); i++) {
-            Genre genre = genres.get(i);
-            stringBuilder.append(genre.getName());
-            if (i + 1 < genres.size()) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
     }
 }
