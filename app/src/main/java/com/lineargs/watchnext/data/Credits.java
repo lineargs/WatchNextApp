@@ -2,9 +2,10 @@ package com.lineargs.watchnext.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "credits")
+@Entity(tableName = "credits", indices = @Index(value = "credit_id", unique = true))
 public class Credits {
 
     @PrimaryKey(autoGenerate = true)
@@ -17,6 +18,9 @@ public class Credits {
     private int personId;
 
     private String name;
+
+    @ColumnInfo(name = "credit_id")
+    private String creditId;
 
     @ColumnInfo(name = "character_name")
     private String characterName;
@@ -51,6 +55,10 @@ public class Credits {
     public void setPersonId(int personId) {
         this.personId = personId;
     }
+
+    public String getCreditId() { return creditId; }
+
+    public void setCreditId(String creditId) { this.creditId = creditId; }
 
     public String getName() {
         return name;

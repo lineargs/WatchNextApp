@@ -55,7 +55,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             //Credits table
             database.execSQL("DROP TABLE credits");
             database.execSQL("CREATE TABLE credits ('tmdb_id' INTEGER NOT NULL, 'character_name' TEXT," +
-                    " 'name' TEXT, 'profile_path' TEXT, 'id' INTEGER NOT NULL, 'job' TEXT, 'type' INTEGER NOT NULL," +
+                    " 'name' TEXT, 'profile_path' TEXT, 'credit_id' TEXT, 'id' INTEGER NOT NULL, 'job' TEXT, 'type' INTEGER NOT NULL," +
                     " 'person_id' INTEGER NOT NULL, PRIMARY KEY ('id'))");
 
             //Episodes table
@@ -129,6 +129,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             database.execSQL("CREATE UNIQUE INDEX 'index_videos_key' ON videos ('key')");
             database.execSQL("CREATE UNIQUE INDEX 'index_reviews_key' ON reviews ('url')");
             database.execSQL("CREATE UNIQUE INDEX 'index_person_key' ON person ('person_id')");
+            database.execSQL("CREATE UNIQUE INDEX 'index_credits_key' ON credits ('credit_id')");
             Log.e("SUCCESS", "MIGRATION SUCCESS");
         }
     };

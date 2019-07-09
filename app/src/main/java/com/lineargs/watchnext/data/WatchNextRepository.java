@@ -288,6 +288,7 @@ public class WatchNextRepository {
                 credit.setName(cast.getName());
                 credit.setCharacterName(cast.getCharacter());
                 credit.setPersonId(cast.getId());
+                credit.setCreditId(cast.getCreditId());
                 credit.setProfilePath(IMAGE_SMALL_BASE + cast.getProfilePath());
                 credit.setType(0);
                 creditsDao.insertCredits(credit);
@@ -315,6 +316,7 @@ public class WatchNextRepository {
                 credit.setTmdbId(tmdbId);
                 credit.setName(crew.getName());
                 credit.setJob(crew.getJob());
+                credit.setCreditId(crew.getCreditId());
                 credit.setPersonId(crew.getId());
                 credit.setProfilePath(IMAGE_SMALL_BASE + crew.getProfilePath());
                 credit.setType(1);
