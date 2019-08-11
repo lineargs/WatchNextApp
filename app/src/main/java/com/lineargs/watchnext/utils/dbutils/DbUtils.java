@@ -1,10 +1,12 @@
 package com.lineargs.watchnext.utils.dbutils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.Query;
 
 /**
  * Created by goranminov on 08/11/2017.
@@ -50,5 +52,78 @@ public class DbUtils {
         boolean contains = cursor.getCount() > 0;
         cursor.close();
         return contains;
+    }
+
+    /**
+     * Adds a movie in the favorites table on a request
+     *
+     * @param context used to access our Cursor
+     * @param uri     The Uri of the data to be added
+     */
+    public static void addMovieToFavorites(Context context, Uri uri) {
+
+        Cursor cursor = context.getContentResolver().query(uri,
+                Query.PROJECTION,
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
+        ContentValues[] movieContentValues = new ContentValues[1];
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, cursor.getInt(Query.ID));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, cursor.getString(Query.BACKDROP_PATH));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, cursor.getString(Query.ORIGINAL_TITLE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, cursor.getString(Query.POSTER_PATH));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, cursor.getString(Query.RELEASE_DATE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, cursor.getString(Query.VOTE_AVERAGE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, cursor.getString(Query.OVERVIEW));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, cursor.getString(Query.ORIGINAL_LANGUAGE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, cursor.getString(Query.TITLE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_IMDB_ID, cursor.getString(Query.IMDB_ID));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_HOMEPAGE, cursor.getString(Query.HOMEPAGE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES, cursor.getString(Query.PRODUCTION_COMPANIES));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES, cursor.getString(Query.PRODUCTION_COUNTRIES));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, cursor.getString(Query.STATUS));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES, cursor.getString(Query.GENRES));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_RUNTIME, cursor.getInt(Query.RUNTIME));
+        movieContentValues[0] = contentValues;
+        context.getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI,
+                movieContentValues);
+        cursor.close();
+    }
+
+    /**
+     * Adds a serie in the favorites table on a request
+     *
+     * @param context used to access our Cursor
+     * @param uri     The Uri of the data to be added
+     */
+    public static void addTVToFavorites(Context context, Uri uri) {
+
+        Cursor cursor = context.getContentResolver().query(uri,
+                Query.PROJECTION,
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
+        ContentValues[] movieContentValues = new ContentValues[1];
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, cursor.getInt(Query.ID));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, cursor.getString(Query.BACKDROP_PATH));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, cursor.getString(Query.ORIGINAL_TITLE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, cursor.getString(Query.POSTER_PATH));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, cursor.getString(Query.RELEASE_DATE));
+        contentValues.put(DataContract.Favorites.COLUMN_TYPE, 1);
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, cursor.getString(Query.VOTE_AVERAGE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, cursor.getString(Query.OVERVIEW));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, cursor.getString(Query.ORIGINAL_LANGUAGE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, cursor.getString(Query.TITLE));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, cursor.getString(Query.STATUS));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES, cursor.getString(Query.PRODUCTION_COMPANIES));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES, cursor.getString(Query.GENRES));
+        movieContentValues[0] = contentValues;
+        context.getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI,
+                movieContentValues);
+        cursor.close();
     }
 }

@@ -67,7 +67,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnClickListener {
-        void OnClick(String seasonId, int seasonNumber, String serieId, String episodes);
+        void OnClick(String seasonId, int seasonNumber, String episodes);
     }
 
     class SeasonsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -101,13 +101,12 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         public void onClick(View view) {
-//            Resources resources = context.getResources();
-//            Seasons season = seasons.get(getAdapterPosition());
-//            String seasonId = String.valueOf(season.getSeasonId());
-//            String episodes = resources.getQuantityString(R.plurals.numberOfEpisodes, season.getEpisodeCount(), season.getEpisodeCount());
-//            String serieId = season.get;
-//            int number = season.getSeasonNumber();
-//            callback.OnClick(seasonId, number, serieId, episodes);
+            Resources resources = context.getResources();
+            Seasons season = seasons.get(getAdapterPosition());
+            String seasonId = String.valueOf(season.getSeasonId());
+            String episodes = resources.getQuantityString(R.plurals.numberOfEpisodes, season.getEpisodeCount(), season.getEpisodeCount());
+            int number = Integer.parseInt(season.getSeasonNumber());
+            callback.OnClick(seasonId, number, episodes);
         }
     }
 }

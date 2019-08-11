@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +19,6 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
-import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Seasons;
 import com.lineargs.watchnext.data.SeasonsViewModel;
 import com.lineargs.watchnext.utils.Constants;
@@ -128,7 +126,7 @@ public class SeasonsFragment extends Fragment implements SeasonsAdapter.OnClickL
 
     //TODO Too many things going on here
     @Override
-    public void OnClick(String seasonId, int seasonNumber, String serieId, String episodes) {
+    public void OnClick(String seasonId, int seasonNumber, String episodes) {
         if (isTablet(getContext())) {
             Intent intent = new Intent(getContext(), SeasonActivity.class);
             intent.putExtra(Constants.ID, tmdbId);
@@ -137,7 +135,6 @@ public class SeasonsFragment extends Fragment implements SeasonsAdapter.OnClickL
             Intent intent = new Intent(getContext(), EpisodesActivity.class);
             intent.putExtra(Constants.SEASON_ID, seasonId);
             intent.putExtra(Constants.SEASON_NUMBER, seasonNumber);
-            intent.putExtra(Constants.SERIE_ID, serieId);
             intent.putExtra(Constants.EPISODES, episodes);
             startActivity(intent);
         }

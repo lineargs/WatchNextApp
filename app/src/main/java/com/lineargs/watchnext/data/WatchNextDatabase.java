@@ -72,10 +72,16 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                     "'backdrop_path' TEXT, 'release_date' TEXT, 'production_companies' TEXT, 'genres' TEXT, " +
                     "'vote_average' TEXT, 'production_countries' TEXT, 'id' INTEGER NOT NULL, 'homepage' TEXT, " +
                     "'status' TEXT, PRIMARY KEY ('id'))");
+            /*
+             * The reason having 0 for runtime is because Room cannot handle properly migration.
+             * In our case for Series runtime is null but assigning Default value does not get picked up.
+             * So we assign 0 just to have which are favourites, runtime will get synced again on next
+             * Details Activity opening.
+             */
             database.execSQL("INSERT INTO favourites (tmdb_id, overview, favourite_type, imdb_id, runtime, title, " +
                     "poster_path, backdrop_path, release_date, production_companies, genres, vote_average, " +
                     "production_countries, homepage, status) SELECT movie_id, overview, type, imdb_id, " +
-                    "runtime, title, poster_path, backdrop_path, release_date, production_companies, " +
+                    "0, title, poster_path, backdrop_path, release_date, production_companies, " +
                     "genres, vote_average, production_countries, homepage, status FROM favorites");
             database.execSQL("DROP TABLE favorites");
 

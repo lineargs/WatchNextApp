@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.NotificationUtils;
+import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.lineargs.watchnext.utils.dbutils.MovieDbUtils;
 import com.lineargs.watchnext.utils.dbutils.SerieDbUtils;
 import com.lineargs.watchnext.api.movies.MovieApiService;
@@ -289,6 +291,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
                 if (contentValues != null && contentValues.length != 0) {
                     contentResolver.delete(DataContract.PopularMovieEntry.CONTENT_URI, null, null);
                     contentResolver.bulkInsert(DataContract.PopularMovieEntry.CONTENT_URI, contentValues);
+                    DbUtils.addMovieToFavorites(context, DataContract.PopularMovieEntry.buildMovieUriWithId(384018));
                 }
             }
             return null;
@@ -373,6 +376,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
                 if (contentValues != null && contentValues.length != 0) {
                     contentResolver.delete(DataContract.PopularSerieEntry.CONTENT_URI, null, null);
                     contentResolver.bulkInsert(DataContract.PopularSerieEntry.CONTENT_URI, contentValues);
+                    DbUtils.addTVToFavorites(context, DataContract.PopularSerieEntry.buildSerieUriWithId(1434));
                 }
             }
 
