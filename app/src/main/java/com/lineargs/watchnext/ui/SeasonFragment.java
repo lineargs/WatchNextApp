@@ -1,15 +1,12 @@
 package com.lineargs.watchnext.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +15,11 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
-import com.lineargs.watchnext.data.SeasonsQuery;
+import com.lineargs.watchnext.data.Seasons;
+import com.lineargs.watchnext.data.SeasonsViewModel;
+import com.lineargs.watchnext.utils.Constants;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,73 +29,51 @@ import butterknife.Unbinder;
  * Same old season fragment. Or not??? Hmmm....
  */
 
-public class SeasonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SeasonsAdapter.OnClickListener {
+public class SeasonFragment extends Fragment implements SeasonsAdapter.OnClickListener {
 
-    private static final int LOADER_ID = 112;
     @BindView(R.id.season_recycler_view)
-    RecyclerView mRecyclerView;
-    private Uri mUri;
-    private SeasonsAdapter mAdapter;
+    RecyclerView recyclerView;
+    private int tmdbId;
+    private SeasonsAdapter adapter;
     private Unbinder unbinder;
 
     public SeasonFragment() {
     }
 
-    public void setmUri(Uri uri) {
-        mUri = uri;
+    public void setTmdbId(int tmdbId) {
+        this.tmdbId = tmdbId;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_season, container, false);
-        setupViews(getContext(), view);
+        setupViews(getContext(), view, savedInstanceState);
         return view;
     }
 
-    private void setupViews(Context context, View view) {
+    private void setupViews(Context context, View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
+        if (savedState != null) {
+            tmdbId = savedState.getInt(Constants.ID);
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new SeasonsAdapter(context, this);
-        mRecyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        SeasonsQuery.SEASON_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
+        adapter = new SeasonsAdapter(context, this);
+        recyclerView.setAdapter(adapter);
+        SeasonsViewModel seasonsViewModel = ViewModelProviders.of(this).get(SeasonsViewModel.class);
+        seasonsViewModel.getSeasons(tmdbId).observe(this, new Observer<List<Seasons>>() {
+            @Override
+            public void onChanged(@Nullable List<Seasons> seasons) {
+                adapter.swapSeasons(seasons);
+            }
+        });
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(Constants.ID, tmdbId);
     }
 
     //TODO Too many things going on here
@@ -104,9 +83,11 @@ public class SeasonFragment extends Fragment implements LoaderManager.LoaderCall
         fragment.setSeasonId(seasonId);
         fragment.setSerieId(serieId);
         fragment.setNumber(seasonNumber);
-        getFragmentManager().beginTransaction()
-                .replace(R.id.episodes_frame_layout, fragment)
-                .commit();
+        if (getFragmentManager() != null) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.episodes_frame_layout, fragment)
+                    .commit();
+        }
     }
 
     @Override

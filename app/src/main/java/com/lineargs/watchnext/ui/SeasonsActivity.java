@@ -29,7 +29,7 @@ public class SeasonsActivity extends BaseTopActivity {
         setupNavDrawer();
         if (savedInstanceState == null) {
             SeasonsFragment fragment = new SeasonsFragment();
-            fragment.setmUri(getIntent().getData());
+            fragment.setTmdbId(getIntent().getIntExtra(Constants.ID, 0));
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.seasons_fragment, fragment)
                     .commit();

@@ -12,6 +12,7 @@
         android:background="?attr/background" />
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/seasons_nested_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -41,14 +42,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:visibility="invisible"
-                        tools:visibility="visible" />
-
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/empty_seasons"
                         style="@style/TitleTextCenter"
@@ -59,7 +52,7 @@
                         android:visibility="invisible"
                         tools:visibility="visible" />
 
-                    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                    <android.support.v7.widget.RecyclerView
                         android:id="@+id/seasons_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

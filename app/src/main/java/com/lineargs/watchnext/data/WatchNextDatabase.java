@@ -29,7 +29,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             WatchNextDatabase.class, "watchnext.db")
-                            //TODO Remove this implementation, here only for testing
+                            //TODO Remove callback implementation, here only for testing
                             .addCallback(callback)
                             .addMigrations(
                                     MIGRATION_41_42
@@ -126,10 +126,13 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             database.execSQL("DROP TABLE videos");
             database.execSQL("CREATE TABLE videos ('name' TEXT, 'tmdb_id' INTEGER NOT NULL, 'image' TEXT, " +
                     "'id' INTEGER NOT NULL, 'key' TEXT, PRIMARY KEY ('id'))");
+
+            //UNIQUE INDICES
             database.execSQL("CREATE UNIQUE INDEX 'index_videos_key' ON videos ('key')");
             database.execSQL("CREATE UNIQUE INDEX 'index_reviews_key' ON reviews ('url')");
             database.execSQL("CREATE UNIQUE INDEX 'index_person_key' ON person ('person_id')");
             database.execSQL("CREATE UNIQUE INDEX 'index_credits_key' ON credits ('credit_id')");
+            database.execSQL("CREATE UNIQUE INDEX 'index_seasons_key' ON seasons ('season_id')");
             Log.e("SUCCESS", "MIGRATION SUCCESS");
         }
     };
@@ -238,4 +241,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     public abstract CreditsDao creditsDao();
 
     public abstract PersonDao personDao();
+
+    public abstract SeasonsDao seasonsDao();
 }

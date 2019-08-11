@@ -2,7 +2,6 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -12,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.SeasonsQuery;
+import com.lineargs.watchnext.data.Seasons;
 import com.lineargs.watchnext.tools.SeasonTools;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +30,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private OnClickListener callback;
     private Context context;
-    private Cursor cursor;
+    private List<Seasons> seasons;
 
     public SeasonsAdapter(@NonNull Context context, OnClickListener listener) {
         this.context = context;
@@ -53,15 +54,15 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (seasons == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return seasons.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapSeasons(List<Seasons> seasons) {
+        this.seasons = seasons;
         notifyDataSetChanged();
     }
 
@@ -85,26 +86,28 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bindViews(Context context, int position) {
             Resources resources = context.getResources();
-            cursor.moveToPosition(position);
-            title.setText(SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER)));
-            String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
-            episodes.setText(episodesCount);
-            Picasso.with(poster.getContext())
-                    .load(cursor.getString(SeasonsQuery.POSTER_PATH))
-                    .centerCrop()
-                    .fit()
-                    .into(poster);
+            if (seasons != null) {
+                Seasons season = seasons.get(position);
+                title.setText(SeasonTools.getSeasonString(context, Integer.parseInt(season.getSeasonNumber())));
+                String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, season.getEpisodeCount(), season.getEpisodeCount());
+                episodes.setText(episodesCount);
+                Picasso.with(poster.getContext())
+                        .load(season.getPosterPath())
+                        .centerCrop()
+                        .fit()
+                        .into(poster);
+            }
         }
 
         @Override
         public void onClick(View view) {
-            Resources resources = context.getResources();
-            cursor.moveToPosition(getAdapterPosition());
-            String seasonId = cursor.getString(SeasonsQuery.SEASON_ID);
-            String episodes = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
-            String serieId = cursor.getString(SeasonsQuery.SERIE_ID);
-            int number = cursor.getInt(SeasonsQuery.SEASON_NUMBER);
-            callback.OnClick(seasonId, number, serieId, episodes);
+//            Resources resources = context.getResources();
+//            Seasons season = seasons.get(getAdapterPosition());
+//            String seasonId = String.valueOf(season.getSeasonId());
+//            String episodes = resources.getQuantityString(R.plurals.numberOfEpisodes, season.getEpisodeCount(), season.getEpisodeCount());
+//            String serieId = season.get;
+//            int number = season.getSeasonNumber();
+//            callback.OnClick(seasonId, number, serieId, episodes);
         }
     }
 }

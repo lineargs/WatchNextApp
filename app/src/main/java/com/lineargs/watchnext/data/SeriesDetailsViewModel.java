@@ -68,6 +68,7 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
                     repository.insertVideos(response.body().getVideos(), response.body().getId());
                     repository.insertCast(response.body().getCredits(), response.body().getId());
                     repository.insertCrew(response.body().getCredits(), response.body().getId());
+                    repository.insertSeasons(response.body().getSeasons(), response.body().getName(), response.body().getId());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
                 }

@@ -249,11 +249,10 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
     @Optional
     @OnClick(R.id.seasons)
     public void loadSeasons() {
-//        Intent intent = new Intent(getContext(), SeasonsActivity.class);
-//        Uri uri = DataContract.Seasons.buildSeasonUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-//        intent.setData(uri);
-//        intent.putExtra(Constants.TITLE, title);
-//        startActivity(intent);
+        Intent intent = new Intent(getContext(), SeasonsActivity.class);
+        intent.putExtra(Constants.ID, tmdbId);
+        intent.putExtra(Constants.TITLE, title);
+        startActivity(intent);
     }
 
     @Optional

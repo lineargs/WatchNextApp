@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.lineargs.watchnext.api.series.seriesdetails.Season;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.api.credits.Cast;
 import com.lineargs.watchnext.api.credits.Crew;
@@ -23,6 +24,7 @@ public class WatchNextRepository {
     private ReviewsDao reviewsDao;
     private CreditsDao creditsDao;
     private PersonDao personDao;
+    private SeasonsDao seasonsDao;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
@@ -49,6 +51,7 @@ public class WatchNextRepository {
         reviewsDao = database.reviewsDao();
         creditsDao = database.creditsDao();
         personDao = database.personDao();
+        seasonsDao = database.seasonsDao();
     }
 
     //Movies
@@ -97,9 +100,21 @@ public class WatchNextRepository {
         new InsertSeriesTask(seriesDao).execute(series);
     }
 
-    void updateSeries(Series series) {new UpdateSeriesTask(seriesDao).execute(series);}
+    void updateSeries(Series series) {
+        new UpdateSeriesTask(seriesDao).execute(series);
+    }
 
-    LiveData<Series> getSeries (int tmdbId) {return seriesDao.getSeries(tmdbId);}
+    LiveData<Series> getSeries(int tmdbId) {
+        return seriesDao.getSeries(tmdbId);
+    }
+
+    void insertSeasons(List<Season> seasons, String name, int tmdbId) {
+        new InsertSeasonsTask(seasonsDao, name, tmdbId).execute(seasons);
+    }
+
+    LiveData<List<Seasons>> getSeasons(int tmdbId) {
+        return seasonsDao.getSeasons(tmdbId);
+    }
 
     //Favourites
     public LiveData<List<Favourites>> getFavourites() {
@@ -145,7 +160,10 @@ public class WatchNextRepository {
     void insertPerson(Person person) {
         new InsertPersonTask(personDao).execute(person);
     }
-    LiveData<Person> getPerson(int personId) { return personDao.getPerson(personId);}
+
+    LiveData<Person> getPerson(int personId) {
+        return personDao.getPerson(personId);
+    }
 
     //Movies Tasks
     private static class UpdateMovieTask extends AsyncTask<Movies, Void, Void> {
@@ -203,12 +221,43 @@ public class WatchNextRepository {
         UpdateSeriesTask(SeriesDao seriesDao) {
             this.seriesDao = seriesDao;
         }
+
         @Override
         protected Void doInBackground(Series... series) {
             Series serie = series[0];
             seriesDao.updateSeries(serie.getTmdbId(), serie.getHomepage(),
                     serie.getProductionCompanies(), serie.getNetworks(),
                     serie.getStatus(), serie.getGenres());
+            return null;
+        }
+    }
+
+    private static class InsertSeasonsTask extends AsyncTask<List<Season>, Void, Void> {
+
+        private SeasonsDao seasonsDao;
+        private String name;
+        private int tmdbId;
+
+        InsertSeasonsTask(SeasonsDao seasonsDao, String name, int tmdbId) {
+            this.seasonsDao = seasonsDao;
+            this.name = name;
+            this.tmdbId = tmdbId;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<Season>... seasonList) {
+            List<Season> seasons = seasonList[0];
+            for (Season season: seasons) {
+                Seasons seasonRoom = new Seasons();
+                seasonRoom.setEpisodeCount(season.getEpisodeCount());
+                seasonRoom.setPosterPath(IMAGE_SMALL_BASE + season.getPosterPath());
+                seasonRoom.setSeasonId(season.getId());
+                seasonRoom.setSeasonNumber(String.valueOf(season.getSeasonNumber()));
+                seasonRoom.setShowName(name);
+                seasonRoom.setTmdbId(tmdbId);
+                seasonsDao.insert(seasonRoom);
+            }
             return null;
         }
     }
