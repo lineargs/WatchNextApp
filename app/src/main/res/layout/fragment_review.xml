@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <View
         android:id="@+id/black_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/background" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/empty_review"
+        style="@style/TitleTextCenter"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_centerInParent="true"
+        android:maxLines="2"
+        android:text="@string/review_empty_text"
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/review_recycler_view"

@@ -2,27 +2,20 @@ package com.lineargs.watchnext.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
 import com.lineargs.watchnext.data.Videos;
-import com.lineargs.watchnext.data.VideosQuery;
 import com.lineargs.watchnext.data.VideosViewModel;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
@@ -42,6 +35,10 @@ public class VideosFragment extends BaseFragment implements VideosAdapter.OnItem
     private int tmdbId;
     @BindView(R.id.videos_recycler_view)
     RecyclerView mRecyclerView;
+    @BindView(R.id.videos_nested_view)
+    NestedScrollView mNestedView;
+    @BindView(R.id.empty_videos)
+    AppCompatTextView mEmptyVideos;
     private VideosAdapter mAdapter;
     private Unbinder unbinder;
 
@@ -71,10 +68,31 @@ public class VideosFragment extends BaseFragment implements VideosAdapter.OnItem
         videosViewModel.getVideos(tmdbId).observe(this, new Observer<List<Videos>>() {
             @Override
             public void onChanged(@Nullable List<Videos> videos) {
-                mAdapter.swapVideos(videos);
+                loadViews(videos);
             }
         });
 
+    }
+
+    private void showEmpty() {
+        mNestedView.setVisibility(View.INVISIBLE);
+        mEmptyVideos.setVisibility(View.VISIBLE);
+    }
+
+    private void showData() {
+        mNestedView.setVisibility(View.VISIBLE);
+        mEmptyVideos.setVisibility(View.INVISIBLE);
+    }
+
+    private void loadViews(List<Videos> videos) {
+        if (videos != null) {
+            if (videos.size() != 0) {
+                showData();
+                mAdapter.swapVideos(videos);
+            } else {
+                showEmpty();
+            }
+        }
     }
 
     @Override
