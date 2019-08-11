@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
@@ -52,8 +51,9 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     private int tmdbId;
     private String title = "";
     private Unbinder unbinder;
-    private long id;
     private boolean dualPane;
+    private CrewAdapter crewAdapter;
+    private CastAdapter castAdapter;
 
     @Nullable
     @BindView(R.id.cover_poster)
@@ -73,6 +73,10 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
     RecyclerView crewRecyclerView;
     @BindView(R.id.crew_linear_layout)
     LinearLayout crewLayout;
+    @BindView(R.id.empty_crew)
+    AppCompatTextView emptyCrew;
+    @BindView(R.id.empty_cast)
+    AppCompatTextView emptyCast;
     @BindView(R.id.imdb)
     Button imdbButton;
     @BindView(R.id.google)
@@ -119,13 +123,13 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         castRecyclerView.setLayoutManager(mLayoutManager);
         castRecyclerView.setHasFixedSize(true);
-        final CastAdapter castAdapter = new CastAdapter(context, this);
+        castAdapter = new CastAdapter(context, this);
         castRecyclerView.setAdapter(castAdapter);
 
         LinearLayoutManager crewManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         crewRecyclerView.setLayoutManager(crewManager);
         crewRecyclerView.setHasFixedSize(true);
-        final CrewAdapter crewAdapter = new CrewAdapter(context, this);
+        crewAdapter = new CrewAdapter(context, this);
         crewRecyclerView.setAdapter(crewAdapter);
 
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
@@ -138,21 +142,21 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         }
         movieViewModel.getMovie(tmdbId).observe(this, new Observer<Movies>() {
             @Override
-            public void onChanged(@Nullable Movies movie) {
+            public void onChanged(Movies movie) {
                 movieDetailAdapter.swapMovie(movie);
-                imageLoad(movie);
+                imageLoad(movie, getContext());
             }
         });
         movieViewModel.getCast(tmdbId).observe(this, new Observer<List<Credits>>() {
             @Override
             public void onChanged(@Nullable List<Credits> credits) {
-                castAdapter.swapCast(credits);
+                loadCastViews(credits);
             }
         });
         movieViewModel.getCrew(tmdbId).observe(this, new Observer<List<Credits>>() {
             @Override
             public void onChanged(@Nullable List<Credits> credits) {
-                crewAdapter.swapCrew(credits);
+                loadCrewViews(credits);
             }
         });
     }
@@ -164,10 +168,11 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         dualPane = detailFrame != null && detailFrame.getVisibility() == View.VISIBLE;
         if (dualPane && savedInstanceState == null) {
             ReviewFragment reviewFragment = new ReviewFragment();
-//            reviewFragment.setmUri(DataContract.Review.buildReviewUriWithId(Long.parseLong(uri.getLastPathSegment())));
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.review_frame_layout, reviewFragment)
-                    .commit();
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.review_frame_layout, reviewFragment)
+                        .commit();
+            }
             VideosFragment videosFragment = new VideosFragment();
             videosFragment.setTmdbId(tmdbId);
             getFragmentManager().beginTransaction()
@@ -229,6 +234,27 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         startActivity(intent);
     }
 
+    private void showCastData() {
+        emptyCast.setVisibility(View.GONE);
+        castLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showCastEmpty() {
+        emptyCast.setVisibility(View.VISIBLE);
+        castLayout.setVisibility(View.GONE);
+    }
+
+    private void loadCastViews(List<Credits> credits) {
+        if (credits != null) {
+            if (credits.size() != 0) {
+                showCastData();
+                castAdapter.swapCast(credits);
+            } else {
+                showCastEmpty();
+            }
+        }
+    }
+
     @OnClick(R.id.crew_header_layout)
     public void loadCrew() {
         Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
@@ -236,9 +262,29 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         startActivity(intent);
     }
 
-    private void imageLoad(Movies movies) {
+    private void showCrewData() {
+        emptyCrew.setVisibility(View.GONE);
+        crewLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showCrewEmpty() {
+        emptyCrew.setVisibility(View.VISIBLE);
+        crewLayout.setVisibility(View.GONE);
+    }
+
+    private void loadCrewViews(List<Credits> credits) {
+        if (credits != null) {
+            if (credits.size() != 0) {
+                showCrewData();
+                crewAdapter.swapCrew(credits);
+            } else {
+                showCrewEmpty();
+            }
+        }
+    }
+
+    private void imageLoad(Movies movies, Context context) {
         title = movies.getTitle();
-        id = movies.getTmdbId();
         String imdb = movies.getImdbId();
         ServiceUtils.setUpImdbButton(imdb, imdbButton);
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
@@ -247,7 +293,7 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 //        if (DbUtils.isFavorite(getContext(), id)) {
 //            starFab.setImageDrawable(Utils.starImage(getContext()));
 //        } else {
-        starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+        starFab.setImageDrawable(Utils.starBorderImage(context));
 //        }
         if (posterPath != null) {
             Picasso.with(posterPath.getContext())
@@ -271,48 +317,42 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share:
-                ServiceUtils.shareMovie(getActivity(), String.valueOf(id));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_share) {
+            ServiceUtils.shareMovie(getActivity(), String.valueOf(tmdbId));
+            return true;
         }
+        return super.onOptionsItemSelected(item);
 
     }
 
 
     @Override
     public void onPersonClick(String id, String name) {
-//        if (dualPane) {
-//            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-//            Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
-//            intent.setData(uri);
-//            intent.putExtra(Constants.ID, id);
-//            intent.putExtra(Constants.NAME, name);
-//            startActivity(intent);
-//        } else {
+        if (dualPane) {
+            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
+            startActivity(intent);
+        } else {
         Intent intent = new Intent(getContext(), PersonActivity.class);
         intent.putExtra(Constants.ID, id);
         intent.putExtra(Constants.NAME, name);
         startActivity(intent);
-//        }
+        }
     }
 
     @Override
     public void onCrewClick(String id, String name) {
-//        if (dualPane) {
-//            Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
-//            Uri uri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(this.uri.getLastPathSegment()));
-//            intent.setData(uri);
-//            intent.putExtra(Constants.ID, id);
-//            intent.putExtra(Constants.NAME, name);
-//            startActivity(intent);
-//        } else {
+        if (dualPane) {
+            Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
+            startActivity(intent);
+        } else {
         Intent intent = new Intent(getContext(), PersonActivity.class);
         intent.putExtra(Constants.ID, id);
         intent.putExtra(Constants.NAME, name);
         startActivity(intent);
-//        }
+        }
     }
 }

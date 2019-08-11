@@ -2,12 +2,14 @@ package com.lineargs.watchnext.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,6 +44,12 @@ import butterknife.Unbinder;
 
 public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnClick, CrewAdapter.OnClick {
 
+    private int tmdbId;
+    private String title = "";
+    private Unbinder unbinder;
+    private boolean mDualPane;
+    private CrewAdapter crewAdapter;
+    private CastAdapter castAdapter;
 
     @Nullable
     @BindView(R.id.cover_poster)
@@ -57,6 +65,12 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
     RecyclerView crewRecyclerView;
     @BindView(R.id.cast_linear_layout)
     LinearLayout castLayout;
+    @BindView(R.id.crew_linear_layout)
+    LinearLayout crewLayout;
+    @BindView(R.id.empty_crew)
+    AppCompatTextView emptyCrew;
+    @BindView(R.id.empty_cast)
+    AppCompatTextView emptyCast;
     @BindView(R.id.movie_details_recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.google)
@@ -68,10 +82,6 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
     @Nullable
     @BindView(R.id.videos)
     Button videosButton;
-    private int tmdbId;
-    private String title = "";
-    private Unbinder unbinder;
-    private boolean mDualPane;
 
     public SeriesDetailsFragment() {
     }
@@ -104,13 +114,13 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         castRecyclerView.setLayoutManager(mLayoutManager);
         castRecyclerView.setHasFixedSize(true);
-        final CastAdapter castAdapter = new CastAdapter(view.getContext(), this);
+        castAdapter = new CastAdapter(view.getContext(), this);
         castRecyclerView.setAdapter(castAdapter);
 
         LinearLayoutManager crewManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         crewRecyclerView.setLayoutManager(crewManager);
         crewRecyclerView.setHasFixedSize(true);
-        final CrewAdapter crewAdapter = new CrewAdapter(view.getContext(), this);
+        crewAdapter = new CrewAdapter(view.getContext(), this);
         crewRecyclerView.setAdapter(crewAdapter);
 
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
@@ -122,21 +132,21 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         }
         seriesDetailsViewModel.getSeries(tmdbId).observe(this, new Observer<Series>() {
             @Override
-            public void onChanged(@Nullable Series series) {
+            public void onChanged(Series series) {
                 adapter.swapSeries(series);
-                imageLoad(series);
+                imageLoad(series, getContext());
             }
         });
         seriesDetailsViewModel.getCast(tmdbId).observe(this, new Observer<List<Credits>>() {
             @Override
             public void onChanged(@Nullable List<Credits> credits) {
-                castAdapter.swapCast(credits);
+                loadCastViews(credits);
             }
         });
         seriesDetailsViewModel.getCrew(tmdbId).observe(this, new Observer<List<Credits>>() {
             @Override
             public void onChanged(@Nullable List<Credits> credits) {
-                crewAdapter.swapCrew(credits);
+                loadCrewViews(credits);
             }
         });
     }
@@ -149,9 +159,11 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         if (mDualPane && savedInstanceState == null) {
             SeasonsFragment fragment = new SeasonsFragment();
 //            fragment.setmUri(DataContract.Seasons.buildSeasonUriWithId(Long.parseLong(mUri.getLastPathSegment())));
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.seasons_frame_layout, fragment)
-                    .commit();
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.seasons_frame_layout, fragment)
+                        .commit();
+            }
             VideosFragment videosFragment = new VideosFragment();
 //            videosFragment.setmUri(DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment())));
             getFragmentManager().beginTransaction()
@@ -185,11 +197,53 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         startActivity(intent);
     }
 
+    private void showCastData() {
+        emptyCast.setVisibility(View.GONE);
+        castLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showCastEmpty() {
+        emptyCast.setVisibility(View.VISIBLE);
+        castLayout.setVisibility(View.GONE);
+    }
+
+    private void loadCastViews(List<Credits> credits) {
+        if (credits != null) {
+            if (credits.size() != 0) {
+                showCastData();
+                castAdapter.swapCast(credits);
+            } else {
+                showCastEmpty();
+            }
+        }
+    }
+
     @OnClick(R.id.crew_header_layout)
     public void loadCrew() {
         Intent intent = (new Intent(getContext(), CreditsCrewActivity.class));
         intent.putExtra(Constants.ID, tmdbId);
         startActivity(intent);
+    }
+
+    private void showCrewData() {
+        emptyCrew.setVisibility(View.GONE);
+        crewLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showCrewEmpty() {
+        emptyCrew.setVisibility(View.VISIBLE);
+        crewLayout.setVisibility(View.GONE);
+    }
+
+    private void loadCrewViews(List<Credits> credits) {
+        if (credits != null) {
+            if (credits.size() != 0) {
+                showCrewData();
+                crewAdapter.swapCrew(credits);
+            } else {
+                showCrewEmpty();
+            }
+        }
     }
 
     @Optional
@@ -219,13 +273,11 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share:
-//                ServiceUtils.shareSerie(getActivity(), String.valueOf(id));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_share) {
+            ServiceUtils.shareSerie(getActivity(), String.valueOf(tmdbId));
+            return true;
         }
+        return super.onOptionsItemSelected(item);
 
     }
 
@@ -235,7 +287,7 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         unbinder.unbind();
     }
 
-    private void imageLoad(Series series) {
+    private void imageLoad(Series series, Context context) {
         title = series.getTitle();
         ServiceUtils.setUpGoogleSearchButton(title, googleButton);
         ServiceUtils.setUpYouTubeButton(title, youTubeButton);
@@ -243,7 +295,7 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
 //        if (DbUtils.isFavorite(getContext(), id)) {
 //            starFab.setImageDrawable(Utils.starImage(getContext()));
 //        } else {
-        starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+        starFab.setImageDrawable(Utils.starBorderImage(context));
 //        }
         if (posterPath != null) {
             Picasso.with(posterPath.getContext())
@@ -261,19 +313,17 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
 
     @Override
     public void onPersonClick(String id, String name) {
-//        if (mDualPane) {
-//            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
-//            Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-//            intent.setData(uri);
-//            intent.putExtra(Constants.ID, id);
-//            intent.putExtra(Constants.NAME, name);
-//            startActivity(intent);
-//        } else {
-        Intent intent = new Intent(getContext(), PersonActivity.class);
-        intent.putExtra(Constants.ID, id);
-        intent.putExtra(Constants.NAME, name);
-        startActivity(intent);
-//        }
+        if (mDualPane) {
+            Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getContext(), PersonActivity.class);
+            intent.putExtra(Constants.ID, id);
+            intent.putExtra(Constants.NAME, name);
+            startActivity(intent);
+        }
     }
 
     @Override
