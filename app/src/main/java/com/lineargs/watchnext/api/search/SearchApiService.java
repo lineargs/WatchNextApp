@@ -19,6 +19,13 @@ import retrofit2.http.Query;
 public interface SearchApiService {
 
     @GET("search/{path}")
+    Call<Search> multiSearch (
+      @Path("path") String path,
+      @Query("api_key") String apiKey,
+      @Query("query") String query,
+      @Query("include_adult") boolean adult);
+
+    @GET("search/{path}")
     Call<Movies> searchMovies(
             @Path("path") String path,
             @Query("api_key") String apiKey,

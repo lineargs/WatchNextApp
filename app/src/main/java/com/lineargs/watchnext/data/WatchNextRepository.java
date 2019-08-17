@@ -25,6 +25,7 @@ public class WatchNextRepository {
     private CreditsDao creditsDao;
     private PersonDao personDao;
     private SeasonsDao seasonsDao;
+    private SearchDao searchDao;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
@@ -33,6 +34,7 @@ public class WatchNextRepository {
     private LiveData<List<Series>> topRatedSeries;
     private LiveData<List<Series>> onTheAirSeries;
     private LiveData<List<Favourites>> favourites;
+    private LiveData<List<Search>> searchResults;
 
     WatchNextRepository(Application application) {
         WatchNextDatabase database = WatchNextDatabase.getDatabase(application);
@@ -52,6 +54,8 @@ public class WatchNextRepository {
         creditsDao = database.creditsDao();
         personDao = database.personDao();
         seasonsDao = database.seasonsDao();
+        searchDao = database.searchDao();
+        searchResults = searchDao.getSearchResults();
     }
 
     //Movies
@@ -164,6 +168,9 @@ public class WatchNextRepository {
     LiveData<Person> getPerson(int personId) {
         return personDao.getPerson(personId);
     }
+
+    //Search
+    LiveData<List<Search>> getSearchResults() {return searchResults;}
 
     //Movies Tasks
     private static class UpdateMovieTask extends AsyncTask<Movies, Void, Void> {

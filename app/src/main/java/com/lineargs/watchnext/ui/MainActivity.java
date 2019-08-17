@@ -123,9 +123,9 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.search:
-                Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
-                startActivity(txtIntent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//                Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+//                startActivity(txtIntent);
+//                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
             case R.id.sort_by:
                 showPopup();

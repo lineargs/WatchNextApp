@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 @Database(entities = {Credits.class, Episodes.class, Favourites.class,
-        Movies.class, Person.class, Reviews.class,
+        Movies.class, Person.class, Reviews.class, Search.class,
         Seasons.class, Series.class, Videos.class}, version = WatchNextDatabase.DB_VERSION)
 public abstract class WatchNextDatabase extends RoomDatabase {
 
@@ -249,4 +249,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     public abstract PersonDao personDao();
 
     public abstract SeasonsDao seasonsDao();
+
+    public abstract SearchDao searchDao();
 }

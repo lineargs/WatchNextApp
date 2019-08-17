@@ -15,10 +15,13 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.Search;
 import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +35,7 @@ import butterknife.ButterKnife;
 public class SearchMoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor;
+    private List<Search> searches;
 
     public SearchMoviesAdapter(@NonNull Context context) {
         this.context = context;
@@ -55,14 +58,14 @@ public class SearchMoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (searches == null) {
             return 0;
         }
-        return cursor.getCount();
+        return searches.size();
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapResults(List<Search> searches) {
+        this.searches = searches;
         notifyDataSetChanged();
     }
 
@@ -103,33 +106,34 @@ public class SearchMoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         void bindViews(final Context context, int position) {
-            cursor.moveToPosition(position);
-            final long id = cursor.getInt(SearchQuery.ID);
-            if (isFavorite(context, id)) {
-                star.setImageDrawable(deleteFromFavorites(context));
-            } else {
-                star.setImageDrawable(addToFavorites(context));
+            if (searches != null) {
+                Search search = searches.get(position);
+//                if (isFavorite(context, id)) {
+//                    star.setImageDrawable(deleteFromFavorites(context));
+//                } else {
+//                    star.setImageDrawable(addToFavorites(context));
+//                }
+//                star.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        if (isFavorite(context, id)) {
+//                            DbUtils.removeFromFavorites(context, DataContract.Search.buildSearchUriWithId(id));
+//                            Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
+//                            star.setImageDrawable(addToFavorites(context));
+//                        } else {
+//                            SearchSyncUtils.syncSearchMovie(context, String.valueOf(id));
+//                            Toast.makeText(context, context.getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
+//                            star.setImageDrawable(deleteFromFavorites(context));
+//                        }
+//                    }
+//                });
+                title.setText(search.getTitle());
+                Picasso.with(poster.getContext())
+                        .load(search.getPosterPath())
+                        .centerInside()
+                        .fit()
+                        .into(poster);
             }
-            star.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isFavorite(context, id)) {
-                        DbUtils.removeFromFavorites(context, DataContract.Search.buildSearchUriWithId(id));
-                        Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-                        star.setImageDrawable(addToFavorites(context));
-                    } else {
-                        SearchSyncUtils.syncSearchMovie(context, String.valueOf(id));
-                        Toast.makeText(context, context.getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-                        star.setImageDrawable(deleteFromFavorites(context));
-                    }
-                }
-            });
-            title.setText(cursor.getString(SearchQuery.TITLE));
-            Picasso.with(poster.getContext())
-                    .load(cursor.getString(SearchQuery.POSTER_PATH))
-                    .centerInside()
-                    .fit()
-                    .into(poster);
         }
     }
 }
