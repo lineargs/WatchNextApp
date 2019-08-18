@@ -1,8 +1,9 @@
 package com.lineargs.watchnext.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by goranminov on 16/11/2017.

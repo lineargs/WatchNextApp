@@ -1,13 +1,13 @@
 package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
-import android.arch.lifecycle.Observer;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeriesTopAdapter;

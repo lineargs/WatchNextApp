@@ -1,12 +1,10 @@
 package com.lineargs.watchnext.data;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "person", indices = @Index(value = "person_id", unique = true))
 public class Person {
@@ -37,9 +35,13 @@ public class Person {
         this.id = id;
     }
 
-    public int getPersonId() { return personId; }
+    public int getPersonId() {
+        return personId;
+    }
 
-    public void setPersonId(int personId) { this.personId = personId; }
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
 
     public String getName() {
         return name;

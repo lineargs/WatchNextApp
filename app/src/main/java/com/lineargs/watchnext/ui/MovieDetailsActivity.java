@@ -1,11 +1,12 @@
 package com.lineargs.watchnext.ui;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.utils.Constants;
 

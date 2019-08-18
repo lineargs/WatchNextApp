@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.api.credits.Crew;

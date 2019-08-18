@@ -1,8 +1,9 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Movies;

@@ -1,8 +1,9 @@
 package com.lineargs.watchnext.ui;
 
 
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.ActionBar;
 
 /**
  * Created by goranminov on 05/11/2017.

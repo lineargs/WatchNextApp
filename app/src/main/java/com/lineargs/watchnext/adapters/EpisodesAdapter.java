@@ -2,10 +2,6 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.EpisodesQuery;
@@ -102,8 +102,6 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         LinearLayout directorsContainer;
         @BindView(R.id.writers_container)
         LinearLayout writersContainer;
-        @BindView(R.id.notification_fab)
-        FloatingActionButton notification;
 
         SeasonsViewHolder(View view) {
             super(view);
