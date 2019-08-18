@@ -42,19 +42,7 @@
         <activity android:name=".ui.TabbedSeriesActivity" />
         <activity android:name=".ui.TabbedMoviesActivity" />
         <activity
-            android:name=".ui.SearchMainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/WatchNext.Search">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.SearchSerieActivity"
+            android:name=".ui.SearchActivity"
             android:launchMode="singleTop"
             android:theme="@style/WatchNext.Search">
             <meta-data
@@ -101,9 +89,6 @@
             tools:ignore="ExportedContentProvider" />
 
         <!-- Intent Services -->
-        <service
-            android:name=".sync.syncsearch.SearchSyncIntentService"
-            android:exported="false" />
         <service
             android:name=".sync.syncseries.SeasonIntentService"
             android:exported="false" />

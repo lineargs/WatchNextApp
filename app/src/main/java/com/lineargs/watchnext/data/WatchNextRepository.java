@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.lineargs.watchnext.api.search.SearchResults;
 import com.lineargs.watchnext.api.series.seriesdetails.Season;
 import com.lineargs.watchnext.utils.MovieUtils;
 import com.lineargs.watchnext.api.credits.Cast;
@@ -113,6 +114,7 @@ public class WatchNextRepository {
     }
 
     void insertSeasons(List<Season> seasons, String name, int tmdbId) {
+        //noinspection unchecked
         new InsertSeasonsTask(seasonsDao, name, tmdbId).execute(seasons);
     }
 
@@ -171,6 +173,9 @@ public class WatchNextRepository {
 
     //Search
     LiveData<List<Search>> getSearchResults() {return searchResults;}
+
+    void insertSearch(List<SearchResults> results) {//noinspection unchecked
+        new InsertSearchTask(searchDao).execute(results);}
 
     //Movies Tasks
     private static class UpdateMovieTask extends AsyncTask<Movies, Void, Void> {
@@ -394,6 +399,34 @@ public class WatchNextRepository {
         @Override
         protected Void doInBackground(Person... people) {
             personDao.insert(people[0]);
+            return null;
+        }
+    }
+
+    private static class InsertSearchTask extends AsyncTask<List<SearchResults>, Void, Void> {
+
+        private SearchDao searchDao;
+
+        InsertSearchTask(SearchDao searchDao) {this.searchDao = searchDao;}
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<SearchResults>... lists) {
+            searchDao.deleteAll();
+            List<SearchResults> searchResults = lists[0];
+            Search search = new Search();
+            for (SearchResults result : searchResults) {
+                if (result.getName() != null) {
+                    search.setTmdbId(result.getId());
+                    search.setTitle(result.getName());
+                    search.setPosterPath(IMAGE_SMALL_BASE + result.getPosterPath());
+                } else if (result.getTitle() != null) {
+                    search.setTmdbId(result.getId());
+                    search.setTitle(result.getTitle());
+                    search.setPosterPath(IMAGE_SMALL_BASE + result.getPosterPath());
+                }
+                searchDao.insert(search);
+            }
             return null;
         }
     }

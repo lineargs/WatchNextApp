@@ -1,8 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Search;
-import com.lineargs.watchnext.data.SearchQuery;
-import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
-import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -32,12 +25,12 @@ import butterknife.ButterKnife;
  * See {@link MainAdapter}
  */
 
-public class SearchMoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private List<Search> searches;
 
-    public SearchMoviesAdapter(@NonNull Context context) {
+    public SearchAdapter(@NonNull Context context) {
         this.context = context;
     }
 
@@ -67,21 +60,6 @@ public class SearchMoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void swapResults(List<Search> searches) {
         this.searches = searches;
         notifyDataSetChanged();
-    }
-
-    public boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor != null && cursor.getCount() != 0) {
-            cursor.close();
-            return true;
-        } else {
-            return false;
-        }
     }
 
     private VectorDrawableCompat addToFavorites(Context context) {

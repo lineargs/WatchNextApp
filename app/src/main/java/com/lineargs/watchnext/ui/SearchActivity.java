@@ -18,10 +18,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.SearchMoviesAdapter;
+import com.lineargs.watchnext.adapters.SearchAdapter;
 import com.lineargs.watchnext.data.Search;
 import com.lineargs.watchnext.data.SearchViewModel;
-import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
 import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;
@@ -37,7 +36,7 @@ import static android.view.View.GONE;
  * <p>
  * Search Activity used to search for movies on the Db website
  */
-public class SearchMainActivity extends BaseTopActivity {
+public class SearchActivity extends BaseTopActivity {
 
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
@@ -49,13 +48,13 @@ public class SearchMainActivity extends BaseTopActivity {
     private String queryString;
     private Handler handler;
     private String query = "";
-    private SearchMoviesAdapter resultsAdapter;
+    private SearchAdapter resultsAdapter;
     private SearchViewModel searchViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_main);
+        setContentView(R.layout.activity_search);
         handler = new Handler();
         setupActionBar();
         setupNavDrawer();
@@ -63,7 +62,7 @@ public class SearchMainActivity extends BaseTopActivity {
         ButterKnife.bind(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         searchResults.setLayoutManager(layoutManager);
-        resultsAdapter = new SearchMoviesAdapter(this);
+        resultsAdapter = new SearchAdapter(this);
         searchResults.setAdapter(resultsAdapter);
         searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
         searchViewModel.getSearchResults().observe(this, new Observer<List<Search>>() {
@@ -181,9 +180,8 @@ public class SearchMainActivity extends BaseTopActivity {
         }
         args.putString(Constants.ARG_QUERY, query);
 
-        if (!TextUtils.equals(query, this.query)) {
-            //TODO API Call from ViewModel
-//            SearchSyncUtils.syncSearchMovies(this, query, adult);
+        if (!TextUtils.equals(query, this.query) && !query.isEmpty()) {
+            searchViewModel.getSearch(query, adult);
             startLoading();
         }
         this.query = query;

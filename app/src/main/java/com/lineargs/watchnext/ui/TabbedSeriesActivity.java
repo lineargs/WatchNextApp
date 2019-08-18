@@ -132,7 +132,7 @@ public class TabbedSeriesActivity extends BaseTopActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.search) {
-            Intent searchIntent = new Intent(this, SearchSerieActivity.class)
+            Intent searchIntent = new Intent(this, SearchActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startSearchIntent(searchIntent);
             return true;

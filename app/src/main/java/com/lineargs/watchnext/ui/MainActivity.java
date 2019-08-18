@@ -23,7 +23,6 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MainAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,13 +59,13 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
 
     @OnClick(R.id.fab)
     public void searchFab() {
-        Intent fabIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+        Intent fabIntent = new Intent(MainActivity.this, SearchActivity.class);
         startIntent(fabIntent);
     }
 
     @OnClick(R.id.title_main_activity)
     public void searchTextView() {
-        Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+        Intent txtIntent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(txtIntent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
@@ -123,7 +122,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.search:
-//                Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
+//                Intent txtIntent = new Intent(MainActivity.this, SearchActivity.class);
 //                startActivity(txtIntent);
 //                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
