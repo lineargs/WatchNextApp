@@ -4,7 +4,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.data.DataContract;

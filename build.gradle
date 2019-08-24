@@ -14,25 +14,31 @@ buildscript {
 
         // SDK and tools
         minSdkVersion = 16
-        compileSdkVersion = 27
-        targetSdkVersion = 27
+        compileSdkVersion = 28
+        targetSdkVersion = 28
         buildToolsVersion = '28.0.3'
 
         // App dependencies
-        archLifecycleVersion = '1.1.1'
-        butterknifeVersion = '8.8.1'
+        appCompatVersion = '1.0.2'
+        legacySupportV4Version = '1.0.0'
+        materialVersion = '1.0.0'
+        preferenceVersion = '1.0.0'
+        vectorVersion = '1.0.1'
+        cardViewVersion = '1.0.0'
+        legacyPreferenceV14Version = '1.0.0'
         constraintLayoutVersion = '1.1.3'
-        espressoVersion = '3.1.0-alpha1'
-        fabricVersion = '2.8.0'
-        firebaseCoreVersion = '16.0.5'
+        roomVersion = '2.1.0'
+        archLifecycleVersion = '2.0.0'
+        firebaseCoreVersion = '17.1.0'
         firebaseCrashVersion = '16.2.1'
         firebaseJobVersion = '0.8.5'
-        firebaseMessagingVersion = '17.3.4'
-        junitVersion = '4.12'
+        firebaseMessagingVersion = '20.0.0'
+        butterknifeVersion = '10.1.0'
         picassoVersion = '2.5.2'
-        retrofitVersion = '2.4.0'
-        roomVersion = '1.1.1'
-        supportLibraryVersion = '27.1.1'
+        retrofitVersion = '2.6.1'
+        espressoVersion = '3.1.0-alpha1'
+        junitVersion = '4.12'
+        fabricVersion = '2.10.1'
     }
     repositories {
         google()
@@ -40,16 +46,16 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         // These docs use an open ended version so that our plugin
         // can be updated quickly in response to Android tooling updates
 
         // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
-        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'io.fabric.tools:gradle:1.31.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.google.gms:google-services:3.2.1'
+        classpath 'com.google.gms:google-services:4.3.0'
     }
 }
 

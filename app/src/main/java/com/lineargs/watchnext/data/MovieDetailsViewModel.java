@@ -1,10 +1,11 @@
 package com.lineargs.watchnext.data;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.api.movies.MovieApiService;
@@ -43,12 +44,11 @@ public class MovieDetailsViewModel extends AndroidViewModel {
         return repository.getMovie(tmdbId);
     }
 
-    public MutableLiveData<Movies> getMovieDetails(String id) {
+    public void getMovieDetails(String id) {
         if (movieDetails == null) {
             movieDetails = new MutableLiveData<>();
             syncMovieDetails(id);
         }
-        return movieDetails;
     }
 
     private void syncMovieDetails(String id) {
@@ -85,6 +85,11 @@ public class MovieDetailsViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<List<Credits>> getCast(int tmdbId) {return repository.getCast(tmdbId);}
-    public LiveData<List<Credits>> getCrew(int tmdbId) {return repository.getCrew(tmdbId);}
+    public LiveData<List<Credits>> getCast(int tmdbId) {
+        return repository.getCast(tmdbId);
+    }
+
+    public LiveData<List<Credits>> getCrew(int tmdbId) {
+        return repository.getCrew(tmdbId);
+    }
 }

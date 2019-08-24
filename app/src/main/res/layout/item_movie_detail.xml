@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
         style="@style/TitleTextCenterVertical"
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:maxLines="2"
         tools:text="@string/tools_movie_title" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/release_date"
         style="@style/DetailText"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:drawableStart="@drawable/icon_event_black"
         tools:text="@string/tools_movie_date" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/runtime"
         style="@style/DetailText"
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
         android:drawableStart="@drawable/icon_timelapse_black"
         tools:text="@string/tools_runtime" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/vote_average"
         style="@style/DetailText"
         android:layout_width="match_parent"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -59,7 +59,7 @@
             android:textColor="?colorPrimary"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/overview"
             style="@style/DetailText"
             android:layout_width="match_parent"
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -82,7 +82,7 @@
             android:textColor="?colorPrimary"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/genres"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -106,7 +106,7 @@
             android:textColor="?colorPrimary"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/companies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -130,7 +130,7 @@
             android:textColor="?colorPrimary"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/countries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

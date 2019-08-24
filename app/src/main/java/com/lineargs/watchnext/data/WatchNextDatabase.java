@@ -1,14 +1,15 @@
 package com.lineargs.watchnext.data;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {Credits.class, Episodes.class, Favourites.class,
         Movies.class, Person.class, Reviews.class, Search.class,
@@ -179,8 +180,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             popularMovie.setTmdbId(301527);
             popularMovie.setVoteAverage("");
             popularMovie.setTitle("Popular");
-            popularMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            popularMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            popularMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            popularMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
             popularMovie.setOverview("Overview");
             popularMovie.setReleaseDate("");
             popularMovie.setType(0);
@@ -188,8 +189,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             topMovie.setTmdbId(301528);
             topMovie.setVoteAverage("");
             topMovie.setTitle("Top Rated");
-            topMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            topMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            topMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            topMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
             topMovie.setOverview("Overview");
             topMovie.setReleaseDate("");
             topMovie.setType(1);
@@ -197,8 +198,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             upcomingMovie.setTmdbId(301529);
             upcomingMovie.setVoteAverage("");
             upcomingMovie.setTitle("Upcoming");
-            upcomingMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            upcomingMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            upcomingMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            upcomingMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
             upcomingMovie.setOverview("Overview");
             upcomingMovie.setReleaseDate("");
             upcomingMovie.setType(2);
@@ -206,24 +207,24 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             theatreMovie.setTmdbId(301526);
             theatreMovie.setVoteAverage("");
             theatreMovie.setTitle("Theater");
-            theatreMovie.setPosterPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            theatreMovie.setBackdropPath("http://image.tmdb.org/t/p/w500//w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            theatreMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            theatreMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
             theatreMovie.setOverview("Overview");
             theatreMovie.setReleaseDate("");
             theatreMovie.setType(3);
             dao.insert(theatreMovie);
             popularSeries.setTitle("Popular");
             popularSeries.setReleaseDate("");
-            popularSeries.setPosterPath("http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg");
-            popularSeries.setBackdropPath("http://image.tmdb.org/t/p/w500//fki3kBlwJzFp8QohL43g9ReV455.jpg");
+            popularSeries.setPosterPath("https://image.tmdb.org/t/p/w500/fki3kBlwJzFp8QohL43g9ReV455.jpg");
+            popularSeries.setBackdropPath("https://image.tmdb.org/t/p/w500/fki3kBlwJzFp8QohL43g9ReV455.jpg");
             popularSeries.setTmdbId(60735);
             popularSeries.setVoteAverage("7.2");
             popularSeries.setOverview("When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.");
             popularSeries.setType(0);
             topSeries.setTitle("Popular");
             topSeries.setReleaseDate("");
-            topSeries.setPosterPath("http://image.tmdb.org/t/p/w500//x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
-            topSeries.setBackdropPath("http://image.tmdb.org/t/p/w500//x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
+            topSeries.setPosterPath("https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
+            topSeries.setBackdropPath("https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
             topSeries.setTmdbId(66732);
             topSeries.setVoteAverage("10.0");
             topSeries.setOverview("When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.");

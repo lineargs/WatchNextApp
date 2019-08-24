@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:background="?attr/background" />
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/detail_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/movie_details_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -65,9 +65,9 @@
 
                         <include layout="@layout/item_buttons_series" />
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/star_fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                     android:layout_marginEnd="@dimen/fab_detail_margin"
                     android:layout_marginRight="@dimen/fab_detail_margin" />
             </FrameLayout>
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
     </FrameLayout>
 
     <View

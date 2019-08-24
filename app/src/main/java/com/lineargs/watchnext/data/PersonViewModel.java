@@ -1,11 +1,12 @@
 package com.lineargs.watchnext.data;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.api.person.PeopleApiService;
@@ -21,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PersonViewModel extends AndroidViewModel {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
-    private static final String IMAGE_MEDIUM_BASE = "http://image.tmdb.org/t/p/w500/";
+    private static final String IMAGE_MEDIUM_BASE = "https://image.tmdb.org/t/p/w500";
 
     private WatchNextRepository repository;
     private MutableLiveData<Person> personDetails;
@@ -31,12 +32,11 @@ public class PersonViewModel extends AndroidViewModel {
         repository = new WatchNextRepository(application);
     }
 
-    public MutableLiveData<Person> getPersonDetails(String id) {
+    public void getPersonDetails(String id) {
         if (personDetails == null) {
             personDetails = new MutableLiveData<>();
             syncPersonDetails(id);
         }
-        return personDetails;
     }
 
     private void syncPersonDetails(String id) {

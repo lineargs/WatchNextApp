@@ -8,7 +8,7 @@
     android:foreground="?selectableItemBackground"
     android:orientation="horizontal">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/cast_text_view"
         style="@style/HeaderTextPrimary"
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:layout_toStartOf="@+id/cast_more"
         android:text="@string/cast_text_view" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/cast_more"
         style="@style/HeaderTextAccent"
         android:layout_width="wrap_content"

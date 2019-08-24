@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_card_view"
@@ -31,7 +31,7 @@
             android:layout_height="@dimen/seasons_poster_height"
             android:background="@color/scrim" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/details"
             style="@style/DetailText.Seasons"
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_marginStart="@dimen/card_view_padding"
             android:text="@string/view_details" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
             style="@style/TitleTextCenterVertical"
             android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
             android:textColor="@color/colorWhite"
             tools:text="@string/tools_season_title" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/seasons_episodes"
             style="@style/DetailText"
             android:layout_width="wrap_content"
@@ -74,4 +74,4 @@
             tools:text="@string/tools_season_episodes" />
 
     </RelativeLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

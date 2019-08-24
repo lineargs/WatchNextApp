@@ -1,23 +1,24 @@
 package com.lineargs.watchnext.data;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
-import com.lineargs.watchnext.api.search.SearchResults;
-import com.lineargs.watchnext.api.series.seriesdetails.Season;
-import com.lineargs.watchnext.utils.MovieUtils;
+import androidx.lifecycle.LiveData;
+
 import com.lineargs.watchnext.api.credits.Cast;
 import com.lineargs.watchnext.api.credits.Crew;
 import com.lineargs.watchnext.api.movies.ReviewsResult;
+import com.lineargs.watchnext.api.search.SearchResults;
+import com.lineargs.watchnext.api.series.seriesdetails.Season;
 import com.lineargs.watchnext.api.videos.VideoDetails;
+import com.lineargs.watchnext.utils.MovieUtils;
 
 import java.util.List;
 
 public class WatchNextRepository {
 
     /* Final variable for our poster and backdrop path*/
-    private static final String IMAGE_SMALL_BASE = "http://image.tmdb.org/t/p/w500/";
+    private static final String IMAGE_SMALL_BASE = "https://image.tmdb.org/t/p/w500";
 
     private MoviesDao moviesDao;
     private SeriesDao seriesDao;
@@ -172,10 +173,13 @@ public class WatchNextRepository {
     }
 
     //Search
-    LiveData<List<Search>> getSearchResults() {return searchResults;}
+    LiveData<List<Search>> getSearchResults() {
+        return searchResults;
+    }
 
     void insertSearch(List<SearchResults> results) {//noinspection unchecked
-        new InsertSearchTask(searchDao).execute(results);}
+        new InsertSearchTask(searchDao).execute(results);
+    }
 
     //Movies Tasks
     private static class UpdateMovieTask extends AsyncTask<Movies, Void, Void> {
@@ -260,7 +264,7 @@ public class WatchNextRepository {
         @Override
         protected final Void doInBackground(List<Season>... seasonList) {
             List<Season> seasons = seasonList[0];
-            for (Season season: seasons) {
+            for (Season season : seasons) {
                 Seasons seasonRoom = new Seasons();
                 seasonRoom.setEpisodeCount(season.getEpisodeCount());
                 seasonRoom.setPosterPath(IMAGE_SMALL_BASE + season.getPosterPath());
@@ -407,7 +411,9 @@ public class WatchNextRepository {
 
         private SearchDao searchDao;
 
-        InsertSearchTask(SearchDao searchDao) {this.searchDao = searchDao;}
+        InsertSearchTask(SearchDao searchDao) {
+            this.searchDao = searchDao;
+        }
 
         @SafeVarargs
         @Override

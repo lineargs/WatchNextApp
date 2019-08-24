@@ -33,7 +33,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/name"
         style="@style/DetailText"
         android:layout_width="match_parent"

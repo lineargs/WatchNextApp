@@ -1,10 +1,11 @@
 package com.lineargs.watchnext.data;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.api.search.SearchApiService;

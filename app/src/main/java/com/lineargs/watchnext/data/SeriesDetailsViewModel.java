@@ -1,10 +1,11 @@
 package com.lineargs.watchnext.data;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.api.series.SeriesApiService;
@@ -41,12 +42,11 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
         repository = new WatchNextRepository(application);
     }
 
-    public MutableLiveData<Series> getSeriesDetails(String id) {
+    public void getSeriesDetails(String id) {
         if (seriesDetails == null) {
             seriesDetails = new MutableLiveData<>();
             syncSeriesDetails(id);
         }
-        return seriesDetails;
     }
 
     private void syncSeriesDetails(String id) {
@@ -81,8 +81,13 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
 
     }
 
-    public LiveData<List<Credits>> getCast(int tmdbId) {return repository.getCast(tmdbId);}
-    public LiveData<List<Credits>> getCrew(int tmdbId) {return repository.getCrew(tmdbId);}
+    public LiveData<List<Credits>> getCast(int tmdbId) {
+        return repository.getCast(tmdbId);
+    }
+
+    public LiveData<List<Credits>> getCrew(int tmdbId) {
+        return repository.getCrew(tmdbId);
+    }
 
     public LiveData<Series> getSeries(int tmdbId) {
         return repository.getSeries(tmdbId);

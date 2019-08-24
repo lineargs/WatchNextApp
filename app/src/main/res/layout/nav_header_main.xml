@@ -20,7 +20,7 @@
         android:paddingTop="@dimen/nav_text_padding"
         app:srcCompat="@drawable/ic_launcher_new" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
