@@ -62,12 +62,12 @@ public class EpisodesActivity extends BaseTopActivity implements
     @BindView(R.id.cover_poster)
     ImageView seasonPoster;
     /**
-     * The {@link androidx.core.view.PagerAdapter} that will provide
+     * The {@link androidx.viewpager.widget.ViewPager} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link androidx.core.app.FragmentStatePagerAdapter}.
+     * {@link androidx.fragment.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
     /**
@@ -133,12 +133,7 @@ public class EpisodesActivity extends BaseTopActivity implements
         super.setDrawerIndicatorEnabled();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.icon_arrow_back_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 
     @NonNull
@@ -246,7 +241,7 @@ public class EpisodesActivity extends BaseTopActivity implements
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(String title, String[] details) {
+        static PlaceholderFragment newInstance(String title, String[] details) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putStringArray(Constants.ARG_QUERY, details);
@@ -284,7 +279,7 @@ public class EpisodesActivity extends BaseTopActivity implements
                     writers.setText(details[8]);
                 }
                 if (airedAlready(details[3])) {
-                    notification.setVisibility(GONE);
+                    notification.hide();
                 }
                 ServiceUtils.loadPicasso(stillPath.getContext(), details[1])
                         .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
@@ -329,7 +324,7 @@ public class EpisodesActivity extends BaseTopActivity implements
         }
 
         @OnClick(R.id.notification_fab)
-        public void setNotification() {
+        void setNotification() {
             int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
             if (intervalSeconds != 0 && details != null) {
                 if (getArguments() != null) {
