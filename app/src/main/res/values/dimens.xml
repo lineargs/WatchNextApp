@@ -10,8 +10,8 @@
     <!-- Images -->
     <dimen name="poster_large_width">175</dimen>
     <dimen name="poster_large_height">267</dimen>
-    <dimen name="movie_poster_width_default">99dp</dimen>
-    <dimen name="movie_poster_height_default">150dp</dimen>
+    <dimen name="movie_poster_width_default">399dp</dimen>
+    <dimen name="movie_poster_height_default">550dp</dimen>
     <dimen name="movie_poster_small_width">70dp</dimen>
     <dimen name="movie_poster_small_height">90dp</dimen>
     <dimen name="cast_image_height">170dp</dimen>
