@@ -35,6 +35,10 @@ android {
             signingConfig signingConfigs.config
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
     bundle {
         language {
