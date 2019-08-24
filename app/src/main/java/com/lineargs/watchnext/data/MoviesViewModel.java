@@ -17,16 +17,12 @@ public class MoviesViewModel extends AndroidViewModel {
 
     private LiveData<List<Movies>> upcomingMovies;
 
-    private LiveData<List<Favourites>> favourites;
-
     public MoviesViewModel(Application application) {
         super(application);
         repository = new WatchNextRepository(application);
         popularMovies = repository.getPopularMovies();
         topRatedMovies = repository.getTopRatedMovies();
         upcomingMovies = repository.getUpcomingMovies();
-        favourites = repository.getFavourites();
-
     }
 
     public LiveData<List<Movies>> getPopularMovies() {
@@ -39,10 +35,6 @@ public class MoviesViewModel extends AndroidViewModel {
 
     public LiveData<List<Movies>> getUpcomingMovies() {
         return upcomingMovies;
-    }
-
-    public LiveData<List<Favourites>> getFavourites() {
-        return favourites;
     }
 
     public void insertMovie(Movies movies) {

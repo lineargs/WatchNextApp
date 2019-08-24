@@ -163,16 +163,19 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
         private final MoviesDao dao;
         private final SeriesDao seriesDao;
+        private final FavouritesDao favouritesDao;
         Movies popularMovie = new Movies();
         Movies topMovie = new Movies();
         Movies upcomingMovie = new Movies();
         Movies theatreMovie = new Movies();
         Series popularSeries = new Series();
         Series topSeries = new Series();
+        Favourites favourites = new Favourites();
 
         PopulateDbAsync(WatchNextDatabase db) {
             dao = db.moviesDao();
             seriesDao = db.seriesDao();
+            favouritesDao = db.favouritesDao();
         }
 
         @Override
@@ -231,6 +234,14 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             topSeries.setType(1);
             seriesDao.insert(popularSeries);
             seriesDao.insert(topSeries);
+            favourites.setTmdbId(301528);
+            favourites.setVoteAverage("");
+            favourites.setTitle("Fav");
+            favourites.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            favourites.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+            favourites.setOverview("Overview");
+            favourites.setReleaseDate("");
+            favouritesDao.insert(favourites);
             return null;
         }
     }

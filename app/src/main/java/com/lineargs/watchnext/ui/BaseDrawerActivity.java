@@ -83,7 +83,7 @@ public abstract class BaseDrawerActivity extends BaseActivity {
         if (!sharedPreferences
                 .getString(getString(R.string.pref_locale_key), "").contains(locale)) {
             sharedPreferences.edit().putString(getString(R.string.pref_locale_key), locale).apply();
-            WatchNextSyncAdapter.syncImmediately(this);
+//            WatchNextSyncAdapter.syncImmediately(this);
         }
     }
 
@@ -99,12 +99,9 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     public void setupNavDrawer() {
         ButterKnife.bind(this);
         navigationView.inflateMenu(R.menu.activity_main_drawer);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                onNavItemClicked(item.getItemId());
-                return false;
-            }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            onNavItemClicked(item.getItemId());
+            return false;
         });
     }
 
@@ -169,12 +166,7 @@ public abstract class BaseDrawerActivity extends BaseActivity {
 
         if (intent != null) {
             final Intent finalIntent = intent;
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startNavDrawerItem(finalIntent);
-                }
-            }, NAV_DRAWER_CLOSE_DELAY);
+            handler.postDelayed(() -> startNavDrawerItem(finalIntent), NAV_DRAWER_CLOSE_DELAY);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
     }

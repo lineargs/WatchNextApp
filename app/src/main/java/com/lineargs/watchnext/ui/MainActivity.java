@@ -1,8 +1,6 @@
 package com.lineargs.watchnext.ui;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -10,31 +8,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MainAdapter;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.data.Favourites;
+import com.lineargs.watchnext.data.FavouritesViewModel;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor>,
-        MainAdapter.OnItemClickListener {
+public class MainActivity extends BaseTopActivity implements MainAdapter.OnItemClickListener {
 
     static final String FAB_ID = "fab_id";
-    private static final int LOADER_ID = 333;
     private static final String BUNDLE_ARG = "sort";
     private static final String ASC = " ASC", DESC = " DESC";
     @BindView(R.id.main_recycler_view)
@@ -53,9 +48,9 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         setupActionBar();
         setupNavDrawer();
         setupViews();
-        if (isConnected()) {
+//        if (isConnected()) {
 //            WatchNextSyncAdapter.initializeSyncAdapter(this);
-        }
+//        }
     }
 
     @OnClick(R.id.fab)
@@ -89,11 +84,19 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new MainAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
-        /* We init the loader with bundle, so later can use the bundle to restart
-         * the loader to sort the list. The default sorting is always first in db,
-         * first to display. We still do not save the user preference.
-         */
-        getSupportLoaderManager().initLoader(LOADER_ID, bundle, this);
+        FavouritesViewModel favouritesViewModel = ViewModelProviders.of(this).get(FavouritesViewModel.class);
+        favouritesViewModel.getFavourites().observe(this, this::loadData);
+    }
+
+    private void loadData(List<Favourites> favourites) {
+        if (favourites != null) {
+            if (favourites.size() != 0) {
+                showData();
+                mAdapter.swapFavourites(favourites);
+            }
+        } else {
+            hideData();
+        }
     }
 
     @Override
@@ -123,9 +126,9 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.search:
-//                Intent txtIntent = new Intent(MainActivity.this, SearchActivity.class);
-//                startActivity(txtIntent);
-//                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                Intent txtIntent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(txtIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
             case R.id.sort_by:
                 showPopup();
@@ -142,87 +145,38 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         View menu = findViewById(R.id.sort_by);
         PopupMenu popupMenu = new PopupMenu(this, menu);
         popupMenu.inflate(R.menu.sort_menu);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.sort_title:
-                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_TITLE + ASC);
-                        getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
-                        break;
-                    case R.id.sort_highest_rated:
-                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + DESC);
-                        getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
-                        break;
-                    case R.id.sort_lowest_rated:
-                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + ASC);
-                        getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
-                        break;
-                }
-                return true;
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.sort_title:
+                    break;
+                case R.id.sort_highest_rated:
+                    break;
+                case R.id.sort_lowest_rated:
+                    break;
             }
+            return true;
         });
         popupMenu.show();
     }
 
-    @NonNull
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(this,
-                        DataContract.Favorites.CONTENT_URI,
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        args.getString(BUNDLE_ARG, null));
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                mAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    showData();
-                } else if (data != null && data.getCount() == 0) {
-                    hideData();
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onItemSelected(Uri uri) {
-
+    public void onItemSelected(String tmdbId) {
         /* In the main(Favorites) activity we have both movies and series.
          * To decide on click which activity to start we simply check in the table if the
          * selected row is serie or movie.
          * TYPE: Movie = 0 / Serie = 1
          */
-        if (isSeries(uri)) {
-            Intent intent = new Intent(this, SeriesDetailsActivity.class);
-            intent.setData(uri);
-            intent.putExtra(FAB_ID, 1);
-            startIntent(intent);
-        } else {
-            Intent intent = new Intent(this, MovieDetailsActivity.class);
-            intent.setData(uri);
-            intent.putExtra(FAB_ID, 1);
-            startIntent(intent);
-        }
-
+//        if (isSeries(uri)) {
+//            Intent intent = new Intent(this, SeriesDetailsActivity.class);
+//            intent.setData(uri);
+//            intent.putExtra(FAB_ID, 1);
+//            startIntent(intent);
+//        } else {
+//            Intent intent = new Intent(this, MovieDetailsActivity.class);
+//            intent.setData(uri);
+//            intent.putExtra(FAB_ID, 1);
+//            startIntent(intent);
+//        }
     }
 
     private int numberOfColumns() {
@@ -236,28 +190,6 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             return 1;
         }
         return nColumns;
-    }
-
-    /**
-     * Checks whether the entry is Movie / Serie in the favourites db. Used so we can open the appropriate
-     * Activity.
-     *
-     * @param uri The URI
-     * @return true / false
-     */
-    private boolean isSeries(Uri uri) {
-        String id = uri.getLastPathSegment();
-        Cursor cursor = this.getContentResolver().query(DataContract.Favorites.CONTENT_URI,
-                null,
-                DataContract.Favorites.COLUMN_TYPE + " = ? AND " + DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                new String[]{String.valueOf(1), id},
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean contains = cursor.getCount() > 0;
-        cursor.close();
-        return contains;
     }
 
     private void startIntent(Intent intent) {

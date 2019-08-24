@@ -1,14 +1,11 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -16,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.utils.dbutils.DbUtils;
+import com.lineargs.watchnext.data.Favourites;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +31,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnItemClickListener callback;
     private Context context;
-    private Cursor cursor;
+    private List<Favourites> favourites;
 
     /**
      * Creates a MainAdapter.
@@ -81,75 +78,53 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (favourites == null) {
             return 0;
         }
-        return cursor.getCount();
+        return favourites.size();
     }
 
     /**
      * Used to set the data on a Adapter if we've already
      * created one.
      *
-     * @param cursor The new data to be displayed.
+     * @param favourites The new data to be displayed.
      */
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapFavourites(List<Favourites> favourites) {
+        this.favourites = favourites;
         notifyDataSetChanged();
     }
 
-    /*
-     * Used to check if the data contains
-     * in the favorites table before we display it
-     */
-    private boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean favorite = cursor.getCount() > 0;
-        cursor.close();
-        return favorite;
-    }
-
     private void bindMainViews(final MainViewHolder holder, final Context context, int position) {
-        cursor.moveToPosition(position);
-        final long id = cursor.getInt(Query.ID);
-
-        holder.star.setImageDrawable(VectorDrawableCompat.create
-                (context.getResources(), R.drawable.icon_star_black, context.getTheme()));
-        holder.star.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = DataContract.PopularMovieEntry.buildMovieUriWithId(id);
-                if (isFavorite(context, id)) {
-                    DbUtils.removeFromFavorites(context, uri);
-                    Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                }
+        if (favourites != null) {
+            Favourites favourite = favourites.get(position);
+            holder.star.setImageDrawable(VectorDrawableCompat.create
+                    (context.getResources(), R.drawable.icon_star_black, context.getTheme()));
+//            holder.star.setOnClickListener(view -> {
+//                Uri uri = DataContract.PopularMovieEntry.buildMovieUriWithId(id);
+//                if (isFavorite(context, id)) {
+//                    DbUtils.removeFromFavorites(context, uri);
+//                    Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
+//                    notifyDataSetChanged();
+//                }
+//            });
+            holder.title.setText(favourite.getTitle());
+            holder.date.setText(favourite.getReleaseDate());
+            holder.vote.setText(favourite.getVoteAverage());
+            if (favourite.getStatus() == null) {
+                holder.status.setText(context.getString(R.string.main_status, context.getString(R.string.text_not_available)));
+            } else {
+                holder.status.setText(context.getString(R.string.main_status, favourite.getStatus()));
             }
-        });
-        holder.title.setText(cursor.getString(Query.TITLE));
-        holder.date.setText(context.getString(R.string.main_date, cursor.getString(Query.RELEASE_DATE)));
-        holder.vote.setText(cursor.getString(Query.VOTE_AVERAGE));
-        if (cursor.getString(Query.STATUS) == null) {
-            holder.status.setText(context.getString(R.string.main_status, context.getString(R.string.text_not_available)));
-        } else {
-            holder.status.setText(context.getString(R.string.main_status, cursor.getString(Query.STATUS)));
+            Picasso.with(holder.poster.getContext())
+                    .load(favourite.getPosterPath())
+                    .fit()
+                    .into(holder.poster);
         }
-        Picasso.with(holder.poster.getContext())
-                .load(cursor.getString(Query.POSTER_PATH))
-                .fit()
-                .into(holder.poster);
     }
 
     public interface OnItemClickListener {
-        void onItemSelected(Uri uri);
+        void onItemSelected(String tmdbId);
     }
 
     /*
@@ -180,10 +155,10 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            cursor.moveToPosition(getAdapterPosition());
-            Uri uri = DataContract.Favorites.buildFavoritesUriWithId(
-                    Long.parseLong(cursor.getString(Query.ID)));
-            callback.onItemSelected(uri);
+            if (favourites != null) {
+                Favourites favourite = favourites.get(getAdapterPosition());
+                callback.onItemSelected(favourite.getImdbId());
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ public class WatchNextRepository {
     private PersonDao personDao;
     private SeasonsDao seasonsDao;
     private SearchDao searchDao;
+    private FavouritesDao favouritesDao;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
@@ -49,7 +50,7 @@ public class WatchNextRepository {
         onTheAirSeries = seriesDao.getOnTheAirSeries();
         topRatedSeries = seriesDao.getTopRatedSeries();
         popularSeries = seriesDao.getPopularSeries();
-        FavouritesDao favouritesDao = database.favouritesDao();
+        favouritesDao = database.favouritesDao();
         favourites = favouritesDao.getAllFavourites();
         videosDao = database.videosDao();
         reviewsDao = database.reviewsDao();
@@ -127,6 +128,8 @@ public class WatchNextRepository {
     public LiveData<List<Favourites>> getFavourites() {
         return favourites;
     }
+
+    public void insertFavourites (Favourites favourites) {favouritesDao.insert(favourites);}
 
     //Videos
     LiveData<List<Videos>> getVideos(int tmdbId) {
