@@ -10,13 +10,11 @@ import java.util.List;
 
 public class TheaterViewModel extends AndroidViewModel {
 
-    private WatchNextRepository repository;
-
     private LiveData<List<Movies>> theaterMovies;
 
     public TheaterViewModel(@NonNull Application application) {
         super(application);
-        repository = new WatchNextRepository(application);
+        WatchNextRepository repository = new WatchNextRepository(application);
         theaterMovies = repository.getTheatreMovies();
     }
 

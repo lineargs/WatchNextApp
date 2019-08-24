@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PersonViewModel extends AndroidViewModel {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
-    private static final String IMAGE_MEDIUM_BASE = "http://image.tmdb.org/t/p/w500/";
+    private static final String IMAGE_MEDIUM_BASE = "https://image.tmdb.org/t/p/w500";
 
     private WatchNextRepository repository;
     private MutableLiveData<Person> personDetails;

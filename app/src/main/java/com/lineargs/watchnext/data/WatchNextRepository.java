@@ -18,7 +18,7 @@ import java.util.List;
 public class WatchNextRepository {
 
     /* Final variable for our poster and backdrop path*/
-    private static final String IMAGE_SMALL_BASE = "http://image.tmdb.org/t/p/w500/";
+    private static final String IMAGE_SMALL_BASE = "https://image.tmdb.org/t/p/w500";
 
     private MoviesDao moviesDao;
     private SeriesDao seriesDao;

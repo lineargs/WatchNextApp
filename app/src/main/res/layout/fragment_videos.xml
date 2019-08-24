@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="?attr/background" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/empty_videos"
         style="@style/TitleTextCenter"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/detail_card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,13 +53,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/videos_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scrollbars="vertical" />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </FrameLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

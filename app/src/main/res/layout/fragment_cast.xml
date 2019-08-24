@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/empty_cast"
         style="@style/TitleTextCenter"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 
         <include layout="@layout/item_header_cast" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cast_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

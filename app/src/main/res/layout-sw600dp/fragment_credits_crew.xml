@@ -10,7 +10,7 @@
     tools:context="com.lineargs.watchnext.ui.CreditsCrewFragment"
     tools:showIn="@layout/activity_credits_crew">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/credits_crew_recycler_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"

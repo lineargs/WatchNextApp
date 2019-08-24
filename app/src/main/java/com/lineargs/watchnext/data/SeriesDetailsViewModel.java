@@ -42,12 +42,11 @@ public class SeriesDetailsViewModel extends AndroidViewModel {
         repository = new WatchNextRepository(application);
     }
 
-    public MutableLiveData<Series> getSeriesDetails(String id) {
+    public void getSeriesDetails(String id) {
         if (seriesDetails == null) {
             seriesDetails = new MutableLiveData<>();
             syncSeriesDetails(id);
         }
-        return seriesDetails;
     }
 
     private void syncSeriesDetails(String id) {

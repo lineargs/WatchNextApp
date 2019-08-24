@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:background="?attr/background" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/empty_review"
         style="@style/TitleTextCenter"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:visibility="invisible"
         tools:visibility="visible" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/review_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

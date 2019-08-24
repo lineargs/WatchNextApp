@@ -7,14 +7,14 @@
     android:orientation="vertical"
     android:padding="@dimen/padding_six">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         style="@style/TitleTextCenterVertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textColor="@color/colorWhite" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/version_text"
         style="@style/DetailText.About"
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:textColor="@color/colorWhite"
         tools:text="@string/about_version" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         style="@style/DetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:text="@string/open_source_text"
         android:textColor="@color/colorWhite" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         style="@style/DetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
