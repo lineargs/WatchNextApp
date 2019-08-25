@@ -234,14 +234,14 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             topSeries.setType(1);
             seriesDao.insert(popularSeries);
             seriesDao.insert(topSeries);
-            favourites.setTmdbId(301528);
-            favourites.setVoteAverage("");
-            favourites.setTitle("Fav");
-            favourites.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            favourites.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            favourites.setOverview("Overview");
-            favourites.setReleaseDate("");
-            favouritesDao.insert(favourites);
+//            favourites.setTmdbId(301528);
+//            favourites.setVoteAverage("");
+//            favourites.setTitle("Fav");
+//            favourites.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+//            favourites.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
+//            favourites.setOverview("Overview");
+//            favourites.setReleaseDate("");
+//            favouritesDao.insert(favourites);
             return null;
         }
     }

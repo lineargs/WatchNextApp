@@ -1,6 +1,7 @@
 package com.lineargs.watchnext.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +23,7 @@ import com.lineargs.watchnext.data.Favourites;
 import com.lineargs.watchnext.data.FavouritesViewModel;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,7 @@ public class MainActivity extends BaseTopActivity implements MainAdapter.OnItemC
     @BindView(R.id.empty_layout)
     RelativeLayout mRelativeLayout;
     private MainAdapter mAdapter;
+    private FavouritesViewModel favouritesViewModel;
     private Bundle bundle;
 
     @Override
@@ -48,9 +52,6 @@ public class MainActivity extends BaseTopActivity implements MainAdapter.OnItemC
         setupActionBar();
         setupNavDrawer();
         setupViews();
-//        if (isConnected()) {
-//            WatchNextSyncAdapter.initializeSyncAdapter(this);
-//        }
     }
 
     @OnClick(R.id.fab)
@@ -84,8 +85,21 @@ public class MainActivity extends BaseTopActivity implements MainAdapter.OnItemC
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new MainAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
-        FavouritesViewModel favouritesViewModel = ViewModelProviders.of(this).get(FavouritesViewModel.class);
+        favouritesViewModel = ViewModelProviders.of(this).get(FavouritesViewModel.class);
         favouritesViewModel.getFavourites().observe(this, this::loadData);
+        if (isConnected()) {
+            syncWorkerNow();
+        }
+    }
+
+    private void syncWorkerNow() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String locale = Locale.getDefault().toString();
+        if (!sharedPreferences
+                .getString(getString(R.string.pref_locale_key), "").contains(locale)) {
+            sharedPreferences.edit().putString(getString(R.string.pref_locale_key), locale).apply();
+            favouritesViewModel.syncNow();
+        }
     }
 
     private void loadData(List<Favourites> favourites) {
