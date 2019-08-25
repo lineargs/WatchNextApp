@@ -9,6 +9,8 @@ import androidx.work.WorkerParameters;
 import com.lineargs.watchnext.BuildConfig;
 import com.lineargs.watchnext.api.movies.MovieApiService;
 import com.lineargs.watchnext.api.movies.Movies;
+import com.lineargs.watchnext.api.series.Series;
+import com.lineargs.watchnext.api.series.SeriesApiService;
 import com.lineargs.watchnext.data.WatchNextDatabase;
 
 import java.util.Locale;
@@ -131,64 +133,64 @@ public class SyncNowWorker extends Worker {
             }
         });
 //
-//        final SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);
-//
-//        Call<Series> popularSeriesCall = seriesApiService.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
-//
-//        popularSeriesCall.enqueue(new Callback<Series>() {
-//            @Override
-//            public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-////                    ContentValues[] values = SerieDbUtils.getPopularContentValues(response.body().getResults());
-////                    InsertPopularSeries insertPopularSeries = new InsertPopularSeries(getContext());
-////                    insertPopularSeries.execute(values);
-//                } else if (response.errorBody() != null) {
-//                    response.errorBody().close();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
-//            }
-//        });
-//
-//        Call<Series> topSeriesCall = seriesApiService.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
-//
-//        topSeriesCall.enqueue(new Callback<Series>() {
-//            @Override
-//            public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-////                    ContentValues[] values = SerieDbUtils.getTopContentValues(response.body().getResults());
-////                    InsertTopSeries insertTopSeries = new InsertTopSeries(getContext());
-////                    insertTopSeries.execute(values);
-//                } else if (response.errorBody() != null) {
-//                    response.errorBody().close();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
-//            }
-//        });
-//
-//        Call<Series> onTheAirCall = seriesApiService.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY);
-//
-//        onTheAirCall.enqueue(new Callback<Series>() {
-//            @Override
-//            public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-////                    ContentValues[] values = SerieDbUtils.getOnTheAirContentValues(response.body().getResults());
-////                    InsertOnTheAirSeries insertOnTheAirSeries = new InsertOnTheAirSeries(getContext());
-////                    insertOnTheAirSeries.execute(values);
-//                } else if (response.errorBody() != null) {
-//                    response.errorBody().close();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
-//            }
-//        });
+        final SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);
+
+        Call<Series> popularSeriesCall = seriesApiService.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
+
+        popularSeriesCall.enqueue(new Callback<Series>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    WorkerUtils.InsertPopularSeries popularSeries = new WorkerUtils.InsertPopularSeries(database);
+                    popularSeries.execute(response.body().getResults());
+                } else if (response.errorBody() != null) {
+                    response.errorBody().close();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
+            }
+        });
+
+        Call<Series> topSeriesCall = seriesApiService.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
+
+        topSeriesCall.enqueue(new Callback<Series>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    WorkerUtils.InsertTopSeries topSeries = new WorkerUtils.InsertTopSeries(database);
+                    topSeries.execute(response.body().getResults());
+                } else if (response.errorBody() != null) {
+                    response.errorBody().close();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
+            }
+        });
+
+        Call<Series> onTheAirCall = seriesApiService.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY);
+
+        onTheAirCall.enqueue(new Callback<Series>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    WorkerUtils.InsertOnTheAirSeries onTheAirSeries = new WorkerUtils.InsertOnTheAirSeries(database);
+                    onTheAirSeries.execute(response.body().getResults());
+                } else if (response.errorBody() != null) {
+                    response.errorBody().close();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
+            }
+        });
         return Result.success();
     }
 }

@@ -3,6 +3,8 @@ package com.lineargs.watchnext.workers;
 import android.os.AsyncTask;
 
 import com.lineargs.watchnext.api.movies.Result;
+import com.lineargs.watchnext.api.series.SeriesDetails;
+import com.lineargs.watchnext.data.Series;
 import com.lineargs.watchnext.data.WatchNextDatabase;
 import com.lineargs.watchnext.utils.MovieUtils;
 
@@ -139,6 +141,102 @@ class WorkerUtils {
                 }
                 movies.setType(3);
                 database.moviesDao().insert(movies);
+            }
+            return null;
+        }
+    }
+
+    static class InsertPopularSeries extends AsyncTask<List<SeriesDetails>, Void, Void> {
+
+        private final WatchNextDatabase database;
+
+        InsertPopularSeries(WatchNextDatabase database) {
+            this.database = database;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<SeriesDetails>... lists) {
+            List<SeriesDetails> resultList = lists[0];
+            Series series = new Series();
+            for (SeriesDetails result : resultList) {
+                series.setTmdbId(result.getId());
+                series.setBackdropPath(IMAGE_SMALL_BASE + result.getBackdropPath());
+                series.setPosterPath(IMAGE_SMALL_BASE + result.getPosterPath());
+                series.setVoteAverage(MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
+                series.setTitle(result.getName());
+                series.setOverview(result.getOverview());
+                try {
+                    series.setReleaseDate(MovieUtils.getNormalizedReleaseDate(result.getFirstAirDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                series.setType(0);
+                database.seriesDao().insert(series);
+            }
+            return null;
+        }
+    }
+
+    static class InsertTopSeries extends AsyncTask<List<SeriesDetails>, Void, Void> {
+
+        private final WatchNextDatabase database;
+
+        InsertTopSeries(WatchNextDatabase database) {
+            this.database = database;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<SeriesDetails>... lists) {
+            List<SeriesDetails> resultList = lists[0];
+            Series series = new Series();
+            for (SeriesDetails result : resultList) {
+                series.setTmdbId(result.getId());
+                series.setBackdropPath(IMAGE_SMALL_BASE + result.getBackdropPath());
+                series.setPosterPath(IMAGE_SMALL_BASE + result.getPosterPath());
+                series.setVoteAverage(MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
+                series.setTitle(result.getName());
+                series.setOverview(result.getOverview());
+                try {
+                    series.setReleaseDate(MovieUtils.getNormalizedReleaseDate(result.getFirstAirDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                series.setType(1);
+                database.seriesDao().insert(series);
+            }
+            return null;
+        }
+    }
+
+    static class InsertOnTheAirSeries extends AsyncTask<List<SeriesDetails>, Void, Void> {
+
+        private final WatchNextDatabase database;
+
+        InsertOnTheAirSeries(WatchNextDatabase database) {
+            this.database = database;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<SeriesDetails>... lists) {
+            List<SeriesDetails> resultList = lists[0];
+            Series series = new Series();
+            for (SeriesDetails result : resultList) {
+                series.setTmdbId(result.getId());
+                series.setBackdropPath(IMAGE_SMALL_BASE + result.getBackdropPath());
+                series.setPosterPath(IMAGE_SMALL_BASE + result.getPosterPath());
+                series.setVoteAverage(MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
+                series.setTitle(result.getName());
+                series.setOverview(result.getOverview());
+                try {
+                    series.setReleaseDate(MovieUtils.getNormalizedReleaseDate(result.getFirstAirDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                series.setType(2);
+                database.seriesDao().insert(series);
             }
             return null;
         }
