@@ -8,16 +8,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ShareCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ShareCompat;
+
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -131,12 +129,7 @@ public final class ServiceUtils {
             if (imdbId != null) {
                 if (!imdbId.equals("0")) {
                     imdbButton.setEnabled(true);
-                    imdbButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openImdb(imdbId, v.getContext());
-                        }
-                    });
+                    imdbButton.setOnClickListener(v -> openImdb(imdbId, v.getContext()));
                 } else {
                     imdbButton.setEnabled(false);
                 }
@@ -189,12 +182,7 @@ public final class ServiceUtils {
             return;
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchGoogle(v.getContext(), title);
-            }
-        });
+        button.setOnClickListener(v -> searchGoogle(v.getContext(), title));
     }
 
     /**
@@ -232,40 +220,7 @@ public final class ServiceUtils {
             return;
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchYouTube(v.getContext(), title);
-            }
-        });
-    }
-
-    /**
-     * Helper method used for setting up the Comments button. If there is no button there is
-     * nothing to set up, if  MovieID does not exist in Review table then there is no point opening
-     * empty activity
-     *
-     * @param context Activity context
-     * @param movieId MovieID
-     * @param button  View
-     */
-    public static void setUpCommentsButton(Context context, String movieId, View button) {
-        if (button != null && !DbUtils.checkForId(context, movieId, DataContract.Review.CONTENT_URI)) {
-            button.setEnabled(false);
-        }
-    }
-
-    /**
-     * Helper method used for setting up the Videos button. If there is no button there is
-     * nothing to set up.
-     *
-     * @param videosListSize      The size of the Videos list returned from the database
-     * @param button  View
-     */
-    public static void setUpVideosButton(int videosListSize, View button) {
-        if (button != null && videosListSize == 0) {
-            button.setEnabled(false);
-        }
+        button.setOnClickListener(v -> searchYouTube(v.getContext(), title));
     }
 
     /**
@@ -323,12 +278,7 @@ public final class ServiceUtils {
             return;
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchGooglePlay(v.getContext(), title);
-            }
-        });
+        button.setOnClickListener(v -> searchGooglePlay(v.getContext(), title));
     }
 
     /**
