@@ -23,6 +23,11 @@ public final class Constants {
 
     public static final String EPISODES = "episodes";
 
+    public static final int SYNC_NOTIFICATION_ID = 29101988;
+
+    /* Static variable for our poster and backdrop path*/
+    public static final String IMAGE_SMALL_BASE = "https://image.tmdb.org/t/p/w500";
+
     private Constants() {
     }
 }

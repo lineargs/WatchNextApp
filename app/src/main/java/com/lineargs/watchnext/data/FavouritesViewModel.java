@@ -10,6 +10,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkContinuation;
 import androidx.work.WorkManager;
 
+import com.lineargs.watchnext.workers.CleanUpWorker;
 import com.lineargs.watchnext.workers.SyncNowWorker;
 
 import java.util.List;
@@ -32,8 +33,10 @@ public class FavouritesViewModel extends AndroidViewModel {
     }
 
     public void syncNow() {
-        WorkContinuation continuation = workManager.beginUniqueWork("notification",
-                ExistingWorkPolicy.REPLACE, OneTimeWorkRequest.from(SyncNowWorker.class));
+        WorkContinuation continuation = workManager.beginUniqueWork("sync_now",
+                ExistingWorkPolicy.REPLACE, OneTimeWorkRequest.from(CleanUpWorker.class));
+        OneTimeWorkRequest.Builder syncNowBuilder = new OneTimeWorkRequest.Builder(SyncNowWorker.class);
+        continuation = continuation.then(syncNowBuilder.build());
         continuation.enqueue();
     }
 }

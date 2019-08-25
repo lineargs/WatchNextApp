@@ -34,7 +34,7 @@ import com.lineargs.watchnext.ui.NotificationActivity;
 public class NotificationUtils extends ContextWrapper {
 
     private static final String EPISODES_REMINDER_NOTIFICATION_CHANNEL_ID = "episode_reminder_channel";
-    private static final String SYNC_ADAPTER_CHANNEL_ID = "sync_adapter_channel";
+    private static final String SYNC_ADAPTER_CHANNEL_ID = "sync_work_manager_channel";
     private static final String EPISODES_CHANNEL = "Episodes";
     private static final String SYNC_ADAPTER_CHANNEL = "Adapter";
     private static final String SERIES_CHANNEL_GROUP = "Series";

@@ -3,6 +3,7 @@ package com.lineargs.watchnext.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -34,4 +35,7 @@ public interface MoviesDao {
 
     @Query("SELECT * FROM movies WHERE tmdb_id LIKE :tmdbId")
     LiveData<Movies> getMovie(int tmdbId);
+
+    @Query("DELETE FROM movies")
+    void deleteAllMovies();
 }

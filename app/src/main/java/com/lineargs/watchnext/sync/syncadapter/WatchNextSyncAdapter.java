@@ -36,6 +36,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.lineargs.watchnext.utils.Constants.SYNC_NOTIFICATION_ID;
+
 /**
  * Created by goranminov on 02/12/2017.
  * <p>
@@ -54,8 +56,6 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String PATH_UPCOMING = "upcoming";
     private static final String PATH_THEATER = "now_playing";
     private static final String PATH_ON_THE_AIR = "on_the_air";
-
-    private static final int SYNC_NOTIFICATION_ID = 29101988;
 
     private static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -131,7 +131,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
         String language = Locale.getDefault().toString();
         language = language.replace('_', '-');
         Log.w("Language", language);
-        String region = language.substring(language.indexOf('-') + 1, language.length());
+        String region = language.substring(language.indexOf('-') + 1);
         Log.w("Region", region);
         Log.w("Locale", Locale.getDefault().getLanguage());
         Call<Movies> popularCall = movieApiService.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, region);

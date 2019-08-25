@@ -24,7 +24,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
     static final int DB_VERSION = VERSION_42_ROOM;
 
-    static WatchNextDatabase getDatabase(final Context context) {
+    public static WatchNextDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (WatchNextDatabase.class) {
                 if (INSTANCE == null) {
