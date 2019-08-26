@@ -12,6 +12,7 @@ import com.lineargs.watchnext.api.movies.Movies;
 import com.lineargs.watchnext.api.series.Series;
 import com.lineargs.watchnext.api.series.SeriesApiService;
 import com.lineargs.watchnext.data.WatchNextDatabase;
+import com.lineargs.watchnext.utils.NotificationUtils;
 
 import java.util.Locale;
 
@@ -21,7 +22,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SyncNowWorker extends Worker {
+import static com.lineargs.watchnext.utils.Constants.SYNC_NOTIFICATION_ID;
+
+public class SyncWorker extends Worker {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String PATH_POPULAR = "popular";
@@ -43,7 +46,7 @@ public class SyncNowWorker extends Worker {
      * @param context      the application {@link Context}
      * @param workerParams the set of {@link WorkerParameters}
      */
-    public SyncNowWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public SyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
@@ -52,6 +55,9 @@ public class SyncNowWorker extends Worker {
     public Result doWork() {
         Context applicationContext = getApplicationContext();
         database = WatchNextDatabase.getDatabase(applicationContext);
+        NotificationUtils.syncProgress(SYNC_NOTIFICATION_ID, applicationContext);
+        database.moviesDao().deleteAllMovies();
+        database.seriesDao().deleteAllSeries();
         final MovieApiService movieApiService = retrofit.create(MovieApiService.class);
 
         String language = Locale.getDefault().toString();
@@ -191,6 +197,7 @@ public class SyncNowWorker extends Worker {
             public void onFailure(@NonNull Call<Series> call, @NonNull Throwable t) {
             }
         });
+        NotificationUtils.clearNotification(SYNC_NOTIFICATION_ID, applicationContext);
         return Result.success();
     }
 }

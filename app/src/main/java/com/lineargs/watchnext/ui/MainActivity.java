@@ -88,17 +88,17 @@ public class MainActivity extends BaseTopActivity implements MainAdapter.OnItemC
         favouritesViewModel = ViewModelProviders.of(this).get(FavouritesViewModel.class);
         favouritesViewModel.getFavourites().observe(this, this::loadData);
         if (isConnected()) {
-            syncWorkerNow();
+            scheduleWorker();
         }
     }
 
-    private void syncWorkerNow() {
+    private void scheduleWorker() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String locale = Locale.getDefault().toString();
         if (!sharedPreferences
                 .getString(getString(R.string.pref_locale_key), "").contains(locale)) {
             sharedPreferences.edit().putString(getString(R.string.pref_locale_key), locale).apply();
-            favouritesViewModel.syncNow();
+            favouritesViewModel.periodicSync();
         }
     }
 

@@ -5,26 +5,25 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkContinuation;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.lineargs.watchnext.workers.CleanUpWorker;
-import com.lineargs.watchnext.workers.SyncNowWorker;
+import com.lineargs.watchnext.workers.SyncWorker;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class FavouritesViewModel extends AndroidViewModel {
 
-    private WatchNextRepository repository;
     private WorkManager workManager;
     private LiveData<List<Favourites>> favourites;
 
     public FavouritesViewModel(@NonNull Application application) {
         super(application);
         workManager = WorkManager.getInstance(application);
-        repository = new WatchNextRepository(application);
+        WatchNextRepository repository = new WatchNextRepository(application);
         favourites = repository.getFavourites();
     }
 
@@ -32,11 +31,16 @@ public class FavouritesViewModel extends AndroidViewModel {
         return favourites;
     }
 
-    public void syncNow() {
-        WorkContinuation continuation = workManager.beginUniqueWork("sync_now",
-                ExistingWorkPolicy.REPLACE, OneTimeWorkRequest.from(CleanUpWorker.class));
-        OneTimeWorkRequest.Builder syncNowBuilder = new OneTimeWorkRequest.Builder(SyncNowWorker.class);
-        continuation = continuation.then(syncNowBuilder.build());
-        continuation.enqueue();
+    public void periodicSync() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresCharging(true)
+                .build();
+
+        PeriodicWorkRequest periodicSyncWorker = new PeriodicWorkRequest.Builder(SyncWorker.class,
+                24, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .build();
+        workManager.enqueueUniquePeriodicWork("periodic_sync",
+                ExistingPeriodicWorkPolicy.REPLACE, periodicSyncWorker);
     }
 }
