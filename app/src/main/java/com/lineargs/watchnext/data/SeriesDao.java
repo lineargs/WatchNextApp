@@ -31,4 +31,7 @@ public interface SeriesDao {
 
     @Query("SELECT * FROM series WHERE tmdb_id LIKE :tmdbId")
     LiveData<Series> getSeries(int tmdbId);
+
+    @Query("DELETE FROM series")
+    void deleteAllSeries();
 }

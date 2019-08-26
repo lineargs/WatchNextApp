@@ -68,6 +68,8 @@ dependencies {
     /* Lifecycle https://developer.android.com/topic/libraries/architecture/adding-components#lifecycle*/
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+    /* WorkManager https://developer.android.com/jetpack/androidx/releases/work#declaring_dependencies*/
+    implementation "androidx.work:work-runtime:$rootProject.workVersion"
     /* We use this import for Material Preference theme */
     implementation "androidx.legacy:legacy-preference-v14:$rootProject.legacyPreferenceV14Version"
     /* Firebase firebase.google.com/docs/android/setup#available_libraries*/
@@ -90,6 +92,8 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
 
     /* Testing only dependencies */
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    androidTestImplementation "androidx.work:work-testing:$rootProject.workVersion"
 
     // Local unit tests
     testImplementation "junit:junit:$rootProject.junitVersion"
@@ -100,7 +104,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

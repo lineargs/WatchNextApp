@@ -112,30 +112,6 @@
                 android:resource="@xml/app_widget_info" />
         </receiver>
 
-        <!-- SyncAdapter -->
-        <service
-            android:name=".sync.syncadapter.WatchNextAuthenticatorService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-        </service>
-        <service
-            android:name=".sync.syncadapter.WatchNextSyncService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
-        </service>
-
         <!-- Firebase Job Service -->
         <service
             android:name=".jobs.ReminderFirebaseJobService"

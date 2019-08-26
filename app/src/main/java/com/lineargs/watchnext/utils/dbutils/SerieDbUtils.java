@@ -2,10 +2,9 @@ package com.lineargs.watchnext.utils.dbutils;
 
 import android.content.ContentValues;
 
+import com.lineargs.watchnext.api.series.seasondetails.Episode;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.MovieUtils;
-import com.lineargs.watchnext.api.series.SeriesDetails;
-import com.lineargs.watchnext.api.series.seasondetails.Episode;
 
 import java.text.ParseException;
 import java.util.List;
@@ -24,136 +23,6 @@ public class SerieDbUtils {
 
     /* Static variable for our poster and backdrop path*/
     private static final String IMAGE_MEDIUM_BASE = "https://image.tmdb.org/t/p/w500";
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
-     * @param seriesDetail List used to get the values from our API response
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues[] getPopularContentValues(List<SeriesDetails> seriesDetail) {
-        int i = 0;
-        ContentValues[] values = new ContentValues[seriesDetail.size()];
-        for (SeriesDetails seriesDetails : seriesDetail) {
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesDetails.getId());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesDetails.getName());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesDetails.getOverview());
-            try {
-                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesDetails.getFirstAirDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesDetails.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getBackdropPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesDetails.getOriginalLanguage());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesDetails.getOriginalName());
-
-            values[i] = contentValues;
-            i++;
-        }
-
-        return values;
-    }
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
-     * @param seriesDetail List used to get the values from our API response
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues[] getTopContentValues(List<SeriesDetails> seriesDetail) {
-        int i = 0;
-        ContentValues[] values = new ContentValues[seriesDetail.size()];
-        for (SeriesDetails seriesDetails : seriesDetail) {
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesDetails.getId());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesDetails.getName());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesDetails.getOverview());
-            try {
-                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesDetails.getFirstAirDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesDetails.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getBackdropPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesDetails.getOriginalLanguage());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesDetails.getOriginalName());
-
-            values[i] = contentValues;
-            i++;
-        }
-
-        return values;
-    }
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
-     * @param seriesDetail List used to get the values from our API response
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues[] getOnTheAirContentValues(List<SeriesDetails> seriesDetail) {
-        int i = 0;
-        ContentValues[] values = new ContentValues[seriesDetail.size()];
-        for (SeriesDetails seriesDetails : seriesDetail) {
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesDetails.getId());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesDetails.getName());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesDetails.getOverview());
-            try {
-                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesDetails.getFirstAirDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesDetails.getVoteAverage())));
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getPosterPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesDetails.getBackdropPath());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesDetails.getOriginalLanguage());
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesDetails.getOriginalName());
-
-            values[i] = contentValues;
-            i++;
-        }
-
-        return values;
-    }
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
-     * @param result Object used to get the values from our API response
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues[] getSyncTV(SeriesDetails result) {
-
-        ContentValues[] values = new ContentValues[1];
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, result.getId());
-        contentValues.put(DataContract.Favorites.COLUMN_TYPE, 1);
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, result.getName());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, result.getOverview());
-        try {
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(result.getFirstAirDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + result.getPosterPath());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + result.getBackdropPath());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, result.getOriginalLanguage());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, result.getOriginalName());
-
-        values[0] = contentValues;
-
-        return values;
-    }
 
     /**
      * Builds ContentValues[] used for our ContentResolver
