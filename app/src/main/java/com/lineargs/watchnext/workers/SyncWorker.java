@@ -70,7 +70,7 @@ public class SyncWorker extends Worker {
             public void onResponse(@NonNull Call<Movies> call, @NonNull final Response<Movies> response) {
 
                 if (response.isSuccessful() && response.body() != null) {
-                    WorkerUtils.InsertPopularMovies popularMovies = new WorkerUtils.InsertPopularMovies(database);
+                    SyncWorkerUtils.InsertPopularMovies popularMovies = new SyncWorkerUtils.InsertPopularMovies(database);
                     popularMovies.execute(response.body().getResults());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
@@ -89,7 +89,7 @@ public class SyncWorker extends Worker {
             @Override
             public void onResponse(@NonNull Call<Movies> call, @NonNull final Response<Movies> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    WorkerUtils.InsertUpcomingMovies upcomingMovies = new WorkerUtils.InsertUpcomingMovies(database);
+                    SyncWorkerUtils.InsertUpcomingMovies upcomingMovies = new SyncWorkerUtils.InsertUpcomingMovies(database);
                     upcomingMovies.execute(response.body().getResults());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
@@ -108,7 +108,7 @@ public class SyncWorker extends Worker {
             @Override
             public void onResponse(@NonNull Call<Movies> call, @NonNull final Response<Movies> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    WorkerUtils.InsertTopMovies topMovies = new WorkerUtils.InsertTopMovies(database);
+                    SyncWorkerUtils.InsertTopMovies topMovies = new SyncWorkerUtils.InsertTopMovies(database);
                     topMovies.execute(response.body().getResults());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
@@ -127,7 +127,7 @@ public class SyncWorker extends Worker {
             @Override
             public void onResponse(@NonNull Call<Movies> call, @NonNull final Response<Movies> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    WorkerUtils.InsertTheaterMovies theaterMovies = new WorkerUtils.InsertTheaterMovies(database);
+                    SyncWorkerUtils.InsertTheaterMovies theaterMovies = new SyncWorkerUtils.InsertTheaterMovies(database);
                     theaterMovies.execute(response.body().getResults());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
@@ -148,7 +148,7 @@ public class SyncWorker extends Worker {
             @Override
             public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    WorkerUtils.InsertPopularSeries popularSeries = new WorkerUtils.InsertPopularSeries(database);
+                    SyncWorkerUtils.InsertPopularSeries popularSeries = new SyncWorkerUtils.InsertPopularSeries(database);
                     popularSeries.execute(response.body().getResults());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
@@ -167,7 +167,7 @@ public class SyncWorker extends Worker {
             @Override
             public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    WorkerUtils.InsertTopSeries topSeries = new WorkerUtils.InsertTopSeries(database);
+                    SyncWorkerUtils.InsertTopSeries topSeries = new SyncWorkerUtils.InsertTopSeries(database);
                     topSeries.execute(response.body().getResults());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();
@@ -186,7 +186,7 @@ public class SyncWorker extends Worker {
             @Override
             public void onResponse(@NonNull Call<Series> call, @NonNull Response<Series> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    WorkerUtils.InsertOnTheAirSeries onTheAirSeries = new WorkerUtils.InsertOnTheAirSeries(database);
+                    SyncWorkerUtils.InsertOnTheAirSeries onTheAirSeries = new SyncWorkerUtils.InsertOnTheAirSeries(database);
                     onTheAirSeries.execute(response.body().getResults());
                 } else if (response.errorBody() != null) {
                     response.errorBody().close();

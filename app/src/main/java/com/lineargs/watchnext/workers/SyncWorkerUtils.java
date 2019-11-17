@@ -14,9 +14,9 @@ import java.util.List;
 
 import static com.lineargs.watchnext.utils.Constants.IMAGE_SMALL_BASE;
 
-class WorkerUtils {
+class SyncWorkerUtils {
 
-    private WorkerUtils() {
+    private SyncWorkerUtils() {
     }
 
     static class InsertPopularMovies extends AsyncTask<List<com.lineargs.watchnext.api.movies.Result>, Void, Void> {
