@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCrewAdapter;
-import com.lineargs.watchnext.data.Credits;
-import com.lineargs.watchnext.data.CreditsViewModel;
+import com.lineargs.watchnext.data.credits.Credits;
+import com.lineargs.watchnext.data.credits.CreditsViewModel;
 import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;

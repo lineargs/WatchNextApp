@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Videos;
+import com.lineargs.watchnext.data.videos.Videos;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

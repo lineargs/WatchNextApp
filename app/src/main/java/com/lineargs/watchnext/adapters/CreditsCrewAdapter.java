@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Credits;
+import com.lineargs.watchnext.data.credits.Credits;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.util.List;

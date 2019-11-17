@@ -17,8 +17,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
-import com.lineargs.watchnext.data.Movies;
-import com.lineargs.watchnext.data.TheaterViewModel;
+import com.lineargs.watchnext.data.movies.Movies;
+import com.lineargs.watchnext.data.movies.TheaterViewModel;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.NetworkUtils;
 

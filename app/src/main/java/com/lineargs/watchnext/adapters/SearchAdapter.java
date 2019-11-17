@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Search;
+import com.lineargs.watchnext.data.search.Search;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

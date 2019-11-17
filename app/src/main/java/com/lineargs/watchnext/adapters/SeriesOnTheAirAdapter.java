@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Series;
+import com.lineargs.watchnext.data.series.Series;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.util.List;

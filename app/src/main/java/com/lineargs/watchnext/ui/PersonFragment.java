@@ -18,8 +18,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Person;
-import com.lineargs.watchnext.data.PersonViewModel;
+import com.lineargs.watchnext.data.person.Person;
+import com.lineargs.watchnext.data.person.PersonViewModel;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 

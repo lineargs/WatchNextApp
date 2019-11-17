@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.MoviesViewModel;
+import com.lineargs.watchnext.data.movies.MoviesViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

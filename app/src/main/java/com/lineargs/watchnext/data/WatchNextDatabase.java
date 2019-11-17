@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.data;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +9,26 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.lineargs.watchnext.data.credits.Credits;
+import com.lineargs.watchnext.data.credits.CreditsDao;
+import com.lineargs.watchnext.data.episodes.Episodes;
+import com.lineargs.watchnext.data.favourites.Favourites;
+import com.lineargs.watchnext.data.favourites.FavouritesDao;
+import com.lineargs.watchnext.data.movies.Movies;
+import com.lineargs.watchnext.data.movies.MoviesDao;
+import com.lineargs.watchnext.data.person.Person;
+import com.lineargs.watchnext.data.person.PersonDao;
+import com.lineargs.watchnext.data.reviews.Reviews;
+import com.lineargs.watchnext.data.reviews.ReviewsDao;
+import com.lineargs.watchnext.data.search.Search;
+import com.lineargs.watchnext.data.search.SearchDao;
+import com.lineargs.watchnext.data.seasons.Seasons;
+import com.lineargs.watchnext.data.seasons.SeasonsDao;
+import com.lineargs.watchnext.data.series.Series;
+import com.lineargs.watchnext.data.series.SeriesDao;
+import com.lineargs.watchnext.data.videos.Videos;
+import com.lineargs.watchnext.data.videos.VideosDao;
 
 @Database(entities = {Credits.class, Episodes.class, Favourites.class,
         Movies.class, Person.class, Reviews.class, Search.class,
@@ -30,12 +49,8 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             WatchNextDatabase.class, "watchnext.db")
-                            //TODO Remove callback implementation, here only for testing
-//                            .addCallback(callback)
                             .addMigrations(
                                     MIGRATION_41_42
-//                                    MIGRATION_42_43
-                                    //MIGRATION_43_44
                             )
                             .build();
                 }
@@ -143,110 +158,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             Log.e("SUCCESS", "MIGRATION SUCCESS");
         }
     };
-
-    /**
-     * Testing purposes only
-     */
-    /*
-    private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
-            new PopulateDbAsync(INSTANCE).execute();
-        }
-    };
-
-     */
-
-    /**
-     * Testing purposes only
-     * Populate the database in the background.
-     */
-    /*
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-
-        private final MoviesDao dao;
-        private final SeriesDao seriesDao;
-        Movies popularMovie = new Movies();
-        Movies topMovie = new Movies();
-        Movies upcomingMovie = new Movies();
-        Movies theatreMovie = new Movies();
-        Series popularSeries = new Series();
-        Series topSeries = new Series();
-
-        PopulateDbAsync(WatchNextDatabase db) {
-            dao = db.moviesDao();
-            seriesDao = db.seriesDao();
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            popularMovie.setTmdbId(301527);
-            popularMovie.setVoteAverage("");
-            popularMovie.setTitle("Popular");
-            popularMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            popularMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            popularMovie.setOverview("Overview");
-            popularMovie.setReleaseDate("");
-            popularMovie.setType(0);
-            dao.insert(popularMovie);
-            topMovie.setTmdbId(301528);
-            topMovie.setVoteAverage("");
-            topMovie.setTitle("Top Rated");
-            topMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            topMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            topMovie.setOverview("Overview");
-            topMovie.setReleaseDate("");
-            topMovie.setType(1);
-            dao.insert(topMovie);
-            upcomingMovie.setTmdbId(301529);
-            upcomingMovie.setVoteAverage("");
-            upcomingMovie.setTitle("Upcoming");
-            upcomingMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            upcomingMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            upcomingMovie.setOverview("Overview");
-            upcomingMovie.setReleaseDate("");
-            upcomingMovie.setType(2);
-            dao.insert(upcomingMovie);
-            theatreMovie.setTmdbId(301526);
-            theatreMovie.setVoteAverage("");
-            theatreMovie.setTitle("Theater");
-            theatreMovie.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            theatreMovie.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-            theatreMovie.setOverview("Overview");
-            theatreMovie.setReleaseDate("");
-            theatreMovie.setType(3);
-            dao.insert(theatreMovie);
-            popularSeries.setTitle("Popular");
-            popularSeries.setReleaseDate("");
-            popularSeries.setPosterPath("https://image.tmdb.org/t/p/w500/fki3kBlwJzFp8QohL43g9ReV455.jpg");
-            popularSeries.setBackdropPath("https://image.tmdb.org/t/p/w500/fki3kBlwJzFp8QohL43g9ReV455.jpg");
-            popularSeries.setTmdbId(60735);
-            popularSeries.setVoteAverage("7.2");
-            popularSeries.setOverview("When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.");
-            popularSeries.setType(0);
-            topSeries.setTitle("Popular");
-            topSeries.setReleaseDate("");
-            topSeries.setPosterPath("https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
-            topSeries.setBackdropPath("https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg");
-            topSeries.setTmdbId(66732);
-            topSeries.setVoteAverage("10.0");
-            topSeries.setOverview("When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.");
-            topSeries.setType(1);
-            seriesDao.insert(popularSeries);
-            seriesDao.insert(topSeries);
-//            favourites.setTmdbId(301528);
-//            favourites.setVoteAverage("");
-//            favourites.setTitle("Fav");
-//            favourites.setPosterPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-//            favourites.setBackdropPath("https://image.tmdb.org/t/p/w500/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg");
-//            favourites.setOverview("Overview");
-//            favourites.setReleaseDate("");
-//            favouritesDao.insert(favourites);
-            return null;
-        }
-    }
-     */
 
     public abstract MoviesDao moviesDao();
 

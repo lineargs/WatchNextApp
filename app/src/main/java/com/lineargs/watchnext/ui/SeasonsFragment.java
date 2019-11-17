@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
-import com.lineargs.watchnext.data.Seasons;
-import com.lineargs.watchnext.data.SeasonsViewModel;
+import com.lineargs.watchnext.data.seasons.Seasons;
+import com.lineargs.watchnext.data.seasons.SeasonsViewModel;
 import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;

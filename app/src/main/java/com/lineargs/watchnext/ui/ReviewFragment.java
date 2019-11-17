@@ -18,8 +18,8 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ReviewAdapter;
-import com.lineargs.watchnext.data.Reviews;
-import com.lineargs.watchnext.data.ReviewsViewModel;
+import com.lineargs.watchnext.data.reviews.Reviews;
+import com.lineargs.watchnext.data.reviews.ReviewsViewModel;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 

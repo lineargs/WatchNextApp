@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SearchAdapter;
-import com.lineargs.watchnext.data.Search;
-import com.lineargs.watchnext.data.SearchViewModel;
+import com.lineargs.watchnext.data.search.Search;
+import com.lineargs.watchnext.data.search.SearchViewModel;
 import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;

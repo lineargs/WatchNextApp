@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Series;
+import com.lineargs.watchnext.data.series.Series;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

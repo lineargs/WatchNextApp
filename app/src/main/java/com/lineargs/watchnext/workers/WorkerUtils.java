@@ -4,8 +4,9 @@ import android.os.AsyncTask;
 
 import com.lineargs.watchnext.api.movies.Result;
 import com.lineargs.watchnext.api.series.SeriesDetails;
-import com.lineargs.watchnext.data.Series;
+import com.lineargs.watchnext.data.series.Series;
 import com.lineargs.watchnext.data.WatchNextDatabase;
+import com.lineargs.watchnext.data.movies.Movies;
 import com.lineargs.watchnext.utils.MovieUtils;
 
 import java.text.ParseException;
@@ -30,7 +31,7 @@ class WorkerUtils {
         @Override
         protected final Void doInBackground(List<com.lineargs.watchnext.api.movies.Result>... lists) {
             List<com.lineargs.watchnext.api.movies.Result> resultList = lists[0];
-            com.lineargs.watchnext.data.Movies movies = new com.lineargs.watchnext.data.Movies();
+            Movies movies = new Movies();
             for (com.lineargs.watchnext.api.movies.Result result : resultList) {
                 movies.setTmdbId(result.getId());
                 movies.setBackdropPath(IMAGE_SMALL_BASE + result.getBackdropPath());
@@ -62,7 +63,7 @@ class WorkerUtils {
         @Override
         protected final Void doInBackground(List<com.lineargs.watchnext.api.movies.Result>... lists) {
             List<com.lineargs.watchnext.api.movies.Result> resultList = lists[0];
-            com.lineargs.watchnext.data.Movies movies = new com.lineargs.watchnext.data.Movies();
+            Movies movies = new Movies();
             for (com.lineargs.watchnext.api.movies.Result result : resultList) {
                 movies.setTmdbId(result.getId());
                 movies.setBackdropPath(IMAGE_SMALL_BASE + result.getBackdropPath());
@@ -94,7 +95,7 @@ class WorkerUtils {
         @Override
         protected final Void doInBackground(List<com.lineargs.watchnext.api.movies.Result>... lists) {
             List<com.lineargs.watchnext.api.movies.Result> resultList = lists[0];
-            com.lineargs.watchnext.data.Movies movies = new com.lineargs.watchnext.data.Movies();
+            Movies movies = new Movies();
             for (com.lineargs.watchnext.api.movies.Result result : resultList) {
                 movies.setTmdbId(result.getId());
                 movies.setBackdropPath(IMAGE_SMALL_BASE + result.getBackdropPath());
@@ -126,7 +127,7 @@ class WorkerUtils {
         @Override
         protected final Void doInBackground(List<com.lineargs.watchnext.api.movies.Result>... lists) {
             List<com.lineargs.watchnext.api.movies.Result> resultList = lists[0];
-            com.lineargs.watchnext.data.Movies movies = new com.lineargs.watchnext.data.Movies();
+            Movies movies = new Movies();
             for (com.lineargs.watchnext.api.movies.Result result : resultList) {
                 movies.setTmdbId(result.getId());
                 movies.setBackdropPath(IMAGE_SMALL_BASE + result.getBackdropPath());

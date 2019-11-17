@@ -11,6 +11,24 @@ import com.lineargs.watchnext.api.movies.ReviewsResult;
 import com.lineargs.watchnext.api.search.SearchResults;
 import com.lineargs.watchnext.api.series.seriesdetails.Season;
 import com.lineargs.watchnext.api.videos.VideoDetails;
+import com.lineargs.watchnext.data.credits.Credits;
+import com.lineargs.watchnext.data.credits.CreditsDao;
+import com.lineargs.watchnext.data.favourites.Favourites;
+import com.lineargs.watchnext.data.favourites.FavouritesDao;
+import com.lineargs.watchnext.data.movies.Movies;
+import com.lineargs.watchnext.data.movies.MoviesDao;
+import com.lineargs.watchnext.data.person.Person;
+import com.lineargs.watchnext.data.person.PersonDao;
+import com.lineargs.watchnext.data.reviews.Reviews;
+import com.lineargs.watchnext.data.reviews.ReviewsDao;
+import com.lineargs.watchnext.data.search.Search;
+import com.lineargs.watchnext.data.search.SearchDao;
+import com.lineargs.watchnext.data.seasons.Seasons;
+import com.lineargs.watchnext.data.seasons.SeasonsDao;
+import com.lineargs.watchnext.data.series.Series;
+import com.lineargs.watchnext.data.series.SeriesDao;
+import com.lineargs.watchnext.data.videos.Videos;
+import com.lineargs.watchnext.data.videos.VideosDao;
 import com.lineargs.watchnext.utils.MovieUtils;
 
 import java.util.List;
@@ -39,7 +57,7 @@ public class WatchNextRepository {
     private LiveData<List<Favourites>> favourites;
     private LiveData<List<Search>> searchResults;
 
-    WatchNextRepository(Application application) {
+    public WatchNextRepository(Application application) {
         WatchNextDatabase database = WatchNextDatabase.getDatabase(application);
         moviesDao = database.moviesDao();
         popularMovies = moviesDao.getPopularMovies();
@@ -62,65 +80,65 @@ public class WatchNextRepository {
     }
 
     //Movies
-    LiveData<Movies> getMovie(int tmdbId) {
+    public LiveData<Movies> getMovie(int tmdbId) {
         return moviesDao.getMovie(tmdbId);
     }
 
-    LiveData<List<Movies>> getPopularMovies() {
+    public LiveData<List<Movies>> getPopularMovies() {
         return popularMovies;
     }
 
-    LiveData<List<Movies>> getTopRatedMovies() {
+    public LiveData<List<Movies>> getTopRatedMovies() {
         return topRatedMovies;
     }
 
-    LiveData<List<Movies>> getUpcomingMovies() {
+    public LiveData<List<Movies>> getUpcomingMovies() {
         return upcomingMovies;
     }
 
-    LiveData<List<Movies>> getTheatreMovies() {
+    public LiveData<List<Movies>> getTheatreMovies() {
         return theatreMovies;
     }
 
-    void insertMovie(Movies movies) {
+    public void insertMovie(Movies movies) {
         new InsertMoviesTask(moviesDao).execute(movies);
     }
 
-    void updateMovie(Movies movies) {
+    public void updateMovie(Movies movies) {
         new UpdateMovieTask(moviesDao).execute(movies);
     }
 
     //Series
-    LiveData<List<Series>> getPopularSeries() {
+    public LiveData<List<Series>> getPopularSeries() {
         return popularSeries;
     }
 
-    LiveData<List<Series>> getTopRatedSeries() {
+    public LiveData<List<Series>> getTopRatedSeries() {
         return topRatedSeries;
     }
 
-    LiveData<List<Series>> getOnTheAirSeries() {
+    public LiveData<List<Series>> getOnTheAirSeries() {
         return onTheAirSeries;
     }
 
-    void insertSeries(Series series) {
+    public void insertSeries(Series series) {
         new InsertSeriesTask(seriesDao).execute(series);
     }
 
-    void updateSeries(Series series) {
+    public void updateSeries(Series series) {
         new UpdateSeriesTask(seriesDao).execute(series);
     }
 
-    LiveData<Series> getSeries(int tmdbId) {
+    public LiveData<Series> getSeries(int tmdbId) {
         return seriesDao.getSeries(tmdbId);
     }
 
-    void insertSeasons(List<Season> seasons, String name, int tmdbId) {
+    public void insertSeasons(List<Season> seasons, String name, int tmdbId) {
         //noinspection unchecked
         new InsertSeasonsTask(seasonsDao, name, tmdbId).execute(seasons);
     }
 
-    LiveData<List<Seasons>> getSeasons(int tmdbId) {
+    public LiveData<List<Seasons>> getSeasons(int tmdbId) {
         return seasonsDao.getSeasons(tmdbId);
     }
 
@@ -129,58 +147,60 @@ public class WatchNextRepository {
         return favourites;
     }
 
-    public void insertFavourites (Favourites favourites) {favouritesDao.insert(favourites);}
+    public void insertFavourites(Favourites favourites) {
+        favouritesDao.insert(favourites);
+    }
 
     //Videos
-    LiveData<List<Videos>> getVideos(int tmdbId) {
+    public LiveData<List<Videos>> getVideos(int tmdbId) {
         return videosDao.getVideos(tmdbId);
     }
 
-    void insertVideos(com.lineargs.watchnext.api.videos.Videos videos, int tmdbId) {
+    public void insertVideos(com.lineargs.watchnext.api.videos.Videos videos, int tmdbId) {
         new InsertVideosTask(videosDao, tmdbId).execute(videos);
     }
 
     //Reviews
-    LiveData<List<Reviews>> getReviews(int tmdbId) {
+    public LiveData<List<Reviews>> getReviews(int tmdbId) {
         return reviewsDao.getReviews(tmdbId);
     }
 
-    void insertReviews(com.lineargs.watchnext.api.movies.Reviews reviews, int tmdbId) {
+    public void insertReviews(com.lineargs.watchnext.api.movies.Reviews reviews, int tmdbId) {
         new InsertReviewsTask(reviewsDao, tmdbId).execute(reviews);
     }
 
     //Credits
-    LiveData<List<Credits>> getCast(int tmdbId) {
+    public LiveData<List<Credits>> getCast(int tmdbId) {
         return creditsDao.getAllCast(tmdbId);
     }
 
-    LiveData<List<Credits>> getCrew(int tmdbId) {
+    public LiveData<List<Credits>> getCrew(int tmdbId) {
         return creditsDao.getAllCrew(tmdbId);
     }
 
-    void insertCast(com.lineargs.watchnext.api.credits.Credits credits, int tmdbId) {
+    public void insertCast(com.lineargs.watchnext.api.credits.Credits credits, int tmdbId) {
         new InsertCastTask(creditsDao, tmdbId).execute(credits);
     }
 
-    void insertCrew(com.lineargs.watchnext.api.credits.Credits credits, int tmdbId) {
+    public void insertCrew(com.lineargs.watchnext.api.credits.Credits credits, int tmdbId) {
         new InsertCrewTask(creditsDao, tmdbId).execute(credits);
     }
 
     //Person
-    void insertPerson(Person person) {
+    public void insertPerson(Person person) {
         new InsertPersonTask(personDao).execute(person);
     }
 
-    LiveData<Person> getPerson(int personId) {
+    public LiveData<Person> getPerson(int personId) {
         return personDao.getPerson(personId);
     }
 
     //Search
-    LiveData<List<Search>> getSearchResults() {
+    public LiveData<List<Search>> getSearchResults() {
         return searchResults;
     }
 
-    void insertSearch(List<SearchResults> results) {//noinspection unchecked
+    public void insertSearch(List<SearchResults> results) {//noinspection unchecked
         new InsertSearchTask(searchDao).execute(results);
     }
 

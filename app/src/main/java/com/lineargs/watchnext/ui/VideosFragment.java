@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
-import com.lineargs.watchnext.data.Videos;
-import com.lineargs.watchnext.data.VideosViewModel;
+import com.lineargs.watchnext.data.videos.Videos;
+import com.lineargs.watchnext.data.videos.VideosViewModel;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 

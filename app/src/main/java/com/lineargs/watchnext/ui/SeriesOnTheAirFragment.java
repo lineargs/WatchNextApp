@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeriesOnTheAirAdapter;
-import com.lineargs.watchnext.data.Series;
-import com.lineargs.watchnext.data.SeriesViewModel;
+import com.lineargs.watchnext.data.series.Series;
+import com.lineargs.watchnext.data.series.SeriesViewModel;
 import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;

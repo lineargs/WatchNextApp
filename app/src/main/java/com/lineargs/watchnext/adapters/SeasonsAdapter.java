@@ -12,7 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Seasons;
+import com.lineargs.watchnext.data.seasons.Seasons;
 import com.lineargs.watchnext.tools.SeasonTools;
 import com.squareup.picasso.Picasso;
 

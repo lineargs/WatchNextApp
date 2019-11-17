@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.crashlytics.android.Crashlytics;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MainAdapter;
-import com.lineargs.watchnext.data.Favourites;
-import com.lineargs.watchnext.data.FavouritesViewModel;
+import com.lineargs.watchnext.data.favourites.Favourites;
+import com.lineargs.watchnext.data.favourites.FavouritesViewModel;
 
 import java.util.List;
 import java.util.Locale;

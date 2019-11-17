@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MoviesUpcomingAdapter;
-import com.lineargs.watchnext.data.Movies;
-import com.lineargs.watchnext.data.MoviesViewModel;
+import com.lineargs.watchnext.data.movies.Movies;
+import com.lineargs.watchnext.data.movies.MoviesViewModel;
 import com.lineargs.watchnext.utils.Constants;
 
 import java.util.List;

@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Reviews;
+import com.lineargs.watchnext.data.reviews.Reviews;
 
 import java.util.List;
 
