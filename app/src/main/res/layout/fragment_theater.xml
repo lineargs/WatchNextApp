@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.lineargs.watchnext.ui.TheaterFragment">
+    tools:context="com.lineargs.watchnext.ui.movies.TheaterFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/theater_recycler_view"

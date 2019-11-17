@@ -25,7 +25,7 @@
         android:theme="@style/WatchNext.Grey">
 
         <!-- Activities -->
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,13 +36,13 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity android:name=".ui.TheaterActivity" />
-        <activity android:name=".ui.MovieDetailsActivity" />
-        <activity android:name=".ui.SeriesDetailsActivity" />
-        <activity android:name=".ui.TabbedSeriesActivity" />
-        <activity android:name=".ui.TabbedMoviesActivity" />
+        <activity android:name=".ui.movies.TheaterActivity" />
+        <activity android:name=".ui.movies.MovieDetailsActivity" />
+        <activity android:name=".ui.series.SeriesDetailsActivity" />
+        <activity android:name=".ui.series.TabbedSeriesActivity" />
+        <activity android:name=".ui.movies.TabbedMoviesActivity" />
         <activity
-            android:name=".ui.SearchActivity"
+            android:name=".ui.search.SearchActivity"
             android:launchMode="singleTop"
             android:theme="@style/WatchNext.Search">
             <meta-data
@@ -54,31 +54,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".ui.ReviewActivity" />
-        <activity android:name=".ui.CreditsCastActivity" />
-        <activity android:name=".ui.CreditsCrewActivity" />
-        <activity android:name=".ui.VideosActivity" />
-        <activity android:name=".ui.SeasonsActivity" />
-        <activity android:name=".ui.EpisodesActivity" />
-        <activity android:name=".ui.PersonActivity" />
+        <activity android:name=".ui.reviews.ReviewActivity" />
+        <activity android:name=".ui.credits.CreditsCastActivity" />
+        <activity android:name=".ui.credits.CreditsCrewActivity" />
+        <activity android:name=".ui.videos.VideosActivity" />
+        <activity android:name=".ui.seasons.SeasonsActivity" />
+        <activity android:name=".ui.episodes.EpisodesActivity" />
+        <activity android:name=".ui.person.PersonActivity" />
         <activity
-            android:name=".ui.NotificationActivity"
-            android:parentActivityName=".ui.MainActivity">
+            android:name=".ui.notifications.NotificationActivity"
+            android:parentActivityName=".ui.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value=".ui.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.SeasonActivity" />
+        <activity android:name=".ui.seasons.SeasonActivity" />
         <activity
-            android:name=".ui.AboutActivity"
+            android:name=".ui.about.AboutActivity"
             android:label="@string/title_activity_about" />
         <activity
-            android:name=".ui.StatisticsActivity"
+            android:name=".ui.statistics.StatisticsActivity"
             android:label="@string/title_activity_statistics" />
         <activity
-            android:name=".ui.PictureActivity" />
+            android:name=".ui.picture.PictureActivity" />
 
         <!-- Content Provider -->
         <provider

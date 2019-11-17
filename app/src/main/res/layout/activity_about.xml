@@ -23,7 +23,7 @@
 
         <fragment
             android:id="@+id/about_fragment"
-            android:name="com.lineargs.watchnext.ui.AboutFragment"
+            android:name="com.lineargs.watchnext.ui.about.AboutFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"

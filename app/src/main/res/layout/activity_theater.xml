@@ -10,7 +10,7 @@
         android:id="@+id/list_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lineargs.watchnext.ui.TheaterActivity">
+        tools:context="com.lineargs.watchnext.ui.movies.TheaterActivity">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"

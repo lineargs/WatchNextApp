@@ -14,6 +14,7 @@ import android.view.ViewParent;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.ui.main.MainActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

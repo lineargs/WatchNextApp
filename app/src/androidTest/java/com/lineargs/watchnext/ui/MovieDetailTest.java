@@ -10,6 +10,7 @@ import androidx.test.runner.AndroidJUnit4;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.ui.movies.MovieDetailsActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

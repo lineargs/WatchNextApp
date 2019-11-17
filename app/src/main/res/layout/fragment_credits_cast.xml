@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/background"
-    tools:context="com.lineargs.watchnext.ui.CreditsCastFragment"
+    tools:context="com.lineargs.watchnext.ui.credits.CreditsCastFragment"
     tools:showIn="@layout/activity_credits_cast">
 
     <androidx.recyclerview.widget.RecyclerView

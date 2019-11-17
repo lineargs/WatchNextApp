@@ -22,8 +22,8 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.jobs.NotificationIntentService;
 import com.lineargs.watchnext.jobs.NotificationTasks;
-import com.lineargs.watchnext.ui.MainActivity;
-import com.lineargs.watchnext.ui.NotificationActivity;
+import com.lineargs.watchnext.ui.main.MainActivity;
+import com.lineargs.watchnext.ui.notifications.NotificationActivity;
 
 /**
  * Created by goranminov on 01/12/2017.

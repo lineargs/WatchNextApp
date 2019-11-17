@@ -5,7 +5,7 @@
     android:id="@+id/frame_layout_episodes"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lineargs.watchnext.ui.NotificationFragment">
+    tools:context="com.lineargs.watchnext.ui.notifications.NotificationFragment">
 
     <ImageView
         android:id="@+id/cover_poster"

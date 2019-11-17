@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.lineargs.watchnext.ui.TabbedMoviesActivity">
+        tools:context="com.lineargs.watchnext.ui.movies.TabbedMoviesActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="?attr/background"
         android:fitsSystemWindows="true"
-        tools:context="com.lineargs.watchnext.ui.StatisticsActivity">
+        tools:context="com.lineargs.watchnext.ui.statistics.StatisticsActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"

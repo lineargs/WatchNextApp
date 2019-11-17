@@ -10,11 +10,11 @@
         android:shortcutShortLabel="@string/title_activity_tabbed_movies">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetClass="com.lineargs.watchnext.ui.main.MainActivity"
             android:targetPackage="com.lineargs.watchnext" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.lineargs.watchnext.ui.TabbedMoviesActivity"
+            android:targetClass="com.lineargs.watchnext.ui.movies.TabbedMoviesActivity"
             android:targetPackage="com.lineargs.watchnext" />
     </shortcut>
 
@@ -27,11 +27,11 @@
         android:shortcutShortLabel="@string/title_activity_tabbed_series">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetClass="com.lineargs.watchnext.ui.main.MainActivity"
             android:targetPackage="com.lineargs.watchnext" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.lineargs.watchnext.ui.TabbedSeriesActivity"
+            android:targetClass="com.lineargs.watchnext.ui.series.TabbedSeriesActivity"
             android:targetPackage="com.lineargs.watchnext" />
     </shortcut>
 
@@ -44,11 +44,11 @@
         android:shortcutShortLabel="@string/title_activity_theater">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.lineargs.watchnext.ui.MainActivity"
+            android:targetClass="com.lineargs.watchnext.ui.main.MainActivity"
             android:targetPackage="com.lineargs.watchnext" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.lineargs.watchnext.ui.TheaterActivity"
+            android:targetClass="com.lineargs.watchnext.ui.movies.TheaterActivity"
             android:targetPackage="com.lineargs.watchnext" />
     </shortcut>
 

@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.ui.MainActivity;
+import com.lineargs.watchnext.ui.main.MainActivity;
 
 /**
  * Implementation of App Widget functionality.

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:background="@color/colorYellowTransparent"
     android:layout_height="match_parent"
-    tools:context=".ui.PictureActivity">
+    tools:context=".ui.picture.PictureActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
