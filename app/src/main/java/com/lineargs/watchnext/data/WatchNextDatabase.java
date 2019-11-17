@@ -31,7 +31,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             WatchNextDatabase.class, "watchnext.db")
                             //TODO Remove callback implementation, here only for testing
-                            .addCallback(callback)
+//                            .addCallback(callback)
                             .addMigrations(
                                     MIGRATION_41_42
 //                                    MIGRATION_42_43
@@ -147,6 +147,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     /**
      * Testing purposes only
      */
+    /*
     private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -155,27 +156,27 @@ public abstract class WatchNextDatabase extends RoomDatabase {
         }
     };
 
+     */
+
     /**
      * Testing purposes only
      * Populate the database in the background.
      */
+    /*
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final MoviesDao dao;
         private final SeriesDao seriesDao;
-        private final FavouritesDao favouritesDao;
         Movies popularMovie = new Movies();
         Movies topMovie = new Movies();
         Movies upcomingMovie = new Movies();
         Movies theatreMovie = new Movies();
         Series popularSeries = new Series();
         Series topSeries = new Series();
-        Favourites favourites = new Favourites();
 
         PopulateDbAsync(WatchNextDatabase db) {
             dao = db.moviesDao();
             seriesDao = db.seriesDao();
-            favouritesDao = db.favouritesDao();
         }
 
         @Override
@@ -245,6 +246,7 @@ public abstract class WatchNextDatabase extends RoomDatabase {
             return null;
         }
     }
+     */
 
     public abstract MoviesDao moviesDao();
 

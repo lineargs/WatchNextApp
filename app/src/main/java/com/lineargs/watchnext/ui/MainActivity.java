@@ -99,6 +99,7 @@ public class MainActivity extends BaseTopActivity implements MainAdapter.OnItemC
                 .getString(getString(R.string.pref_locale_key), "").contains(locale)) {
             sharedPreferences.edit().putString(getString(R.string.pref_locale_key), locale).apply();
             favouritesViewModel.periodicSync();
+            favouritesViewModel.oneTimeSync();
         }
     }
 

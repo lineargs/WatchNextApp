@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -42,5 +43,11 @@ public class FavouritesViewModel extends AndroidViewModel {
                 .build();
         workManager.enqueueUniquePeriodicWork("periodic_sync",
                 ExistingPeriodicWorkPolicy.REPLACE, periodicSyncWorker);
+    }
+
+    public void oneTimeSync() {
+
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(SyncWorker.class).build();
+        workManager.enqueue(oneTimeWorkRequest);
     }
 }
