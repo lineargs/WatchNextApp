@@ -18,8 +18,6 @@ public class ReminderWorker extends ListenableWorker {
     /**
      * @param appContext   The application {@link Context}
      * @param workerParams Parameters to setup the internal state of this worker
-     *
-     * See @https://developer.android.com/topic/libraries/architecture/workmanager/migrating-fb
      */
     public ReminderWorker(@NonNull Context appContext, @NonNull WorkerParameters workerParams) {
         super(appContext, workerParams);
@@ -28,6 +26,7 @@ public class ReminderWorker extends ListenableWorker {
     @NonNull
     @Override
     public ListenableFuture<Result> startWork() {
+        //TODO See @https://developer.android.com/topic/libraries/architecture/workmanager/migrating-fb
         return null;
     }
 

@@ -129,7 +129,7 @@ public class SeasonsFragment extends Fragment implements SeasonsAdapter.OnClickL
 
     //TODO Too many things going on here
     @Override
-    public void OnClick(String seasonId, int seasonNumber, String episodes) {
+    public void OnClick(String seasonId, int seasonNumber, String serieId, String episodes) {
         if (isTablet(getContext())) {
             Intent intent = new Intent(getContext(), SeasonActivity.class);
             intent.putExtra(Constants.ID, tmdbId);
@@ -139,6 +139,7 @@ public class SeasonsFragment extends Fragment implements SeasonsAdapter.OnClickL
             intent.putExtra(Constants.SEASON_ID, seasonId);
             intent.putExtra(Constants.SEASON_NUMBER, seasonNumber);
             intent.putExtra(Constants.EPISODES, episodes);
+            intent.putExtra(Constants.SERIE_ID, serieId);
             startActivity(intent);
         }
     }

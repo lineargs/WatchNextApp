@@ -9,10 +9,13 @@ import com.lineargs.watchnext.api.credits.Cast;
 import com.lineargs.watchnext.api.credits.Crew;
 import com.lineargs.watchnext.api.movies.ReviewsResult;
 import com.lineargs.watchnext.api.search.SearchResults;
+import com.lineargs.watchnext.api.series.seasondetails.Episode;
 import com.lineargs.watchnext.api.series.seriesdetails.Season;
 import com.lineargs.watchnext.api.videos.VideoDetails;
 import com.lineargs.watchnext.data.credits.Credits;
 import com.lineargs.watchnext.data.credits.CreditsDao;
+import com.lineargs.watchnext.data.episodes.Episodes;
+import com.lineargs.watchnext.data.episodes.EpisodesDao;
 import com.lineargs.watchnext.data.favourites.Favourites;
 import com.lineargs.watchnext.data.favourites.FavouritesDao;
 import com.lineargs.watchnext.data.movies.Movies;
@@ -30,7 +33,9 @@ import com.lineargs.watchnext.data.series.SeriesDao;
 import com.lineargs.watchnext.data.videos.Videos;
 import com.lineargs.watchnext.data.videos.VideosDao;
 import com.lineargs.watchnext.utils.MovieUtils;
+import com.lineargs.watchnext.utils.Utils;
 
+import java.text.ParseException;
 import java.util.List;
 
 public class WatchNextRepository {
@@ -47,6 +52,7 @@ public class WatchNextRepository {
     private SeasonsDao seasonsDao;
     private SearchDao searchDao;
     private FavouritesDao favouritesDao;
+    private EpisodesDao episodesDao;
     private LiveData<List<Movies>> popularMovies;
     private LiveData<List<Movies>> topRatedMovies;
     private LiveData<List<Movies>> upcomingMovies;
@@ -77,6 +83,7 @@ public class WatchNextRepository {
         seasonsDao = database.seasonsDao();
         searchDao = database.searchDao();
         searchResults = searchDao.getSearchResults();
+        episodesDao = database.episodesDao();
     }
 
     //Movies
@@ -202,6 +209,16 @@ public class WatchNextRepository {
 
     public void insertSearch(List<SearchResults> results) {//noinspection unchecked
         new InsertSearchTask(searchDao).execute(results);
+    }
+
+    //Episodes
+    public LiveData<List<Episodes>> getSeasonEpisodes(int seasonId) {
+        return episodesDao.getSeasonEpisodes(seasonId);
+    }
+
+    public void insertEpisodes(List<Episode> episodes, String seasonId) {
+        EpisodesParams params = new EpisodesParams(episodes, seasonId);
+        new InsertEpisodesTask(episodesDao).execute(params);
     }
 
     //Movies Tasks
@@ -457,6 +474,57 @@ public class WatchNextRepository {
                 searchDao.insert(search);
             }
             return null;
+        }
+    }
+
+    //Episodes Tasks
+    private static class InsertEpisodesTask extends AsyncTask<EpisodesParams, Void, Void> {
+
+        private EpisodesDao episodesDao;
+
+        InsertEpisodesTask(EpisodesDao episodesDao) {
+            this.episodesDao = episodesDao;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(EpisodesParams... episodesParams) {
+            //TODO Wrong data pulled and entered in database
+            List<Episode> episodesList = episodesParams[0].episodes;
+            for (Episode episode : episodesList) {
+                Episodes episodesRoom = new Episodes();
+                episodesRoom.setId(episode.getId());
+                episodesRoom.setSeasonId(Integer.parseInt(episodesParams[0].seasonId));
+                episodesRoom.setSeasonNumber(episode.getSeasonNumber());
+                if (episode.getAirDate() != null) {
+                    try {
+                        episodesRoom.setReleaseDate(MovieUtils.getNormalizedReleaseDate(episode.getAirDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                episodesRoom.setStillPath(IMAGE_SMALL_BASE + episode.getStillPath());
+                episodesRoom.setEpisodeNumber(episode.getEpisodeNumber());
+                episodesRoom.setName(episode.getName());
+                episodesRoom.setOverview(episode.getOverview());
+                episodesRoom.setVoteAverage(MovieUtils.getNormalizedVoteAverage(String.valueOf(episode.getVoteAverage())));
+                episodesRoom.setGuestStars(Utils.buildGuestStarsString(episode.getGuestStars()));
+                episodesRoom.setDirectors(Utils.buildDirectorsString(episode.getCrew()));
+                episodesRoom.setWriters(Utils.buildWritersString(episode.getCrew()));
+                episodesDao.insertEpisodes(episodesRoom);
+            }
+            return null;
+        }
+
+    }
+
+    private static class EpisodesParams {
+        List<Episode> episodes;
+        String seasonId;
+
+        EpisodesParams(List<Episode> episodes, String seasonId) {
+            this.episodes = episodes;
+            this.seasonId = seasonId;
         }
     }
 }

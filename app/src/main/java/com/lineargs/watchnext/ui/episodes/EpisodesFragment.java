@@ -23,7 +23,6 @@ import com.lineargs.watchnext.adapters.EpisodesAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.data.SeasonsQuery;
-import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,7 +72,7 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
     private void setupViews(Context context, View view, Bundle savedState) {
         unbinder = ButterKnife.bind(this, view);
         if (savedState == null) {
-            SeasonUtils.syncEpisodes(context, serieId, number, seasonId);
+//            SeasonUtils.syncEpisodes(context, serieId, number, seasonId);
             startLoading();
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);

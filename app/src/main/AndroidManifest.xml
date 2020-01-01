@@ -89,10 +89,6 @@
             tools:ignore="ExportedContentProvider" />
 
         <!-- Intent Services -->
-        <service
-            android:name=".sync.syncseries.SeasonIntentService"
-            android:exported="false" />
-        <service
             android:name=".jobs.NotificationIntentService"
             android:exported="false" />
 

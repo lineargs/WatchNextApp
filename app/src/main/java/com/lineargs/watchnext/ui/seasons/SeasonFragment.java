@@ -80,7 +80,7 @@ public class SeasonFragment extends Fragment implements SeasonsAdapter.OnClickLi
 
     //TODO Too many things going on here
     @Override
-    public void OnClick(String seasonId, int seasonNumber, String episodes) {
+    public void OnClick(String seasonId, int seasonNumber, String serieId, String episodes) {
         EpisodesFragment fragment = new EpisodesFragment();
         fragment.setSeasonId(seasonId);
         fragment.setNumber(seasonNumber);

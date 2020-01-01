@@ -13,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.lineargs.watchnext.data.credits.Credits;
 import com.lineargs.watchnext.data.credits.CreditsDao;
 import com.lineargs.watchnext.data.episodes.Episodes;
+import com.lineargs.watchnext.data.episodes.EpisodesDao;
 import com.lineargs.watchnext.data.favourites.Favourites;
 import com.lineargs.watchnext.data.favourites.FavouritesDao;
 import com.lineargs.watchnext.data.movies.Movies;
@@ -176,4 +177,6 @@ public abstract class WatchNextDatabase extends RoomDatabase {
     public abstract SeasonsDao seasonsDao();
 
     public abstract SearchDao searchDao();
+
+    public abstract EpisodesDao episodesDao();
 }
