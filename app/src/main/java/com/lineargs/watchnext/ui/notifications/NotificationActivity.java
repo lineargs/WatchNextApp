@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.ui.notifications;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -27,7 +26,7 @@ public class NotificationActivity extends BaseTopActivity {
         setupNavDrawer();
         if (savedInstanceState == null) {
             NotificationFragment fragment = new NotificationFragment();
-            fragment.setmUri(getIntent().getData());
+//            fragment.setmUri(getIntent().getData());
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.notification_fragment, fragment)
                     .commit();
@@ -49,11 +48,6 @@ public class NotificationActivity extends BaseTopActivity {
         super.setDrawerIndicatorEnabled();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.icon_arrow_back_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 }

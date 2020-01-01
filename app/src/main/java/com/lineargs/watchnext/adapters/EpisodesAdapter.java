@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +14,14 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.EpisodesQuery;
-import com.lineargs.watchnext.data.SeasonsQuery;
+import com.lineargs.watchnext.data.episodes.Episodes;
 import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +38,7 @@ import butterknife.OnClick;
 public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor, backCursor;
+    private List<Episodes> episodesList;
 
     public EpisodesAdapter(@NonNull Context context) {
         this.context = context;
@@ -62,20 +61,15 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (episodesList == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return episodesList.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
-        notifyDataSetChanged();
-    }
-
-    public void swapBackCursor(Cursor cursor) {
-        this.backCursor = cursor;
+    public void swapData(List<Episodes> episodesList) {
+        this.episodesList = episodesList;
         notifyDataSetChanged();
     }
 
@@ -109,39 +103,40 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            name.setText(cursor.getString(EpisodesQuery.NAME));
-            voteAverage.setText(cursor.getString(EpisodesQuery.VOTE_AVERAGE));
-            releaseDate.setText(cursor.getString(EpisodesQuery.RELEASE_DATE));
-            overview.setText(cursor.getString(EpisodesQuery.OVERVIEW));
-            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.GUEST_STARS))) {
+            Episodes episodes = episodesList.get(position);
+            name.setText(episodes.getName());
+            voteAverage.setText(episodes.getVoteAverage());
+            releaseDate.setText(episodes.getReleaseDate());
+            overview.setText(episodes.getOverview());
+            if (TextUtils.isEmpty(episodes.getGuestStars())) {
                 guestStarsContainer.setVisibility(View.GONE);
             } else {
-                guestStars.setText(cursor.getString(EpisodesQuery.GUEST_STARS));
+                guestStars.setText(episodes.getGuestStars());
             }
-            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.DIRECTORS))) {
+            if (TextUtils.isEmpty(episodes.getDirectors())) {
                 directorsContainer.setVisibility(View.GONE);
             } else {
-                directors.setText(cursor.getString(EpisodesQuery.DIRECTORS));
+                directors.setText(episodes.getDirectors());
             }
-            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.WRITERS))) {
+            if (TextUtils.isEmpty(episodes.getWriters())) {
                 writersContainer.setVisibility(View.GONE);
             } else {
-                writers.setText(cursor.getString(EpisodesQuery.WRITERS));
+                writers.setText(episodes.getWriters());
             }
-            ServiceUtils.loadPicasso(stillPath.getContext(), cursor.getString(EpisodesQuery.STILL_PATH))
+            ServiceUtils.loadPicasso(stillPath.getContext(), episodes.getStillPath())
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerInside()
                     .into(stillPath);
         }
 
         @OnClick(R.id.notification_fab)
-        public void setNotification() {
-            cursor.moveToPosition(getAdapterPosition());
-            String date = cursor.getString(EpisodesQuery.RELEASE_DATE);
-            String name = cursor.getString(EpisodesQuery.NAME);
-            int id = cursor.getInt(EpisodesQuery.EPISODE_ID);
-            String title = backCursor.getString(SeasonsQuery.SHOW_NAME);
+        void setNotification() {
+            Episodes episodes = episodesList.get(getAdapterPosition());
+            String date = episodes.getReleaseDate();
+            String name = episodes.getName();
+            int id = episodes.getId();
+            String title = "";
+//                    backCursor.getString(SeasonsQuery.SHOW_NAME);
             if (!airedAlready(date)) {
                 int intervalSeconds = getSeconds(System.currentTimeMillis(), date);
                 ReminderFirebaseUtilities.scheduleReminder(context, intervalSeconds, id,

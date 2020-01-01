@@ -75,8 +75,8 @@ public class StatisticsActivity extends BaseTopActivity {
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.item_statistics, container, false);
             unbinder = ButterKnife.bind(this, view);
-            movies.setText(String.valueOf(StatsUtils.getMoviesCount(getActivity())));
-            series.setText(String.valueOf(StatsUtils.getSeriesCount(getActivity())));
+//            movies.setText(String.valueOf(StatsUtils.getMoviesCount(getActivity())));
+//            series.setText(String.valueOf(StatsUtils.getSeriesCount(getActivity())));
             return view;
         }
 

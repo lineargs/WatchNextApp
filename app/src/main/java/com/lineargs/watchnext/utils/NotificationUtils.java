@@ -11,15 +11,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.jobs.NotificationIntentService;
 import com.lineargs.watchnext.jobs.NotificationTasks;
 import com.lineargs.watchnext.ui.main.MainActivity;
@@ -144,8 +143,8 @@ public class NotificationUtils extends ContextWrapper {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(NotificationActivity.class);
         stackBuilder.addNextIntent(startActivity);
-        Uri uri = DataContract.Episodes.buildEpisodeUriWithId(id);
-        startActivity.setData(uri);
+//        Uri uri = DataContract.Episodes.buildEpisodeUriWithId(id);
+//        startActivity.setData(uri);
         return stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

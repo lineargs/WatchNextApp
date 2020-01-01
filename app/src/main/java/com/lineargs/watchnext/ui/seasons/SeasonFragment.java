@@ -83,6 +83,7 @@ public class SeasonFragment extends Fragment implements SeasonsAdapter.OnClickLi
     public void OnClick(String seasonId, int seasonNumber, String serieId, String episodes) {
         EpisodesFragment fragment = new EpisodesFragment();
         fragment.setSeasonId(seasonId);
+        fragment.setSerieId(serieId);
         fragment.setNumber(seasonNumber);
         if (getFragmentManager() != null) {
             getFragmentManager().beginTransaction()
