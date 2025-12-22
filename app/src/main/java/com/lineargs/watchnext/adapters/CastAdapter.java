@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -86,8 +87,7 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             cursor.moveToPosition(position);
             castName.setText(cursor.getString(CreditsQuery.NAME));
             castCharacter.setText(cursor.getString(CreditsQuery.CHARACTER_NAME));
-            Picasso.get()
-                    .load(cursor.getString(CreditsQuery.PROFILE_PATH))
+            ServiceUtils.loadPicasso(profilePath.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
                     .fit()

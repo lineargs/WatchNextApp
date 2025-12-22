@@ -17,6 +17,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
@@ -125,8 +126,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
             title.setText(cursor.getString(SearchQuery.TITLE));
-            Picasso.get()
-                    .load(cursor.getString(SearchQuery.POSTER_PATH))
+            ServiceUtils.loadPicasso(poster.getContext(), cursor.getString(SearchQuery.POSTER_PATH))
                     .centerInside()
                     .fit()
                     .into(poster);

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
@@ -141,8 +142,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else {
             holder.status.setText(context.getString(R.string.main_status, cursor.getString(Query.STATUS)));
         }
-        Picasso.get()
-                .load(cursor.getString(Query.POSTER_PATH))
+        ServiceUtils.loadPicasso(context, cursor.getString(Query.POSTER_PATH))
                 .fit()
                 .into(holder.poster);
     }

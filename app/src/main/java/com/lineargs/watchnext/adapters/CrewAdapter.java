@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -87,8 +88,7 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             cursor.moveToPosition(position);
             crewName.setText(cursor.getString(CreditsQuery.NAME));
             crewJob.setText(cursor.getString(CreditsQuery.JOB));
-            Picasso.get()
-                    .load(cursor.getString(CreditsQuery.PROFILE_PATH))
+            ServiceUtils.loadPicasso(profilePath.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
                     .fit()

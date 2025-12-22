@@ -28,9 +28,9 @@ import static com.lineargs.watchnext.utils.Utils.buildWritersString;
 public class SerieDbUtils {
 
     /* Static variable for our poster and backdrop path*/
-    private static final String IMAGE_SMALL_BASE = "http://image.tmdb.org/t/p/w370/";
-    private static final String IMAGE_MEDIUM_BASE = "http://image.tmdb.org/t/p/w500/";
-    private static final String IMAGE_ORIGINAL_BASE = "http://image.tmdb.org/t/p/original/";
+    private static final String IMAGE_SMALL_BASE = "https://image.tmdb.org/t/p/w370/";
+    private static final String IMAGE_MEDIUM_BASE = "https://image.tmdb.org/t/p/w500/";
+    private static final String IMAGE_ORIGINAL_BASE = "https://image.tmdb.org/t/p/original/";
 
     /**
      * Builds ContentValues[] used for our ContentResolver

@@ -53,6 +53,9 @@ public final class ServiceUtils {
      */
     @NonNull
     public static RequestCreator loadPicasso(Context context, String path) {
+        if (!TextUtils.isEmpty(path) && path.contains("http://")) {
+            path = path.replace("http://", "https://");
+        }
         return Picasso.get().load(path);
     }
 

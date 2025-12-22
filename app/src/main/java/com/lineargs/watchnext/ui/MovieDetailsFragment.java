@@ -404,14 +404,12 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         }
         if (mPosterPath != null) {
-            Picasso.get()
-                    .load(cursor.getString(Query.POSTER_PATH))
+            ServiceUtils.loadPicasso(getContext(), cursor.getString(Query.POSTER_PATH))
                     .fit()
                     .into(mPosterPath);
         }
         if (mBackdropPath != null) {
-            Picasso.get()
-                    .load(cursor.getString(Query.BACKDROP_PATH))
+            ServiceUtils.loadPicasso(getContext(), cursor.getString(Query.BACKDROP_PATH))
                     .fit()
                     .into(mBackdropPath);
         }
