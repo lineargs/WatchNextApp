@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.tools.SeasonTools;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -89,8 +90,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             title.setText(SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER)));
             String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
             episodes.setText(episodesCount);
-            Picasso.get()
-                    .load(cursor.getString(SeasonsQuery.POSTER_PATH))
+            ServiceUtils.loadPicasso(context, cursor.getString(SeasonsQuery.POSTER_PATH))
                     .centerCrop()
                     .fit()
                     .into(poster);
