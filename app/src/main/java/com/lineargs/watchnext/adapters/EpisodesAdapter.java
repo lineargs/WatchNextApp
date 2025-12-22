@@ -1,9 +1,21 @@
 package com.lineargs.watchnext.adapters;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.content.SharedPreferences;
+import androidx.preference.PreferenceManager;
+import android.provider.Settings;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
@@ -140,6 +152,40 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @OnClick(R.id.notification_fab)
         public void setNotification() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.POST_NOTIFICATIONS)) {
+                        Snackbar.make(notification, context.getString(R.string.snackbar_notifications_required), Snackbar.LENGTH_LONG)
+                                .setAction(context.getString(R.string.snackbar_grant), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                    }
+                                })
+                                .show();
+                    } else {
+                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                         if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
+                             Snackbar.make(notification, context.getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
+                                     .setAction(context.getString(R.string.snackbar_settings), new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             Intent intent = new Intent();
+                                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                             Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                                             intent.setData(uri);
+                                             context.startActivity(intent);
+                                         }
+                                     })
+                                     .show();
+                         } else {
+                             sharedPreferences.edit().putBoolean("PREF_PERMISSION_REQUESTED", true).apply();
+                             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                         }
+                    }
+                    return;
+                }
+            }
             cursor.moveToPosition(getAdapterPosition());
             String date = cursor.getString(EpisodesQuery.RELEASE_DATE);
             String name = cursor.getString(EpisodesQuery.NAME);

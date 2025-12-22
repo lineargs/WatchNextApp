@@ -1,9 +1,20 @@
 package com.lineargs.watchnext.ui;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -330,6 +341,40 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @OnClick(R.id.notification_fab)
         public void setNotification() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.POST_NOTIFICATIONS)) {
+                        Snackbar.make(notification, getString(R.string.snackbar_notifications_required), Snackbar.LENGTH_LONG)
+                                .setAction(getString(R.string.snackbar_grant), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                    }
+                                })
+                                .show();
+                    } else {
+                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                         if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
+                             Snackbar.make(notification, getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
+                                     .setAction(getString(R.string.snackbar_settings), new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             Intent intent = new Intent();
+                                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                             Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                             intent.setData(uri);
+                                             startActivity(intent);
+                                         }
+                                     })
+                                     .show();
+                         } else {
+                             sharedPreferences.edit().putBoolean("PREF_PERMISSION_REQUESTED", true).apply();
+                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                         }
+                    }
+                    return;
+                }
+            }
             int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
              if (intervalSeconds != 0 && details != null) {
                  if (getArguments() != null) {

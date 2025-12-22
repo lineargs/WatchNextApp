@@ -1,9 +1,14 @@
 package com.lineargs.watchnext.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -54,6 +59,11 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         setupActionBar();
         setupNavDrawer();
         setupViews();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
         if (isConnected()) {
             WatchNextSyncAdapter.initializeSyncAdapter(this);
             WatchNextSyncAdapter.syncImmediately(this);
