@@ -376,7 +376,7 @@ public class DataProvider extends ContentProvider {
             case CODE_REVIEW_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Review.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.Review.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -390,7 +390,7 @@ public class DataProvider extends ContentProvider {
             case CODE_VIDEOS_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Videos.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.Videos.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -404,7 +404,7 @@ public class DataProvider extends ContentProvider {
             case CODE_SEASONS_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Seasons.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.Seasons.COLUMN_SERIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -418,7 +418,7 @@ public class DataProvider extends ContentProvider {
             case CODE_EPISODES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Episodes.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.Episodes.COLUMN_EPISODE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -432,7 +432,7 @@ public class DataProvider extends ContentProvider {
             case CODE_PERSON_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Person.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.Person.COLUMN_PERSON_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
