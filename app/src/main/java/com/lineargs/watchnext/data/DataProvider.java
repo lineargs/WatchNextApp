@@ -199,7 +199,7 @@ public class DataProvider extends ContentProvider {
             case CODE_POPULAR_MOVIES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.PopularMovieEntry.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -220,7 +220,7 @@ public class DataProvider extends ContentProvider {
             case CODE_TOP_MOVIES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TopRatedMovieEntry.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -234,7 +234,7 @@ public class DataProvider extends ContentProvider {
             case CODE_UPCOMING_MOVIES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.UpcomingMovieEntry.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -248,7 +248,7 @@ public class DataProvider extends ContentProvider {
             case CODE_THEATER_MOVIES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TheaterMovieEntry.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -292,7 +292,7 @@ public class DataProvider extends ContentProvider {
             case CODE_POPULAR_SERIES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.PopularSerieEntry.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -306,7 +306,7 @@ public class DataProvider extends ContentProvider {
             case CODE_TOP_SERIES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TopRatedSerieEntry.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -320,7 +320,7 @@ public class DataProvider extends ContentProvider {
             case CODE_ON_THE_AIR_SERIES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.OnTheAirSerieEntry.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -334,7 +334,7 @@ public class DataProvider extends ContentProvider {
             case CODE_FAVORITES_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Favorites.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -348,7 +348,7 @@ public class DataProvider extends ContentProvider {
             case CODE_SEARCH_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Search.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.Search.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
@@ -362,7 +362,7 @@ public class DataProvider extends ContentProvider {
             case CODE_SEARCH_TV_WITH_ID:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.SearchTv.TABLE_NAME)
                         .columns(projection)
-                        .selection(android.provider.BaseColumns._ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .selection(DataContract.Search.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
