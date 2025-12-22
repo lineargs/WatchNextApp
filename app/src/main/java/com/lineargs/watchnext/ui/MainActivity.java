@@ -56,6 +56,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         setupViews();
         if (isConnected()) {
             WatchNextSyncAdapter.initializeSyncAdapter(this);
+            WatchNextSyncAdapter.syncImmediately(this);
         }
     }
 
