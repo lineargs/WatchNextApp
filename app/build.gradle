@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     signingConfigs {
@@ -15,15 +15,20 @@ android {
             }
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    namespace 'com.lineargs.watchnext'
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
     defaultConfig {
         applicationId "com.lineargs.watchnext"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode rootProject.versionCode
         versionName rootProject.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         buildConfigField 'String', 'MOVIE_DATABASE_API_KEY', TMDbApiKey
     }
@@ -46,49 +51,53 @@ android {
             enableSplit = true
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    /* Support Library developer.android.com/topic/libraries/support-library/revisions.html */
-    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:preference-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:support-vector-drawable:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
-    /* We use this import for Material Preference theme */
-    implementation "com.android.support:preference-v14:$rootProject.supportLibraryVersion"
-    /* Firebase firebase.google.com/docs/android/setup#available_libraries*/
-    implementation "com.google.firebase:firebase-crash:$rootProject.firebaseCrashVersion"
-    implementation "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
-    implementation "com.google.firebase:firebase-messaging:$rootProject.firebaseMessagingVersion"
-    /* github.com/firebase/firebase-jobdispatcher-android/blob/master/README.md */
-    implementation "com.firebase:firebase-jobdispatcher:$rootProject.firebaseJobVersion"
-    /* Crashlytics docs.fabric.io/android/changelog.html */
-    implementation("com.crashlytics.sdk.android:crashlytics:$rootProject.fabricVersion@aar") {
-        transitive = true
-    }
-    /* Butterknife github.com/JakeWharton/butterknife/blob/master/CHANGELOG.md */
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation "androidx.annotation:annotation:1.7.1"
+    implementation "androidx.work:work-runtime:2.7.1"
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:32.1.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
+    
+    // Legacy Firebase JobDispatcher replacement (using WorkManager is recommended but simple removal for now as requested)
+    // implementation "com.firebase:firebase-jobdispatcher:0.8.5"
+
+    // Butterknife
     implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
-    /* Retrofit github.com/square/retrofit/blob/master/CHANGELOG.md */
+    
+    // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    /* Picasso github.com/square/picasso/blob/master/CHANGELOG.md */
+    
+    // Picasso
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
 
-    /* Testing only dependencies */
-
-    // Local unit tests
+    // Testing
     testImplementation "junit:junit:$rootProject.junitVersion"
-
-    // Instrumentation tests
-    /* Espresso developer.android.com/topic/libraries/testing-support-library/release-notes.html*/
-    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

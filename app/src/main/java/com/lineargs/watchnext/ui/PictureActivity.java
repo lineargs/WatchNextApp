@@ -1,8 +1,8 @@
 package com.lineargs.watchnext.ui;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -100,7 +100,7 @@ public class PictureActivity extends AppCompatActivity {
         mContentView = findViewById(R.id.fullscreen_content);
         supportPostponeEnterTransition();
 
-        Picasso.with(mContentView.getContext())
+        Picasso.get()
                 .load(getIntent().getStringExtra(Constants.STILL_PATH))
                 .noFade()
                 .into(mContentView, new Callback() {
@@ -110,7 +110,7 @@ public class PictureActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError() {
+                    public void onError(Exception e) {
                         supportStartPostponedEnterTransition();
                     }
                 });

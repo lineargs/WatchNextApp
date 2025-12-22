@@ -2,10 +2,10 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,8 @@ import android.widget.Toast;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.data.SeasonsQuery;
-import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
+// import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.text.ParseException;
@@ -146,9 +147,11 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String title = backCursor.getString(SeasonsQuery.SHOW_NAME);
             if (!airedAlready(date)) {
                 int intervalSeconds = getSeconds(System.currentTimeMillis(), date);
-                ReminderFirebaseUtilities.scheduleReminder(context, intervalSeconds, id,
-                        title, name);
-                Toast.makeText(context, context.getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+                if (intervalSeconds != 0) {
+                    WorkManagerUtils.scheduleReminder(context, intervalSeconds, id,
+                            title, name);
+                    Toast.makeText(context, context.getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(context, context.getString(R.string.toast_aired_already), Toast.LENGTH_SHORT).show();
             }

@@ -2,9 +2,9 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +82,7 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void bindViews(int position) {
             cursor.moveToPosition(position);
             name.setText(cursor.getString(VideosQuery.NAME));
-            Picasso.with(photo.getContext())
+            Picasso.get()
                     .load(cursor.getString(VideosQuery.IMG))
                     .centerInside()
                     .fit()

@@ -2,19 +2,19 @@ package com.lineargs.watchnext.ui;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +28,8 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.data.SeasonsQuery;
-import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
+// import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 import com.lineargs.watchnext.tools.SeasonTools;
 import com.lineargs.watchnext.utils.Constants;
@@ -61,12 +62,12 @@ public class EpisodesActivity extends BaseTopActivity implements
     @BindView(R.id.cover_poster)
     ImageView seasonPoster;
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link androidx.viewpager.widget.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link androidx.fragment.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
     /**
@@ -194,7 +195,7 @@ public class EpisodesActivity extends BaseTopActivity implements
     }
 
     void swapPosterCursor(Cursor cursor) {
-        Picasso.with(seasonPoster.getContext())
+        Picasso.get()
                 .load(cursor.getString(SeasonsQuery.POSTER_PATH))
                 .centerInside()
                 .fit()
@@ -330,13 +331,13 @@ public class EpisodesActivity extends BaseTopActivity implements
         @OnClick(R.id.notification_fab)
         public void setNotification() {
             int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
-            if (intervalSeconds != 0 && details != null) {
-                if (getArguments() != null) {
-                    ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
-                            getArguments().getString(Constants.TITLE), details[0]);
-                }
-                Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
-            }
+             if (intervalSeconds != 0 && details != null) {
+                 if (getArguments() != null) {
+                      WorkManagerUtils.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
+                              getArguments().getString(Constants.TITLE), details[0]);
+                 }
+                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+             }
         }
     }
 
