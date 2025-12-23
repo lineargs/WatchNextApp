@@ -1,24 +1,38 @@
 package com.lineargs.watchnext.sync.syncmovies;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import androidx.annotation.NonNull;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import com.lineargs.watchnext.workers.MovieDetailWorker;
 
 public class MovieSyncUtils {
 
-    static final String UPDATE_TAG = "UPDATE";
-
     public static void syncFullMovieDetail(@NonNull Context context, Uri uri) {
-        Intent intent = new Intent(context, MovieSyncIntentService.class);
-        intent.setData(uri);
-        context.startService(intent);
+        Data inputData = new Data.Builder()
+                .putString(MovieDetailWorker.ARG_URI, uri.toString())
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(MovieDetailWorker.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(request);
     }
 
     public static void syncUpdateMovieDetail(@NonNull Context context, Uri uri) {
-        Intent intent = new Intent(context, MovieSyncIntentService.class);
-        intent.setData(uri);
-        intent.putExtra(UPDATE_TAG, true);
-        context.startService(intent);
+        Data inputData = new Data.Builder()
+                .putString(MovieDetailWorker.ARG_URI, uri.toString())
+                .putBoolean(MovieDetailWorker.ARG_UPDATE_ONLY, true)
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(MovieDetailWorker.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(request);
     }
 }

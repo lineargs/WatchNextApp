@@ -1,14 +1,24 @@
 package com.lineargs.watchnext.sync.syncpeople;
 
 import android.content.Context;
-import android.content.Intent;
 import androidx.annotation.NonNull;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import com.lineargs.watchnext.workers.PersonWorker;
 
 public class PersonSyncUtils {
 
     public static void syncReviews(@NonNull Context context, @NonNull String id) {
-        Intent intent = new Intent(context, PersonSyncIntentService.class);
-        intent.putExtra(PersonSyncIntentService.ID, id);
-        context.startService(intent);
+        Data inputData = new Data.Builder()
+                .putString(PersonWorker.ARG_ID, id)
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PersonWorker.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(request);
     }
 }

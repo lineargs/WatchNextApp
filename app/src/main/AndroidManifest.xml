@@ -9,9 +9,7 @@
     <!-- Notifications -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- SyncAdapter -->
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Show shortcuts -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -118,24 +116,11 @@
             tools:ignore="ExportedContentProvider" />
 
         <!-- Intent Services -->
-        <service
-            android:name=".sync.syncsearch.SearchSyncIntentService"
-            android:exported="false" />
-        <service
-            android:name=".sync.syncseries.SerieDetailIntentService"
-            android:exported="false" />
-        <service
-            android:name=".sync.syncseries.SeasonIntentService"
-            android:exported="false" />
-        <service
-            android:name=".sync.syncpeople.PersonSyncIntentService"
-            android:exported="false" />
+
         <service
             android:name=".jobs.NotificationIntentService"
             android:exported="false" />
-        <service
-            android:name=".sync.syncmovies.MovieSyncIntentService"
-            android:exported="false" />
+
 
         <!-- Widget Service -->
         <service
@@ -156,28 +141,7 @@
         </receiver>
 
         <!-- SyncAdapter -->
-        <service
-            android:name=".sync.syncadapter.WatchNextAuthenticatorService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
 
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-        </service>
-        <service
-            android:name=".sync.syncadapter.WatchNextSyncService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
-        </service>
 
         <!-- Firebase Job Service -->
 

@@ -28,8 +28,8 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MainAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 import com.lineargs.watchnext.utils.NotificationUtils;
+import com.lineargs.watchnext.utils.WorkManagerUtils;
 
 import com.lineargs.watchnext.databinding.ActivityMainBinding;
 
@@ -62,8 +62,8 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             }
         }
         if (isConnected()) {
-            WatchNextSyncAdapter.initializeSyncAdapter(this);
-            WatchNextSyncAdapter.syncImmediately(this);
+            WorkManagerUtils.schedulePeriodicSync(this);
+            WorkManagerUtils.syncImmediately(this);
         }
     }
 

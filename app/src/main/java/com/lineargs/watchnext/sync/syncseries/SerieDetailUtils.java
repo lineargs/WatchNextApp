@@ -1,24 +1,38 @@
 package com.lineargs.watchnext.sync.syncseries;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import androidx.annotation.NonNull;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import com.lineargs.watchnext.workers.SerieDetailWorker;
 
 public class SerieDetailUtils {
 
-    static final String UPDATE_TAG = "UPDATE";
-
     public static void syncSeasons(@NonNull Context context, @NonNull Uri uri) {
-        Intent intent = new Intent(context, SerieDetailIntentService.class);
-        intent.setData(uri);
-        context.startService(intent);
+        Data inputData = new Data.Builder()
+                .putString(SerieDetailWorker.ARG_URI, uri.toString())
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(SerieDetailWorker.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(request);
     }
 
     public static void updateDetails(@NonNull Context context, @NonNull Uri uri) {
-        Intent intent = new Intent(context, SerieDetailIntentService.class);
-        intent.setData(uri);
-        intent.putExtra(UPDATE_TAG, true);
-        context.startService(intent);
+        Data inputData = new Data.Builder()
+                .putString(SerieDetailWorker.ARG_URI, uri.toString())
+                .putBoolean(SerieDetailWorker.ARG_UPDATE_ONLY, true)
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(SerieDetailWorker.class)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(request);
     }
 }
