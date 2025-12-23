@@ -21,7 +21,7 @@ import com.lineargs.watchnext.adapters.TheaterAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
-import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+import com.lineargs.watchnext.utils.WorkManagerUtils;
 
 import com.lineargs.watchnext.databinding.FragmentTheaterBinding;
 
@@ -61,7 +61,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
             public void onRefresh() {
                 if (NetworkUtils.isConnected(getContext())) {
                     binding.swipeRefreshLayout.setRefreshing(true);
-                    WatchNextSyncAdapter.syncImmediately(getContext());
+                    WorkManagerUtils.syncImmediately(getContext());
                     getLoaderManager().restartLoader(LOADER_ID, null, TheaterFragment.this);
                 }
             }

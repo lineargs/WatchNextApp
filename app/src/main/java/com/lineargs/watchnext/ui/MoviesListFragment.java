@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+import com.lineargs.watchnext.utils.WorkManagerUtils;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -51,7 +51,7 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
             public void onRefresh() {
                 if (NetworkUtils.isConnected(getContext())) {
                     binding.swipeRefreshLayout.setRefreshing(true);
-                    WatchNextSyncAdapter.syncImmediately(getContext());
+                    WorkManagerUtils.syncImmediately(getContext());
                     getLoaderManager().restartLoader(LOADER_ID, null, MoviesListFragment.this);
                 } else {
                     binding.swipeRefreshLayout.setRefreshing(false);

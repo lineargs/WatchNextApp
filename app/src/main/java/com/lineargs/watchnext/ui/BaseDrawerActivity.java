@@ -22,7 +22,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
+import com.lineargs.watchnext.utils.WorkManagerUtils;
 import com.lineargs.watchnext.tools.Tools;
 
 import java.util.Locale;
@@ -78,7 +78,7 @@ public abstract class BaseDrawerActivity extends BaseActivity {
         if (!sharedPreferences
                 .getString(getString(R.string.pref_locale_key), "").contains(locale)) {
             sharedPreferences.edit().putString(getString(R.string.pref_locale_key), locale).apply();
-            WatchNextSyncAdapter.syncImmediately(this);
+            WorkManagerUtils.syncImmediately(this);
         }
     }
 
