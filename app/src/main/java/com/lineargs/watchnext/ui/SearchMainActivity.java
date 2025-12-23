@@ -17,7 +17,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ProgressBar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SearchAdapter;
@@ -61,6 +61,13 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;
         mQuery = query;
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SearchSyncUtils.syncSearchMovies(SearchMainActivity.this, queryString, adult);
+                startLoading();
+            }
+        });
         if (binding.searchView != null) {
             binding.searchView.setQuery(query, false);
         }
@@ -184,12 +191,16 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
         binding.searchResults.setVisibility(GONE);
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.searchResults.setVisibility(View.VISIBLE);
     }
 

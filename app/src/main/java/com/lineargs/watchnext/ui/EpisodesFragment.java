@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.EpisodesAdapter;
@@ -68,6 +68,13 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
             SeasonUtils.syncEpisodes(context, serieId, number, seasonId);
             startLoading();
         }
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SeasonUtils.syncEpisodes(getContext(), serieId, number, seasonId);
+                startLoading();
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         /* Simulating View Pager on our Recycler View */
         SnapHelper snapHelper = new PagerSnapHelper();
@@ -83,12 +90,16 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
         binding.episodesRecyclerView.setVisibility(View.GONE);
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.episodesRecyclerView.setVisibility(View.VISIBLE);
     }
 

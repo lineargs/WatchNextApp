@@ -18,7 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.PersonQuery;
@@ -69,13 +69,18 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void startLoading() {
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
         binding.personNestedView.setVisibility(View.INVISIBLE);
-        binding.progressBar.setVisibility(View.VISIBLE);
     }
 
     private void showData() {
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.personNestedView.setVisibility(View.VISIBLE);
-        binding.progressBar.setVisibility(View.INVISIBLE);
     }
 
     @NonNull

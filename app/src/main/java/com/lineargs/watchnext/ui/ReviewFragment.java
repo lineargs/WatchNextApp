@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ReviewAdapter;
@@ -52,7 +52,6 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         binding.reviewRecyclerView.setLayoutManager(layoutManager);
         binding.reviewRecyclerView.setHasFixedSize(true);
-        binding.reviewRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new ReviewAdapter(getContext(), this);
         binding.reviewRecyclerView.setAdapter(mAdapter);
 
@@ -60,23 +59,30 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         if (savedState == null) {
             startLoading();
         }
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
         binding.reviewRecyclerView.setVisibility(View.GONE);
         binding.emptyReview.setVisibility(View.GONE);
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.reviewRecyclerView.setVisibility(View.VISIBLE);
         binding.emptyReview.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.reviewRecyclerView.setVisibility(View.GONE);
         binding.emptyReview.setVisibility(View.VISIBLE);
     }

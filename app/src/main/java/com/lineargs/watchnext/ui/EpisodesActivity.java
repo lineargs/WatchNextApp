@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
@@ -111,12 +110,17 @@ public class EpisodesActivity extends BaseTopActivity implements
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
         binding.container.setVisibility(GONE);
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.container.setVisibility(View.VISIBLE);
     }
 
@@ -385,7 +389,10 @@ public class EpisodesActivity extends BaseTopActivity implements
             details[7] = mCursor.getString(EpisodesQuery.DIRECTORS);
             details[8] = mCursor.getString(EpisodesQuery.WRITERS);
 
-            String title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
+            String title = "";
+            if (mBackCursor != null && mBackCursor.moveToFirst()) {
+                title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
+            }
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(title, details);
@@ -399,8 +406,10 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @Override
         public CharSequence getPageTitle(int position) {
-            mCursor.moveToPosition(position);
-            return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, mCursor.getInt(EpisodesQuery.EPISODE_NUMBER));
+            if (mCursor != null && mCursor.moveToPosition(position)) {
+                return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, mCursor.getInt(EpisodesQuery.EPISODE_NUMBER));
+            }
+            return "";
         }
 
         void swapCursor(Cursor cursor) {

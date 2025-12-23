@@ -69,6 +69,7 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
+        if (account == null) return;
         String authority = context.getString(R.string.content_authority);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
@@ -84,10 +85,12 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public static void syncImmediately(Context context) {
+        Account account = getSyncAccount(context);
+        if (account == null) return;
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(getSyncAccount(context),
+        ContentResolver.requestSync(account,
                 context.getString(R.string.content_authority), bundle);
     }
 
@@ -96,7 +99,14 @@ public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         Account newAccount = new Account(context.getString(R.string.sync_account_name), context.getString(R.string.sync_account_type));
 
-        if (null == accountManager.getPassword(newAccount)) {
+        String password = null;
+        try {
+            password = accountManager.getPassword(newAccount);
+        } catch (SecurityException e) {
+            Log.e(LOG_TAG, "SecurityException while accessing account", e);
+        }
+
+        if (null == password) {
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null;
             }

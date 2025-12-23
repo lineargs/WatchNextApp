@@ -45,27 +45,26 @@
 
         </androidx.cardview.widget.CardView>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/search_card_view"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_results"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/search_card_view"
             android:layout_marginBottom="@dimen/search_card_view_margin"
             android:layout_marginEnd="@dimen/search_card_view_margin"
             android:layout_marginLeft="@dimen/search_card_view_margin"
             android:layout_marginRight="@dimen/search_card_view_margin"
-            android:layout_marginStart="@dimen/search_card_view_margin"
-            android:background="@color/colorWhite"
-            android:clipToPadding="false"
-            android:divider="@null" />
+            android:layout_marginStart="@dimen/search_card_view_margin">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:clipToPadding="false"
+                android:divider="@null" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </RelativeLayout>
 

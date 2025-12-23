@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 
 import com.lineargs.watchnext.databinding.FragmentListSeriesBinding;
 
@@ -43,6 +45,20 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
         binding.tabbedSeriesRecyclerView.setLayoutManager(layoutManager);
         binding.tabbedSeriesRecyclerView.setAdapter(getAdapter());
+
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkUtils.isConnected(getContext())) {
+                    binding.swipeRefreshLayout.setRefreshing(true);
+                    WatchNextSyncAdapter.syncImmediately(getContext());
+                    getLoaderManager().restartLoader(LOADER_ID, null, SeriesListFragment.this);
+                } else {
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -89,13 +105,16 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
-        binding.tabbedSeriesRecyclerView.setVisibility(View.INVISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(View.INVISIBLE);
         binding.tabbedSeriesRecyclerView.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     public abstract RecyclerView.Adapter getAdapter();

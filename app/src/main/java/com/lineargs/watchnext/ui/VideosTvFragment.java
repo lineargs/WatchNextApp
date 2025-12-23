@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
@@ -62,19 +62,26 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
         binding.videosTvRecyclerView.setVisibility(View.GONE);
         binding.emptyVideos.setVisibility(View.GONE);
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.videosTvRecyclerView.setVisibility(View.VISIBLE);
         binding.emptyVideos.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.videosTvRecyclerView.setVisibility(View.GONE);
         binding.emptyVideos.setVisibility(View.VISIBLE);
     }

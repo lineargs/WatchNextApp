@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
@@ -72,19 +72,26 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
         binding.seasonsRecyclerView.setVisibility(View.GONE);
         binding.emptySeasons.setVisibility(View.GONE);
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.seasonsRecyclerView.setVisibility(View.VISIBLE);
         binding.emptySeasons.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        binding.progressBar.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
         binding.seasonsRecyclerView.setVisibility(View.GONE);
         binding.emptySeasons.setVisibility(View.VISIBLE);
     }

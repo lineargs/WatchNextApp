@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
@@ -106,12 +106,12 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
     }
 
     private void startLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
-        binding.tabbedMoviesRecyclerView.setVisibility(View.INVISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     private void showData() {
-        binding.progressBar.setVisibility(View.INVISIBLE);
         binding.tabbedMoviesRecyclerView.setVisibility(View.VISIBLE);
         if (binding.swipeRefreshLayout != null) {
             binding.swipeRefreshLayout.setRefreshing(false);

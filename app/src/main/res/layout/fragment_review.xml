@@ -11,27 +11,28 @@
         android:layout_height="match_parent"
         android:background="?attr/background" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="invisible"
-            tools:visibility="visible" />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/empty_review"
-            style="@style/TitleTextCenter"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height"
-            android:layout_centerInParent="true"
-            android:maxLines="2"
-            android:text="@string/review_empty_text"
-            android:visibility="invisible"
-            tools:visibility="visible" />
-
-        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/review_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/empty_review"
+        style="@style/TitleTextCenter"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:layout_centerInParent="true"
+        android:maxLines="2"
+        android:text="@string/review_empty_text"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
 </RelativeLayout>
