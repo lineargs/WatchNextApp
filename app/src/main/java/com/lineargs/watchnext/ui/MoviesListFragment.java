@@ -23,47 +23,38 @@ import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentListMoviesBinding;
 
 public abstract class MoviesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 225;
-    @BindView(R.id.tabbed_movies_recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
-    private Unbinder unbinder;
+    private FragmentListMoviesBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_list_movies, container, false);
-        setupViews(rootView);
-        return rootView;
+        binding = FragmentListMoviesBinding.inflate(inflater, container, false);
+        setupViews();
+        return binding.getRoot();
     }
 
-    private void setupViews(final View view) {
-        unbinder = ButterKnife.bind(this, view);
-        if (NetworkUtils.isConnected(view.getContext())) {
+    private void setupViews() {
+        if (NetworkUtils.isConnected(getContext())) {
             startLoading();
         }
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(getAdapter());
+        binding.tabbedMoviesRecyclerView.setLayoutManager(layoutManager);
+        binding.tabbedMoviesRecyclerView.setAdapter(getAdapter());
         
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetworkUtils.isConnected(view.getContext())) {
-                    swipeRefreshLayout.setRefreshing(true);
+                if (NetworkUtils.isConnected(getContext())) {
+                    binding.swipeRefreshLayout.setRefreshing(true);
                     WatchNextSyncAdapter.syncImmediately(getContext());
                     getLoaderManager().restartLoader(LOADER_ID, null, MoviesListFragment.this);
                 } else {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
@@ -110,19 +101,20 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        super.onDestroyView();
+        binding = null;
     }
 
     private void startLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.tabbedMoviesRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void showData() {
-        progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setRefreshing(false);
+        binding.progressBar.setVisibility(View.INVISIBLE);
+        binding.tabbedMoviesRecyclerView.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
         }
     }
 

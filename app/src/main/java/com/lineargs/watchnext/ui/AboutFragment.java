@@ -12,18 +12,14 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.AboutAdapter;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentAboutBinding;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class AboutFragment extends Fragment implements AboutAdapter.OnWebsiteClick {
 
-    @BindView(R.id.library_recycler_view)
-    RecyclerView libraryRecyclerView;
-    private Unbinder unbinder;
+    private FragmentAboutBinding binding;
 
     public AboutFragment() {
     }
@@ -31,16 +27,15 @@ public class AboutFragment extends Fragment implements AboutAdapter.OnWebsiteCli
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
-        libraryRecyclerView.setAdapter(new AboutAdapter(getActivity(), this));
-        return rootView;
+        binding = FragmentAboutBinding.inflate(inflater, container, false);
+        binding.libraryRecyclerView.setAdapter(new AboutAdapter(getActivity(), this));
+        return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 
     @Override

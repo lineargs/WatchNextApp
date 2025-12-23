@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
@@ -13,10 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.databinding.ItemLayoutTabbedBinding;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by goranminov on 16/11/2017.
@@ -29,6 +28,7 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
 
     OnItemClickListener callback;
     private Context context;
+    private Set<Long> favoriteIds = new HashSet<>();
 
     /* Empty constructor*/
     BaseTabbedAdapter() {
@@ -46,6 +46,11 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
         this.callback = listener;
     }
 
+    public void setFavorites(Set<Long> ids) {
+        this.favoriteIds = ids;
+        notifyDataSetChanged();
+    }
+
     /**
      * This gets called when each new ViewHolder is created. This happens when the RecyclerView
      * is laid out. Enough ViewHolders will be created to fill the screen and allow for scrolling.
@@ -57,10 +62,8 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_layout_tabbed, parent, false);
-        return new TabbedViewHolder(view);
+        ItemLayoutTabbedBinding binding = ItemLayoutTabbedBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new TabbedViewHolder(binding);
     }
 
     /**
@@ -89,18 +92,7 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
      * in the favorites table before we display it
      */
     protected boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean favorite = cursor.getCount() > 0;
-        cursor.close();
-        return favorite;
+        return favoriteIds.contains(id);
     }
 
     /**
@@ -132,17 +124,21 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
      * Cache of the children views
      */
     class TabbedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.poster)
-        ImageView poster;
-        @BindView(R.id.star_image)
-        ImageView star;
-        @BindView(R.id.title)
-        AppCompatTextView title;
+        
+        final ItemLayoutTabbedBinding binding;
+        
+        // Convenience fields to minimize changes in subclasses
+        final ImageView poster;
+        final ImageView star;
+        final AppCompatTextView title;
 
-        TabbedViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-            if (callback != null) view.setOnClickListener(this);
+        TabbedViewHolder(ItemLayoutTabbedBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.poster = binding.tabbedLayout.poster;
+            this.star = binding.tabbedLayout.starImage;
+            this.title = binding.tabbedLayout.title;
+            if (callback != null) binding.getRoot().setOnClickListener(this);
         }
 
         @Override

@@ -29,7 +29,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/item_header_cast" />
+        <include
+            android:id="@+id/cast_header_layout"
+            layout="@layout/item_header_cast" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cast_recycler_view"

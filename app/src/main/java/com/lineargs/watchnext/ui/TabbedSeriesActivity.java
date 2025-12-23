@@ -14,22 +14,17 @@ import android.view.MenuItem;
 
 import com.lineargs.watchnext.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ActivityTabbedSeriesBinding;
 
 public class TabbedSeriesActivity extends BaseTopActivity {
 
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    @BindView(R.id.container)
-    ViewPager mViewPager;
+    private ActivityTabbedSeriesBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tabbed_series);
+        binding = ActivityTabbedSeriesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         setupActionBar();
         setupNavDrawer();
@@ -38,7 +33,7 @@ public class TabbedSeriesActivity extends BaseTopActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (savedInstanceState != null) {
                 postponeEnterTransition();
-                mViewPager.post(new Runnable() {
+                binding.container.post(new Runnable() {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void run() {
@@ -56,7 +51,7 @@ public class TabbedSeriesActivity extends BaseTopActivity {
     }
 
     private void setupViews() {
-        ButterKnife.bind(this);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         /*
@@ -96,10 +91,10 @@ public class TabbedSeriesActivity extends BaseTopActivity {
         };
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager.setAdapter(fragmentPagerAdapter);
+        binding.container.setAdapter(fragmentPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(binding.container);
     }
 
     @Override

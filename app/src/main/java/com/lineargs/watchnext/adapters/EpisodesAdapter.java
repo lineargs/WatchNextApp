@@ -39,9 +39,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.lineargs.watchnext.databinding.ItemEpisodesBinding;
 
 /**
  * Created by goranminov on 09/12/2017.
@@ -61,10 +59,8 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_episodes, parent, false);
-        return new SeasonsViewHolder(view);
+        ItemEpisodesBinding binding = ItemEpisodesBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new SeasonsViewHolder(binding);
     }
 
     @Override
@@ -93,34 +89,43 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     class SeasonsViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.name)
-        AppCompatTextView name;
-        @BindView(R.id.still_path)
-        ImageView stillPath;
-        @BindView(R.id.vote_average)
-        AppCompatTextView voteAverage;
-        @BindView(R.id.release_date)
-        AppCompatTextView releaseDate;
-        @BindView(R.id.overview)
-        AppCompatTextView overview;
-        @BindView(R.id.guest_stars)
-        AppCompatTextView guestStars;
-        @BindView(R.id.directors)
-        AppCompatTextView directors;
-        @BindView(R.id.writers)
-        AppCompatTextView writers;
-        @BindView(R.id.guest_stars_container)
-        LinearLayout guestStarsContainer;
-        @BindView(R.id.directors_container)
-        LinearLayout directorsContainer;
-        @BindView(R.id.writers_container)
-        LinearLayout writersContainer;
-        @BindView(R.id.notification_fab)
-        FloatingActionButton notification;
+        
+        final ItemEpisodesBinding binding;
+        final AppCompatTextView name;
+        final ImageView stillPath;
+        final AppCompatTextView voteAverage;
+        final AppCompatTextView releaseDate;
+        final AppCompatTextView overview;
+        final AppCompatTextView guestStars;
+        final AppCompatTextView directors;
+        final AppCompatTextView writers;
+        final LinearLayout guestStarsContainer;
+        final LinearLayout directorsContainer;
+        final LinearLayout writersContainer;
+        final FloatingActionButton notification;
 
-        SeasonsViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        SeasonsViewHolder(ItemEpisodesBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.name = binding.name;
+            this.stillPath = binding.stillPath;
+            this.voteAverage = binding.voteAverage;
+            this.releaseDate = binding.releaseDate;
+            this.overview = binding.overview;
+            this.guestStars = binding.guestStars;
+            this.directors = binding.directors;
+            this.writers = binding.writers;
+            this.guestStarsContainer = binding.guestStarsContainer;
+            this.directorsContainer = binding.directorsContainer;
+            this.writersContainer = binding.writersContainer;
+            this.notification = binding.notificationFab;
+            
+            this.notification.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setNotification();
+                }
+            });
         }
 
         void bindViews(int position) {
@@ -150,7 +155,6 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(stillPath);
         }
 
-        @OnClick(R.id.notification_fab)
         public void setNotification() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {

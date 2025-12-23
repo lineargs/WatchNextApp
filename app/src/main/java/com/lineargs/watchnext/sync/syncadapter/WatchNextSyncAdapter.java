@@ -9,9 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.lineargs.watchnext.BuildConfig;
@@ -25,11 +23,9 @@ import com.lineargs.watchnext.utils.retrofit.movies.Movies;
 import com.lineargs.watchnext.utils.retrofit.series.Series;
 import com.lineargs.watchnext.utils.retrofit.series.SeriesApiService;
 
-import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -41,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * According to the Movie Db API documentation those endpoints
  * are updated once in a day so we have no interest to call for new data more
  * often than that.
- * See https://developers.themoviedb.org/3/movies/get-popular-movies
+ * See <a href="https://developers.themoviedb.org/3/movies/get-popular-movies">...</a>
  */
 
 public class WatchNextSyncAdapter extends AbstractThreadedSyncAdapter {

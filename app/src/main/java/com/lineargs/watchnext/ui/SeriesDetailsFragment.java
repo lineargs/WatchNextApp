@@ -40,49 +40,26 @@ import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Optional;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.ui.CreditsCastActivity;
+import com.lineargs.watchnext.ui.CreditsCrewActivity;
+import com.lineargs.watchnext.ui.MainActivity;
+import com.lineargs.watchnext.ui.PersonActivity;
+import com.lineargs.watchnext.ui.ReviewActivity;
+import com.lineargs.watchnext.ui.SeasonsActivity;
+import com.lineargs.watchnext.ui.VideosActivity;
+import com.lineargs.watchnext.ui.VideosTvActivity;
+import com.lineargs.watchnext.databinding.FragmentSeriesDetailBinding;
 
 public class SeriesDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick {
 
 
     private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333;
-    @Nullable
-    @BindView(R.id.cover_poster)
-    ImageView mPosterPath;
-    @Nullable
-    @BindView(R.id.cover_backdrop)
-    ImageView mBackdropPath;
-    @BindView(R.id.star_fab)
-    FloatingActionButton starFab;
-    @BindView(R.id.cast_recycler_view)
-    RecyclerView mCastRecyclerView;
-    @BindView(R.id.cast_progress_bar)
-    ProgressBar mCastProgressBar;
-    @BindView(R.id.cast_linear_layout)
-    LinearLayout mCastLayout;
-    @BindView(R.id.movie_details_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.empty_cast)
-    AppCompatTextView mEmptyCast;
-    @BindView(R.id.google)
-    Button googleButton;
-    @BindView(R.id.youtube)
-    Button youTubeButton;
-    @BindView(R.id.google_play)
-    Button googlePlayButton;
-    @Nullable
-    @BindView(R.id.videos)
-    Button videosButton;
+    private FragmentSeriesDetailBinding binding;
     private Uri mUri;
     private CastAdapter mCastAdapter;
     private TVDetailAdapter mAdapter;
     private Handler handler;
     private String title = "";
-    private Unbinder unbinder;
     private long id;
     private boolean mDualPane;
 
@@ -100,29 +77,28 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
             mUri = Uri.parse(savedInstanceState.getString(Constants.URI));
         }
         setHasOptionsMenu(true);
-        View mRootView = inflater.inflate(R.layout.fragment_series_detail, container, false);
-        setupViews(mRootView, savedInstanceState);
-        return mRootView;
+        binding = FragmentSeriesDetailBinding.inflate(inflater, container, false);
+        setupViews(savedInstanceState);
+        return binding.getRoot();
     }
 
-    private void setupViews(View view, Bundle savedState) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Bundle savedState) {
         handler = new Handler();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         layoutManager.setAutoMeasureEnabled(true);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        binding.movieDetailsRecyclerView.setLayoutManager(layoutManager);
+        binding.movieDetailsRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new TVDetailAdapter(getContext());
-        mRecyclerView.setAdapter(mAdapter);
+        binding.movieDetailsRecyclerView.setAdapter(mAdapter);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mCastRecyclerView.setLayoutManager(mLayoutManager);
-        mCastRecyclerView.setHasFixedSize(true);
+        binding.castHeaderLayout.castRecyclerView.setLayoutManager(mLayoutManager);
+        binding.castHeaderLayout.castRecyclerView.setHasFixedSize(true);
         mCastAdapter = new CastAdapter(getContext(), this);
-        mCastRecyclerView.setAdapter(mCastAdapter);
+        binding.castHeaderLayout.castRecyclerView.setAdapter(mCastAdapter);
 
         if (getActivity().getIntent().getIntExtra(MainActivity.FAB_ID, 0) == 1) {
-            starFab.setVisibility(View.GONE);
+            binding.starFab.setVisibility(View.GONE);
         }
 
         if (mUri != null) {
@@ -135,6 +111,38 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         }
         getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
         getLoaderManager().initLoader(CAST_LOADER_ID, null, this);
+        
+        binding.starFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                starFabFavorite();
+            }
+        });
+        
+        binding.castHeaderLayout.castHeaderLayout.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadCast();
+            }
+        });
+        
+        if (binding.seriesFooter.seasons != null) {
+            binding.seriesFooter.seasons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadSeasons();
+            }
+        });
+        }
+        
+        if (binding.seriesFooter.videos != null) {
+            binding.seriesFooter.videos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadVideos();
+            }
+        });
+        }
     }
 
     @Override
@@ -162,37 +170,35 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void startCastLoading() {
-        mCastProgressBar.setVisibility(View.VISIBLE);
-        mCastLayout.setVisibility(View.GONE);
-        mEmptyCast.setVisibility(View.GONE);
+        binding.castHeaderLayout.castProgressBar.setVisibility(View.VISIBLE);
+        binding.castHeaderLayout.castLinearLayout.setVisibility(View.GONE);
+        binding.castHeaderLayout.emptyCast.setVisibility(View.GONE);
     }
 
     private void showCastData() {
-        mCastProgressBar.setVisibility(View.GONE);
-        mCastLayout.setVisibility(View.VISIBLE);
-        mEmptyCast.setVisibility(View.GONE);
+        binding.castHeaderLayout.castProgressBar.setVisibility(View.GONE);
+        binding.castHeaderLayout.castLinearLayout.setVisibility(View.VISIBLE);
+        binding.castHeaderLayout.emptyCast.setVisibility(View.GONE);
     }
 
     private void showEmptyCast() {
-        mCastProgressBar.setVisibility(View.GONE);
-        mCastLayout.setVisibility(View.GONE);
-        mEmptyCast.setVisibility(View.VISIBLE);
+        binding.castHeaderLayout.castProgressBar.setVisibility(View.GONE);
+        binding.castHeaderLayout.castLinearLayout.setVisibility(View.GONE);
+        binding.castHeaderLayout.emptyCast.setVisibility(View.VISIBLE);
     }
 
-    @OnClick(R.id.star_fab)
     public void starFabFavorite() {
         if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
             DbUtils.removeFromFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+            binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         } else {
             DbUtils.addTVToFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-            starFab.setImageDrawable(Utils.starImage(getContext()));
+            binding.starFab.setImageDrawable(Utils.starImage(getContext()));
         }
     }
 
-    @OnClick(R.id.cast_header_layout)
     public void loadCast() {
         Intent intent = (new Intent(getContext(), CreditsCastActivity.class));
         Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
@@ -201,8 +207,8 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         startActivity(intent);
     }
 
-    @Optional
-    @OnClick(R.id.seasons)
+
+
     public void loadSeasons() {
         Intent intent = new Intent(getContext(), SeasonsActivity.class);
         Uri uri = DataContract.Seasons.buildSeasonUriWithId(Long.parseLong(mUri.getLastPathSegment()));
@@ -211,8 +217,6 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         startActivity(intent);
     }
 
-    @Optional
-    @OnClick(R.id.videos)
     public void loadVideos() {
         Intent intent = new Intent(getContext(), VideosTvActivity.class);
         Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment()));
@@ -309,34 +313,34 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 
     private void imageLoad(Cursor cursor) {
         title = cursor.getString(Query.TITLE);
         id = cursor.getInt(Query.ID);
-        if (videosButton != null) {
-            ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), videosButton);
+        if (binding.seriesFooter.videos != null) {
+            ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), binding.seriesFooter.videos);
         }
-        ServiceUtils.setUpGoogleSearchButton(title, googleButton);
-        ServiceUtils.setUpYouTubeButton(title, youTubeButton);
-        ServiceUtils.setUpGooglePlayButton(title, googlePlayButton);
+        ServiceUtils.setUpGoogleSearchButton(title, binding.seriesButtons.google);
+        ServiceUtils.setUpYouTubeButton(title, binding.seriesButtons.youtube);
+        ServiceUtils.setUpGooglePlayButton(title, binding.seriesButtons.googlePlay);
         if (DbUtils.isFavorite(getContext(), id)) {
-            starFab.setImageDrawable(Utils.starImage(getContext()));
+            binding.starFab.setImageDrawable(Utils.starImage(getContext()));
         } else {
-            starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+            binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         }
-        if (mPosterPath != null) {
+        if (binding.coverPoster != null) {
             Picasso.get()
                     .load(cursor.getString(Query.POSTER_PATH))
                     .fit()
-                    .into(mPosterPath);
+                    .into(binding.coverPoster);
         }
-        if (mBackdropPath != null) {
+        if (binding.coverBackdrop != null) {
             Picasso.get()
                     .load(cursor.getString(Query.BACKDROP_PATH))
                     .fit()
-                    .into(mBackdropPath);
+                    .into(binding.coverBackdrop);
         }
     }
 

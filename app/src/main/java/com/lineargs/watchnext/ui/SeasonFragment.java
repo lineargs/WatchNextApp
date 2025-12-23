@@ -20,9 +20,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
 import com.lineargs.watchnext.data.SeasonsQuery;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentSeasonBinding;
 
 /**
  * Same old season fragment. Or not??? Hmmm....
@@ -31,11 +29,9 @@ import butterknife.Unbinder;
 public class SeasonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SeasonsAdapter.OnClickListener {
 
     private static final int LOADER_ID = 112;
-    @BindView(R.id.season_recycler_view)
-    RecyclerView mRecyclerView;
+    private FragmentSeasonBinding binding;
     private Uri mUri;
     private SeasonsAdapter mAdapter;
-    private Unbinder unbinder;
 
     public SeasonFragment() {
     }
@@ -47,18 +43,17 @@ public class SeasonFragment extends Fragment implements LoaderManager.LoaderCall
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_season, container, false);
-        setupViews(getContext(), view);
-        return view;
+        binding = FragmentSeasonBinding.inflate(inflater, container, false);
+        setupViews(getContext());
+        return binding.getRoot();
     }
 
-    private void setupViews(Context context, View view) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Context context) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        binding.seasonRecyclerView.setLayoutManager(layoutManager);
+        binding.seasonRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new SeasonsAdapter(context, this);
-        mRecyclerView.setAdapter(mAdapter);
+        binding.seasonRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -112,6 +107,6 @@ public class SeasonFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 }

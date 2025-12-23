@@ -29,7 +29,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/item_header_crew" />
+        <include
+            android:id="@+id/crew_header_layout"
+            layout="@layout/item_header_crew" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/crew_recycler_view"

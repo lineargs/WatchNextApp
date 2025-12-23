@@ -19,25 +19,13 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentNotificationBinding;
 
 public class NotificationFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 445;
-    @BindView(R.id.name)
-    AppCompatTextView name;
-    @BindView(R.id.vote_average)
-    AppCompatTextView voteAverage;
-    @BindView(R.id.release_date)
-    AppCompatTextView releaseDate;
-    @BindView(R.id.overview)
-    AppCompatTextView overview;
-    @BindView(R.id.still_path)
-    ImageView poster;
+    private FragmentNotificationBinding binding;
     private Uri mUri;
-    private Unbinder unbinder;
 
     public NotificationFragment() {
     }
@@ -49,16 +37,15 @@ public class NotificationFragment extends Fragment implements LoaderManager.Load
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        binding = FragmentNotificationBinding.inflate(inflater, container, false);
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 
     @NonNull
@@ -97,13 +84,13 @@ public class NotificationFragment extends Fragment implements LoaderManager.Load
     }
 
     private void loadData(Cursor cursor) {
-        name.setText(cursor.getString(EpisodesQuery.NAME));
-        voteAverage.setText(cursor.getString(EpisodesQuery.VOTE_AVERAGE));
-        releaseDate.setText(cursor.getString(EpisodesQuery.RELEASE_DATE));
-        overview.setText(cursor.getString(EpisodesQuery.OVERVIEW));
-        ServiceUtils.loadPicasso(poster.getContext(), cursor.getString(EpisodesQuery.STILL_PATH))
+        binding.name.setText(cursor.getString(EpisodesQuery.NAME));
+        binding.voteAverage.setText(cursor.getString(EpisodesQuery.VOTE_AVERAGE));
+        binding.releaseDate.setText(cursor.getString(EpisodesQuery.RELEASE_DATE));
+        binding.overview.setText(cursor.getString(EpisodesQuery.OVERVIEW));
+        ServiceUtils.loadPicasso(binding.stillPath.getContext(), cursor.getString(EpisodesQuery.STILL_PATH))
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerInside()
-                .into(poster);
+                .into(binding.stillPath);
     }
 }

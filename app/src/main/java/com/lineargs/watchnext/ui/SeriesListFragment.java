@@ -21,35 +21,28 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentListSeriesBinding;
 
 public abstract class SeriesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 233;
-    @BindView(R.id.tabbed_series_recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    private Unbinder unbinder;
+    private FragmentListSeriesBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_list_series, container, false);
-        setupViews(rootView);
-        return rootView;
+        binding = FragmentListSeriesBinding.inflate(inflater, container, false);
+        setupViews();
+        return binding.getRoot();
     }
 
-    private void setupViews(View view) {
-        unbinder = ButterKnife.bind(this, view);
-        if (NetworkUtils.isConnected(view.getContext())) {
+    private void setupViews() {
+        if (NetworkUtils.isConnected(getContext())) {
             startLoading();
         }
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(getAdapter());
+        binding.tabbedSeriesRecyclerView.setLayoutManager(layoutManager);
+        binding.tabbedSeriesRecyclerView.setAdapter(getAdapter());
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -92,17 +85,17 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 
     private void startLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.tabbedSeriesRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void showData() {
-        progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.INVISIBLE);
+        binding.tabbedSeriesRecyclerView.setVisibility(View.VISIBLE);
     }
 
     public abstract RecyclerView.Adapter getAdapter();

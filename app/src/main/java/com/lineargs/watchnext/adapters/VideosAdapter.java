@@ -14,8 +14,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.VideosQuery;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ItemVideosBinding;
 
 /**
  * Created by goranminov on 26/11/2017.
@@ -37,10 +36,8 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_videos, parent, false);
-        return new VideoViewHolder(view);
+        ItemVideosBinding binding = ItemVideosBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new VideoViewHolder(binding);
     }
 
     @Override
@@ -68,15 +65,17 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.name)
-        AppCompatTextView name;
-        @BindView(R.id.you_tube_image)
-        ImageView photo;
+        
+        final ItemVideosBinding binding;
+        final AppCompatTextView name;
+        final ImageView photo;
 
-        VideoViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-            if (callback != null) view.setOnClickListener(this);
+        VideoViewHolder(ItemVideosBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.name = binding.name;
+            this.photo = binding.youTubeImage;
+            if (callback != null) binding.getRoot().setOnClickListener(this);
         }
 
         void bindViews(int position) {

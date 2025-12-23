@@ -19,10 +19,11 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
-import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ItemMainBinding;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by goranminov on 14/10/2017.
@@ -35,6 +36,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private OnItemClickListener callback;
     private Context context;
     private Cursor cursor;
+    private Set<Long> favoriteIds = new HashSet<>();
 
     /**
      * Creates a MainAdapter.
@@ -55,10 +57,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mainView = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_main, parent, false);
-        return new MainViewHolder(mainView);
+        ItemMainBinding binding = ItemMainBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new MainViewHolder(binding);
     }
 
     /**
@@ -98,23 +98,17 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
+     public void setFavorites(Set<Long> ids) {
+        this.favoriteIds = ids;
+        notifyDataSetChanged();
+    }
+
     /*
      * Used to check if the data contains
      * in the favorites table before we display it
      */
     private boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor == null) {
-            return false;
-        }
-        boolean favorite = cursor.getCount() > 0;
-        cursor.close();
-        return favorite;
+        return favoriteIds.contains(id);
     }
 
     private void bindMainViews(final MainViewHolder holder, final Context context, int position) {
@@ -130,7 +124,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if (isFavorite(context, id)) {
                     DbUtils.removeFromFavorites(context, uri);
                     Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
+                    // Just visually update for now since cache is not auto-updated here
+                    // Ideally we should sync with activity
                 }
             }
         });
@@ -156,24 +151,26 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     class MainViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.main_poster)
-        ImageView poster;
-        @BindView(R.id.main_title)
-        AppCompatTextView title;
-        @BindView(R.id.main_date)
-        TextView date;
-        @BindView(R.id.main_vote)
-        AppCompatTextView vote;
-        @BindView(R.id.main_star_image)
-        ImageView star;
-        @BindView(R.id.main_status)
-        AppCompatTextView status;
+        final ItemMainBinding binding;
+        final ImageView poster;
+        final AppCompatTextView title;
+        final TextView date;
+        final AppCompatTextView vote;
+        final ImageView star;
+        final AppCompatTextView status;
 
-        MainViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        MainViewHolder(ItemMainBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.poster = binding.mainPoster;
+            this.title = binding.mainTitle;
+            this.date = binding.mainDate;
+            this.vote = binding.mainVote;
+            this.star = binding.mainStarImage;
+            this.status = binding.mainStatus;
+            
             if (callback != null) {
-                view.setOnClickListener(this);
+                binding.getRoot().setOnClickListener(this);
             }
         }
 

@@ -27,8 +27,7 @@ import com.lineargs.watchnext.tools.Tools;
 
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 
 /**
  * Created by goranminov on 05/11/2017.
@@ -39,11 +38,8 @@ import butterknife.ButterKnife;
 public abstract class BaseDrawerActivity extends BaseActivity {
 
     private static final int NAV_DRAWER_CLOSE_DELAY = 250;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @BindView(R.id.nav_view)
     NavigationView navigationView;
     ConnectivityBroadcastReceiver connectivityBroadcastReceiver;
     IntentFilter connectivityIntentFilter;
@@ -96,7 +92,9 @@ public abstract class BaseDrawerActivity extends BaseActivity {
      * in {@link #onCreate} after {@link #setContentView}.
      */
     public void setupNavDrawer() {
-        ButterKnife.bind(this);
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.inflateMenu(R.menu.activity_main_drawer);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

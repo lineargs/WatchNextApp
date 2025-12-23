@@ -21,9 +21,7 @@ import com.lineargs.watchnext.adapters.VideosAdapter;
 import com.lineargs.watchnext.data.VideosQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentVideosTvBinding;
 
 /**
  * Created by goranminov on 27/11/2017.
@@ -32,16 +30,10 @@ import butterknife.Unbinder;
 public class VideosTvFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, VideosAdapter.OnItemClick {
 
     private static final int LOADER_ID = 334;
-    @BindView(R.id.videos_tv_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.empty_videos)
-    AppCompatTextView mEmptyVideos;
+    private FragmentVideosTvBinding binding;
     private Uri mUri;
     private VideosAdapter mAdapter;
     private Handler handler;
-    private Unbinder unbinder;
 
     public void setmUri(Uri uri) {
         this.mUri = uri;
@@ -49,19 +41,18 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_videos_tv, container, false);
-        setupViews(view, savedInstanceState);
-        return view;
+        binding = FragmentVideosTvBinding.inflate(inflater, container, false);
+        setupViews(savedInstanceState);
+        return binding.getRoot();
     }
 
-    private void setupViews(View view, Bundle savedState) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Bundle savedState) {
         handler = new Handler();
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        binding.videosTvRecyclerView.setLayoutManager(layoutManager);
+        binding.videosTvRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new VideosAdapter(getContext(), this);
-        mRecyclerView.setAdapter(mAdapter);
+        binding.videosTvRecyclerView.setAdapter(mAdapter);
 
         if (savedState == null) {
             startLoading();
@@ -71,21 +62,21 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyVideos.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.videosTvRecyclerView.setVisibility(View.GONE);
+        binding.emptyVideos.setVisibility(View.GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mEmptyVideos.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.GONE);
+        binding.videosTvRecyclerView.setVisibility(View.VISIBLE);
+        binding.emptyVideos.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyVideos.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.GONE);
+        binding.videosTvRecyclerView.setVisibility(View.GONE);
+        binding.emptyVideos.setVisibility(View.VISIBLE);
     }
 
     @NonNull
@@ -149,6 +140,6 @@ public class VideosTvFragment extends BaseFragment implements LoaderManager.Load
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 }

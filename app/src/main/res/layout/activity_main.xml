@@ -22,7 +22,9 @@
                 android:layout_height="?android:attr/actionBarSize"
                 android:layout_margin="@dimen/padding_eight">
 
-                <include layout="@layout/toolbar_main" />
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/toolbar_main" />
             </androidx.cardview.widget.CardView>
 
         </com.google.android.material.appbar.AppBarLayout>

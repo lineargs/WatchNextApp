@@ -15,8 +15,7 @@ import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ItemCrewBinding;
 
 /**
  * Created by goranminov on 02/11/2017.
@@ -38,10 +37,8 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_crew, parent, false);
-        return new MovieViewHolder(view);
+        ItemCrewBinding binding = ItemCrewBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new MovieViewHolder(binding);
     }
 
     @Override
@@ -69,18 +66,20 @@ public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.crew_name)
-        TextView crewName;
-        @BindView(R.id.crew_job)
-        TextView crewJob;
-        @BindView(R.id.crew_image_view)
-        ImageView profilePath;
+        
+        final ItemCrewBinding binding;
+        final TextView crewName;
+        final TextView crewJob;
+        final ImageView profilePath;
 
-        MovieViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        MovieViewHolder(ItemCrewBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.crewName = binding.crewName;
+            this.crewJob = binding.crewJob;
+            this.profilePath = binding.crewImageView;
             if (onClick != null) {
-                view.setOnClickListener(this);
+                binding.getRoot().setOnClickListener(this);
             }
         }
 

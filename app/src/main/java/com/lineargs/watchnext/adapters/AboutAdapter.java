@@ -14,9 +14,9 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.lineargs.watchnext.databinding.ItemAboutBinding;
+import com.lineargs.watchnext.databinding.ItemHeaderLibraryBinding;
+import com.lineargs.watchnext.databinding.ItemLibraryBinding;
 
 public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -60,20 +60,14 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_ABOUT:
-                View about = LayoutInflater
-                        .from(parent.getContext())
-                        .inflate(R.layout.item_about, parent, false);
-                return new AboutHolder(about);
+                ItemAboutBinding aboutBinding = ItemAboutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new AboutHolder(aboutBinding);
             case VIEW_TYPE_HEADER:
-                View header = LayoutInflater
-                        .from(parent.getContext())
-                        .inflate(R.layout.item_header_library, parent, false);
-                return new HeaderHolder(header);
+                ItemHeaderLibraryBinding headerBinding = ItemHeaderLibraryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new HeaderHolder(headerBinding);
             case VIEW_TYPE_LIBRARY:
-                View library = LayoutInflater
-                        .from(parent.getContext())
-                        .inflate(R.layout.item_library, parent, false);
-                return new LibraryHolder(library);
+                ItemLibraryBinding libraryBinding = ItemLibraryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new LibraryHolder(libraryBinding);
             default:
                 throw new IllegalArgumentException("Invalid view type, value of" + viewType);
 
@@ -134,16 +128,17 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     class LibraryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.library_name)
-        TextView name;
-        @BindView(R.id.library_description)
-        TextView description;
-        @BindView(R.id.library_link)
-        Button link;
+        final ItemLibraryBinding binding;
+        final TextView name;
+        final TextView description;
+        final Button link;
 
-        LibraryHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        LibraryHolder(ItemLibraryBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.name = binding.libraryName;
+            this.description = binding.libraryDescription;
+            this.link = binding.libraryLink;
             if (onClick != null) link.setOnClickListener(this);
         }
 
@@ -157,20 +152,32 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     class AboutHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.version_text)
-        AppCompatTextView version;
+        final ItemAboutBinding binding;
+        final AppCompatTextView version;
 
-        AboutHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        AboutHolder(ItemAboutBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.version = binding.versionText;
+            
+            binding.tmdbTerms.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openTerms();
+                }
+            });
+            binding.tmdbApiTerms.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openTermsApi();
+                }
+            });
         }
 
-        @OnClick(R.id.tmdb_terms)
         public void openTerms() {
             ServiceUtils.openWeb(context, context.getString(R.string.tmdb_terms_link));
         }
 
-        @OnClick(R.id.tmdb_api_terms)
         public void openTermsApi() {
             ServiceUtils.openWeb(context, context.getString(R.string.tmdb_api_terms_link));
         }
@@ -178,8 +185,8 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     class HeaderHolder extends RecyclerView.ViewHolder {
 
-        HeaderHolder(View view) {
-            super(view);
+        HeaderHolder(ItemHeaderLibraryBinding binding) {
+            super(binding.getRoot());
         }
     }
 }

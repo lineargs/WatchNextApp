@@ -14,8 +14,7 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ItemCreditsCastBinding;
 
 /**
  * Created by goranminov on 24/11/2017.
@@ -37,10 +36,8 @@ public class CreditsCastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_credits_cast, parent, false);
-        return new CreditsViewHolder(view);
+        ItemCreditsCastBinding binding = ItemCreditsCastBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new CreditsViewHolder(binding);
     }
 
     @Override
@@ -68,17 +65,19 @@ public class CreditsCastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     class CreditsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.name)
-        AppCompatTextView name;
-        @BindView(R.id.character_name)
-        AppCompatTextView characterName;
-        @BindView(R.id.profile_photo)
-        ImageView photo;
+        
+        final ItemCreditsCastBinding binding;
+        final AppCompatTextView name;
+        final AppCompatTextView characterName;
+        final ImageView photo;
 
-        CreditsViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-            view.setOnClickListener(this);
+        CreditsViewHolder(ItemCreditsCastBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.name = binding.name;
+            this.characterName = binding.characterName;
+            this.photo = binding.profilePhoto;
+            binding.getRoot().setOnClickListener(this);
         }
 
         void bindViews(int position) {

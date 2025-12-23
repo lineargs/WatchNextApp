@@ -13,19 +13,18 @@ import android.widget.TextView;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.utils.StatsUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.ActivityStatisticsBinding;
+import com.lineargs.watchnext.databinding.ItemStatisticsBinding;
 
 public class StatisticsActivity extends BaseTopActivity {
 
-    @BindView(R.id.container)
-    ViewPager viewPager;
+    private ActivityStatisticsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_statistics);
+        binding = ActivityStatisticsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setupActionBar();
         setupNavDrawer();
 
@@ -45,7 +44,7 @@ public class StatisticsActivity extends BaseTopActivity {
             }
         };
 
-        viewPager.setAdapter(fragmentPagerAdapter);
+        binding.container.setAdapter(fragmentPagerAdapter);
     }
 
 //    @Override
@@ -62,25 +61,20 @@ public class StatisticsActivity extends BaseTopActivity {
 
     public static class FirstFragment extends BaseFragment {
 
-        @BindView(R.id.movies_count)
-        TextView movies;
-        @BindView(R.id.series_count)
-        TextView series;
-        private Unbinder unbinder;
+        private ItemStatisticsBinding binding;
 
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.item_statistics, container, false);
-            unbinder = ButterKnife.bind(this, view);
-            movies.setText(String.valueOf(StatsUtils.getMoviesCount(getActivity())));
-            series.setText(String.valueOf(StatsUtils.getSeriesCount(getActivity())));
-            return view;
+            binding = ItemStatisticsBinding.inflate(inflater, container, false);
+            binding.moviesCount.setText(String.valueOf(StatsUtils.getMoviesCount(getActivity())));
+            binding.seriesCount.setText(String.valueOf(StatsUtils.getSeriesCount(getActivity())));
+            return binding.getRoot();
         }
 
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            unbinder.unbind();
+            binding = null;
         }
     }
 }

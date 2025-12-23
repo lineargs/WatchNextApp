@@ -53,11 +53,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                    <include layout="@layout/fragment_cast" />
+                    <include
+                        android:id="@+id/cast_header_layout"
+                        layout="@layout/fragment_cast" />
 
-                    <include layout="@layout/item_footer_series" />
+                    <include
+                        android:id="@+id/series_footer"
+                        layout="@layout/item_footer_series" />
 
-                    <include layout="@layout/item_buttons_series" />
+                    <include
+                        android:id="@+id/series_buttons"
+                        layout="@layout/item_buttons_series" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

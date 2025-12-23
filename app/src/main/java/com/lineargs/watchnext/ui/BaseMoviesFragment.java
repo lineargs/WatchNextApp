@@ -11,8 +11,7 @@ import android.widget.ProgressBar;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.FragmentTabbedMoviesBinding;
 
 /**
  * Created by goranminov on 16/11/2017.
@@ -23,32 +22,28 @@ import butterknife.ButterKnife;
 
 public abstract class BaseMoviesFragment extends BaseFragment {
 
-    @BindView(R.id.tabbed_movies_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    private FragmentTabbedMoviesBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_tabbed_movies, container, false);
-        setupViews(rootView);
-        return rootView;
+        binding = FragmentTabbedMoviesBinding.inflate(inflater, container, false);
+        setupViews();
+        return binding.getRoot();
     }
 
-    public void setupViews(View view) {
-        ButterKnife.bind(this, view);
-        if (NetworkUtils.isConnected(view.getContext())) {
+    public void setupViews() {
+        if (NetworkUtils.isConnected(getContext())) {
             startLoading();
         }
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.tabbedMoviesRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     public void showData() {
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.INVISIBLE);
+        binding.tabbedMoviesRecyclerView.setVisibility(View.VISIBLE);
     }
 }

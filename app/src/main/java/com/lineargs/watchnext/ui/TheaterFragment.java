@@ -1,11 +1,8 @@
 package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -15,11 +12,9 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
@@ -28,51 +23,44 @@ import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
 import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentTheaterBinding;
 
 public class TheaterFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         TheaterAdapter.OnItemClickListener {
 
     private static final int LOADER_ID = 333;
-    @BindView(R.id.theater_recycler_view)
-    RecyclerView recyclerView;
+    private FragmentTheaterBinding binding;
     private TheaterAdapter theaterAdapter;
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
-    private Unbinder unbinder;
 
     public TheaterFragment() {
     }
 
     public void setSwipeRefreshLayout (SwipeRefreshLayout swipeRefreshLayout) {
-        this.swipeRefreshLayout = swipeRefreshLayout;
+        // this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_theater, container, false);
-        setupViews(rootView);
-        return rootView;
+        binding = FragmentTheaterBinding.inflate(inflater, container, false);
+        setupViews();
+        return binding.getRoot();
     }
 
-    private void setupViews(final View view) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews() {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
+        binding.theaterRecyclerView.setLayoutManager(layoutManager);
+        binding.theaterRecyclerView.setHasFixedSize(true);
         theaterAdapter = new TheaterAdapter(getContext(), this);
-        recyclerView.setAdapter(theaterAdapter);
-        if (NetworkUtils.isConnected(view.getContext())) {
-            swipeRefreshLayout.setRefreshing(true);
+        binding.theaterRecyclerView.setAdapter(theaterAdapter);
+        if (NetworkUtils.isConnected(getContext())) {
+            binding.swipeRefreshLayout.setRefreshing(true);
         }
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetworkUtils.isConnected(view.getContext())) {
-                    swipeRefreshLayout.setRefreshing(true);
+                if (NetworkUtils.isConnected(getContext())) {
+                    binding.swipeRefreshLayout.setRefreshing(true);
                     WatchNextSyncAdapter.syncImmediately(getContext());
                     getLoaderManager().restartLoader(LOADER_ID, null, TheaterFragment.this);
                 }
@@ -104,7 +92,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
                 theaterAdapter.swapCursor(data);
                 if (data != null && data.getCount() != 0) {
                     data.moveToFirst();
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeRefreshLayout.setRefreshing(false);
                 }
                 break;
             default:
@@ -128,6 +116,6 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 }
