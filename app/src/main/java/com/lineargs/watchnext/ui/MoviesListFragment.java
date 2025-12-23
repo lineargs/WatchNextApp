@@ -19,8 +19,10 @@ import android.widget.ProgressBar;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,6 +34,8 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
     RecyclerView recyclerView;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
     private Unbinder unbinder;
 
     @Override
@@ -42,7 +46,7 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
         return rootView;
     }
 
-    private void setupViews(View view) {
+    private void setupViews(final View view) {
         unbinder = ButterKnife.bind(this, view);
         if (NetworkUtils.isConnected(view.getContext())) {
             startLoading();
@@ -50,6 +54,20 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(getAdapter());
+        
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkUtils.isConnected(view.getContext())) {
+                    swipeRefreshLayout.setRefreshing(true);
+                    WatchNextSyncAdapter.syncImmediately(getContext());
+                    getLoaderManager().restartLoader(LOADER_ID, null, MoviesListFragment.this);
+                } else {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -103,6 +121,9 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
     private void showData() {
         progressBar.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     public abstract RecyclerView.Adapter getAdapter();

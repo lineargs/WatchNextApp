@@ -26,6 +26,7 @@ import com.lineargs.watchnext.adapters.TheaterAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
+import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +39,8 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
     @BindView(R.id.theater_recycler_view)
     RecyclerView recyclerView;
     private TheaterAdapter theaterAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
     private Unbinder unbinder;
 
     public TheaterFragment() {
@@ -71,6 +73,7 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
             public void onRefresh() {
                 if (NetworkUtils.isConnected(view.getContext())) {
                     swipeRefreshLayout.setRefreshing(true);
+                    WatchNextSyncAdapter.syncImmediately(getContext());
                     getLoaderManager().restartLoader(LOADER_ID, null, TheaterFragment.this);
                 }
             }
