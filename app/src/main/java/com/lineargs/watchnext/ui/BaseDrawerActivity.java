@@ -9,15 +9,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -27,8 +27,7 @@ import com.lineargs.watchnext.tools.Tools;
 
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 
 /**
  * Created by goranminov on 05/11/2017.
@@ -39,11 +38,8 @@ import butterknife.ButterKnife;
 public abstract class BaseDrawerActivity extends BaseActivity {
 
     private static final int NAV_DRAWER_CLOSE_DELAY = 250;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @BindView(R.id.nav_view)
     NavigationView navigationView;
     ConnectivityBroadcastReceiver connectivityBroadcastReceiver;
     IntentFilter connectivityIntentFilter;
@@ -96,7 +92,9 @@ public abstract class BaseDrawerActivity extends BaseActivity {
      * in {@link #onCreate} after {@link #setContentView}.
      */
     public void setupNavDrawer() {
-        ButterKnife.bind(this);
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.inflateMenu(R.menu.activity_main_drawer);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

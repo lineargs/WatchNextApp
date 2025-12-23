@@ -59,6 +59,10 @@
     <string name="toast_aired_already">This episode aired already</string>
     <string name="snackbar_no_connection">No connection</string>
     <string name="no_apps_installed">No apps installed</string>
+    <string name="snackbar_notifications_required">Notifications are required for reminders</string>
+    <string name="snackbar_notifications_disabled">Notifications are disabled</string>
+    <string name="snackbar_grant">Grant</string>
+    <string name="snackbar_settings">Settings</string>
 
     <!-- Season and Episode -->
     <string name="season">Season %d</string>

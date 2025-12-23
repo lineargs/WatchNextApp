@@ -4,41 +4,33 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ReviewAdapter;
 import com.lineargs.watchnext.data.ReviewQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentReviewBinding;
 
 public class ReviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ReviewAdapter.OnClickListener {
 
     private static final int LOADER_ID = 112;
-    @BindView(R.id.review_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.empty_review)
-    AppCompatTextView mEmptyReview;
+    private FragmentReviewBinding binding;
     private ReviewAdapter mAdapter;
     private Uri mUri;
     private Handler handler;
-    private Unbinder unbinder;
 
     public ReviewFragment() {
     }
@@ -50,44 +42,49 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_review, container, false);
-        setupViews(view, savedInstanceState);
-        return view;
+        binding = FragmentReviewBinding.inflate(inflater, container, false);
+        setupViews(savedInstanceState);
+        return binding.getRoot();
     }
 
-    private void setupViews(View view, Bundle savedState) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Bundle savedState) {
         handler = new Handler();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        binding.reviewRecyclerView.setLayoutManager(layoutManager);
+        binding.reviewRecyclerView.setHasFixedSize(true);
         mAdapter = new ReviewAdapter(getContext(), this);
-        mRecyclerView.setAdapter(mAdapter);
+        binding.reviewRecyclerView.setAdapter(mAdapter);
 
 
         if (savedState == null) {
             startLoading();
         }
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyReview.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+        binding.reviewRecyclerView.setVisibility(View.GONE);
+        binding.emptyReview.setVisibility(View.GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mEmptyReview.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.reviewRecyclerView.setVisibility(View.VISIBLE);
+        binding.emptyReview.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyReview.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.reviewRecyclerView.setVisibility(View.GONE);
+        binding.emptyReview.setVisibility(View.VISIBLE);
     }
 
     @NonNull
@@ -151,6 +148,6 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 }

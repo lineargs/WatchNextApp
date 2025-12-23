@@ -6,10 +6,11 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ShareCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ShareCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -53,7 +54,10 @@ public final class ServiceUtils {
      */
     @NonNull
     public static RequestCreator loadPicasso(Context context, String path) {
-        return Picasso.with(context).load(path);
+        if (!TextUtils.isEmpty(path) && path.contains("http://")) {
+            path = path.replace("http://", "https://");
+        }
+        return Picasso.get().load(path);
     }
 
     /**
@@ -251,6 +255,9 @@ public final class ServiceUtils {
     public static void setUpCommentsButton(Context context, String movieId, View button) {
         if (button != null && !DbUtils.checkForId(context, movieId, DataContract.Review.CONTENT_URI)) {
             button.setEnabled(false);
+            if (button instanceof android.widget.TextView) {
+                ((android.widget.TextView) button).setTextColor(Color.GRAY);
+            }
         }
     }
 
@@ -266,6 +273,9 @@ public final class ServiceUtils {
     public static void setUpVideosButton(Context context, String id, View button) {
         if (button != null && !DbUtils.checkForId(context, id, DataContract.Videos.CONTENT_URI)) {
             button.setEnabled(false);
+            if (button instanceof android.widget.TextView) {
+                ((android.widget.TextView) button).setTextColor(Color.GRAY);
+            }
         }
     }
 

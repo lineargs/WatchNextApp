@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
             style="@style/DetailText"
             android:layout_width="0dp"

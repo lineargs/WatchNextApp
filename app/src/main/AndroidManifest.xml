@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.lineargs.watchnext">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Network call -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,6 +12,7 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Show shortcuts -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
@@ -25,7 +25,9 @@
         android:theme="@style/WatchNext.Grey">
 
         <!-- Activities -->
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,6 +45,7 @@
         <activity android:name=".ui.TabbedMoviesActivity" />
         <activity
             android:name=".ui.SearchMainActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/WatchNext.Search">
             <meta-data
@@ -55,6 +58,7 @@
         </activity>
         <activity
             android:name=".ui.SearchSerieActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/WatchNext.Search">
             <meta-data
@@ -67,6 +71,7 @@
         </activity>
         <activity
             android:name=".ui.SearchMovieActivity"
+            android:exported="true"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.app.searchable"
@@ -138,7 +143,9 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <!-- Widget Receiver -->
-        <receiver android:name=".widget.AppWidget">
+        <receiver
+            android:name=".widget.AppWidget"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -173,13 +180,6 @@
         </service>
 
         <!-- Firebase Job Service -->
-        <service
-            android:name=".jobs.ReminderFirebaseJobService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
 
     </application>
 

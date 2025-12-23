@@ -1,8 +1,3 @@
-🚧 Work in progress 👷‍♀️⛏👷🔧️👷🔧 🚧 WatchNext 2.0
-==================
-
-Rewriting WatchNext using [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/)
-
 WatchNext
 =========
 Simple application to track and explore all the information from your favourite movies and series.

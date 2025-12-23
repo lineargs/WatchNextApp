@@ -2,9 +2,9 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +12,10 @@ import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.CreditsQuery;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ItemCastBinding;
 
 /**
  * Created by goranminov on 31/10/2017.
@@ -37,10 +37,8 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_cast, parent, false);
-        return new CastViewHolder(view);
+        ItemCastBinding binding = ItemCastBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new CastViewHolder(binding);
     }
 
     @Override
@@ -68,26 +66,27 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class CastViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.cast_name)
-        AppCompatTextView castName;
-        @BindView(R.id.cast_character_name)
-        AppCompatTextView castCharacter;
-        @BindView(R.id.cast_image_view)
-        ImageView profilePath;
+        
+        final ItemCastBinding binding;
+        final AppCompatTextView castName;
+        final AppCompatTextView castCharacter;
+        final ImageView profilePath;
 
-        CastViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        CastViewHolder(ItemCastBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.castName = binding.castName;
+            this.castCharacter = binding.castCharacterName;
+            this.profilePath = binding.castImageView;
             if (callback != null)
-                view.setOnClickListener(this);
+                binding.getRoot().setOnClickListener(this);
         }
 
         void bindViews(int position) {
             cursor.moveToPosition(position);
             castName.setText(cursor.getString(CreditsQuery.NAME));
             castCharacter.setText(cursor.getString(CreditsQuery.CHARACTER_NAME));
-            Picasso.with(profilePath.getContext())
-                    .load(cursor.getString(CreditsQuery.PROFILE_PATH))
+            ServiceUtils.loadPicasso(profilePath.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
                     .fit()

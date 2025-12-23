@@ -3,9 +3,9 @@ package com.lineargs.watchnext.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +17,11 @@ import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ItemSearchBinding;
 
 /**
  * Created by goranminov on 24/11/2017.
@@ -41,10 +41,8 @@ public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View movieView = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_search, parent, false);
-        return new SearchTvViewHolder(movieView);
+        ItemSearchBinding binding = ItemSearchBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new SearchTvViewHolder(binding);
     }
 
     @Override
@@ -90,16 +88,18 @@ public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     class SearchTvViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.main_poster)
-        ImageView poster;
-        @BindView(R.id.star_image)
-        ImageView star;
-        @BindView(R.id.main_title)
-        TextView title;
 
-        SearchTvViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        final ItemSearchBinding binding;
+        final ImageView poster;
+        final ImageView star;
+        final TextView title;
+
+        SearchTvViewHolder(ItemSearchBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.poster = binding.mainPoster;
+            this.star = binding.starImage;
+            this.title = binding.mainTitle;
         }
 
         void bindViews(final Context context, int position) {
@@ -125,8 +125,7 @@ public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
             title.setText(cursor.getString(SearchQuery.TITLE));
-            Picasso.with(poster.getContext())
-                    .load(cursor.getString(SearchQuery.POSTER_PATH))
+            ServiceUtils.loadPicasso(poster.getContext(), cursor.getString(SearchQuery.POSTER_PATH))
                     .centerInside()
                     .fit()
                     .into(poster);

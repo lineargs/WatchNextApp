@@ -1,6 +1,7 @@
 package com.lineargs.watchnext.widget;
 
 import android.app.PendingIntent;
+import android.os.Build;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -33,7 +34,7 @@ public class AppWidget extends AppWidgetProvider {
 
         Intent appIntent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-                appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                appIntent, PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE : 0));
         views.setPendingIntentTemplate(R.id.widget_list_view, pendingIntent);
         views.setEmptyView(R.id.widget_list_view, R.id.empty_view);
         return views;

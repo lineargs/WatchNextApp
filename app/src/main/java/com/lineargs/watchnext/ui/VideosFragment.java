@@ -4,26 +4,24 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
 import com.lineargs.watchnext.data.VideosQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentVideosBinding;
 
 /**
  * Created by goranminov on 26/11/2017.
@@ -32,16 +30,10 @@ import butterknife.Unbinder;
 public class VideosFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, VideosAdapter.OnItemClick {
 
     private static final int LOADER_ID = 334;
-    @BindView(R.id.videos_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.empty_videos)
-    AppCompatTextView mEmptyVideos;
+    private FragmentVideosBinding binding;
     private Uri mUri;
     private VideosAdapter mAdapter;
     private Handler handler;
-    private Unbinder unbinder;
 
     public void setmUri(Uri uri) {
         this.mUri = uri;
@@ -50,19 +42,18 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_videos, container, false);
-        setupViews(view, savedInstanceState);
-        return view;
+        binding = FragmentVideosBinding.inflate(inflater, container, false);
+        setupViews(savedInstanceState);
+        return binding.getRoot();
     }
 
-    private void setupViews(View view, Bundle savedState) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Bundle savedState) {
         handler = new Handler();
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        binding.videosRecyclerView.setLayoutManager(layoutManager);
+        binding.videosRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new VideosAdapter(getContext(), this);
-        mRecyclerView.setAdapter(mAdapter);
+        binding.videosRecyclerView.setAdapter(mAdapter);
 
         if (savedState == null) {
             startLoading();
@@ -72,21 +63,28 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyVideos.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+        binding.videosRecyclerView.setVisibility(View.GONE);
+        binding.emptyVideos.setVisibility(View.GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mEmptyVideos.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.videosRecyclerView.setVisibility(View.VISIBLE);
+        binding.emptyVideos.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmptyVideos.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.videosRecyclerView.setVisibility(View.GONE);
+        binding.emptyVideos.setVisibility(View.VISIBLE);
     }
 
     @NonNull
@@ -150,6 +148,6 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 }

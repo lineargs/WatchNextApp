@@ -7,19 +7,19 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
@@ -27,9 +27,7 @@ import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.utils.Constants;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentSeasonsBinding;
 
 /**
  * Created by goranminov on 27/11/2017.
@@ -40,16 +38,10 @@ import butterknife.Unbinder;
 public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SeasonsAdapter.OnClickListener {
 
     private static final int LOADER_ID = 112;
-    @BindView(R.id.seasons_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.empty_seasons)
-    AppCompatTextView mEmpty;
+    private FragmentSeasonsBinding binding;
     private Uri mUri;
     private Handler handler;
     private SeasonsAdapter mAdapter;
-    private Unbinder unbinder;
 
     public SeasonsFragment() {
     }
@@ -61,18 +53,17 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_seasons, container, false);
-        setupViews(getContext(), view, savedInstanceState);
-        return view;
+        binding = FragmentSeasonsBinding.inflate(inflater, container, false);
+        setupViews(getContext(), savedInstanceState);
+        return binding.getRoot();
     }
 
-    private void setupViews(Context context, View view, Bundle savedState) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Context context, Bundle savedState) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        binding.seasonsRecyclerView.setLayoutManager(layoutManager);
+        binding.seasonsRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new SeasonsAdapter(context, this);
-        mRecyclerView.setAdapter(mAdapter);
+        binding.seasonsRecyclerView.setAdapter(mAdapter);
         handler = new Handler();
         if (savedState == null) {
             startLoading();
@@ -81,21 +72,28 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmpty.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+        binding.seasonsRecyclerView.setVisibility(View.GONE);
+        binding.emptySeasons.setVisibility(View.GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mEmpty.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.seasonsRecyclerView.setVisibility(View.VISIBLE);
+        binding.emptySeasons.setVisibility(View.GONE);
     }
 
     private void showEmpty() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mEmpty.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.seasonsRecyclerView.setVisibility(View.GONE);
+        binding.emptySeasons.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -178,6 +176,6 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 }

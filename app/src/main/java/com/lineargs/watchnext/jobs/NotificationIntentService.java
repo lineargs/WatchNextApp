@@ -20,7 +20,7 @@ public class NotificationIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
-        int id = intent.getIntExtra(ReminderFirebaseUtilities.ID, 0);
+        int id = intent.getIntExtra("id", 0);
         NotificationTasks.executeTask(id, action, getApplicationContext());
     }
 }

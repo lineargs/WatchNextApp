@@ -4,21 +4,21 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.PersonQuery;
@@ -26,30 +26,15 @@ import com.lineargs.watchnext.sync.syncpeople.PersonSyncUtils;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentPersonBinding;
 
 public class PersonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 455;
 
-    @BindView(R.id.still_path)
-    ImageView photo;
-    @BindView(R.id.biography)
-    AppCompatTextView biography;
-    @BindView(R.id.place_of_birth)
-    AppCompatTextView placeOfBirth;
-    @BindView(R.id.homepage)
-    AppCompatTextView homepage;
-    @BindView(R.id.person_nested_view)
-    NestedScrollView mNestedView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    private FragmentPersonBinding binding;
     private Uri mUri;
     private String id = "";
-    private Unbinder unbinder;
     private Cursor cursor;
 
     public PersonFragment() {
@@ -66,24 +51,36 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_person, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        binding = FragmentPersonBinding.inflate(inflater, container, false);
         if (savedInstanceState == null) {
             PersonSyncUtils.syncReviews(getContext(), id);
             startLoading();
         }
+        
+        binding.stillPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFullscreen();
+            }
+        });
+        
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        return view;
+        return binding.getRoot();
     }
 
     private void startLoading() {
-        mNestedView.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+        binding.personNestedView.setVisibility(View.INVISIBLE);
     }
 
     private void showData() {
-        mNestedView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.personNestedView.setVisibility(View.VISIBLE);
     }
 
     @NonNull
@@ -125,29 +122,28 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 
-    @OnClick(R.id.still_path)
     public void openFullscreen() {
         Intent fullscreen = new Intent(getActivity(), PictureActivity.class);
         fullscreen.putExtra(Constants.STILL_PATH, cursor.getString(PersonQuery.PROFILE_PATH));
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(getActivity(),
-                        photo,
-                        ViewCompat.getTransitionName(photo));
+                        binding.stillPath,
+                        ViewCompat.getTransitionName(binding.stillPath));
         startActivity(fullscreen, optionsCompat.toBundle());
     }
 
     private void loadViews(Cursor cursor) {
-        ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(PersonQuery.PROFILE_PATH))
+        ServiceUtils.loadPicasso(binding.stillPath.getContext(), cursor.getString(PersonQuery.PROFILE_PATH))
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
-                .into(photo);
+                .into(binding.stillPath);
         if (TextUtils.isEmpty(cursor.getString(PersonQuery.BIOGRAPHY))) {
-            biography.setText(getString(R.string.biography_not_available));
+            binding.biography.setText(getString(R.string.biography_not_available));
         } else {
-            biography.setText(cursor.getString(PersonQuery.BIOGRAPHY));
+            binding.biography.setText(cursor.getString(PersonQuery.BIOGRAPHY));
         }
         /* We can use same logic from the biography for the place of birth or
          * homepage, just one small but big step for the mankind is that the Movie Db
@@ -156,14 +152,14 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
          * UPDATE: Took only less than a minute to implement that. Do not be lazy please :)
          */
         if (TextUtils.isEmpty(cursor.getString(PersonQuery.PLACE_OF_BIRTH))) {
-            placeOfBirth.setVisibility(View.GONE);
+            binding.placeOfBirth.setVisibility(View.GONE);
         } else {
-            placeOfBirth.setText(cursor.getString(PersonQuery.PLACE_OF_BIRTH));
+            binding.placeOfBirth.setText(cursor.getString(PersonQuery.PLACE_OF_BIRTH));
         }
         if (TextUtils.isEmpty(cursor.getString(PersonQuery.HOMEPAGE))) {
-            homepage.setVisibility(View.GONE);
+            binding.homepage.setVisibility(View.GONE);
         } else {
-            homepage.setText(cursor.getString(PersonQuery.HOMEPAGE));
+            binding.homepage.setText(cursor.getString(PersonQuery.HOMEPAGE));
         }
     }
 }

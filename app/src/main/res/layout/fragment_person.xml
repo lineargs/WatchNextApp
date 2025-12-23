@@ -7,104 +7,103 @@
     android:layout_height="match_parent"
     tools:context="com.lineargs.watchnext.ui.PersonFragment">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/person_nested_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/person_nested_view_padding"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/person_nested_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/person_nested_view_padding"
+            android:scrollbars="none">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/review_card_view"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_view_padding"
-                android:layout_marginLeft="@dimen/card_view_padding"
-                android:layout_marginRight="@dimen/card_view_padding"
-                android:layout_marginTop="@dimen/card_view_padding_top"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="@dimen/card_view_corner_radius"
-                app:cardElevation="@dimen/card_view_elevation"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="@dimen/card_view_padding">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/review_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/still_path"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?selectableItemBackground"
-                        android:transitionName="@string/still_path_transition"
-                        android:adjustViewBounds="true"
-                        android:contentDescription="@string/person_content_description" />
+                    android:layout_marginBottom="@dimen/card_view_padding"
+                    android:layout_marginLeft="@dimen/card_view_padding"
+                    android:layout_marginRight="@dimen/card_view_padding"
+                    android:layout_marginTop="@dimen/card_view_padding_top"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="@dimen/card_view_corner_radius"
+                    app:cardElevation="@dimen/card_view_elevation"
+                    app:cardUseCompatPadding="true"
+                    app:contentPadding="@dimen/card_view_padding">
 
                     <LinearLayout
-                        android:id="@+id/biography_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <ImageView
+                            android:id="@+id/still_path"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?selectableItemBackground"
+                            android:transitionName="@string/still_path_transition"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/person_content_description" />
+
+                        <LinearLayout
+                            android:id="@+id/biography_container"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:minHeight="@dimen/text_view_min_height"
-                            android:text="@string/biography_text"
-                            android:textAllCaps="true"
-                            android:textColor="?colorPrimary"
-                            android:textStyle="bold" />
+                            android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/biography"
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:minHeight="@dimen/text_view_min_height"
+                                android:text="@string/biography_text"
+                                android:textAllCaps="true"
+                                android:textColor="?colorPrimary"
+                                android:textStyle="bold" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/biography"
+                                style="@style/DetailText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/place_of_birth"
                             style="@style/DetailText"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/icon_home_black"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            android:drawableStart="@drawable/icon_home_black"
+                            tools:text="@string/tools_person_place" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/homepage"
+                            style="@style/DetailLinkText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoLink="web"
+                            android:clickable="true"
+                            android:drawableLeft="@drawable/icon_link_black"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            android:drawableStart="@drawable/icon_link_black"
+                            android:focusable="true"
+                            android:foreground="?selectableItemBackgroundBorderless"
+                            tools:text="@string/tools_person_homepage" />
                     </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
+        </androidx.core.widget.NestedScrollView>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/place_of_birth"
-                        style="@style/DetailText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_home_black"
-                        android:drawablePadding="@dimen/text_view_drawable_padding"
-                        android:drawableStart="@drawable/icon_home_black"
-                        tools:text="@string/tools_person_place" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/homepage"
-                        style="@style/DetailLinkText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoLink="web"
-                        android:clickable="true"
-                        android:drawableLeft="@drawable/icon_link_black"
-                        android:drawablePadding="@dimen/text_view_drawable_padding"
-                        android:drawableStart="@drawable/icon_link_black"
-                        android:focusable="true"
-                        android:foreground="?selectableItemBackgroundBorderless"
-                        tools:text="@string/tools_person_homepage" />
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        </FrameLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

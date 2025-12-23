@@ -14,7 +14,7 @@ import android.os.Bundle;
  * requires an authenticator object, so syncing to a service that doesn't need authentication
  * typically means creating a stub authenticator like this one.
  * This code is copied directly, in its entirety, from
- * http://developer.android.com/training/sync-adapters/creating-authenticator.html
+ * <a href="http://developer.android.com/training/sync-adapters/creating-authenticator.html">...</a>
  * Which is a pretty handy reference when creating your own syncadapters.  Just sayin'.
  */
 

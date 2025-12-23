@@ -7,8 +7,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by goranminov on 15/10/2017.
@@ -66,7 +66,7 @@ public class DataProvider extends ContentProvider {
      * signifies that this UriMatcher is a static member variable of DataProvider.
      */
     private static final UriMatcher uriMatcher = buildUriMatcher();
-    private DataDbHelper dataDbHelper;
+    private WatchNextDatabase database;
 
     /**
      * Creates the UriMatcher that will match each URI to the constants defined above.
@@ -160,10 +160,10 @@ public class DataProvider extends ContentProvider {
 
         /*
          * As noted in the comment above, onCreate is run on the main thread, so performing any
-         * lengthy operations will cause lag in your app. Since DataDbHelper's constructor is
+         * lengthy operations will cause lag in your app. Since WatchNextDatabase.getDatabase is
          * very lightweight, we are safe to perform that initialization here.
          */
-        dataDbHelper = new DataDbHelper(getContext());
+        database = WatchNextDatabase.getDatabase(getContext());
         return true;
     }
 
@@ -184,426 +184,257 @@ public class DataProvider extends ContentProvider {
      */
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-
-        /* The returning cursor*/
+        final androidx.sqlite.db.SupportSQLiteDatabase db = database.getOpenHelper().getReadableDatabase();
         Cursor cursor;
+        androidx.sqlite.db.SupportSQLiteQueryBuilder builder;
 
-        /*
-         * Here's the switch statement that, given a URI, will determine what kind of request is
-         * being made and query the database accordingly.
-         */
         switch (uriMatcher.match(uri)) {
-            /*
-             * When uriMatcher's match method is called with a URI that looks EXACTLY like this
-             *
-             *      content://com.lineargs.watchnext/popularmovie/
-             *
-             * uriMatcher's match method will return the code that indicates to us that we need
-             * to return all of the movies in our popularmovies table.
-             *
-             * In this case, we want to return a cursor that contains every row of data
-             * in our popularmovies table.
-             */
             case CODE_POPULAR_MOVIES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        /* Table we are going to query */
-                        DataContract.PopularMovieEntry.TABLE_NAME,
-                        /*
-                         * A projection designates the columns we want returned in our Cursor.
-                         * Passing null will return all columns of data within the Cursor.
-                         * However, if you don't need all the data from the table, it's best
-                         * practice to limit the columns returned in the Cursor with a projection.
-                         */
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.PopularMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
-            /*
-             * When uriMatcher's match method is called with a URI that looks something like this
-             *
-             *      content://com.lineargs.watchnext/popularmovie/123567
-             *
-             * uriMatcher's match method will return the code that indicates to us that we need
-             * to return the movie for a particular movie ID. The ID in this code is at the very
-             * end of the URI (123567) and can be accessed programmatically using Uri's getLastPathSegment method.
-             *
-             * In this case, we want to return a cursor that contains one row of data for
-             * a particular movie ID.
-             */
             case CODE_POPULAR_MOVIES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.PopularMovieEntry.TABLE_NAME,
-                        projection,
-                        /*
-                         * The URI that matches CODE_POPULAR_MOVIES_WITH_ID contains an ID at the end
-                         * of it. We extract that ID and use it with these next two lines to
-                         * specify the row of movie we want returned in the cursor. We use a
-                         * question mark here and then designate selectionArgs as the next
-                         * argument for performance reasons. Whatever Strings are contained
-                         * within the selectionArgs array will be inserted into the
-                         * selection statement by SQLite under the hood.
-                         */
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        /*
-                         * In order to determine the movie ID associated with this URI, we look at the last
-                         * path segment. In the comment above, the last path segment is 123567 and
-                         * represents the movie ID.
-                         * The query method accepts a string array of arguments, as there may be more
-                         * than one "?" in the selection statement. Even though in our case, we only have
-                         * one "?", we have to create a string array that only contains one element
-                         * because this method signature accepts a string array.
-                         */
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.PopularMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
-            /*
-             * When uriMatcher's match method is called with a URI that looks something like this
-             *
-             *      content://com.lineargs.watchnext/popularmovie/thor
-             *
-             * uriMatcher's match method will return the code that indicates to us that we need
-             * to return the movie for a particular movie title. The title in this code is at the very
-             * end of the URI (thor) and can be accessed programmatically using Uri's getLastPathSegment method.
-             *
-             * In this case, we want to return a cursor that contains one row of data for
-             * a particular movie title.
-             */
             case CODE_POPULAR_MOVIES_WITH_TITLE:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.PopularMovieEntry.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_TITLE + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.PopularMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_TITLE + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_TOP_MOVIES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.TopRatedMovieEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TopRatedMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_TOP_MOVIES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.TopRatedMovieEntry.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TopRatedMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_UPCOMING_MOVIES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.UpcomingMovieEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.UpcomingMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_UPCOMING_MOVIES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.UpcomingMovieEntry.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.UpcomingMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_THEATER_MOVIES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.TheaterMovieEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TheaterMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_THEATER_MOVIES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.TheaterMovieEntry.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TheaterMovieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_CAST:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Credits.TABLE_NAME,
-                        projection,
-                        DataContract.Credits.COLUMN_TYPE + " = ? ",
-                        new String[]{"0"},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Credits.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Credits.COLUMN_TYPE + " = ? ", new String[]{"0"})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_CAST_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Credits.TABLE_NAME,
-                        projection,
-                        DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
-                                + DataContract.Credits.COLUMN_TYPE + " = ? ",
-                        new String[]{uri.getLastPathSegment(), "0"},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Credits.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
+                                + DataContract.Credits.COLUMN_TYPE + " = ? ", new String[]{uri.getLastPathSegment(), "0"})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_CREW:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Credits.TABLE_NAME,
-                        projection,
-                        DataContract.Credits.COLUMN_TYPE + " = ? ",
-                        new String[]{"1"},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Credits.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Credits.COLUMN_TYPE + " = ? ", new String[]{"1"})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_CREW_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Credits.TABLE_NAME,
-                        projection,
-                        DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
-                                + DataContract.Credits.COLUMN_TYPE + " = ? ",
-                        new String[]{uri.getLastPathSegment(), "1"},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Credits.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Credits.COLUMN_MOVIE_ID + " = ? AND "
+                                + DataContract.Credits.COLUMN_TYPE + " = ? ", new String[]{uri.getLastPathSegment(), "1"})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_POPULAR_SERIES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.PopularSerieEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.PopularSerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_POPULAR_SERIES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.PopularSerieEntry.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.PopularSerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_TOP_SERIES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.TopRatedSerieEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TopRatedSerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_TOP_SERIES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.TopRatedSerieEntry.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.TopRatedSerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_ON_THE_AIR_SERIES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.OnTheAirSerieEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.OnTheAirSerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_ON_THE_AIR_SERIES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.OnTheAirSerieEntry.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.OnTheAirSerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_FAVORITES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Favorites.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Favorites.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_FAVORITES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Favorites.TABLE_NAME,
-                        projection,
-                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Favorites.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_SEARCH:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Search.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Search.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_SEARCH_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Search.TABLE_NAME,
-                        projection,
-                        DataContract.Search.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Search.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Search.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_SEARCH_TV:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.SearchTv.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.SearchTv.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_SEARCH_TV_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.SearchTv.TABLE_NAME,
-                        projection,
-                        DataContract.Search.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.SearchTv.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Search.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_REVIEW:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Review.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Review.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_REVIEW_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Review.TABLE_NAME,
-                        projection,
-                        DataContract.Review.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Review.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Review.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_VIDEOS:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Videos.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Videos.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_VIDEOS_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Videos.TABLE_NAME,
-                        projection,
-                        DataContract.Videos.COLUMN_MOVIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Videos.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Videos.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_SEASONS:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Seasons.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Seasons.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_SEASONS_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Seasons.TABLE_NAME,
-                        projection,
-                        DataContract.Seasons.COLUMN_SERIE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Seasons.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Seasons.COLUMN_SERIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_EPISODES:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Episodes.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Episodes.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_EPISODES_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Episodes.TABLE_NAME,
-                        projection,
-                        DataContract.Episodes.COLUMN_EPISODE_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Episodes.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Episodes.COLUMN_EPISODE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_PERSON:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Person.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Person.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             case CODE_PERSON_WITH_ID:
-                cursor = dataDbHelper.getReadableDatabase().query(
-                        DataContract.Person.TABLE_NAME,
-                        projection,
-                        DataContract.Person.COLUMN_PERSON_ID + " = ? ",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder);
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Person.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.Person.COLUMN_PERSON_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -693,159 +524,159 @@ public class DataProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        final SQLiteDatabase db = dataDbHelper.getWritableDatabase();
+        final androidx.sqlite.db.SupportSQLiteDatabase db = database.getOpenHelper().getWritableDatabase();
         Uri returnUri;
         switch (uriMatcher.match(uri)) {
             case CODE_POPULAR_MOVIES: {
-                long _id = db.insert(DataContract.PopularMovieEntry.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.PopularMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.PopularMovieEntry.buildMovieUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_TOP_MOVIES: {
-                long _id = db.insert(DataContract.TopRatedMovieEntry.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.TopRatedMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.TopRatedMovieEntry.buildMovieUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_UPCOMING_MOVIES: {
-                long _id = db.insert(DataContract.UpcomingMovieEntry.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.UpcomingMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.UpcomingMovieEntry.buildMovieUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_THEATER_MOVIES: {
-                long _id = db.insert(DataContract.TheaterMovieEntry.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.TheaterMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.TheaterMovieEntry.buildMovieUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_CAST: {
-                long _id = db.insert(DataContract.Credits.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Credits.buildCastUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_CREW: {
-                long _id = db.insert(DataContract.Credits.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Credits.buildCrewUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_POPULAR_SERIES: {
-                long _id = db.insert(DataContract.PopularSerieEntry.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.PopularSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.PopularSerieEntry.buildSerieUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_TOP_SERIES: {
-                long _id = db.insert(DataContract.TopRatedSerieEntry.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.TopRatedSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_NONE, values);
                 if (_id > 0) {
                     returnUri = DataContract.TopRatedSerieEntry.buildSerieUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_ON_THE_AIR_SERIES: {
-                long _id = db.insert(DataContract.OnTheAirSerieEntry.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.OnTheAirSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.OnTheAirSerieEntry.buildSerieUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_FAVORITES: {
-                long _id = db.insert(DataContract.Favorites.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Favorites.buildFavoritesUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_SEARCH: {
-                long _id = db.insert(DataContract.Search.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Search.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Search.buildSearchUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_SEARCH_TV: {
-                long _id = db.insert(DataContract.SearchTv.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.SearchTv.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.SearchTv.buildSearchUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_REVIEW: {
-                long _id = db.insert(DataContract.Review.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Review.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Review.buildReviewUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_VIDEOS: {
-                long _id = db.insert(DataContract.Videos.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Videos.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Videos.buildVideoUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_SEASONS: {
-                long _id = db.insert(DataContract.Seasons.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Seasons.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Seasons.buildSeasonUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_EPISODES: {
-                long _id = db.insert(DataContract.Episodes.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Episodes.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Episodes.buildEpisodeUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
             case CODE_PERSON: {
-                long _id = db.insert(DataContract.Person.TABLE_NAME, null, values);
+                long _id = db.insert(DataContract.Person.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Person.buildPersonUriWithId(_id);
                 } else {
-                    throw new SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
@@ -867,14 +698,14 @@ public class DataProvider extends ContentProvider {
      */
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        final SQLiteDatabase db = dataDbHelper.getWritableDatabase();
+        final androidx.sqlite.db.SupportSQLiteDatabase db = database.getOpenHelper().getWritableDatabase();
         int rowsInserted = 0;
         switch (uriMatcher.match(uri)) {
             case CODE_POPULAR_MOVIES:
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.PopularMovieEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.PopularMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -891,7 +722,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.TopRatedMovieEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.TopRatedMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -908,7 +739,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.UpcomingMovieEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.UpcomingMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -925,7 +756,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.TheaterMovieEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.TheaterMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -942,7 +773,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Credits.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -959,7 +790,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Credits.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -976,7 +807,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.PopularSerieEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.PopularSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -993,7 +824,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.TopRatedSerieEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.TopRatedSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1010,7 +841,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.OnTheAirSerieEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.OnTheAirSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1027,7 +858,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Favorites.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1044,7 +875,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Search.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Search.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1061,7 +892,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.SearchTv.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.SearchTv.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1078,7 +909,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Review.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Review.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1095,7 +926,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Videos.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Videos.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1112,7 +943,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Seasons.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Seasons.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1129,7 +960,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Episodes.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Episodes.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1146,7 +977,7 @@ public class DataProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(DataContract.Person.TABLE_NAME, null, value);
+                        long _id = db.insert(DataContract.Person.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -1174,6 +1005,7 @@ public class DataProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+        final androidx.sqlite.db.SupportSQLiteDatabase db = database.getOpenHelper().getWritableDatabase();
         /* Users of the delete method will expect the number of rows deleted to be returned. */
         int rowsDeleted;
         /*
@@ -1186,205 +1018,205 @@ public class DataProvider extends ContentProvider {
         if (null == selection) selection = "1";
         switch (uriMatcher.match(uri)) {
             case CODE_POPULAR_MOVIES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.PopularMovieEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_POPULAR_MOVIES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.PopularMovieEntry.TABLE_NAME,
                         DataContract.PopularMovieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_TOP_MOVIES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.TopRatedMovieEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_TOP_MOVIES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.TopRatedMovieEntry.TABLE_NAME,
                         DataContract.TopRatedMovieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_UPCOMING_MOVIES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.UpcomingMovieEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_UPCOMING_MOVIES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.UpcomingMovieEntry.TABLE_NAME,
                         DataContract.UpcomingMovieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_THEATER_MOVIES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.TheaterMovieEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_THEATER_MOVIES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.TheaterMovieEntry.TABLE_NAME,
                         DataContract.TheaterMovieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_CAST:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Credits.TABLE_NAME,
                         DataContract.Credits.COLUMN_TYPE + " = ? ",
                         new String[]{"0"});
                 break;
             case CODE_CAST_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Credits.TABLE_NAME,
                         DataContract.Credits._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_CREW:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Credits.TABLE_NAME,
                         DataContract.Credits.COLUMN_TYPE + " = ? ",
                         new String[]{"1"});
                 break;
             case CODE_CREW_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Credits.TABLE_NAME,
                         DataContract.Credits._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_POPULAR_SERIES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.PopularSerieEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_POPULAR_SERIES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.PopularSerieEntry.TABLE_NAME,
                         DataContract.PopularSerieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_TOP_SERIES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.TopRatedSerieEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_TOP_SERIES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.TopRatedSerieEntry.TABLE_NAME,
                         DataContract.TopRatedSerieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_ON_THE_AIR_SERIES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.OnTheAirSerieEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_ON_THE_AIR_SERIES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.OnTheAirSerieEntry.TABLE_NAME,
                         DataContract.OnTheAirSerieEntry._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_FAVORITES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Favorites.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_FAVORITES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Favorites.TABLE_NAME,
                         DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_SEARCH:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Search.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_SEARCH_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Search.TABLE_NAME,
                         DataContract.Search._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_SEARCH_TV:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.SearchTv.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_SEARCH_TV_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.SearchTv.TABLE_NAME,
                         DataContract.SearchTv._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_REVIEW:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Review.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_REVIEW_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Review.TABLE_NAME,
                         DataContract.Review._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_VIDEOS:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Videos.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_VIDEOS_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Videos.TABLE_NAME,
                         DataContract.Videos._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_SEASONS:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Seasons.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_SEASONS_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Seasons.TABLE_NAME,
                         DataContract.Seasons._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_EPISODES:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Episodes.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_EPISODES_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Episodes.TABLE_NAME,
                         DataContract.Episodes._ID + " = ? ",
                         selectionArgs);
                 break;
             case CODE_PERSON:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Person.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
             case CODE_PERSON_WITH_ID:
-                rowsDeleted = dataDbHelper.getWritableDatabase().delete(
+                rowsDeleted = db.delete(
                         DataContract.Person.TABLE_NAME,
                         DataContract.Person._ID + " = ? ",
                         selectionArgs);
@@ -1401,59 +1233,59 @@ public class DataProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = dataDbHelper.getWritableDatabase();
+        final androidx.sqlite.db.SupportSQLiteDatabase db = database.getOpenHelper().getWritableDatabase();
         int rowsUpdated;
         switch (uriMatcher.match(uri)) {
             case CODE_POPULAR_MOVIES:
-                rowsUpdated = db.update(DataContract.PopularMovieEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.PopularMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_TOP_MOVIES:
-                rowsUpdated = db.update(DataContract.TopRatedMovieEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.TopRatedMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_UPCOMING_MOVIES:
-                rowsUpdated = db.update(DataContract.UpcomingMovieEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.UpcomingMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_THEATER_MOVIES:
-                rowsUpdated = db.update(DataContract.TheaterMovieEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.TheaterMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_CAST:
-                rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_CREW:
-                rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_POPULAR_SERIES:
-                rowsUpdated = db.update(DataContract.PopularSerieEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.PopularSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_TOP_SERIES:
-                rowsUpdated = db.update(DataContract.TopRatedSerieEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.TopRatedSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_ON_THE_AIR_SERIES:
-                rowsUpdated = db.update(DataContract.OnTheAirSerieEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.OnTheAirSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_FAVORITES:
-                rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_SEARCH:
-                rowsUpdated = db.update(DataContract.Search.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Search.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_SEARCH_TV:
-                rowsUpdated = db.update(DataContract.SearchTv.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.SearchTv.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_REVIEW:
-                rowsUpdated = db.update(DataContract.Review.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Review.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_VIDEOS:
-                rowsUpdated = db.update(DataContract.Videos.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Videos.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_SEASONS:
-                rowsUpdated = db.update(DataContract.Seasons.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Seasons.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_EPISODES:
-                rowsUpdated = db.update(DataContract.Episodes.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Episodes.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_PERSON:
-                rowsUpdated = db.update(DataContract.Person.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(DataContract.Person.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

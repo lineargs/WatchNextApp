@@ -1,29 +1,27 @@
 package com.lineargs.watchnext.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.utils.Constants;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ActivityPersonBinding;
 
 public class PersonActivity extends BaseActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    private ActivityPersonBinding binding;
 
     private String name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_person);
+        binding = ActivityPersonBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        ButterKnife.bind(this);
         if (savedInstanceState == null && getIntent().getData() != null) {
             PersonFragment fragment = new PersonFragment();
             fragment.setmUri(getIntent().getData());
@@ -51,8 +49,8 @@ public class PersonActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setTitle(name);
         }
-        toolbar.setNavigationIcon(R.drawable.icon_arrow_back_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        binding.toolbar.toolbar.setNavigationIcon(R.drawable.icon_arrow_back_white);
+        binding.toolbar.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();

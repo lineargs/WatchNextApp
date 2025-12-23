@@ -32,7 +32,8 @@ public class DbUtils {
                 null,
                 null,
                 null);
-        cursor.moveToFirst();
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
         ContentValues[] movieContentValues = new ContentValues[1];
         ContentValues contentValues = new ContentValues();
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, cursor.getInt(Query.ID));
@@ -52,9 +53,11 @@ public class DbUtils {
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES, cursor.getString(Query.GENRES));
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_RUNTIME, cursor.getInt(Query.RUNTIME));
         movieContentValues[0] = contentValues;
-        context.getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI,
-                movieContentValues);
-        cursor.close();
+                context.getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI,
+                        movieContentValues);
+            }
+            cursor.close();
+        }
     }
 
     /**
@@ -70,7 +73,8 @@ public class DbUtils {
                 null,
                 null,
                 null);
-        cursor.moveToFirst();
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
         ContentValues[] movieContentValues = new ContentValues[1];
         ContentValues contentValues = new ContentValues();
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, cursor.getInt(Query.ID));
@@ -87,9 +91,11 @@ public class DbUtils {
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES, cursor.getString(Query.PRODUCTION_COMPANIES));
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES, cursor.getString(Query.GENRES));
         movieContentValues[0] = contentValues;
-        context.getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI,
-                movieContentValues);
-        cursor.close();
+                context.getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI,
+                        movieContentValues);
+            }
+            cursor.close();
+        }
     }
 
     /**

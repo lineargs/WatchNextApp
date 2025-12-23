@@ -5,19 +5,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ProgressBar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SearchAdapter;
@@ -26,9 +26,7 @@ import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
 import com.lineargs.watchnext.utils.Constants;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.lineargs.watchnext.databinding.ActivitySearchMainBinding;
 
 import static android.view.View.GONE;
 
@@ -40,12 +38,7 @@ import static android.view.View.GONE;
 public class SearchMainActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 223;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    @BindView(R.id.search_view)
-    SearchView mSearchView;
-    @BindView(R.id.search_results)
-    RecyclerView mSearchResults;
+    private ActivitySearchMainBinding binding;
     boolean adult;
     private String queryString;
     private Handler handler;
@@ -55,22 +48,36 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_main);
+        binding = ActivitySearchMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         handler = new Handler();
         setupActionBar();
         setupNavDrawer();
         setupSearchView();
-        ButterKnife.bind(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mSearchResults.setLayoutManager(layoutManager);
+        binding.searchResults.setLayoutManager(layoutManager);
         mResultsAdapter = new SearchAdapter(this);
-        mSearchResults.setAdapter(mResultsAdapter);
+        binding.searchResults.setAdapter(mResultsAdapter);
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;
         mQuery = query;
-        if (mSearchView != null) {
-            mSearchView.setQuery(query, false);
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SearchSyncUtils.syncSearchMovies(SearchMainActivity.this, queryString, adult);
+                startLoading();
+            }
+        });
+        if (binding.searchView != null) {
+            binding.searchView.setQuery(query, false);
         }
+        
+        binding.scrim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrimView();
+            }
+        });
     }
 
     @Override
@@ -85,7 +92,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         if (intent.hasExtra(SearchManager.QUERY)) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             if (!TextUtils.isEmpty(query)) {
-                mSearchView.setQuery(query, false);
+                binding.searchView.setQuery(query, false);
                 searchFor(query);
             }
         }
@@ -107,14 +114,14 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         if (searchManager != null) {
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            binding.searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         }
-        mSearchView.setIconified(false);
-        mSearchView.setQueryHint(getString(R.string.search_query_hint));
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setIconified(false);
+        binding.searchView.setQueryHint(getString(R.string.search_query_hint));
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mSearchView.clearFocus();
+                binding.searchView.clearFocus();
                 return true;
             }
 
@@ -134,7 +141,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
                 return true;
             }
         });
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        binding.searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 dismiss();
@@ -142,7 +149,7 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
             }
         });
         if (!TextUtils.isEmpty(mQuery)) {
-            mSearchView.setQuery(mQuery, false);
+            binding.searchView.setQuery(mQuery, false);
         }
     }
 
@@ -155,7 +162,6 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         ActivityCompat.finishAfterTransition(this);
     }
 
-    @OnClick(R.id.scrim)
     public void scrimView() {
         dismiss();
     }
@@ -185,13 +191,17 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mSearchResults.setVisibility(GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+        binding.searchResults.setVisibility(GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(GONE);
-        mSearchResults.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.searchResults.setVisibility(View.VISIBLE);
     }
 
     @NonNull

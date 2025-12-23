@@ -6,50 +6,59 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
+import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.lineargs.watchnext.databinding.FragmentListMoviesBinding;
 
 public abstract class MoviesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 225;
-    @BindView(R.id.tabbed_movies_recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    private Unbinder unbinder;
+    private FragmentListMoviesBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_list_movies, container, false);
-        setupViews(rootView);
-        return rootView;
+        binding = FragmentListMoviesBinding.inflate(inflater, container, false);
+        setupViews();
+        return binding.getRoot();
     }
 
-    private void setupViews(View view) {
-        unbinder = ButterKnife.bind(this, view);
-        if (NetworkUtils.isConnected(view.getContext())) {
+    private void setupViews() {
+        if (NetworkUtils.isConnected(getContext())) {
             startLoading();
         }
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(getAdapter());
+        binding.tabbedMoviesRecyclerView.setLayoutManager(layoutManager);
+        binding.tabbedMoviesRecyclerView.setAdapter(getAdapter());
+        
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkUtils.isConnected(getContext())) {
+                    binding.swipeRefreshLayout.setRefreshing(true);
+                    WatchNextSyncAdapter.syncImmediately(getContext());
+                    getLoaderManager().restartLoader(LOADER_ID, null, MoviesListFragment.this);
+                } else {
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -92,17 +101,21 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        super.onDestroyView();
+        binding = null;
     }
 
     private void startLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     private void showData() {
-        progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
+        binding.tabbedMoviesRecyclerView.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     public abstract RecyclerView.Adapter getAdapter();

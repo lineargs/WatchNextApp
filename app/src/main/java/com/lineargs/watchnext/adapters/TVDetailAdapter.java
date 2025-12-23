@@ -2,9 +2,9 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.lineargs.watchnext.databinding.ItemTvDetailBinding;
 
 public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -27,10 +26,8 @@ public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(context)
-                .inflate(R.layout.item_tv_detail, parent, false);
-        return new MovieViewHolder(view);
+        ItemTvDetailBinding binding = ItemTvDetailBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new MovieViewHolder(binding);
     }
 
     @Override
@@ -54,22 +51,24 @@ public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.title)
-        AppCompatTextView title;
-        @BindView(R.id.release_date)
-        AppCompatTextView releaseDate;
-        @BindView(R.id.overview)
-        AppCompatTextView overview;
-        @BindView(R.id.vote_average)
-        AppCompatTextView voteAverage;
-        @BindView(R.id.companies)
-        AppCompatTextView companies;
-        @BindView(R.id.genres)
-        AppCompatTextView genres;
+        
+        final ItemTvDetailBinding binding;
+        final AppCompatTextView title;
+        final AppCompatTextView releaseDate;
+        final AppCompatTextView overview;
+        final AppCompatTextView voteAverage;
+        final AppCompatTextView companies;
+        final AppCompatTextView genres;
 
-        MovieViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        MovieViewHolder(ItemTvDetailBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.title = binding.title;
+            this.releaseDate = binding.releaseDate;
+            this.overview = binding.overview;
+            this.voteAverage = binding.voteAverage;
+            this.companies = binding.companies;
+            this.genres = binding.genres;
         }
 
         void bindViews(int position) {

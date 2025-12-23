@@ -1,24 +1,29 @@
 package com.lineargs.watchnext.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.crashlytics.android.Crashlytics;
+// import com.crashlytics.android.Crashlytics;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MainAdapter;
 import com.lineargs.watchnext.data.DataContract;
@@ -26,10 +31,7 @@ import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncadapter.WatchNextSyncAdapter;
 import com.lineargs.watchnext.utils.NotificationUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
+import com.lineargs.watchnext.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         MainAdapter.OnItemClickListener {
@@ -38,10 +40,8 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     private static final int LOADER_ID = 333;
     private static final String BUNDLE_ARG = "sort";
     private static final String ASC = " ASC", DESC = " DESC";
-    @BindView(R.id.main_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.empty_layout)
-    RelativeLayout mRelativeLayout;
+    @NonNull
+    ActivityMainBinding binding;
     private MainAdapter mAdapter;
     private Bundle bundle;
 
@@ -49,23 +49,29 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /* Setup Crashlytics instance for crash reports */
-        Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_main);
+        // Fabric.with(this, new Crashlytics());
+        // Fabric.with(this, new Crashlytics());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setupActionBar();
         setupNavDrawer();
         setupViews();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
         if (isConnected()) {
             WatchNextSyncAdapter.initializeSyncAdapter(this);
+            WatchNextSyncAdapter.syncImmediately(this);
         }
     }
 
-    @OnClick(R.id.fab)
     public void searchFab() {
         Intent fabIntent = new Intent(MainActivity.this, SearchMainActivity.class);
         startIntent(fabIntent);
     }
 
-    @OnClick(R.id.title_main_activity)
     public void searchTextView() {
         Intent txtIntent = new Intent(MainActivity.this, SearchMainActivity.class);
         startActivity(txtIntent);
@@ -73,23 +79,35 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     }
 
     private void showData() {
-        mRelativeLayout.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        if (findViewById(R.id.empty_layout) != null) {findViewById(R.id.empty_layout).setVisibility(View.GONE);}
+        findViewById(R.id.main_recycler_view).setVisibility(View.VISIBLE);
     }
 
     private void hideData() {
-        mRelativeLayout.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
+        if (findViewById(R.id.empty_layout) != null) {findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);}
+        findViewById(R.id.main_recycler_view).setVisibility(View.GONE);
     }
 
     private void setupViews() {
-        ButterKnife.bind(this);
         bundle = new Bundle();
         GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
+        RecyclerView recyclerView = findViewById(R.id.main_recycler_view);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
         mAdapter = new MainAdapter(this, this);
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchFab();
+            }
+        });
+        binding.toolbar.titleMainActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchTextView();
+            }
+        });
         /* We init the loader with bundle, so later can use the bundle to restart
          * the loader to sort the list. The default sorting is always first in db,
          * first to display. We still do not save the user preference.

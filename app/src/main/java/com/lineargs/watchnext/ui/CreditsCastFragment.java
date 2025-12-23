@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +21,7 @@ import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.Constants;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.FragmentCreditsCastBinding;
 
 /**
  * A fragment loading and showing list of cast members for now.
@@ -34,14 +32,11 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
 
     private static final int LOADER_ID = 333;
 
+    private FragmentCreditsCastBinding binding;
     private CreditsCastAdapter mAdapter;
     private Uri mUri;
     private Uri mDualUri = null;
-    private Unbinder unbinder;
     private boolean mDualPane;
-
-    @BindView(R.id.credits_cast_recycler_view)
-    RecyclerView mRecyclerView;
 
 
     public void setmUri(Uri uri) {
@@ -51,18 +46,17 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_credits_cast, container, false);
-        setupViews(getContext(), view);
-        return view;
+        binding = FragmentCreditsCastBinding.inflate(inflater, container, false);
+        setupViews(getContext());
+        return binding.getRoot();
     }
 
-    private void setupViews(Context context, View view) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Context context) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), numberOfColumns());
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.setHasFixedSize(true);
+        binding.creditsCastRecyclerView.setLayoutManager(gridLayoutManager);
+        binding.creditsCastRecyclerView.setHasFixedSize(true);
         mAdapter = new CreditsCastAdapter(context, this);
-        mRecyclerView.setAdapter(mAdapter);
+        binding.creditsCastRecyclerView.setAdapter(mAdapter);
         if (getActivity().getIntent().getData() != null) {
             mUri = getActivity().getIntent().getData();
         }
@@ -149,6 +143,7 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
     public void onDestroyView() {
         super.onDestroyView();
         /* Binding reset */
-        unbinder.unbind();
+        /* Binding reset */
+        binding = null;
     }
 }

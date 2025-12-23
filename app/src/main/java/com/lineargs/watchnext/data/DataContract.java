@@ -41,23 +41,23 @@ public class DataContract {
      * will fail, as the ContentProvider hasn't been given any information on what to do with
      * "givemeroot".
      */
-    static final String PATH_POPULAR_MOVIE = "popularmovie";
-    static final String PATH_TOP_RATED_MOVIE = "topratedmovie";
-    static final String PATH_UPCOMING_MOVIE = "upcomingmovie";
-    static final String PATH_THEATER_MOVIE = "theatermovie";
-    static final String PATH_CREDIT_CAST = "creditcast";
-    static final String PATH_CREDIT_CREW = "creditcrew";
-    static final String PATH_POPULAR_SERIE = "popularserie";
-    static final String PATH_TOP_SERIE = "topratedserie";
-    static final String PATH_ON_THE_AIR_SERIE = "ontheair";
-    static final String PATH_FAVORITES = "favorites";
-    static final String PATH_SEARCH = "search";
-    static final String PATH_SEARCH_TV = "searchtv";
-    static final String PATH_REVIEW = "review";
-    static final String PATH_VIDEOS = "videos";
-    static final String PATH_SEASONS = "seasons";
-    static final String PATH_EPISODES = "episodes";
-    static final String PATH_PERSON = "person";
+    public static final String PATH_POPULAR_MOVIE = "popularmovie";
+    public static final String PATH_TOP_RATED_MOVIE = "topratedmovie";
+    public static final String PATH_UPCOMING_MOVIE = "upcomingmovie";
+    public static final String PATH_THEATER_MOVIE = "theatermovie";
+    public static final String PATH_CREDIT_CAST = "creditcast";
+    public static final String PATH_CREDIT_CREW = "creditcrew";
+    public static final String PATH_POPULAR_SERIE = "popularserie";
+    public static final String PATH_TOP_SERIE = "topratedserie";
+    public static final String PATH_ON_THE_AIR_SERIE = "ontheair";
+    public static final String PATH_FAVORITES = "favorites";
+    public static final String PATH_SEARCH = "search";
+    public static final String PATH_SEARCH_TV = "searchtv";
+    public static final String PATH_REVIEW = "review";
+    public static final String PATH_VIDEOS = "videos";
+    public static final String PATH_SEASONS = "seasons";
+    public static final String PATH_EPISODES = "episodes";
+    public static final String PATH_PERSON = "person";
 
     /* Inner class that defines the table contents of the popular movie table */
     public static final class PopularMovieEntry implements BaseColumns {
@@ -86,7 +86,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_MOVIE;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR_MOVIE;
         /* Used internally as the name of our popular movies table. */
-        static final String TABLE_NAME = "popularmovies";
+        public static final String TABLE_NAME = "popularmovies";
 
         /**
          * Builds a URI that adds the movie id to the end of the popular movies content URI path.
@@ -132,7 +132,7 @@ public class DataContract {
          * ************************************* */
 
         /* Used internally as the name of our top rated movies table. */
-        static final String TABLE_NAME = "topmovies";
+        public static final String TABLE_NAME = "topmovies";
 
         /**
          * Builds a URI that adds the movie id to the end of the top rated content URI path.
@@ -164,7 +164,7 @@ public class DataContract {
          * ************************************* */
 
         /* Used internally as the name of our upcoming movies table. */
-        static final String TABLE_NAME = "upcomingmovies";
+        public static final String TABLE_NAME = "upcomingmovies";
 
         /**
          * Builds a URI that adds the movie id to the end of the upcoming content URI path.
@@ -196,7 +196,7 @@ public class DataContract {
          * ************************************* */
 
         /* Used internally as the name of our in theaters table. */
-        static final String TABLE_NAME = "theatermovies";
+        public static final String TABLE_NAME = "theatermovies";
 
         /**
          * Builds a URI that adds the movie id to the end of the in theaters content URI path.
@@ -240,7 +240,7 @@ public class DataContract {
         static final String CONTENT_TYPE_CREW = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
         static final String CONTENT_ITEM_TYPE_CREW = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
         /* Used internally as the name of our casts table. */
-        static final String TABLE_NAME = "credits";
+        public static final String TABLE_NAME = "credits";
 
         /**
          * Builds a URI that adds the cast id to the end of the casts content URI path.
@@ -287,7 +287,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CREDIT_CREW;
         /* Used internally as the name of our crew table. */
-        static final String TABLE_NAME = "crew";
+        public static final String TABLE_NAME = "crew";
 
         /**
          * Builds a URI that adds the crew id to the end of the crew content URI path.
@@ -319,7 +319,7 @@ public class DataContract {
          * ************************************* */
 
         /* Used internally as the name of our popular series table. */
-        static final String TABLE_NAME = "popularseries";
+        public static final String TABLE_NAME = "popularseries";
 
         /**
          * Builds a URI that adds the serie id to the end of the popular series content URI path.
@@ -351,7 +351,7 @@ public class DataContract {
          * ************************************* */
 
         /* Used internally as the name of our top rated series table. */
-        static final String TABLE_NAME = "topseries";
+        public static final String TABLE_NAME = "topseries";
 
         /**
          * Builds a URI that adds the serie id to the end of the top rated series content URI path.
@@ -383,7 +383,7 @@ public class DataContract {
          * ************************************* */
 
         /* Used internally as the name of our on the air series table. */
-        static final String TABLE_NAME = "ontheairseries";
+        public static final String TABLE_NAME = "ontheairseries";
 
         /**
          * Builds a URI that adds the serie id to the end of the on the air series content URI path.
@@ -419,7 +419,7 @@ public class DataContract {
          * We use the Popular Movies column names
          * ************************************* */
         /* Used internally as the name of our favorites table. */
-        static final String TABLE_NAME = "favorites";
+        public static final String TABLE_NAME = "favorites";
 
         /**
          * Builds a URI that adds the serie/ movie id to the end of the favorites content URI path.
@@ -449,7 +449,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEARCH;
         /* Used internally as the name of our search table. */
-        static final String TABLE_NAME = "search";
+        public static final String TABLE_NAME = "search";
 
         /**
          * Builds a URI that adds the movie id to the end of the search content URI path.
@@ -481,7 +481,7 @@ public class DataContract {
          * ************************************* */
 
         /* Used internally as the name of our search table. */
-        static final String TABLE_NAME = "searchtv";
+        public static final String TABLE_NAME = "searchtv";
 
         /**
          * Builds a URI that adds the serie id to the end of the search content URI path.
@@ -515,7 +515,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
         /* Used internally as the name of our review table. */
-        static final String TABLE_NAME = "review";
+        public static final String TABLE_NAME = "review";
 
         /**
          * Builds a URI that adds the review id to the end of the content URI path.
@@ -551,7 +551,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEOS;
         /* Used internally as the name of our videos table. */
-        static final String TABLE_NAME = "videos";
+        public static final String TABLE_NAME = "videos";
 
         /**
          * Builds a URI that adds the video id to the end of the content URI path.
@@ -587,7 +587,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEASONS;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SEASONS;
         /* Used internally as the name of our seasons table. */
-        static final String TABLE_NAME = "seasons";
+        public static final String TABLE_NAME = "seasons";
 
         /**
          * Builds a URI that adds the season id to the end of the content URI path.
@@ -629,7 +629,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EPISODES;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EPISODES;
         /* Used internally as the name of our table. */
-        static final String TABLE_NAME = "episodes";
+        public static final String TABLE_NAME = "episodes";
 
         /**
          * Builds a URI that adds the episode id to the end of the episode content URI path.
@@ -665,7 +665,7 @@ public class DataContract {
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PERSON;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PERSON;
         /* Used internally as the name of our table. */
-        static final String TABLE_NAME = "person";
+        public static final String TABLE_NAME = "person";
 
         /**
          * Builds a URI that adds the person id to the end of the content URI path.

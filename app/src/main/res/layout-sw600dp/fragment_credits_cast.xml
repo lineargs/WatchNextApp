@@ -10,7 +10,7 @@
     tools:context="com.lineargs.watchnext.ui.CreditsCastFragment"
     tools:showIn="@layout/activity_credits_cast">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/credits_cast_recycler_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"

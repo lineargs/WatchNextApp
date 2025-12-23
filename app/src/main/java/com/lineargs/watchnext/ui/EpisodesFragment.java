@@ -3,19 +3,19 @@ package com.lineargs.watchnext.ui;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.EpisodesAdapter;
@@ -24,9 +24,7 @@ import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.ContentEpisodesBinding;
 
 /**
  * Created by goranminov on 09/12/2017.
@@ -37,13 +35,9 @@ import butterknife.Unbinder;
 public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 112, BACK_LOADER_ID = 456;
-    @BindView(R.id.episodes_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    private ContentEpisodesBinding binding;
     int number = -1;
     private EpisodesAdapter mAdapter;
-    private Unbinder unbinder;
     private String seasonId = "", serieId = "";
 
     public EpisodesFragment() {
@@ -64,39 +58,49 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_episodes, container, false);
-        setupViews(getContext(), view, savedInstanceState);
-        return view;
+        binding = ContentEpisodesBinding.inflate(inflater, container, false);
+        setupViews(getContext(), savedInstanceState);
+        return binding.getRoot();
     }
 
-    private void setupViews(Context context, View view, Bundle savedState) {
-        unbinder = ButterKnife.bind(this, view);
+    private void setupViews(Context context, Bundle savedState) {
         if (savedState == null) {
             SeasonUtils.syncEpisodes(context, serieId, number, seasonId);
             startLoading();
         }
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SeasonUtils.syncEpisodes(getContext(), serieId, number, seasonId);
+                startLoading();
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         /* Simulating View Pager on our Recycler View */
         SnapHelper snapHelper = new PagerSnapHelper();
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        snapHelper.attachToRecyclerView(mRecyclerView);
+        binding.episodesRecyclerView.setLayoutManager(layoutManager);
+        binding.episodesRecyclerView.setHasFixedSize(true);
+        binding.episodesRecyclerView.setNestedScrollingEnabled(false);
+        snapHelper.attachToRecyclerView(binding.episodesRecyclerView);
         mAdapter = new EpisodesAdapter(context);
-        mRecyclerView.setAdapter(mAdapter);
+        binding.episodesRecyclerView.setAdapter(mAdapter);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
         getLoaderManager().initLoader(BACK_LOADER_ID, null, this);
     }
 
     private void startLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+        binding.episodesRecyclerView.setVisibility(View.GONE);
     }
 
     private void showData() {
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.episodesRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @NonNull
@@ -152,6 +156,6 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        binding = null;
     }
 }

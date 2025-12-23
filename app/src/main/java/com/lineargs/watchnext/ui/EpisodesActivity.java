@@ -1,34 +1,45 @@
 package com.lineargs.watchnext.ui;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.Toolbar;
+import android.provider.Settings;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.EpisodesQuery;
 import com.lineargs.watchnext.data.SeasonsQuery;
-import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
+// import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 import com.lineargs.watchnext.tools.SeasonTools;
 import com.lineargs.watchnext.utils.Constants;
@@ -41,10 +52,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lineargs.watchnext.databinding.ActivityEpisodesBinding;
+import com.lineargs.watchnext.databinding.FragmentEpisodesBinding;
 
 import static android.view.View.GONE;
 
@@ -52,21 +61,15 @@ public class EpisodesActivity extends BaseTopActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 667, BACK_LOADER_ID = 888;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.container)
-    ViewPager viewPager;
-    @BindView(R.id.tabs)
-    TabLayout tabs;
-    @BindView(R.id.cover_poster)
-    ImageView seasonPoster;
+
+    private ActivityEpisodesBinding binding;
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link androidx.viewpager.widget.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link androidx.fragment.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
     /**
@@ -79,8 +82,8 @@ public class EpisodesActivity extends BaseTopActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_episodes);
-        ButterKnife.bind(this);
+        binding = ActivityEpisodesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         if (getIntent().hasExtra(Constants.SEASON_NUMBER) && getIntent().hasExtra(Constants.EPISODES)) {
             title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(Constants.SEASON_NUMBER, -1));
@@ -107,13 +110,18 @@ public class EpisodesActivity extends BaseTopActivity implements
     }
 
     private void startLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-        viewPager.setVisibility(GONE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayout.setRefreshing(true);
+        }
+        binding.container.setVisibility(GONE);
     }
 
     private void showData() {
-        progressBar.setVisibility(GONE);
-        viewPager.setVisibility(View.VISIBLE);
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.container.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -171,8 +179,8 @@ public class EpisodesActivity extends BaseTopActivity implements
                     data.moveToFirst();
                     mSectionsPagerAdapter.swapCursor(data);
                     showData();
-                    viewPager.setAdapter(mSectionsPagerAdapter);
-                    tabs.setupWithViewPager(viewPager);
+                    binding.container.setAdapter(mSectionsPagerAdapter);
+                    binding.tabs.setupWithViewPager(binding.container);
                 }
                 break;
             case BACK_LOADER_ID:
@@ -194,11 +202,11 @@ public class EpisodesActivity extends BaseTopActivity implements
     }
 
     void swapPosterCursor(Cursor cursor) {
-        Picasso.with(seasonPoster.getContext())
+        Picasso.get()
                 .load(cursor.getString(SeasonsQuery.POSTER_PATH))
                 .centerInside()
                 .fit()
-                .into(seasonPoster);
+                .into(binding.coverPoster);
     }
 
     /**
@@ -210,31 +218,7 @@ public class EpisodesActivity extends BaseTopActivity implements
          * fragment.
          */
 
-        @BindView(R.id.name)
-        AppCompatTextView name;
-        @BindView(R.id.still_path)
-        ImageView stillPath;
-        @BindView(R.id.vote_average)
-        AppCompatTextView voteAverage;
-        @BindView(R.id.release_date)
-        AppCompatTextView releaseDate;
-        @BindView(R.id.overview)
-        AppCompatTextView overview;
-        @BindView(R.id.guest_stars)
-        AppCompatTextView guestStars;
-        @BindView(R.id.directors)
-        AppCompatTextView directors;
-        @BindView(R.id.writers)
-        AppCompatTextView writers;
-        @BindView(R.id.guest_stars_container)
-        LinearLayout guestStarsContainer;
-        @BindView(R.id.directors_container)
-        LinearLayout directorsContainer;
-        @BindView(R.id.writers_container)
-        LinearLayout writersContainer;
-        @BindView(R.id.notification_fab)
-        FloatingActionButton notification;
-        private Unbinder unbinder;
+        private FragmentEpisodesBinding binding;
         private String[] details;
 
 
@@ -256,40 +240,46 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_episodes, container, false);
-            unbinder = ButterKnife.bind(this, rootView);
+            binding = FragmentEpisodesBinding.inflate(inflater, container, false);
+            View rootView = binding.getRoot();
             if (getArguments() != null) {
                 details = getArguments().getStringArray(Constants.ARG_QUERY);
             }
 
             if (details != null) {
-                name.setText(details[0]);
-                voteAverage.setText(details[2]);
-                releaseDate.setText(details[3]);
-                overview.setText(details[4]);
+                binding.name.setText(details[0]);
+                binding.voteAverage.setText(details[2]);
+                binding.releaseDate.setText(details[3]);
+                binding.overview.setText(details[4]);
                 if (TextUtils.isEmpty(details[6])) {
-                    guestStarsContainer.setVisibility(GONE);
+                    binding.guestStarsContainer.setVisibility(GONE);
                 } else {
-                    guestStars.setText(details[6]);
+                    binding.guestStars.setText(details[6]);
                 }
                 if (TextUtils.isEmpty(details[7])) {
-                    directorsContainer.setVisibility(GONE);
+                    binding.directorsContainer.setVisibility(GONE);
                 } else {
-                    directors.setText(details[7]);
+                    binding.directors.setText(details[7]);
                 }
                 if (TextUtils.isEmpty(details[8])) {
-                    writersContainer.setVisibility(GONE);
+                    binding.writersContainer.setVisibility(GONE);
                 } else {
-                    writers.setText(details[8]);
+                    binding.writers.setText(details[8]);
                 }
                 if (airedAlready(details[3])) {
-                    notification.setVisibility(GONE);
+                    binding.notificationFab.setVisibility(GONE);
                 }
-                ServiceUtils.loadPicasso(stillPath.getContext(), details[1])
+                ServiceUtils.loadPicasso(binding.stillPath.getContext(), details[1])
                         .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                         .centerInside()
-                        .into(stillPath);
+                        .into(binding.stillPath);
             }
+            binding.notificationFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setNotification();
+                }
+            });
             return rootView;
         }
 
@@ -309,7 +299,7 @@ public class EpisodesActivity extends BaseTopActivity implements
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            unbinder.unbind();
+            binding = null;
         }
 
         private int getSeconds(long today, String date) {
@@ -327,16 +317,49 @@ public class EpisodesActivity extends BaseTopActivity implements
             }
         }
 
-        @OnClick(R.id.notification_fab)
-        public void setNotification() {
-            int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
-            if (intervalSeconds != 0 && details != null) {
-                if (getArguments() != null) {
-                    ReminderFirebaseUtilities.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
-                            getArguments().getString(Constants.TITLE), details[0]);
+    public void setNotification() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.POST_NOTIFICATIONS)) {
+                        Snackbar.make(binding.notificationFab, getString(R.string.snackbar_notifications_required), Snackbar.LENGTH_LONG)
+                                .setAction(getString(R.string.snackbar_grant), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                                    }
+                                })
+                                .show();
+                    } else {
+                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                         if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
+                             Snackbar.make(binding.notificationFab, getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
+                                     .setAction(getString(R.string.snackbar_settings), new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             Intent intent = new Intent();
+                                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                             Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                             intent.setData(uri);
+                                             startActivity(intent);
+                                         }
+                                     })
+                                     .show();
+                         } else {
+                             sharedPreferences.edit().putBoolean("PREF_PERMISSION_REQUESTED", true).apply();
+                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                         }
+                    }
+                    return;
                 }
-                Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
             }
+            int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
+             if (intervalSeconds != 0 && details != null) {
+                 if (getArguments() != null) {
+                      WorkManagerUtils.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
+                              getArguments().getString(Constants.TITLE), details[0]);
+                 }
+                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+             }
         }
     }
 
@@ -366,7 +389,10 @@ public class EpisodesActivity extends BaseTopActivity implements
             details[7] = mCursor.getString(EpisodesQuery.DIRECTORS);
             details[8] = mCursor.getString(EpisodesQuery.WRITERS);
 
-            String title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
+            String title = "";
+            if (mBackCursor != null && mBackCursor.moveToFirst()) {
+                title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
+            }
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(title, details);
@@ -380,8 +406,10 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @Override
         public CharSequence getPageTitle(int position) {
-            mCursor.moveToPosition(position);
-            return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, mCursor.getInt(EpisodesQuery.EPISODE_NUMBER));
+            if (mCursor != null && mCursor.moveToPosition(position)) {
+                return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, mCursor.getInt(EpisodesQuery.EPISODE_NUMBER));
+            }
+            return "";
         }
 
         void swapCursor(Cursor cursor) {

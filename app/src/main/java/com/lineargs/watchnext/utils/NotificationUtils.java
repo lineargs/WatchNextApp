@@ -13,10 +13,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
@@ -146,7 +146,7 @@ public class NotificationUtils extends ContextWrapper {
         stackBuilder.addNextIntent(startActivity);
         Uri uri = DataContract.Episodes.buildEpisodeUriWithId(id);
         startActivity.setData(uri);
-        return stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
+        return stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
     }
 
     private static PendingIntent reminderContentIntent(int id, Context context) {
@@ -154,7 +154,7 @@ public class NotificationUtils extends ContextWrapper {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(startActivity);
-        return stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
+        return stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
     }
 
     private static NotificationCompat.Action dismissNotification(Context context, int id) {
@@ -165,7 +165,7 @@ public class NotificationUtils extends ContextWrapper {
                 context,
                 id,
                 ignoreReminderIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
         return new NotificationCompat.Action
                 (R.drawable.icon_cancel_black, context.getString(R.string.notification_dismiss), ignoreReminderPendingIntent);
     }
