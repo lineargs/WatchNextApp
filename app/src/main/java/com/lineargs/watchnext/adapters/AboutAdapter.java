@@ -22,12 +22,9 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private static final Library[] library = {
             //TODO Move them to strings resources for translating
-            new Library("Android support libraries",
-                    "The Android Support Library offers backward-compatible versions of a number of features that are not built into the framework",
-                    "https://developer.android.com/topic/libraries/support-library/index.html"),
-            new Library("ButterKnife",
-                    "Field and method binding for Android views",
-                    "http://jakewharton.github.io/butterknife/"),
+            new Library("Android Jetpack (AndroidX)",
+                    "Android Jetpack is a suite of libraries to help developers follow best practices, reduce boilerplate code, and write code that works consistently across Android versions and devices.",
+                    "https://developer.android.com/jetpack/"),
             new Library("Retrofit",
                     "A type-safe HTTP client for Android and Java",
                     "http://square.github.io/retrofit/"),
@@ -37,12 +34,15 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             new Library("Firebase Crashlytics",
                     "Lightweight, realtime crash reporter that helps you track, prioritize, and fix stability issues that erode your app quality",
                     "https://firebase.google.com/docs/crashlytics/"),
-            new Library("Firebase JobDispatcher",
-                    "Library for scheduling background jobs in your Android app",
-                    "https://github.com/firebase/firebase-jobdispatcher-android"),
             new Library("Firebase Cloud Messaging",
                     "Firebase Cloud Messaging (FCM) is a cross-platform messaging solution that lets you reliably deliver messages at no cost.",
-                    "https://firebase.google.com/docs/cloud-messaging/")
+                    "https://firebase.google.com/docs/cloud-messaging/"),
+            new Library("WorkManager",
+                    "The recommended solution for persistent work.",
+                    "https://developer.android.com/topic/libraries/architecture/workmanager"),
+            new Library("Room Persistence Library",
+                    "The Room persistence library provides an abstraction layer over SQLite to allow for more robust database access while harnessing the full power of SQLite.",
+                    "https://developer.android.com/topic/libraries/architecture/room")
     };
     private final int VIEW_TYPE_ABOUT = 0;
     private final int VIEW_TYPE_HEADER = 1;
