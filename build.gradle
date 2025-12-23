@@ -19,7 +19,7 @@ buildscript {
 
         // App dependencies
         butterknifeVersion = '10.2.3'
-        constraintLayoutVersion = '2.1.4'
+        constraintLayoutVersion = '2.2.1'
         firebaseCrashlyticsVersion = '18.3.7'
         junitVersion = '4.13.2'
         picassoVersion = '2.8'
@@ -30,19 +30,18 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.2'
-        classpath 'com.google.gms:google-services:4.3.15'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.5'
+        classpath 'com.android.tools.build:gradle:8.13.2'
+        classpath 'com.google.gms:google-services:4.4.4'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.6'
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register('clean', Delete) {
 }

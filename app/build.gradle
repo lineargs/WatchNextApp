@@ -35,7 +35,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
     }
@@ -79,9 +79,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
-    
-    // Legacy Firebase JobDispatcher replacement (using WorkManager is recommended but simple removal for now as requested)
-    // implementation "com.firebase:firebase-jobdispatcher:0.8.5"
 
     // Butterknife
     implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
