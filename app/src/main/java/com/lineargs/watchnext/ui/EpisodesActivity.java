@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,32 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.EpisodesQuery;
-import com.lineargs.watchnext.data.SeasonsQuery;
-// import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
 import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 import com.lineargs.watchnext.tools.SeasonTools;
@@ -57,10 +44,7 @@ import com.lineargs.watchnext.databinding.FragmentEpisodesBinding;
 
 import static android.view.View.GONE;
 
-public class EpisodesActivity extends BaseTopActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int LOADER_ID = 667, BACK_LOADER_ID = 888;
+public class EpisodesActivity extends BaseTopActivity {
 
     private ActivityEpisodesBinding binding;
     /**
@@ -78,6 +62,7 @@ public class EpisodesActivity extends BaseTopActivity implements
     private String title = "", subtitle = "";
     private int number;
     private String seasonId = "";
+    private String showName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,16 +82,40 @@ public class EpisodesActivity extends BaseTopActivity implements
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+        // Initialize ViewModel
+        EpisodeViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(EpisodeViewModel.class);
+
         if (getIntent().hasExtra(Constants.SEASON_ID) && getIntent().hasExtra(Constants.SERIE_ID) && getIntent().hasExtra(Constants.SEASON_NUMBER)) {
             String serieId = getIntent().getStringExtra(Constants.SERIE_ID);
             number = getIntent().getIntExtra(Constants.SEASON_NUMBER, -1);
             seasonId = getIntent().getStringExtra(Constants.SEASON_ID);
             SeasonUtils.syncEpisodes(this, serieId, number, seasonId);
             startLoading();
-        }
 
-        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-        getSupportLoaderManager().initLoader(BACK_LOADER_ID, null, this);
+            viewModel.setSeasonId(seasonId);
+            viewModel.getEpisodes().observe(this, new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Episodes>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes) {
+                    if (episodes != null && !episodes.isEmpty()) {
+                        mSectionsPagerAdapter.swapEpisodes(episodes);
+                        showData();
+                        binding.container.setAdapter(mSectionsPagerAdapter);
+                        binding.tabs.setupWithViewPager(binding.container);
+                    }
+                }
+            });
+
+            viewModel.getSeason().observe(this, new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.Seasons>() {
+                @Override
+                public void onChanged(com.lineargs.watchnext.data.entity.Seasons season) {
+                    if (season != null) {
+                        setPoster(season.getPosterPath());
+                        showName = season.getShowName();
+                        mSectionsPagerAdapter.setShowName(showName);
+                    }
+                }
+            });
+        }
     }
 
     private void startLoading() {
@@ -148,62 +157,9 @@ public class EpisodesActivity extends BaseTopActivity implements
         });
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(this,
-                        DataContract.Episodes.CONTENT_URI,
-                        EpisodesQuery.EPISODE_PROJECTION,
-                        DataContract.Episodes.COLUMN_SEASON_ID + " = ? ",
-                        new String[]{seasonId},
-                        null);
-            case BACK_LOADER_ID:
-                return new CursorLoader(this,
-                        DataContract.Seasons.CONTENT_URI,
-                        SeasonsQuery.SEASON_PROJECTION,
-                        DataContract.Seasons.COLUMN_SEASON_ID + " = ? ",
-                        new String[]{seasonId},
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mSectionsPagerAdapter.swapCursor(data);
-                    showData();
-                    binding.container.setAdapter(mSectionsPagerAdapter);
-                    binding.tabs.setupWithViewPager(binding.container);
-                }
-                break;
-            case BACK_LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mSectionsPagerAdapter.swapBackCursor(data);
-                    swapPosterCursor(data);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mSectionsPagerAdapter.swapCursor(null);
-        mSectionsPagerAdapter.swapBackCursor(null);
-    }
-
-    void swapPosterCursor(Cursor cursor) {
+    void setPoster(String posterPath) {
         Picasso.get()
-                .load(cursor.getString(SeasonsQuery.POSTER_PATH))
+                .load(posterPath)
                 .centerInside()
                 .fit()
                 .into(binding.coverPoster);
@@ -266,7 +222,7 @@ public class EpisodesActivity extends BaseTopActivity implements
                 } else {
                     binding.writers.setText(details[8]);
                 }
-                if (airedAlready(details[3])) {
+                if (TextUtils.isEmpty(details[3]) || airedAlready(details[3])) {
                     binding.notificationFab.setVisibility(GONE);
                 }
                 ServiceUtils.loadPicasso(binding.stillPath.getContext(), details[1])
@@ -303,6 +259,7 @@ public class EpisodesActivity extends BaseTopActivity implements
         }
 
         private int getSeconds(long today, String date) {
+            if (TextUtils.isEmpty(date)) return 0;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_pattern), Locale.getDefault());
             Date releaseDay = null;
             try {
@@ -369,7 +326,8 @@ public class EpisodesActivity extends BaseTopActivity implements
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private Cursor mCursor, mBackCursor;
+        private java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes;
+        private String showName = "";
 
         SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -377,49 +335,46 @@ public class EpisodesActivity extends BaseTopActivity implements
 
         @Override
         public Fragment getItem(int position) {
-            mCursor.moveToPosition(position);
+            com.lineargs.watchnext.data.entity.Episodes episode = episodes.get(position);
             String[] details = new String[9];
-            details[0] = mCursor.getString(EpisodesQuery.NAME);
-            details[1] = mCursor.getString(EpisodesQuery.STILL_PATH);
-            details[2] = mCursor.getString(EpisodesQuery.VOTE_AVERAGE);
-            details[3] = mCursor.getString(EpisodesQuery.RELEASE_DATE);
-            details[4] = mCursor.getString(EpisodesQuery.OVERVIEW);
-            details[5] = mCursor.getString(EpisodesQuery.EPISODE_ID);
-            details[6] = mCursor.getString(EpisodesQuery.GUEST_STARS);
-            details[7] = mCursor.getString(EpisodesQuery.DIRECTORS);
-            details[8] = mCursor.getString(EpisodesQuery.WRITERS);
+            details[0] = episode.getName();
+            details[1] = episode.getStillPath();
+            details[2] = episode.getVoteAverage();
+            details[3] = episode.getReleaseDate();
+            details[4] = episode.getOverview();
+            details[5] = String.valueOf(episode.getEpisodeId());
+            details[6] = episode.getGuestStars();
+            details[7] = episode.getDirectors();
+            details[8] = episode.getWriters();
 
-            String title = "";
-            if (mBackCursor != null && mBackCursor.moveToFirst()) {
-                title = mBackCursor.getString(SeasonsQuery.SHOW_NAME);
-            }
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(title, details);
+            return PlaceholderFragment.newInstance(showName, details);
         }
 
         @Override
         public int getCount() {
-            if (mCursor == null) return 0;
-            return mCursor.getCount();
+            if (episodes == null) return 0;
+            return episodes.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (mCursor != null && mCursor.moveToPosition(position)) {
-                return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, mCursor.getInt(EpisodesQuery.EPISODE_NUMBER));
+            if (episodes != null) {
+                return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, episodes.get(position).getEpisodeNumber());
             }
             return "";
         }
 
-        void swapCursor(Cursor cursor) {
-            mCursor = cursor;
+        void swapEpisodes(java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes) {
+            this.episodes = episodes;
             notifyDataSetChanged();
         }
 
-        void swapBackCursor(Cursor cursor) {
-            mBackCursor = cursor;
-            notifyDataSetChanged();
+        void setShowName(String name) {
+            this.showName = name;
+            // No need to notify if it's passed during instantiation, but if it updates later, fragments might not update title.
+            // But usually ShowName is constant.
         }
     }
 }
