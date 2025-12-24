@@ -48,8 +48,10 @@ public class WatchNextWorker extends Worker {
     public Result doWork() {
         NotificationUtils.syncProgress(SYNC_NOTIFICATION_ID, getApplicationContext());
 
-        String language = Locale.getDefault().toString().replace('_', '-');
-        String region = language.substring(language.indexOf('-') + 1);
+        String region = Locale.getDefault().getCountry();
+        if (region.isEmpty()) {
+            region = "US";
+        }
 
         MovieApiService movieApiService = retrofit.create(MovieApiService.class);
         SeriesApiService seriesApiService = retrofit.create(SeriesApiService.class);

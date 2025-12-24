@@ -29,6 +29,9 @@ public abstract class WatchNextDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "watchnext.db";
     private static volatile WatchNextDatabase INSTANCE;
+    private static final int NUMBER_OF_THREADS = 4;
+    public static final java.util.concurrent.ExecutorService databaseWriteExecutor =
+            java.util.concurrent.Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public abstract MoviesDao moviesDao();
     public abstract SeriesDao seriesDao();

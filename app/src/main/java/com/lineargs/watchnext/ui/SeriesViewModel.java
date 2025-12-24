@@ -15,10 +15,12 @@ import java.util.List;
 public class SeriesViewModel extends AndroidViewModel {
 
     private final SeriesRepository repository;
+    private final com.lineargs.watchnext.data.FavoritesRepository favoritesRepository;
 
     public SeriesViewModel(@NonNull Application application) {
         super(application);
         repository = new SeriesRepository(application);
+        favoritesRepository = new com.lineargs.watchnext.data.FavoritesRepository(application);
     }
 
     public LiveData<List<PopularSerie>> getPopularSeries() {
@@ -31,5 +33,9 @@ public class SeriesViewModel extends AndroidViewModel {
 
     public LiveData<List<OnTheAirSerie>> getOnTheAirSeries() {
         return repository.getOnTheAirSeries();
+    }
+
+    public LiveData<List<Integer>> getFavoriteSeriesIds() {
+        return favoritesRepository.getFavoriteSeriesIds();
     }
 }

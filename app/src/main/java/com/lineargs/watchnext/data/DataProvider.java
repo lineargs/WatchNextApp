@@ -612,6 +612,7 @@ public class DataProvider extends ContentProvider {
                 long _id = db.insert(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Favorites.buildFavoritesUriWithId(_id);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -878,6 +879,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_SEARCH:
@@ -1144,12 +1146,14 @@ public class DataProvider extends ContentProvider {
                         DataContract.Favorites.TABLE_NAME,
                         selection,
                         selectionArgs);
+                if (rowsDeleted > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
                 break;
             case CODE_FAVORITES_WITH_ID:
                 rowsDeleted = db.delete(
                         DataContract.Favorites.TABLE_NAME,
                         DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
                         selectionArgs);
+                if (rowsDeleted > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
                 break;
             case CODE_SEARCH:
                 rowsDeleted = db.delete(
@@ -1288,6 +1292,7 @@ public class DataProvider extends ContentProvider {
                 break;
             case CODE_FAVORITES:
                 rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
                 break;
             case CODE_SEARCH:
                 rowsUpdated = db.update(DataContract.Search.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);

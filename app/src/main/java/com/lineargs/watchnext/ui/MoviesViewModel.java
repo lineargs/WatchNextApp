@@ -16,10 +16,12 @@ import java.util.List;
 public class MoviesViewModel extends AndroidViewModel {
 
     private final MoviesRepository repository;
+    private final com.lineargs.watchnext.data.FavoritesRepository favoritesRepository;
 
     public MoviesViewModel(@NonNull Application application) {
         super(application);
         repository = new MoviesRepository(application);
+        favoritesRepository = new com.lineargs.watchnext.data.FavoritesRepository(application);
     }
 
     public LiveData<List<PopularMovie>> getPopularMovies() {
@@ -36,5 +38,9 @@ public class MoviesViewModel extends AndroidViewModel {
 
     public LiveData<List<TheaterMovie>> getTheaterMovies() {
         return repository.getTheaterMovies();
+    }
+
+    public LiveData<List<Integer>> getFavoriteMovieIds() {
+        return favoritesRepository.getFavoriteMovieIds();
     }
 }

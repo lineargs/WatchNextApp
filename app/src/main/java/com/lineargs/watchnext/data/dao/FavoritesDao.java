@@ -22,6 +22,12 @@ public interface FavoritesDao {
     @Query("SELECT * FROM favorites WHERE movie_id = :id")
     androidx.lifecycle.LiveData<Favorites> getFavoriteLiveData(int id);
 
+    @Query("SELECT movie_id FROM favorites WHERE type = 0")
+    androidx.lifecycle.LiveData<java.util.List<Integer>> getFavoriteMovieIds();
+
+    @Query("SELECT movie_id FROM favorites WHERE type = 1")
+    androidx.lifecycle.LiveData<java.util.List<Integer>> getFavoriteSeriesIds();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertFavorite(Favorites favorite);
 

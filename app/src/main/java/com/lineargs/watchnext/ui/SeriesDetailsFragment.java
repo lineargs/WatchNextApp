@@ -92,7 +92,7 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SeriesDetailViewModel.class);
         if (mUri != null) {
             int seriesId = Integer.parseInt(mUri.getLastPathSegment());
-            viewModel.setSeriesId(seriesId);
+            viewModel.setSeriesUri(mUri);
 
             // Observe Serie
             viewModel.getSerie().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.PopularSerie>() {

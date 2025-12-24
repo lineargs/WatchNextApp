@@ -17,6 +17,7 @@ public class SeriesDetailsActivity extends BaseTopActivity {
         setupActionBar();
         setupNavDrawer();
         setupFragment(savedInstanceState);
+        checkUpdates();
     }
 
     @Override
@@ -68,6 +69,27 @@ public class SeriesDetailsActivity extends BaseTopActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    private void checkUpdates() {
+        android.net.Uri uri = getIntent().getData();
+        if (uri == null) return;
+
+        androidx.work.Data inputData = new androidx.work.Data.Builder()
+                .putString(com.lineargs.watchnext.workers.SerieDetailWorker.ARG_URI, uri.toString())
+                .putBoolean(com.lineargs.watchnext.workers.SerieDetailWorker.ARG_UPDATE_ONLY, true)
+                .build();
+
+        androidx.work.Constraints constraints = new androidx.work.Constraints.Builder()
+                .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
+                .build();
+
+        androidx.work.OneTimeWorkRequest workRequest = new androidx.work.OneTimeWorkRequest.Builder(com.lineargs.watchnext.workers.SerieDetailWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+
+        androidx.work.WorkManager.getInstance(getApplicationContext()).enqueue(workRequest);
     }
 }
 
