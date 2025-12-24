@@ -17,6 +17,7 @@ public class MovieDetailsActivity extends BaseTopActivity {
         setupActionBar();
         setupNavDrawer();
         setupFragment(savedInstanceState);
+        // checkUpdates();
     }
 
     @Override

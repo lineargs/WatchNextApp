@@ -24,4 +24,8 @@ public class FavoritesRepository {
     public LiveData<Favorites> getFavorite(int id) {
         return favoritesDao.getFavoriteLiveData(id);
     }
+
+    public void deleteFavorite(int id) {
+        WatchNextDatabase.databaseWriteExecutor.execute(() -> favoritesDao.deleteFavorite(id));
+    }
 }

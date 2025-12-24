@@ -22,4 +22,8 @@ public class FavoritesViewModel extends AndroidViewModel {
     public LiveData<List<Favorites>> getFavorites() {
         return repository.getFavorites();
     }
+
+    public void removeFavorite(int id) {
+        repository.deleteFavorite(id);
+    }
 }
