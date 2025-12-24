@@ -49,6 +49,18 @@ public class SeriesPopularFragment extends SeriesListFragment implements SeriesP
                 }
             }
         });
+        viewModel.getFavoriteSeriesIds().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<Integer>>() {
+            @Override
+            public void onChanged(java.util.List<Integer> ids) {
+                if (ids != null) {
+                    java.util.Set<Long> favorites = new java.util.HashSet<>();
+                    for (Integer id : ids) {
+                        favorites.add(id.longValue());
+                    }
+                    adapter.setFavorites(favorites);
+                }
+            }
+        });
     }
 }
 
