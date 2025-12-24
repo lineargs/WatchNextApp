@@ -29,7 +29,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private OnClickListener callback;
     private Context context;
-    private Cursor cursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.Seasons> seasons;
 
     public SeasonsAdapter(@NonNull Context context, OnClickListener listener) {
         this.context = context;
@@ -51,15 +51,15 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (seasons == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return seasons.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapSeasons(java.util.List<com.lineargs.watchnext.data.entity.Seasons> seasons) {
+        this.seasons = seasons;
         notifyDataSetChanged();
     }
 
@@ -85,11 +85,16 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bindViews(Context context, int position) {
             Resources resources = context.getResources();
-            cursor.moveToPosition(position);
-            title.setText(SeasonTools.getSeasonString(context, cursor.getInt(SeasonsQuery.SEASON_NUMBER)));
-            String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
+            com.lineargs.watchnext.data.entity.Seasons season = seasons.get(position);
+            int number = 0;
+            try {
+                 number = Integer.parseInt(season.getSeasonNumber());
+            } catch (NumberFormatException e) {}
+
+            title.setText(SeasonTools.getSeasonString(context, number));
+            String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, season.getEpisodeCount(), season.getEpisodeCount());
             episodes.setText(episodesCount);
-            ServiceUtils.loadPicasso(context, cursor.getString(SeasonsQuery.POSTER_PATH))
+            ServiceUtils.loadPicasso(context, season.getPosterPath())
                     .centerCrop()
                     .fit()
                     .into(poster);
@@ -98,12 +103,15 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @Override
         public void onClick(View view) {
             Resources resources = context.getResources();
-            cursor.moveToPosition(getAdapterPosition());
-            String seasonId = cursor.getString(SeasonsQuery.SEASON_ID);
-            String episodes = resources.getQuantityString(R.plurals.numberOfEpisodes, cursor.getInt(SeasonsQuery.EPISODE_COUNT), cursor.getInt(SeasonsQuery.EPISODE_COUNT));
-            String serieId = cursor.getString(SeasonsQuery.SERIE_ID);
-            int number = cursor.getInt(SeasonsQuery.SEASON_NUMBER);
-            callback.OnClick(seasonId, number, serieId, episodes);
+            com.lineargs.watchnext.data.entity.Seasons season = seasons.get(getAdapterPosition());
+            String seasonId = String.valueOf(season.getSeasonId());
+            String episodesCount = resources.getQuantityString(R.plurals.numberOfEpisodes, season.getEpisodeCount(), season.getEpisodeCount());
+            String serieId = String.valueOf(season.getTmdbId());
+            int number = 0;
+            try {
+                 number = Integer.parseInt(season.getSeasonNumber());
+            } catch (NumberFormatException e) {}
+            callback.OnClick(seasonId, number, serieId, episodesCount);
         }
     }
 }

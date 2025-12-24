@@ -29,18 +29,18 @@ public class MoviesTopFragment extends MoviesListFragment implements MoviesTopAd
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    @Override
-    public Uri getLoaderUri() {
-        return DataContract.TopRatedMovieEntry.CONTENT_URI;
+    public void onViewCreated(@androidx.annotation.NonNull android.view.View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        com.lineargs.watchnext.ui.MoviesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.MoviesViewModel.class);
+        viewModel.getTopRatedMovies().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.TopRatedMovie>>() {
+            @Override
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.TopRatedMovie> movies) {
+                if (movies != null && !movies.isEmpty()) {
+                    mAdapter.swapMovies(movies);
+                    showData();
+                }
+            }
+        });
     }
 
     @Override

@@ -19,8 +19,7 @@ import com.lineargs.watchnext.data.DataContract;
  * A fragment for our Tabbed Movies View Pager
  */
 
-public class MoviesUpcomingFragment extends MoviesListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        MoviesUpcomingAdapter.OnItemClickListener {
+public class MoviesUpcomingFragment extends MoviesListFragment implements MoviesUpcomingAdapter.OnItemClickListener {
 
     private MoviesUpcomingAdapter mAdapter;
 
@@ -31,18 +30,18 @@ public class MoviesUpcomingFragment extends MoviesListFragment implements Loader
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    @Override
-    public Uri getLoaderUri() {
-        return DataContract.UpcomingMovieEntry.CONTENT_URI;
+    public void onViewCreated(@androidx.annotation.NonNull android.view.View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        com.lineargs.watchnext.ui.MoviesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.MoviesViewModel.class);
+        viewModel.getUpcomingMovies().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.UpcomingMovie>>() {
+            @Override
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.UpcomingMovie> movies) {
+                if (movies != null && !movies.isEmpty()) {
+                    mAdapter.swapMovies(movies);
+                    showData();
+                }
+            }
+        });
     }
 
     @Override

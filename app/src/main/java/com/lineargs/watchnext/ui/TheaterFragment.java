@@ -25,10 +25,8 @@ import com.lineargs.watchnext.utils.WorkManagerUtils;
 
 import com.lineargs.watchnext.databinding.FragmentTheaterBinding;
 
-public class TheaterFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        TheaterAdapter.OnItemClickListener {
+public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnItemClickListener {
 
-    private static final int LOADER_ID = 333;
     private FragmentTheaterBinding binding;
     private TheaterAdapter theaterAdapter;
 
@@ -62,47 +60,24 @@ public class TheaterFragment extends BaseFragment implements LoaderManager.Loade
                 if (NetworkUtils.isConnected(getContext())) {
                     binding.swipeRefreshLayout.setRefreshing(true);
                     WorkManagerUtils.syncImmediately(getContext());
-                    getLoaderManager().restartLoader(LOADER_ID, null, TheaterFragment.this);
                 }
             }
         });
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        DataContract.TheaterMovieEntry.CONTENT_URI,
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                theaterAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
+    public void onViewCreated(@androidx.annotation.NonNull View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        com.lineargs.watchnext.ui.MoviesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.MoviesViewModel.class);
+        viewModel.getTheaterMovies().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.TheaterMovie>>() {
+            @Override
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.TheaterMovie> movies) {
+                if (movies != null && !movies.isEmpty()) {
+                    theaterAdapter.swapMovies(movies);
                     binding.swipeRefreshLayout.setRefreshing(false);
                 }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        theaterAdapter.swapCursor(null);
+            }
+        });
     }
 
     @Override

@@ -17,7 +17,7 @@ import com.lineargs.watchnext.databinding.ItemTvDetailBinding;
 public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor;
+    private com.lineargs.watchnext.data.entity.PopularSerie serie;
 
     public TVDetailAdapter(@NonNull Context context) {
         this.context = context;
@@ -38,15 +38,15 @@ public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (serie == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return 1;
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapSerie(com.lineargs.watchnext.data.entity.PopularSerie serie) {
+        this.serie = serie;
         notifyDataSetChanged();
     }
 
@@ -72,13 +72,12 @@ public class TVDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            title.setText(cursor.getString(Query.TITLE));
-            releaseDate.setText(cursor.getString(Query.RELEASE_DATE));
-            overview.setText(cursor.getString(Query.OVERVIEW));
-            voteAverage.setText(cursor.getString(Query.VOTE_AVERAGE));
-            companies.setText(cursor.getString(Query.PRODUCTION_COMPANIES));
-            genres.setText(cursor.getString(Query.GENRES));
+            title.setText(serie.getTitle());
+            releaseDate.setText(serie.getReleaseDate());
+            overview.setText(serie.getOverview());
+            voteAverage.setText(serie.getVoteAverage());
+            companies.setText(serie.getProductionCompanies());
+            genres.setText(serie.getGenres());
         }
     }
 }

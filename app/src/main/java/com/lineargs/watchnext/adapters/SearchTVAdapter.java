@@ -32,7 +32,7 @@ import com.lineargs.watchnext.databinding.ItemSearchBinding;
 public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.SearchTv> searchResults;
 
     public SearchTVAdapter(@NonNull Context context) {
         this.context = context;
@@ -53,14 +53,14 @@ public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (searchResults == null) {
             return 0;
         }
-        return cursor.getCount();
+        return searchResults.size();
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapSearchResults(java.util.List<com.lineargs.watchnext.data.entity.SearchTv> searchResults) {
+        this.searchResults = searchResults;
         notifyDataSetChanged();
     }
 
@@ -103,8 +103,8 @@ public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindViews(final Context context, int position) {
-            cursor.moveToPosition(position);
-            final long id = cursor.getInt(SearchQuery.ID);
+            com.lineargs.watchnext.data.entity.SearchTv searchTV = searchResults.get(position);
+            final long id = searchTV.getTmdbId();
             if (isFavorite(context, id)) {
                 star.setImageDrawable(deleteFromFavorites(context));
             } else {
@@ -124,8 +124,8 @@ public class SearchTVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
             });
-            title.setText(cursor.getString(SearchQuery.TITLE));
-            ServiceUtils.loadPicasso(poster.getContext(), cursor.getString(SearchQuery.POSTER_PATH))
+            title.setText(searchTV.getTitle());
+            ServiceUtils.loadPicasso(poster.getContext(), searchTV.getPosterPath())
                     .centerInside()
                     .fit()
                     .into(poster);

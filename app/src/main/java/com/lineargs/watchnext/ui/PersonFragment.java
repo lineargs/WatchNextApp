@@ -28,14 +28,13 @@ import com.lineargs.watchnext.utils.ServiceUtils;
 
 import com.lineargs.watchnext.databinding.FragmentPersonBinding;
 
-public class PersonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int LOADER_ID = 455;
+public class PersonFragment extends Fragment {
 
     private FragmentPersonBinding binding;
     private Uri mUri;
     private String id = "";
-    private Cursor cursor;
+    private String profilePath = ""; // To store path for fullscreen
+    private PersonViewModel viewModel;
 
     public PersonFragment() {
     }
@@ -64,7 +63,26 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
             }
         });
         
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(PersonViewModel.class);
+        if (!TextUtils.isEmpty(id)) {
+            try {
+                int personId = Integer.parseInt(id);
+                viewModel.setPersonId(personId);
+                viewModel.getPerson().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.Person>() {
+                     @Override
+                     public void onChanged(com.lineargs.watchnext.data.entity.Person person) {
+                         if (person != null) {
+                             loadViews(person);
+                             showData();
+                         }
+                     }
+                });
+            } catch (NumberFormatException e) {
+                // Handle parsing error
+            }
+        }
+        
         return binding.getRoot();
     }
 
@@ -83,42 +101,6 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
         binding.personNestedView.setVisibility(View.VISIBLE);
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        PersonQuery.PERSON_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    loadViews(data);
-                    cursor = data;
-                    showData();
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -126,40 +108,38 @@ public class PersonFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     public void openFullscreen() {
-        Intent fullscreen = new Intent(getActivity(), PictureActivity.class);
-        fullscreen.putExtra(Constants.STILL_PATH, cursor.getString(PersonQuery.PROFILE_PATH));
-        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(getActivity(),
-                        binding.stillPath,
-                        ViewCompat.getTransitionName(binding.stillPath));
-        startActivity(fullscreen, optionsCompat.toBundle());
+        if (!TextUtils.isEmpty(profilePath)) {
+            Intent fullscreen = new Intent(getActivity(), PictureActivity.class);
+            fullscreen.putExtra(Constants.STILL_PATH, profilePath);
+            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(getActivity(),
+                            binding.stillPath,
+                            ViewCompat.getTransitionName(binding.stillPath));
+            startActivity(fullscreen, optionsCompat.toBundle());
+        }
     }
 
-    private void loadViews(Cursor cursor) {
-        ServiceUtils.loadPicasso(binding.stillPath.getContext(), cursor.getString(PersonQuery.PROFILE_PATH))
+    private void loadViews(com.lineargs.watchnext.data.entity.Person person) {
+        profilePath = person.getProfilePath();
+        ServiceUtils.loadPicasso(binding.stillPath.getContext(), person.getProfilePath())
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
                 .into(binding.stillPath);
-        if (TextUtils.isEmpty(cursor.getString(PersonQuery.BIOGRAPHY))) {
+        if (TextUtils.isEmpty(person.getBiography())) {
             binding.biography.setText(getString(R.string.biography_not_available));
         } else {
-            binding.biography.setText(cursor.getString(PersonQuery.BIOGRAPHY));
+            binding.biography.setText(person.getBiography());
         }
-        /* We can use same logic from the biography for the place of birth or
-         * homepage, just one small but big step for the mankind is that the Movie Db
-         * API returns {String or null} for these. Still no bother implementing for now.
-         * Just sayin'
-         * UPDATE: Took only less than a minute to implement that. Do not be lazy please :)
-         */
-        if (TextUtils.isEmpty(cursor.getString(PersonQuery.PLACE_OF_BIRTH))) {
+        
+        if (TextUtils.isEmpty(person.getPlaceOfBirth())) {
             binding.placeOfBirth.setVisibility(View.GONE);
         } else {
-            binding.placeOfBirth.setText(cursor.getString(PersonQuery.PLACE_OF_BIRTH));
+            binding.placeOfBirth.setText(person.getPlaceOfBirth());
         }
-        if (TextUtils.isEmpty(cursor.getString(PersonQuery.HOMEPAGE))) {
+        if (TextUtils.isEmpty(person.getHomepage())) {
             binding.homepage.setVisibility(View.GONE);
         } else {
-            binding.homepage.setText(cursor.getString(PersonQuery.HOMEPAGE));
+            binding.homepage.setText(person.getHomepage());
         }
     }
 }

@@ -24,7 +24,7 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private OnClick callBack;
     private Context context;
-    private Cursor cursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.Credits> crew;
 
     public CreditsCrewAdapter(@NonNull Context context, @NonNull OnClick listener) {
         this.context = context;
@@ -46,15 +46,15 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (crew == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return crew.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapCrew(java.util.List<com.lineargs.watchnext.data.entity.Credits> crew) {
+        this.crew = crew;
         notifyDataSetChanged();
     }
 
@@ -79,10 +79,10 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            name.setText(cursor.getString(CreditsQuery.NAME));
-            job.setText(cursor.getString(CreditsQuery.JOB));
-            ServiceUtils.loadPicasso(photo.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
+            com.lineargs.watchnext.data.entity.Credits person = crew.get(position);
+            name.setText(person.getName());
+            job.setText(person.getJob());
+            ServiceUtils.loadPicasso(photo.getContext(), person.getProfilePath())
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
@@ -91,9 +91,9 @@ public class CreditsCrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View view) {
-            cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CreditsQuery.PERSON_ID);
-            String name = cursor.getString(CreditsQuery.NAME);
+            com.lineargs.watchnext.data.entity.Credits person = crew.get(getAdapterPosition());
+            String id = String.valueOf(person.getPersonId());
+            String name = person.getName();
             callBack.onPersonClick(id, name);
         }
     }

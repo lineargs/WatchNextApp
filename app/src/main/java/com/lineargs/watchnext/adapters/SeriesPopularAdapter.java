@@ -21,7 +21,7 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
 
 public class SeriesPopularAdapter extends BaseTabbedAdapter {
 
-    private Cursor cursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.PopularSerie> series;
 
     public SeriesPopularAdapter(@NonNull Context context, OnItemClickListener listener) {
         super(context, listener);
@@ -29,15 +29,15 @@ public class SeriesPopularAdapter extends BaseTabbedAdapter {
 
     @Override
     protected void bindViews(final TabbedViewHolder holder, final Context context, int position) {
-        cursor.moveToPosition(position);
-        final long id = cursor.getInt(Query.ID);
+        final com.lineargs.watchnext.data.entity.PopularSerie serie = series.get(position);
+        final long id = serie.getTmdbId();
         if (isFavorite(context, id)) {
             holder.star.setImageDrawable(starImage());
         } else {
             holder.star.setImageDrawable(starImageBorder());
         }
-        holder.title.setText(cursor.getString(Query.TITLE));
-        ServiceUtils.loadPicasso(holder.poster.getContext(), cursor.getString(Query.POSTER_PATH))
+        holder.title.setText(serie.getTitle());
+        ServiceUtils.loadPicasso(holder.poster.getContext(), serie.getPosterPath())
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
                 .into(holder.poster);
@@ -61,23 +61,22 @@ public class SeriesPopularAdapter extends BaseTabbedAdapter {
 
     @Override
     protected void onViewClick(View view, int position) {
-        cursor.moveToPosition(position);
-        Uri uri = DataContract.PopularSerieEntry.buildSerieUriWithId(
-                Long.parseLong(cursor.getString(Query.ID)));
+        com.lineargs.watchnext.data.entity.PopularSerie serie = series.get(position);
+        Uri uri = DataContract.PopularSerieEntry.buildSerieUriWithId(serie.getTmdbId());
         callback.onItemSelected(uri);
     }
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (series == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return series.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapSeries(java.util.List<com.lineargs.watchnext.data.entity.PopularSerie> series) {
+        this.series = series;
         notifyDataSetChanged();
     }
 }

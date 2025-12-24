@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 import com.lineargs.watchnext.data.DataContract;
 
 @Entity(tableName = DataContract.Favorites.TABLE_NAME)
-public class Favorites {
+public class Favorites implements Movie {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DataContract.Favorites._ID)

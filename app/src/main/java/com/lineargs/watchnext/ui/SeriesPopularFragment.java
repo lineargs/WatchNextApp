@@ -37,18 +37,18 @@ public class SeriesPopularFragment extends SeriesListFragment implements SeriesP
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public Uri getLoaderUri() {
-        return DataContract.PopularSerieEntry.CONTENT_URI;
+    public void onViewCreated(@androidx.annotation.NonNull android.view.View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        com.lineargs.watchnext.ui.SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.SeriesViewModel.class);
+        viewModel.getPopularSeries().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.PopularSerie>>() {
+            @Override
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.PopularSerie> series) {
+                if (series != null && !series.isEmpty()) {
+                    adapter.swapSeries(series);
+                    showData();
+                }
+            }
+        });
     }
 }
 

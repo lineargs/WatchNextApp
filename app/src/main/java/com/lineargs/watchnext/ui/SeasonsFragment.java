@@ -35,13 +35,13 @@ import com.lineargs.watchnext.databinding.FragmentSeasonsBinding;
  * Same old seasons fragment. Or not??? Hmmm....
  */
 
-public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SeasonsAdapter.OnClickListener {
+public class SeasonsFragment extends Fragment implements SeasonsAdapter.OnClickListener {
 
-    private static final int LOADER_ID = 112;
     private FragmentSeasonsBinding binding;
     private Uri mUri;
     private Handler handler;
     private SeasonsAdapter mAdapter;
+    private SeasonViewModel viewModel;
 
     public SeasonsFragment() {
     }
@@ -68,7 +68,30 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
         if (savedState == null) {
             startLoading();
         }
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SeasonViewModel.class);
+        if (mUri != null) {
+            int seriesId = Integer.parseInt(mUri.getLastPathSegment());
+            viewModel.setSerieId(seriesId);
+            viewModel.getSeasons().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Seasons>>() {
+                 @Override
+                 public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Seasons> seasons) {
+                     mAdapter.swapSeasons(seasons);
+                     if (seasons != null && !seasons.isEmpty()) {
+                        handler.removeCallbacksAndMessages(null);
+                        showData();
+                    } else if (seasons != null) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showEmpty();
+                            }
+                        }, 5000);
+                    }
+                 }
+            });
+        }
     }
 
     private void startLoading() {
@@ -94,51 +117,6 @@ public class SeasonsFragment extends Fragment implements LoaderManager.LoaderCal
         }
         binding.seasonsRecyclerView.setVisibility(View.GONE);
         binding.emptySeasons.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    @NonNull
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        SeasonsQuery.SEASON_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                    showData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmpty();
-                        }
-                    }, 5000);
-
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     public boolean isTablet(Context context) {

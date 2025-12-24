@@ -26,12 +26,12 @@ import com.lineargs.watchnext.databinding.FragmentSeasonBinding;
  * Same old season fragment. Or not??? Hmmm....
  */
 
-public class SeasonFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SeasonsAdapter.OnClickListener {
+public class SeasonFragment extends Fragment implements SeasonsAdapter.OnClickListener {
 
-    private static final int LOADER_ID = 112;
     private FragmentSeasonBinding binding;
     private Uri mUri;
     private SeasonsAdapter mAdapter;
+    private SeasonViewModel viewModel;
 
     public SeasonFragment() {
     }
@@ -54,42 +54,19 @@ public class SeasonFragment extends Fragment implements LoaderManager.LoaderCall
         binding.seasonRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new SeasonsAdapter(context, this);
         binding.seasonRecyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        SeasonsQuery.SEASON_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SeasonViewModel.class);
+        if (mUri != null) {
+            int seriesId = Integer.parseInt(mUri.getLastPathSegment());
+            viewModel.setSerieId(seriesId);
+            viewModel.getSeasons().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Seasons>>() {
+                 @Override
+                 public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Seasons> seasons) {
+                     mAdapter.swapSeasons(seasons);
+                 }
+            });
         }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     //TODO Too many things going on here

@@ -716,6 +716,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.PopularMovieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_TOP_MOVIES:
@@ -733,6 +734,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.TopRatedMovieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_UPCOMING_MOVIES:
@@ -750,6 +752,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.UpcomingMovieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_THEATER_MOVIES:
@@ -767,6 +770,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.TheaterMovieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_CAST:
@@ -784,6 +788,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Credits.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_CREW:
@@ -801,6 +806,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Credits.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_POPULAR_SERIES:
@@ -818,6 +824,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.PopularSerieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_TOP_SERIES:
@@ -835,6 +842,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.TopRatedSerieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_ON_THE_AIR_SERIES:
@@ -852,6 +860,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.OnTheAirSerieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_FAVORITES:
@@ -886,6 +895,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Search.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_SEARCH_TV:
@@ -920,6 +930,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Review.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_VIDEOS:
@@ -937,6 +948,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Videos.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_SEASONS:
@@ -954,6 +966,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Seasons.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_EPISODES:
@@ -971,6 +984,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Episodes.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_PERSON:
@@ -1238,51 +1252,65 @@ public class DataProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case CODE_POPULAR_MOVIES:
                 rowsUpdated = db.update(DataContract.PopularMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.PopularMovieEntry.TABLE_NAME);
                 break;
             case CODE_TOP_MOVIES:
                 rowsUpdated = db.update(DataContract.TopRatedMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.TopRatedMovieEntry.TABLE_NAME);
                 break;
             case CODE_UPCOMING_MOVIES:
                 rowsUpdated = db.update(DataContract.UpcomingMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.UpcomingMovieEntry.TABLE_NAME);
                 break;
             case CODE_THEATER_MOVIES:
                 rowsUpdated = db.update(DataContract.TheaterMovieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.TheaterMovieEntry.TABLE_NAME);
                 break;
             case CODE_CAST:
                 rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Credits.TABLE_NAME);
                 break;
             case CODE_CREW:
                 rowsUpdated = db.update(DataContract.Credits.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Credits.TABLE_NAME);
                 break;
             case CODE_POPULAR_SERIES:
                 rowsUpdated = db.update(DataContract.PopularSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.PopularSerieEntry.TABLE_NAME);
                 break;
             case CODE_TOP_SERIES:
                 rowsUpdated = db.update(DataContract.TopRatedSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.TopRatedSerieEntry.TABLE_NAME);
                 break;
             case CODE_ON_THE_AIR_SERIES:
                 rowsUpdated = db.update(DataContract.OnTheAirSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.OnTheAirSerieEntry.TABLE_NAME);
                 break;
             case CODE_FAVORITES:
                 rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_SEARCH:
                 rowsUpdated = db.update(DataContract.Search.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Search.TABLE_NAME);
                 break;
             case CODE_SEARCH_TV:
                 rowsUpdated = db.update(DataContract.SearchTv.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 break;
             case CODE_REVIEW:
                 rowsUpdated = db.update(DataContract.Review.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Review.TABLE_NAME);
                 break;
             case CODE_VIDEOS:
                 rowsUpdated = db.update(DataContract.Videos.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Videos.TABLE_NAME);
                 break;
             case CODE_SEASONS:
                 rowsUpdated = db.update(DataContract.Seasons.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Seasons.TABLE_NAME);
                 break;
             case CODE_EPISODES:
                 rowsUpdated = db.update(DataContract.Episodes.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Episodes.TABLE_NAME);
                 break;
             case CODE_PERSON:
                 rowsUpdated = db.update(DataContract.Person.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);

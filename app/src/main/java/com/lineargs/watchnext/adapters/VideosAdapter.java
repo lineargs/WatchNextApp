@@ -26,7 +26,7 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private OnItemClick callback;
     private Context context;
-    private Cursor cursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.Videos> videos;
 
     public VideosAdapter(@NonNull Context context, OnItemClick listener) {
         this.context = context;
@@ -48,15 +48,15 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (videos == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return videos.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapVideos(java.util.List<com.lineargs.watchnext.data.entity.Videos> videos) {
+        this.videos = videos;
         notifyDataSetChanged();
     }
 
@@ -79,10 +79,10 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            name.setText(cursor.getString(VideosQuery.NAME));
+            com.lineargs.watchnext.data.entity.Videos video = videos.get(position);
+            name.setText(video.getName());
             Picasso.get()
-                    .load(cursor.getString(VideosQuery.IMG))
+                    .load(video.getImage())
                     .centerInside()
                     .fit()
                     .into(photo);
@@ -90,8 +90,8 @@ public class VideosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View view) {
-            cursor.moveToPosition(getAdapterPosition());
-            callback.OnClick(cursor.getString(VideosQuery.KEY));
+            com.lineargs.watchnext.data.entity.Videos video = videos.get(getAdapterPosition());
+            callback.OnClick(video.getKey());
         }
     }
 }

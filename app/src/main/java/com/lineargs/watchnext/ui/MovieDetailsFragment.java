@@ -1,42 +1,27 @@
 package com.lineargs.watchnext.ui;
 
-
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.CrewAdapter;
 import com.lineargs.watchnext.adapters.MovieDetailAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
@@ -47,12 +32,9 @@ import com.squareup.picasso.Picasso;
 import com.lineargs.watchnext.databinding.FragmentMovieDetailBinding;
 
 /**
- * A fragment using Loaders to show details for the movie.
+ * A fragment using ViewModel to show details for the movie.
  */
-public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick, CrewAdapter.OnClick {
-
-
-    private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333, CREW_LOADER_ID = 445;
+public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClick, CrewAdapter.OnClick {
 
     private FragmentMovieDetailBinding binding;
     private Uri mUri;
@@ -63,6 +45,19 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private String title = "";
     private long id;
     private boolean dualPane;
+    private MovieDetailViewModel viewModel;
+    private final Runnable castRunnable = new Runnable() {
+        @Override
+        public void run() {
+            showEmptyCast();
+        }
+    };
+    private final Runnable crewRunnable = new Runnable() {
+        @Override
+        public void run() {
+            showEmptyCrew();
+        }
+    };
 
     public MovieDetailsFragment() {
     }
@@ -119,9 +114,84 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             startCrewLoading();
         }
 
-        getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
-        getLoaderManager().initLoader(CAST_LOADER_ID, null, this);
-        getLoaderManager().initLoader(CREW_LOADER_ID, null, this);
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(MovieDetailViewModel.class);
+        if (mUri != null) {
+            viewModel.setMovieUri(mUri);
+            
+            // Observe Movie
+            viewModel.getMovie().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.Movie>() {
+                @Override
+                public void onChanged(com.lineargs.watchnext.data.entity.Movie movie) {
+                    if (movie != null) {
+                         imageLoad(movie);
+                         mAdapter.swapMovie(movie);
+                    }
+                }
+            });
+
+            // Observe Cast
+            viewModel.getCast().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Credits>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Credits> credits) {
+                    mCastAdapter.swapCast(credits);
+                    if (credits != null && !credits.isEmpty()) {
+                        handler.removeCallbacks(castRunnable);
+                        showCastData();
+                    } else if (credits != null) { // Empty list
+                         handler.removeCallbacks(castRunnable); // Reset timer if empty updates repeatedly
+                         handler.postDelayed(castRunnable, 3000); // Reduced to 3s
+                    }
+                }
+            });
+            
+             // Observe Crew
+            viewModel.getCrew().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Credits>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Credits> credits) {
+                    mCrewAdapter.swapCrew(credits);
+                    if (credits != null && !credits.isEmpty()) {
+                        handler.removeCallbacks(crewRunnable);
+                        showCrewData();
+                    } else if (credits != null) {
+                        handler.removeCallbacks(crewRunnable);
+                        handler.postDelayed(crewRunnable, 3000);
+                    }
+                }
+            });
+
+            // Observe Reviews
+            viewModel.getReviews().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Review>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Review> reviews) {
+                     if (binding.movieFooter.reviews != null) {
+                        if (reviews != null && !reviews.isEmpty()) {
+                            binding.movieFooter.reviews.setEnabled(true);
+                            binding.movieFooter.reviews.setTextColor(getResources().getColor(R.color.colorBlack));
+                        } else {
+                            binding.movieFooter.reviews.setEnabled(false);
+                            binding.movieFooter.reviews.setTextColor(android.graphics.Color.GRAY);
+                        }
+                     }
+                }
+            });
+
+            // Observe Videos
+            viewModel.getVideos().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Videos>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Videos> videos) {
+                     if (binding.movieFooter.videos != null) {
+                        if (videos != null && !videos.isEmpty()) {
+                            binding.movieFooter.videos.setEnabled(true);
+                            binding.movieFooter.videos.setTextColor(getResources().getColor(R.color.colorBlack));
+                        } else {
+                            binding.movieFooter.videos.setEnabled(false);
+                            binding.movieFooter.videos.setTextColor(android.graphics.Color.GRAY);
+                        }
+                     }
+                }
+            });
+        }
         
         binding.starFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,96 +309,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         }
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case MAIN_LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            case CAST_LOADER_ID:
-                Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-                return new CursorLoader(getContext(),
-                        uri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            case CREW_LOADER_ID:
-                Uri crewUri = DataContract.Credits.buildCrewUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-                return new CursorLoader(getContext(),
-                        crewUri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case MAIN_LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    imageLoad(data);
-                    mAdapter.swapCursor(data);
-                }
-                break;
-            case CAST_LOADER_ID:
-                mCastAdapter.swapCursor(data);
-                /* We use handler to manipulate with the user experience.
-                 * The Loaders are much faster than the load from Network, so
-                 * we delay the empty data show by calling the handler. Once
-                 * we will get the data from the Network, the Loader is calling again
-                 * onLoadFinished thanks to our Notify in the Adapter.
-                 * We cancel the handler call just so we will not show empty data by mistake after
-                 * populating the list.
-                 */
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    showCastData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmptyCast();
-                        }
-                    }, 7000);
-                }
-                break;
-            case CREW_LOADER_ID:
-                mCrewAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    showCrewData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmptyCrew();
-                        }
-                    }, 7000);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -372,10 +352,12 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         startActivity(intent);
     }
 
-    private void imageLoad(Cursor cursor) {
-        title = cursor.getString(Query.TITLE);
-        id = cursor.getInt(Query.ID);
-        String imdb = cursor.getString(Query.IMDB_ID);
+    private void imageLoad(com.lineargs.watchnext.data.entity.Movie movie) {
+        title = movie.getTitle();
+        id = movie.getTmdbId();
+        // String imdb = cursor.getString(Query.IMDB_ID); // PopularMovie has imdbId
+        String imdb = movie.getImdbId();
+        
         if (binding.movieFooter.reviews != null) {
             ServiceUtils.setUpCommentsButton(getContext(), mUri.getLastPathSegment(), binding.movieFooter.reviews);
         }
@@ -392,12 +374,12 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         }
         if (binding.coverPoster != null) {
-            ServiceUtils.loadPicasso(getContext(), cursor.getString(Query.POSTER_PATH))
+            ServiceUtils.loadPicasso(getContext(), movie.getPosterPath())
                     .fit()
                     .into(binding.coverPoster);
         }
         if (binding.coverBackdrop != null) {
-            ServiceUtils.loadPicasso(getContext(), cursor.getString(Query.BACKDROP_PATH))
+            ServiceUtils.loadPicasso(getContext(), movie.getBackdropPath())
                     .fit()
                     .into(binding.coverBackdrop);
         }
@@ -420,8 +402,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         }
 
     }
-
-
 
     @Override
     public void onPersonClick(String id, String name) {

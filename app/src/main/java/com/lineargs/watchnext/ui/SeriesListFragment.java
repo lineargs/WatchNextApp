@@ -1,33 +1,22 @@
 package com.lineargs.watchnext.ui;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.lineargs.watchnext.utils.WorkManagerUtils;
 
 import com.lineargs.watchnext.databinding.FragmentListSeriesBinding;
 
-public abstract class SeriesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class SeriesListFragment extends BaseFragment {
 
-    private static final int LOADER_ID = 233;
     private FragmentListSeriesBinding binding;
 
     @Override
@@ -52,50 +41,12 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
                 if (NetworkUtils.isConnected(getContext())) {
                     binding.swipeRefreshLayout.setRefreshing(true);
                     WorkManagerUtils.syncImmediately(getContext());
-                    getLoaderManager().restartLoader(LOADER_ID, null, SeriesListFragment.this);
+                    // Refresh logic handled by LiveData in subclasses
                 } else {
                     binding.swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
-
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        getLoaderUri(),
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data.getCount() != 0) {
-                    data.moveToFirst();
-                    swapData(data);
-                    showData();
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        resetLoader(loader);
     }
 
     @Override
@@ -110,7 +61,7 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
         }
     }
 
-    private void showData() {
+    public void showData() {
         binding.tabbedSeriesRecyclerView.setVisibility(View.VISIBLE);
         if (binding.swipeRefreshLayout != null) {
             binding.swipeRefreshLayout.setRefreshing(false);
@@ -118,10 +69,4 @@ public abstract class SeriesListFragment extends BaseFragment implements LoaderM
     }
 
     public abstract RecyclerView.Adapter getAdapter();
-
-    public abstract void resetLoader(Loader<Cursor> loader);
-
-    public abstract void swapData(Cursor data);
-
-    public abstract Uri getLoaderUri();
 }

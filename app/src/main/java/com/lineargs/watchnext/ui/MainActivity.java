@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
     static final String FAB_ID = "fab_id";
     private static final int LOADER_ID = 333;
     private static final String BUNDLE_ARG = "sort";
+    private static final String PREF_SORT_ORDER = "pref_sort_order";
     private static final String ASC = " ASC", DESC = " DESC";
     @NonNull
     ActivityMainBinding binding;
@@ -112,6 +114,9 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
          * the loader to sort the list. The default sorting is always first in db,
          * first to display. We still do not save the user preference.
          */
+        android.content.SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String sortOrder = sharedPreferences.getString(PREF_SORT_ORDER, DataContract.PopularMovieEntry.COLUMN_TITLE + ASC);
+        bundle.putString(BUNDLE_ARG, sortOrder);
         getSupportLoaderManager().initLoader(LOADER_ID, bundle, this);
     }
 
@@ -161,20 +166,38 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
         View menu = findViewById(R.id.sort_by);
         PopupMenu popupMenu = new PopupMenu(this, menu);
         popupMenu.inflate(R.menu.sort_menu);
+
+        android.content.SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String sortOrder = sharedPreferences.getString(PREF_SORT_ORDER, DataContract.PopularMovieEntry.COLUMN_TITLE + ASC);
+
+        if (sortOrder.equals(DataContract.PopularMovieEntry.COLUMN_TITLE + ASC)) {
+            popupMenu.getMenu().findItem(R.id.sort_title).setChecked(true);
+        } else if (sortOrder.equals(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + DESC)) {
+            popupMenu.getMenu().findItem(R.id.sort_highest_rated).setChecked(true);
+        } else if (sortOrder.equals(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + ASC)) {
+            popupMenu.getMenu().findItem(R.id.sort_lowest_rated).setChecked(true);
+        }
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.sort_title:
-                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_TITLE + ASC);
+                        String sortTitle = DataContract.PopularMovieEntry.COLUMN_TITLE + ASC;
+                        bundle.putString(BUNDLE_ARG, sortTitle);
+                        saveSortOrder(sortTitle);
                         getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
                         break;
                     case R.id.sort_highest_rated:
-                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + DESC);
+                        String sortHighest = DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + DESC;
+                        bundle.putString(BUNDLE_ARG, sortHighest);
+                        saveSortOrder(sortHighest);
                         getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
                         break;
                     case R.id.sort_lowest_rated:
-                        bundle.putString(BUNDLE_ARG, DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + ASC);
+                        String sortLowest = DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + ASC;
+                        bundle.putString(BUNDLE_ARG, sortLowest);
+                        saveSortOrder(sortLowest);
                         getSupportLoaderManager().restartLoader(LOADER_ID, bundle, MainActivity.this);
                         break;
                 }
@@ -198,6 +221,13 @@ public class MainActivity extends BaseTopActivity implements LoaderManager.Loade
             default:
                 throw new RuntimeException("Loader not implemented: " + id);
         }
+    }
+
+    private void saveSortOrder(String sortOrder) {
+        android.content.SharedPreferences preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        android.content.SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREF_SORT_ORDER, sortOrder);
+        editor.apply();
     }
 
     @Override

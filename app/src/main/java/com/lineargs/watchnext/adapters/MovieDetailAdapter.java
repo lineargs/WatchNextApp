@@ -23,7 +23,7 @@ import com.lineargs.watchnext.databinding.ItemMovieDetailBinding;
 public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor;
+    private com.lineargs.watchnext.data.entity.Movie movie;
 
     public MovieDetailAdapter(@NonNull Context context) {
         this.context = context;
@@ -44,15 +44,15 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (movie == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return 1;
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapMovie(com.lineargs.watchnext.data.entity.Movie movie) {
+        this.movie = movie;
         notifyDataSetChanged();
     }
 
@@ -82,15 +82,14 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            title.setText(cursor.getString(Query.TITLE));
-            releaseDate.setText(cursor.getString(Query.RELEASE_DATE));
-            overview.setText(cursor.getString(Query.OVERVIEW));
-            voteAverage.setText(cursor.getString(Query.VOTE_AVERAGE));
-            runtime.setText(context.getString(R.string.runtime, cursor.getString(Query.RUNTIME)));
-            companies.setText(cursor.getString(Query.PRODUCTION_COMPANIES));
-            countries.setText(cursor.getString(Query.PRODUCTION_COUNTRIES));
-            genres.setText(cursor.getString(Query.GENRES));
+            title.setText(movie.getTitle());
+            releaseDate.setText(movie.getReleaseDate());
+            overview.setText(movie.getOverview());
+            voteAverage.setText(movie.getVoteAverage());
+            runtime.setText(context.getString(R.string.runtime, String.valueOf(movie.getRuntime())));
+            companies.setText(movie.getProductionCompanies());
+            countries.setText(movie.getProductionCountries());
+            genres.setText(movie.getGenres());
         }
     }
 }

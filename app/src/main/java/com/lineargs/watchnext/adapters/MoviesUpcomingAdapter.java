@@ -21,7 +21,7 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
 
 public class MoviesUpcomingAdapter extends BaseTabbedAdapter {
 
-    private Cursor cursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.UpcomingMovie> movies;
 
     public MoviesUpcomingAdapter(@NonNull Context context, OnItemClickListener listener) {
         super(context, listener);
@@ -29,16 +29,16 @@ public class MoviesUpcomingAdapter extends BaseTabbedAdapter {
 
     @Override
     protected void bindViews(final TabbedViewHolder holder, final Context context, int position) {
-        cursor.moveToPosition(position);
-        final long id = cursor.getInt(Query.ID);
+        final com.lineargs.watchnext.data.entity.UpcomingMovie movie = movies.get(position);
+        final long id = movie.getTmdbId();
         if (isFavorite(context, id)) {
             holder.star.setImageDrawable(starImage());
         } else {
             holder.star.setImageDrawable(starImageBorder());
         }
-        holder.title.setText(cursor.getString(Query.TITLE));
+        holder.title.setText(movie.getTitle());
 
-        ServiceUtils.loadPicasso(holder.poster.getContext(), cursor.getString(Query.POSTER_PATH))
+        ServiceUtils.loadPicasso(holder.poster.getContext(), movie.getPosterPath())
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
                 .into(holder.poster);
@@ -62,23 +62,22 @@ public class MoviesUpcomingAdapter extends BaseTabbedAdapter {
 
     @Override
     protected void onViewClick(View view, int position) {
-        cursor.moveToPosition(position);
-        Uri uri = DataContract.UpcomingMovieEntry.buildMovieUriWithId(
-                Long.parseLong(cursor.getString(Query.ID)));
+        com.lineargs.watchnext.data.entity.UpcomingMovie movie = movies.get(position);
+        Uri uri = DataContract.UpcomingMovieEntry.buildMovieUriWithId(movie.getTmdbId());
         callback.onItemSelected(uri);
     }
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (movies == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return movies.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapMovies(java.util.List<com.lineargs.watchnext.data.entity.UpcomingMovie> movies) {
+        this.movies = movies;
         notifyDataSetChanged();
     }
 }

@@ -1,38 +1,25 @@
 package com.lineargs.watchnext.ui;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
@@ -40,20 +27,10 @@ import com.lineargs.watchnext.utils.Utils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
-import com.lineargs.watchnext.ui.CreditsCastActivity;
-import com.lineargs.watchnext.ui.CreditsCrewActivity;
-import com.lineargs.watchnext.ui.MainActivity;
-import com.lineargs.watchnext.ui.PersonActivity;
-import com.lineargs.watchnext.ui.ReviewActivity;
-import com.lineargs.watchnext.ui.SeasonsActivity;
-import com.lineargs.watchnext.ui.VideosActivity;
-import com.lineargs.watchnext.ui.VideosTvActivity;
 import com.lineargs.watchnext.databinding.FragmentSeriesDetailBinding;
 
-public class SeriesDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, CastAdapter.OnClick {
+public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnClick {
 
-
-    private static final int MAIN_LOADER_ID = 223, CAST_LOADER_ID = 333;
     private FragmentSeriesDetailBinding binding;
     private Uri mUri;
     private CastAdapter mCastAdapter;
@@ -62,6 +39,7 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
     private String title = "";
     private long id;
     private boolean mDualPane;
+    private SeriesDetailViewModel viewModel;
 
     public SeriesDetailsFragment() {
     }
@@ -109,8 +87,76 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
             }
             startCastLoading();
         }
-        getLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
-        getLoaderManager().initLoader(CAST_LOADER_ID, null, this);
+
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SeriesDetailViewModel.class);
+        if (mUri != null) {
+            int seriesId = Integer.parseInt(mUri.getLastPathSegment());
+            viewModel.setSeriesId(seriesId);
+
+            // Observe Serie
+            viewModel.getSerie().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.PopularSerie>() {
+                @Override
+                public void onChanged(com.lineargs.watchnext.data.entity.PopularSerie serie) {
+                    if (serie != null) {
+                        imageLoad(serie);
+                        mAdapter.swapSerie(serie);
+                    }
+                }
+            });
+
+            // Observe Cast
+            viewModel.getCast().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Credits>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Credits> credits) {
+                     mCastAdapter.swapCast(credits);
+                      if (credits != null && !credits.isEmpty()) {
+                        handler.removeCallbacksAndMessages(null);
+                        showCastData();
+                    } else if (credits != null) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showEmptyCast();
+                            }
+                        }, 7000);
+                    }
+                }
+            });
+
+
+            // Observe Seasons
+            viewModel.getSeasons().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Seasons>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Seasons> seasons) {
+                     if (binding.seriesFooter.seasons != null) {
+                        if (seasons != null && !seasons.isEmpty()) {
+                            binding.seriesFooter.seasons.setEnabled(true);
+                            binding.seriesFooter.seasons.setTextColor(getResources().getColor(R.color.colorBlack));
+                        } else {
+                            binding.seriesFooter.seasons.setEnabled(false);
+                            binding.seriesFooter.seasons.setTextColor(android.graphics.Color.GRAY);
+                        }
+                     }
+                }
+            });
+
+            // Observe Videos
+            viewModel.getVideos().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Videos>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Videos> videos) {
+                     if (binding.seriesFooter.videos != null) {
+                        if (videos != null && !videos.isEmpty()) {
+                            binding.seriesFooter.videos.setEnabled(true);
+                            binding.seriesFooter.videos.setTextColor(getResources().getColor(R.color.colorBlack));
+                        } else {
+                            binding.seriesFooter.videos.setEnabled(false);
+                            binding.seriesFooter.videos.setTextColor(android.graphics.Color.GRAY);
+                        }
+                     }
+                }
+            });
+        }
         
         binding.starFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,65 +271,6 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         startActivity(intent);
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case MAIN_LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            case CAST_LOADER_ID:
-                Uri uri = DataContract.Credits.buildCastUriWithId(Long.parseLong(mUri.getLastPathSegment()));
-                return new CursorLoader(getContext(),
-                        uri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case MAIN_LOADER_ID:
-                mAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    imageLoad(data);
-                }
-                break;
-            case CAST_LOADER_ID:
-                mCastAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    showCastData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmptyCast();
-                        }
-                    }, 7000);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -316,9 +303,9 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         binding = null;
     }
 
-    private void imageLoad(Cursor cursor) {
-        title = cursor.getString(Query.TITLE);
-        id = cursor.getInt(Query.ID);
+    private void imageLoad(com.lineargs.watchnext.data.entity.PopularSerie serie) {
+        title = serie.getTitle();
+        id = serie.getTmdbId();
         if (binding.seriesFooter.videos != null) {
             ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), binding.seriesFooter.videos);
         }
@@ -332,13 +319,13 @@ public class SeriesDetailsFragment extends Fragment implements LoaderManager.Loa
         }
         if (binding.coverPoster != null) {
             Picasso.get()
-                    .load(cursor.getString(Query.POSTER_PATH))
+                    .load(serie.getPosterPath())
                     .fit()
                     .into(binding.coverPoster);
         }
         if (binding.coverBackdrop != null) {
             Picasso.get()
-                    .load(cursor.getString(Query.BACKDROP_PATH))
+                    .load(serie.getBackdropPath())
                     .fit()
                     .into(binding.coverBackdrop);
         }
