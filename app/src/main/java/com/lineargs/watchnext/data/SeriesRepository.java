@@ -34,4 +34,12 @@ public class SeriesRepository {
     public LiveData<List<OnTheAirSerie>> getOnTheAirSeries() {
         return seriesDao.getOnTheAirSeriesLiveData();
     }
+
+    public LiveData<TopRatedSerie> getTopRatedSerieLiveData(int id) {
+        return seriesDao.getTopRatedSerieLiveData(id);
+    }
+
+    public LiveData<OnTheAirSerie> getOnTheAirSerieLiveData(int id) {
+        return seriesDao.getOnTheAirSerieLiveData(id);
+    }
 }

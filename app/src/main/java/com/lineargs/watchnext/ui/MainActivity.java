@@ -103,9 +103,14 @@ public class MainActivity extends BaseTopActivity {
         android.content.SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         currentSortOrder = sharedPreferences.getString(PREF_SORT_ORDER, DataContract.PopularMovieEntry.COLUMN_TITLE + ASC);
 
+        viewModel.setSortOrder(currentSortOrder);
         viewModel.getFavorites().observe(this, favorites -> {
             if (favorites != null && !favorites.isEmpty()) {
-                mAdapter.submitList(sortList(favorites, currentSortOrder));
+                mAdapter.submitList(favorites, () -> {
+                    if (recyclerView != null) {
+                        recyclerView.scrollToPosition(0);
+                    }
+                });
                 showData();
             } else {
                 hideData();
@@ -118,36 +123,8 @@ public class MainActivity extends BaseTopActivity {
         android.widget.Toast.makeText(this, getString(R.string.toast_remove_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
     }
 
-    private java.util.List<com.lineargs.watchnext.data.entity.Favorites> sortList(java.util.List<com.lineargs.watchnext.data.entity.Favorites> favorites, String sortOrder) {
-        if (favorites == null) return null;
-        java.util.List<com.lineargs.watchnext.data.entity.Favorites> sorted = new java.util.ArrayList<>(favorites);
-        
-        java.util.Collections.sort(sorted, (o1, o2) -> {
-            if (sortOrder.equals(DataContract.PopularMovieEntry.COLUMN_TITLE + ASC)) {
-                return o1.getTitle().compareTo(o2.getTitle());
-            } else if (sortOrder.equals(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + DESC)) {
-                // High to low
-                try {
-                    Double v1 = Double.parseDouble(o1.getVoteAverage());
-                    Double v2 = Double.parseDouble(o2.getVoteAverage());
-                    return v2.compareTo(v1);
-                } catch (NumberFormatException e) {
-                    return 0;
-                }
-            } else if (sortOrder.equals(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + ASC)) {
-                // Low to high
-                try {
-                    Double v1 = Double.parseDouble(o1.getVoteAverage());
-                    Double v2 = Double.parseDouble(o2.getVoteAverage());
-                    return v1.compareTo(v2);
-                } catch (NumberFormatException e) {
-                    return 0;
-                }
-            }
-            return 0;
-        });
-        return sorted;
-    }
+    // sortList and safeParseDouble removed
+
 
     @Override
     public void setDrawerIndicatorEnabled() {
@@ -202,19 +179,18 @@ public class MainActivity extends BaseTopActivity {
                 case R.id.sort_title:
                     currentSortOrder = DataContract.PopularMovieEntry.COLUMN_TITLE + ASC;
                     saveSortOrder(currentSortOrder);
+                    viewModel.setSortOrder(currentSortOrder);
                     break;
                 case R.id.sort_highest_rated:
                     currentSortOrder = DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + DESC;
                     saveSortOrder(currentSortOrder);
+                    viewModel.setSortOrder(currentSortOrder);
                     break;
                 case R.id.sort_lowest_rated:
                     currentSortOrder = DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE + ASC;
                     saveSortOrder(currentSortOrder);
+                    viewModel.setSortOrder(currentSortOrder);
                     break;
-            }
-            // Trigger resort
-            if (viewModel.getFavorites().getValue() != null) {
-                mAdapter.submitList(sortList(viewModel.getFavorites().getValue(), currentSortOrder));
             }
             return true;
         });
