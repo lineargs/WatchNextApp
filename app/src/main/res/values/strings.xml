@@ -24,6 +24,9 @@
     <string name="menu_search">Search</string>
     <string name="settings_description">Search for latest movies and series</string>
     <string name="search_query_hint">Search The MovieDb</string>
+    <string name="movie">MOVIE</string>
+    <string name="tv_series">TV SERIES</string>
+    <string name="no_results">No results found</string>
     <string name="search_empty_text_movie">Please use the search to look up for a movie.  Powered by THE MOVIE DB</string>
     <string name="search_empty_text_serie">Please use the search to look up for a serie.  Powered by THE MOVIE DB</string>
     <string name="search">web search</string>

@@ -103,6 +103,26 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             binding.getRoot().setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                com.lineargs.watchnext.data.entity.Search search = searchResults.get(position);
+                int tmdbId = search.getTmdbId();
+                if (search.getMediaType() == 0) {
+                    Intent intent = new Intent(context, com.lineargs.watchnext.ui.MovieDetailsActivity.class);
+                    intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId));
+                    context.startActivity(intent);
+                } else if (search.getMediaType() == 1) {
+                    Intent intent = new Intent(context, com.lineargs.watchnext.ui.SeriesDetailsActivity.class);
+                    // We pass the Search URI for consistency with standard loaders but add ID as extra
+                    // SeriesDetailsActivity logic needs to be verified to handle this if it relies on distinct tables
+                    intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId)); 
+                    context.startActivity(intent);
+                }
+            }
+        }
+
         void bindViews(final Context context, int position) {
             final com.lineargs.watchnext.data.entity.Search search = searchResults.get(position);
             final int tmdbId = search.getTmdbId(); 
@@ -120,7 +140,11 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
                         star.setImageDrawable(addToFavorites(context));
                     } else {
-                        SearchSyncUtils.syncSearchMovie(context, String.valueOf(tmdbId));
+                        if (search.getMediaType() == 0) {
+                            SearchSyncUtils.syncSearchMovie(context, String.valueOf(tmdbId));
+                        } else {
+                            SearchSyncUtils.syncTV(context, String.valueOf(tmdbId));
+                        }
                         Toast.makeText(context, context.getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
                         star.setImageDrawable(deleteFromFavorites(context));
                     }
@@ -131,17 +155,14 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     .centerInside()
                     .fit()
                     .into(poster);
-        }
-
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                com.lineargs.watchnext.data.entity.Search search = searchResults.get(position);
-                int tmdbId = search.getTmdbId();
-                Intent intent = new Intent(context, com.lineargs.watchnext.ui.MovieDetailsActivity.class);
-                intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId));
-                context.startActivity(intent);
+            
+            // Visual indicator
+            if (binding.mediaType != null) {
+                if (search.getMediaType() == 0) {
+                    binding.mediaType.setText(context.getString(R.string.movie));
+                } else {
+                    binding.mediaType.setText(context.getString(R.string.tv_series));
+                }
             }
         }
     }

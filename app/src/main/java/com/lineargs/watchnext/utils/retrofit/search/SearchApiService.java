@@ -25,6 +25,12 @@ public interface SearchApiService {
             @Query("query") String query,
             @Query("include_adult") boolean adult);
 
+    @GET("search/multi")
+    Call<MultiSearchResponse> searchMulti(
+            @Query("api_key") String apiKey,
+            @Query("query") String query,
+            @Query("include_adult") boolean adult);
+
     @GET("search/{path}")
     Call<Series> searchTV(
             @Path("path") String path,

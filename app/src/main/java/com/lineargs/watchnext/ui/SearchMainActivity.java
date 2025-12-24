@@ -71,6 +71,8 @@ public class SearchMainActivity extends BaseTopActivity {
                  mResultsAdapter.swapSearchResults(searches);
                  if (searches != null && !searches.isEmpty()) {
                      showData();
+                 } else {
+                     showEmpty();
                  }
              }
         });
@@ -78,7 +80,7 @@ public class SearchMainActivity extends BaseTopActivity {
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SearchSyncUtils.syncSearchMovies(SearchMainActivity.this, queryString, adult);
+                SearchSyncUtils.syncSearch(SearchMainActivity.this, queryString, adult);
                 startLoading();
             }
         });
@@ -143,15 +145,17 @@ public class SearchMainActivity extends BaseTopActivity {
             public boolean onQueryTextChange(String newText) {
                 queryString = newText;
                 handler.removeCallbacksAndMessages(null);
-                /* So we can wait for the user to find the next letter
-                 * on the keyboard
-                 */
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        searchFor(queryString);
-                    }
-                }, 1000);
+                if (queryString.length() > 0) {
+                    /* So we can wait for the user to find the next letter
+                     * on the keyboard
+                     */
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            searchFor(queryString);
+                        }
+                    }, 1000);
+                }
                 return true;
             }
         });
@@ -185,8 +189,8 @@ public class SearchMainActivity extends BaseTopActivity {
             query = "";
         }
         
-        if (!TextUtils.equals(query, mQuery)) {
-            SearchSyncUtils.syncSearchMovies(this, query, adult);
+        if (!TextUtils.equals(query, mQuery) && query.length() > 0) {
+            SearchSyncUtils.syncSearch(this, query, adult);
             startLoading();
         }
         mQuery = query;
@@ -212,5 +216,19 @@ public class SearchMainActivity extends BaseTopActivity {
             binding.swipeRefreshLayout.setRefreshing(false);
         }
         binding.searchResults.setVisibility(View.VISIBLE);
+        // We might want to hide empty view here if we add one
+        if (binding.emptyView != null) {
+            binding.emptyView.setVisibility(GONE);
+        }
+    }
+
+    private void showEmpty() {
+        if (binding.swipeRefreshLayout != null) {
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+        binding.searchResults.setVisibility(GONE);
+        if (binding.emptyView != null) {
+            binding.emptyView.setVisibility(View.VISIBLE);
+        }
     }
 }
