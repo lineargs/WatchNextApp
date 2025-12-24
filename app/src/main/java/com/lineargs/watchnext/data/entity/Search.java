@@ -21,6 +21,9 @@ public class Search implements Movie {
     @ColumnInfo(name = DataContract.Search.COLUMN_POSTER_PATH)
     private String posterPath;
 
+    @ColumnInfo(name = DataContract.Search.COLUMN_TYPE)
+    private int mediaType;
+
     @ColumnInfo(name = DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH)
     private String backdropPath;
 
@@ -63,6 +66,9 @@ public class Search implements Movie {
 
     public String getPosterPath() { return posterPath; }
     public void setPosterPath(String posterPath) { this.posterPath = posterPath; }
+
+    public int getMediaType() { return mediaType; }
+    public void setMediaType(int mediaType) { this.mediaType = mediaType; }
 
     public String getBackdropPath() { return backdropPath; }
     public void setBackdropPath(String backdropPath) { this.backdropPath = backdropPath; }

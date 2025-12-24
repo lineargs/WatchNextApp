@@ -50,7 +50,6 @@ public class SearchWorker extends Worker {
     public Result doWork() {
         String query = getInputData().getString(ARG_QUERY);
         boolean adult = getInputData().getBoolean(ARG_ADULT, false);
-        String tvQuery = getInputData().getString(ARG_TV_QUERY);
         String movieId = getInputData().getString(ARG_MOVIE_ID);
         String tvId = getInputData().getString(ARG_TV_ID);
 
@@ -58,10 +57,8 @@ public class SearchWorker extends Worker {
 
         try {
             if (query != null) {
-                searchMovies(service, query, adult);
-            }
-            if (tvQuery != null) {
-                searchTV(service, tvQuery, adult);
+                searchMulti(service, query, adult);
+                // We don't need separate calls anymore
             }
             if (movieId != null) {
                 getMovie(service, movieId);
@@ -76,26 +73,16 @@ public class SearchWorker extends Worker {
         }
     }
 
-    private void searchMovies(SearchApiService service, String query, boolean adult) throws IOException {
-        Call<Movies> call = service.searchMovies(PATH_MOVIE, BuildConfig.MOVIE_DATABASE_API_KEY, query, adult);
-        Response<Movies> response = call.execute();
+    private void searchMulti(SearchApiService service, String query, boolean adult) throws IOException {
+        Call<com.lineargs.watchnext.utils.retrofit.search.MultiSearchResponse> call = service.searchMulti(BuildConfig.MOVIE_DATABASE_API_KEY, query, adult);
+        Response<com.lineargs.watchnext.utils.retrofit.search.MultiSearchResponse> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
-            ContentValues[] values = SearchDbUtils.getMovieContentValues(response.body().getResults());
+            ContentValues[] values = SearchDbUtils.getMultiSearchContentValues(response.body().getResults());
+            // Clear both search and searchTv tables to be safe, or just search
+            // For now, let's stick to using the SEARCH table for everything
+            getApplicationContext().getContentResolver().delete(DataContract.Search.CONTENT_URI, null, null);
             if (values != null && values.length > 0) {
-                getApplicationContext().getContentResolver().delete(DataContract.Search.CONTENT_URI, null, null);
                 getApplicationContext().getContentResolver().bulkInsert(DataContract.Search.CONTENT_URI, values);
-            }
-        }
-    }
-
-    private void searchTV(SearchApiService service, String query, boolean adult) throws IOException {
-        Call<Series> call = service.searchTV(PATH_TV, BuildConfig.MOVIE_DATABASE_API_KEY, query, adult);
-        Response<Series> response = call.execute();
-        if (response.isSuccessful() && response.body() != null) {
-            ContentValues[] values = SearchDbUtils.getTVContentValues(response.body().getResults());
-            if (values != null && values.length > 0) {
-                getApplicationContext().getContentResolver().delete(DataContract.SearchTv.CONTENT_URI, null, null);
-                getApplicationContext().getContentResolver().bulkInsert(DataContract.SearchTv.CONTENT_URI, values);
             }
         }
     }

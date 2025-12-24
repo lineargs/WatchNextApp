@@ -20,7 +20,7 @@ import android.view.View;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.SearchTVAdapter;
+import com.lineargs.watchnext.adapters.SearchAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
@@ -43,7 +43,7 @@ public class SearchSerieActivity extends BaseTopActivity {
     private String queryString;
     private Handler handler;
     private String mQuery = "";
-    private SearchTVAdapter mResultsAdapter;
+    private SearchAdapter mResultsAdapter;
     private SearchViewModel viewModel;
 
     @Override
@@ -57,7 +57,7 @@ public class SearchSerieActivity extends BaseTopActivity {
         setupSearchView();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         binding.searchResults.setLayoutManager(layoutManager);
-        mResultsAdapter = new SearchTVAdapter(this);
+        mResultsAdapter = new SearchAdapter(this);
         binding.searchResults.setAdapter(mResultsAdapter);
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;
@@ -65,9 +65,9 @@ public class SearchSerieActivity extends BaseTopActivity {
 
         // Initialize ViewModel
         viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SearchViewModel.class);
-        viewModel.getSearchTvSeries().observe(this, new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.SearchTv>>() {
+        viewModel.getSearchMovies().observe(this, new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Search>>() {
             @Override
-            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.SearchTv> searches) {
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Search> searches) {
                 mResultsAdapter.swapSearchResults(searches);
                  if (searches != null && !searches.isEmpty()) {
                      showData();
@@ -78,7 +78,7 @@ public class SearchSerieActivity extends BaseTopActivity {
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                SearchSyncUtils.syncSearchTV(SearchSerieActivity.this, queryString, adult);
+                SearchSyncUtils.syncSearch(SearchSerieActivity.this, queryString, adult);
                 startLoading();
             }
         });
@@ -144,13 +144,15 @@ public class SearchSerieActivity extends BaseTopActivity {
             public boolean onQueryTextChange(String newText) {
                 queryString = newText;
                 handler.removeCallbacksAndMessages(null);
-                /* Again waiting............... */
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        searchFor(queryString);
-                    }
-                }, 1000);
+                if (queryString.length() > 0) {
+                    /* Again waiting............... */
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            searchFor(queryString);
+                        }
+                    }, 1000);
+                }
                 return true;
             }
         });
@@ -184,8 +186,8 @@ public class SearchSerieActivity extends BaseTopActivity {
             query = "";
         }
         
-        if (!TextUtils.equals(query, mQuery)) {
-            SearchSyncUtils.syncSearchTV(this, query, adult);
+        if (!TextUtils.equals(query, mQuery) && query.length() > 0) {
+            SearchSyncUtils.syncSearch(this, query, adult);
             startLoading();
         }
         mQuery = query;

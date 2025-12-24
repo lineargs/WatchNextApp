@@ -33,6 +33,24 @@
         app:layout_constraintTop_toTopOf="@+id/main_poster"
         tools:text="@string/tools_movie_title" />
 
+    <TextView
+        android:id="@+id/media_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_six"
+        android:background="@drawable/rounded_corner_background"
+        android:paddingBottom="@dimen/padding_four"
+        android:paddingEnd="@dimen/padding_six"
+        android:paddingStart="@dimen/padding_six"
+        android:paddingTop="@dimen/padding_four"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_ten"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/main_poster"
+        app:layout_constraintLeft_toRightOf="@+id/main_poster"
+        tools:text="MOVIE" />
+
     <ImageView
         android:id="@+id/star_image"
         android:layout_width="wrap_content"

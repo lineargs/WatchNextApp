@@ -10,22 +10,9 @@ import com.lineargs.watchnext.workers.SearchWorker;
 
 public class SearchSyncUtils {
 
-    public static void syncSearchMovies(@NonNull Context context, @NonNull String query, @NonNull boolean adult) {
+    public static void syncSearch(@NonNull Context context, @NonNull String query, @NonNull boolean adult) {
         Data inputData = new Data.Builder()
                 .putString(SearchWorker.ARG_QUERY, query)
-                .putBoolean(SearchWorker.ARG_ADULT, adult)
-                .build();
-
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(SearchWorker.class)
-                .setInputData(inputData)
-                .build();
-
-        WorkManager.getInstance(context).enqueue(request);
-    }
-
-    public static void syncSearchTV(@NonNull Context context, @NonNull String query, @NonNull boolean adult) {
-        Data inputData = new Data.Builder()
-                .putString(SearchWorker.ARG_TV_QUERY, query)
                 .putBoolean(SearchWorker.ARG_ADULT, adult)
                 .build();
 
