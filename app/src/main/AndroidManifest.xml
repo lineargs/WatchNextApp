@@ -8,11 +8,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Notifications -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- SyncAdapter -->
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Show shortcuts -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove" />
 
     <application
         android:allowBackup="true"
@@ -116,7 +116,6 @@
             tools:ignore="ExportedContentProvider" />
 
         <!-- Intent Services -->
-
         <service
             android:name=".jobs.NotificationIntentService"
             android:exported="false" />
@@ -139,12 +138,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_info" />
         </receiver>
-
-        <!-- SyncAdapter -->
-
-
-        <!-- Firebase Job Service -->
-
     </application>
 
 </manifest>

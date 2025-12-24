@@ -16,11 +16,17 @@ public interface CreditsDao {
     @Query("SELECT * FROM credits WHERE type = 0 AND movie_id = :movieId")
     Cursor getCastForMovie(int movieId);
 
+    @Query("SELECT * FROM credits WHERE type = 0 AND movie_id = :movieId")
+    androidx.lifecycle.LiveData<java.util.List<Credits>> getCastForMovieLiveData(int movieId);
+
     @Query("SELECT * FROM credits WHERE type = 1")
     Cursor getAllCrew();
 
     @Query("SELECT * FROM credits WHERE type = 1 AND movie_id = :movieId")
     Cursor getCrewForMovie(int movieId);
+
+    @Query("SELECT * FROM credits WHERE type = 1 AND movie_id = :movieId")
+    androidx.lifecycle.LiveData<java.util.List<Credits>> getCrewForMovieLiveData(int movieId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertCredit(Credits credit);

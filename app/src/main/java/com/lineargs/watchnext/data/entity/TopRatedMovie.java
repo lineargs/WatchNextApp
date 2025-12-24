@@ -8,7 +8,7 @@ import com.lineargs.watchnext.data.DataContract;
 
 @Entity(tableName = DataContract.TopRatedMovieEntry.TABLE_NAME,
         indices = {@Index(value = {DataContract.PopularMovieEntry.COLUMN_MOVIE_ID}, unique = true)})
-public class TopRatedMovie {
+public class TopRatedMovie implements Movie {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DataContract.TopRatedMovieEntry._ID)

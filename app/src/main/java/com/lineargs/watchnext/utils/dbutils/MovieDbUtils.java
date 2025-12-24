@@ -189,6 +189,45 @@ public class MovieDbUtils {
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
+     * @param movie Object used to get the values from our API response
+     * @return The {@link ContentValues}
+     */
+    public static ContentValues[] getSyncMovie(MovieDetail movie) {
+
+        ContentValues[] values = new ContentValues[1];
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, movie.getId());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, movie.getTitle());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+        try {
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(movie.getReleaseDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(movie.getVoteAverage())));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + movie.getPosterPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + movie.getBackdropPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, movie.getOriginalLanguage());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_IMDB_ID, movie.getImdbId());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_RUNTIME, movie.getRuntime());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, movie.getStatus());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES,
+                buildCompaniesString(movie.getProductionCompanies()));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COUNTRIES,
+                buildCountriesString(movie.getProductionCountries()));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES,
+                buildGenresString(movie.getGenres()));
+
+        values[0] = contentValues;
+
+        return values;
+    }
+
+    /**
+     * Builds ContentValues[] used for our ContentResolver
+     *
      * @param result Object used to get the values from our API response
      * @return The {@link ContentValues}
      */

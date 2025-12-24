@@ -101,8 +101,8 @@ public class SearchWorker extends Worker {
     }
 
     private void getMovie(SearchApiService service, String id) throws IOException {
-        Call<com.lineargs.watchnext.utils.retrofit.movies.Result> call = service.getMovie(id, BuildConfig.MOVIE_DATABASE_API_KEY);
-        Response<com.lineargs.watchnext.utils.retrofit.movies.Result> response = call.execute();
+        Call<com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail> call = service.getMovie(id, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Response<com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getSyncMovie(response.body());
             if (values != null && values.length > 0) {

@@ -18,12 +18,18 @@ public interface DetailsDao {
     @Query("SELECT * FROM review WHERE movie_id = :movieId")
     Cursor getReviews(int movieId);
 
+    @Query("SELECT * FROM review WHERE movie_id = :movieId")
+    androidx.lifecycle.LiveData<java.util.List<Review>> getReviewsLiveData(int movieId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertReview(Review review);
 
     // Videos
     @Query("SELECT * FROM videos WHERE movie_id = :movieId")
     Cursor getVideos(int movieId);
+
+    @Query("SELECT * FROM videos WHERE movie_id = :movieId")
+    androidx.lifecycle.LiveData<java.util.List<Videos>> getVideosLiveData(int movieId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertVideo(Videos video);
@@ -32,12 +38,24 @@ public interface DetailsDao {
     @Query("SELECT * FROM seasons WHERE movie_id = :serieId")
     Cursor getSeasons(int serieId);
 
+    @Query("SELECT * FROM seasons WHERE movie_id = :serieId")
+    androidx.lifecycle.LiveData<java.util.List<Seasons>> getSeasonsLiveData(int serieId);
+
+    @Query("SELECT * FROM seasons WHERE season_id = :seasonId")
+    androidx.lifecycle.LiveData<Seasons> getSeasonLiveData(String seasonId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertSeason(Seasons season);
 
     // Episodes
     @Query("SELECT * FROM episodes WHERE episode_id = :episodeId")
     Cursor getEpisode(int episodeId);
+
+    @Query("SELECT * FROM episodes WHERE episode_id = :episodeId")
+    androidx.lifecycle.LiveData<Episodes> getEpisodeLiveData(int episodeId);
+
+    @Query("SELECT * FROM episodes WHERE season_id = :seasonId")
+    androidx.lifecycle.LiveData<java.util.List<Episodes>> getEpisodesForSeasonLiveData(String seasonId);
 
     @Query("SELECT * FROM episodes")
     Cursor getEpisodes();
@@ -48,6 +66,9 @@ public interface DetailsDao {
     // Person
     @Query("SELECT * FROM person WHERE person_id = :personId")
     Cursor getPerson(int personId);
+
+    @Query("SELECT * FROM person WHERE person_id = :personId")
+    androidx.lifecycle.LiveData<Person> getPersonLiveData(int personId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertPerson(Person person);

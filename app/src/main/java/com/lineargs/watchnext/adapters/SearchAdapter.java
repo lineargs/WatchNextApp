@@ -1,6 +1,7 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import androidx.annotation.NonNull;
@@ -30,8 +31,8 @@ import com.lineargs.watchnext.databinding.ItemSearchBinding;
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private java.util.List<com.lineargs.watchnext.data.entity.Search> searchResults;
     private Context context;
-    private Cursor cursor;
 
     public SearchAdapter(@NonNull Context context) {
         this.context = context;
@@ -52,14 +53,14 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (searchResults == null) {
             return 0;
         }
-        return cursor.getCount();
+        return searchResults.size();
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapSearchResults(java.util.List<com.lineargs.watchnext.data.entity.Search> searchResults) {
+        this.searchResults = searchResults;
         notifyDataSetChanged();
     }
 
@@ -86,7 +87,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return VectorDrawableCompat.create(context.getResources(), R.drawable.icon_delete_black, context.getTheme());
     }
 
-    class SearchViewHolder extends RecyclerView.ViewHolder {
+    class SearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         
         final ItemSearchBinding binding;
         final ImageView poster;
@@ -99,12 +100,14 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             this.poster = binding.mainPoster;
             this.star = binding.starImage;
             this.title = binding.mainTitle;
+            binding.getRoot().setOnClickListener(this);
         }
 
         void bindViews(final Context context, int position) {
-            cursor.moveToPosition(position);
-            final long id = cursor.getInt(SearchQuery.ID);
-            if (isFavorite(context, id)) {
+            final com.lineargs.watchnext.data.entity.Search search = searchResults.get(position);
+            final int tmdbId = search.getTmdbId(); 
+            
+            if (isFavorite(context, tmdbId)) {
                 star.setImageDrawable(deleteFromFavorites(context));
             } else {
                 star.setImageDrawable(addToFavorites(context));
@@ -112,22 +115,34 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             star.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isFavorite(context, id)) {
-                        DbUtils.removeFromFavorites(context, DataContract.Search.buildSearchUriWithId(id));
+                    if (isFavorite(context, tmdbId)) {
+                        DbUtils.removeFromFavorites(context, DataContract.Search.buildSearchUriWithId(tmdbId));
                         Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
                         star.setImageDrawable(addToFavorites(context));
                     } else {
-                        SearchSyncUtils.syncSearchMovie(context, String.valueOf(id));
+                        SearchSyncUtils.syncSearchMovie(context, String.valueOf(tmdbId));
                         Toast.makeText(context, context.getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
                         star.setImageDrawable(deleteFromFavorites(context));
                     }
                 }
             });
-            title.setText(cursor.getString(SearchQuery.TITLE));
-            ServiceUtils.loadPicasso(poster.getContext(), cursor.getString(SearchQuery.POSTER_PATH))
+            title.setText(search.getTitle());
+            ServiceUtils.loadPicasso(poster.getContext(), search.getPosterPath())
                     .centerInside()
                     .fit()
                     .into(poster);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                com.lineargs.watchnext.data.entity.Search search = searchResults.get(position);
+                int tmdbId = search.getTmdbId();
+                Intent intent = new Intent(context, com.lineargs.watchnext.ui.MovieDetailsActivity.class);
+                intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId));
+                context.startActivity(intent);
+            }
         }
     }
 }

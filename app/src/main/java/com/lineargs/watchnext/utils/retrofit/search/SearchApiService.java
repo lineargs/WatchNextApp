@@ -33,7 +33,7 @@ public interface SearchApiService {
             @Query("include_adult") boolean adult);
 
     @GET("movie/{movie_id}")
-    Call<Result> getMovie(
+    Call<com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail> getMovie(
             @Path("movie_id") String id,
             @Query("api_key") String apiKey);
 

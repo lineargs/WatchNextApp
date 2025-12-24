@@ -27,16 +27,15 @@ import com.lineargs.watchnext.databinding.FragmentCreditsCastBinding;
  * A fragment loading and showing list of cast members for now.
  * We will use same class to implement crew.
  */
-public class CreditsCastFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, CreditsCastAdapter.OnClick {
+public class CreditsCastFragment extends BaseFragment implements CreditsCastAdapter.OnClick {
 
-
-    private static final int LOADER_ID = 333;
 
     private FragmentCreditsCastBinding binding;
     private CreditsCastAdapter mAdapter;
     private Uri mUri;
     private Uri mDualUri = null;
     private boolean mDualPane;
+    private CreditsViewModel viewModel;
 
 
     public void setmUri(Uri uri) {
@@ -65,7 +64,18 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
             mDualUri = DataContract.Person.buildPersonUriWithId(id);
         }
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(CreditsViewModel.class);
+        if (mUri != null) {
+            int movieId = Integer.parseInt(mUri.getLastPathSegment());
+            viewModel.setMovieId(movieId);
+            viewModel.getCast().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Credits>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Credits> credits) {
+                    mAdapter.swapCasts(credits);
+                }
+            });
+        }
     }
 
     @Override
@@ -82,38 +92,6 @@ public class CreditsCastFragment extends BaseFragment implements LoaderManager.L
                     .add(R.id.frame_layout_person, fragment)
                     .commit();
         }
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        CreditsQuery.CREDITS_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                }
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     @Override

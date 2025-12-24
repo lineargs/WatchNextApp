@@ -24,7 +24,7 @@ import com.lineargs.watchnext.data.dao.*;
         Videos.class,
         Search.class,
         SearchTv.class
-}, version = 45, exportSchema = false)
+}, version = 47, exportSchema = false)
 public abstract class WatchNextDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "watchnext.db";

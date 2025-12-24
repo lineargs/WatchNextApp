@@ -27,13 +27,13 @@ import com.lineargs.watchnext.databinding.FragmentVideosBinding;
  * Created by goranminov on 26/11/2017.
  */
 
-public class VideosFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, VideosAdapter.OnItemClick {
+public class VideosFragment extends BaseFragment implements VideosAdapter.OnItemClick {
 
-    private static final int LOADER_ID = 334;
     private FragmentVideosBinding binding;
     private Uri mUri;
     private VideosAdapter mAdapter;
     private Handler handler;
+    private VideosViewModel viewModel;
 
     public void setmUri(Uri uri) {
         this.mUri = uri;
@@ -59,7 +59,29 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
             startLoading();
         }
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(VideosViewModel.class);
+        if (mUri != null) {
+            int movieId = Integer.parseInt(mUri.getLastPathSegment());
+            viewModel.setMovieId(movieId);
+            viewModel.getVideos().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Videos>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Videos> videos) {
+                    mAdapter.swapVideos(videos);
+                     if (videos != null && !videos.isEmpty()) {
+                        handler.removeCallbacksAndMessages(null);
+                        showData();
+                    } else if (videos != null) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showEmpty();
+                            }
+                        }, 3000);
+                    }
+                }
+            });
+        }
     }
 
     private void startLoading() {
@@ -85,51 +107,6 @@ public class VideosFragment extends BaseFragment implements LoaderManager.Loader
         }
         binding.videosRecyclerView.setVisibility(View.GONE);
         binding.emptyVideos.setVisibility(View.VISIBLE);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        VideosQuery.VIDEO_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                    showData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmpty();
-                        }
-                    }, 3000);
-
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     @Override

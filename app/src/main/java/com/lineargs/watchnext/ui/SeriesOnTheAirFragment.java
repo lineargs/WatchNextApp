@@ -37,18 +37,18 @@ public class SeriesOnTheAirFragment extends SeriesListFragment implements Series
     }
 
     @Override
-    public void resetLoader(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
-    }
-
-    @Override
-    public void swapData(Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public Uri getLoaderUri() {
-        return DataContract.OnTheAirSerieEntry.CONTENT_URI;
+    public void onViewCreated(@androidx.annotation.NonNull android.view.View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        com.lineargs.watchnext.ui.SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.SeriesViewModel.class);
+        viewModel.getOnTheAirSeries().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.OnTheAirSerie>>() {
+            @Override
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.OnTheAirSerie> series) {
+                if (series != null && !series.isEmpty()) {
+                    adapter.swapSeries(series);
+                    showData();
+                }
+            }
+        });
     }
 }
 

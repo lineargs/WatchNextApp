@@ -35,15 +35,15 @@ import static android.view.View.GONE;
  * <p>
  * Search Activity used to search for movies on the Db website
  */
-public class SearchMainActivity extends BaseTopActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SearchMainActivity extends BaseTopActivity {
 
-    private static final int LOADER_ID = 223;
     private ActivitySearchMainBinding binding;
     boolean adult;
     private String queryString;
     private Handler handler;
     private String mQuery = "";
     private SearchAdapter mResultsAdapter;
+    private SearchViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,20 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;
         mQuery = query;
+
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SearchViewModel.class);
+        // Observe search results
+        viewModel.getSearchMovies().observe(this, new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Search>>() {
+             @Override
+             public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Search> searches) {
+                 mResultsAdapter.swapSearchResults(searches);
+                 if (searches != null && !searches.isEmpty()) {
+                     showData();
+                 }
+             }
+        });
+
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -167,15 +181,11 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
     }
 
     private void searchFor(String query) {
-        Bundle args = new Bundle(1);
         if (query == null) {
             query = "";
         }
-        args.putString(Constants.ARG_QUERY, query);
-
-        if (TextUtils.equals(query, mQuery)) {
-            getSupportLoaderManager().initLoader(LOADER_ID, args, this);
-        } else {
+        
+        if (!TextUtils.equals(query, mQuery)) {
             SearchSyncUtils.syncSearchMovies(this, query, adult);
             startLoading();
         }
@@ -202,39 +212,5 @@ public class SearchMainActivity extends BaseTopActivity implements LoaderManager
             binding.swipeRefreshLayout.setRefreshing(false);
         }
         binding.searchResults.setVisibility(View.VISIBLE);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(this,
-                        DataContract.Search.CONTENT_URI,
-                        SearchQuery.SEARCH_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new UnsupportedOperationException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                mResultsAdapter.swapCursor(data);
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    showData();
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mResultsAdapter.swapCursor(null);
     }
 }

@@ -27,7 +27,7 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnClick callback;
     private Context context;
-    private Cursor cursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.Credits> cast;
 
     public CastAdapter(@NonNull Context context, @NonNull OnClick listener) {
         this.context = context;
@@ -49,15 +49,15 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (cast == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return cast.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapCast(java.util.List<com.lineargs.watchnext.data.entity.Credits> cast) {
+        this.cast = cast;
         notifyDataSetChanged();
     }
 
@@ -83,10 +83,10 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            castName.setText(cursor.getString(CreditsQuery.NAME));
-            castCharacter.setText(cursor.getString(CreditsQuery.CHARACTER_NAME));
-            ServiceUtils.loadPicasso(profilePath.getContext(), cursor.getString(CreditsQuery.PROFILE_PATH))
+            com.lineargs.watchnext.data.entity.Credits credit = cast.get(position);
+            castName.setText(credit.getName());
+            castCharacter.setText(credit.getCharacterName());
+            ServiceUtils.loadPicasso(profilePath.getContext(), credit.getProfilePath())
                     .centerCrop()
                     .error(R.drawable.icon_person_grey)
                     .fit()
@@ -95,9 +95,9 @@ public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            cursor.moveToPosition(getAdapterPosition());
-            String id = cursor.getString(CreditsQuery.PERSON_ID);
-            String name = cursor.getString(CreditsQuery.NAME);
+            com.lineargs.watchnext.data.entity.Credits credit = cast.get(getAdapterPosition());
+            String id = String.valueOf(credit.getPersonId());
+            String name = credit.getName();
             callback.onPersonClick(id, name);
         }
     }

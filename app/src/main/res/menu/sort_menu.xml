@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/sort_title"
-        android:title="@string/sort_menu_title" />
-    <item
-        android:id="@+id/sort_highest_rated"
-        android:title="@string/sort_menu_highest_rated" />
-    <item
-        android:id="@+id/sort_lowest_rated"
-        android:title="@string/sort_menu_lowest_rated" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/sort_title"
+            android:title="@string/sort_menu_title" />
+        <item
+            android:id="@+id/sort_highest_rated"
+            android:title="@string/sort_menu_highest_rated" />
+        <item
+            android:id="@+id/sort_lowest_rated"
+            android:title="@string/sort_menu_lowest_rated" />
+    </group>
 </menu>

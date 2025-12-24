@@ -15,8 +15,14 @@ public interface SearchDao {
     @Query("SELECT * FROM search")
     Cursor getSearchMovies();
 
+    @Query("SELECT * FROM search")
+    androidx.lifecycle.LiveData<java.util.List<Search>> getSearchMoviesLiveData();
+
     @Query("SELECT * FROM search WHERE movie_id = :id")
     Cursor getSearchMovie(int id);
+
+    @Query("SELECT * FROM search WHERE movie_id = :id")
+    androidx.lifecycle.LiveData<Search> getSearchMovieLiveData(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertSearchMovie(Search movie);
@@ -24,6 +30,9 @@ public interface SearchDao {
     // Search TV
     @Query("SELECT * FROM searchtv")
     Cursor getSearchTvSeries();
+
+    @Query("SELECT * FROM searchtv")
+    androidx.lifecycle.LiveData<java.util.List<SearchTv>> getSearchTvSeriesLiveData();
 
     @Query("SELECT * FROM searchtv WHERE movie_id = :id")
     Cursor getSearchTvSerie(int id);

@@ -24,13 +24,13 @@ import com.lineargs.watchnext.utils.ServiceUtils;
 
 import com.lineargs.watchnext.databinding.FragmentReviewBinding;
 
-public class ReviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ReviewAdapter.OnClickListener {
+public class ReviewFragment extends Fragment implements ReviewAdapter.OnClickListener {
 
-    private static final int LOADER_ID = 112;
     private FragmentReviewBinding binding;
     private ReviewAdapter mAdapter;
     private Uri mUri;
     private Handler handler;
+    private ReviewViewModel viewModel;
 
     public ReviewFragment() {
     }
@@ -55,11 +55,33 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         mAdapter = new ReviewAdapter(getContext(), this);
         binding.reviewRecyclerView.setAdapter(mAdapter);
 
-
         if (savedState == null) {
             startLoading();
         }
-        LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
+
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(ReviewViewModel.class);
+        if (mUri != null) {
+            int movieId = Integer.parseInt(mUri.getLastPathSegment());
+            viewModel.setMovieId(movieId);
+            viewModel.getReviews().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Review>>() {
+                @Override
+                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Review> reviews) {
+                    mAdapter.swapReviews(reviews);
+                    if (reviews != null && !reviews.isEmpty()) {
+                        handler.removeCallbacksAndMessages(null);
+                        showData();
+                    } else if (reviews != null) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showEmpty();
+                            }
+                        }, 3000);
+                    }
+                }
+            });
+        }
     }
 
     private void startLoading() {
@@ -85,51 +107,6 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         }
         binding.reviewRecyclerView.setVisibility(View.GONE);
         binding.emptyReview.setVisibility(View.VISIBLE);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        mUri,
-                        ReviewQuery.REVIEW_PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                    showData();
-                } else if (data != null && data.getCount() == 0) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showEmpty();
-                        }
-                    }, 3000);
-
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     @Override

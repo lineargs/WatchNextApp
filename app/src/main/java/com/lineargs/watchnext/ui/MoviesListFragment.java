@@ -25,9 +25,8 @@ import com.lineargs.watchnext.utils.NetworkUtils;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.lineargs.watchnext.databinding.FragmentListMoviesBinding;
 
-public abstract class MoviesListFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class MoviesListFragment extends BaseFragment {
 
-    private static final int LOADER_ID = 225;
     private FragmentListMoviesBinding binding;
 
     @Override
@@ -52,50 +51,12 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
                 if (NetworkUtils.isConnected(getContext())) {
                     binding.swipeRefreshLayout.setRefreshing(true);
                     WorkManagerUtils.syncImmediately(getContext());
-                    getLoaderManager().restartLoader(LOADER_ID, null, MoviesListFragment.this);
+                    // Refresh logic will be handled by LiveData observation in child fragments
                 } else {
                     binding.swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
-
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        getLoaderUri(),
-                        Query.PROJECTION,
-                        null,
-                        null,
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data.getCount() != 0) {
-                    data.moveToFirst();
-                    swapData(data);
-                    showData();
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        resetLoader(loader);
     }
 
     @Override
@@ -111,7 +72,7 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
         }
     }
 
-    private void showData() {
+    public void showData() {
         binding.tabbedMoviesRecyclerView.setVisibility(View.VISIBLE);
         if (binding.swipeRefreshLayout != null) {
             binding.swipeRefreshLayout.setRefreshing(false);
@@ -119,10 +80,4 @@ public abstract class MoviesListFragment extends BaseFragment implements LoaderM
     }
 
     public abstract RecyclerView.Adapter getAdapter();
-
-    public abstract void resetLoader(Loader<Cursor> loader);
-
-    public abstract void swapData(Cursor data);
-
-    public abstract Uri getLoaderUri();
 }
