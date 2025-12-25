@@ -11,6 +11,7 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import android.content.res.ColorStateList;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.fragment.app.Fragment;
@@ -224,6 +225,8 @@ public class EpisodesActivity extends BaseTopActivity {
                 }
                 if (TextUtils.isEmpty(details[3]) || airedAlready(details[3])) {
                     binding.notificationFab.setVisibility(GONE);
+                } else {
+                    updateFabUI();
                 }
                 ServiceUtils.loadPicasso(binding.stillPath.getContext(), details[1])
                         .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
@@ -249,7 +252,16 @@ public class EpisodesActivity extends BaseTopActivity {
                     e.printStackTrace();
                 }
             }
-            return date1 != null && (System.currentTimeMillis() > date1.getTime());
+            if (date1 == null) return true;
+
+            // Allow reminders on the release day if it's before 8:00 PM
+            java.util.Calendar airTime = java.util.Calendar.getInstance();
+            airTime.setTime(date1);
+            airTime.set(java.util.Calendar.HOUR_OF_DAY, 20);
+            airTime.set(java.util.Calendar.MINUTE, 0);
+            airTime.set(java.util.Calendar.SECOND, 0);
+
+            return System.currentTimeMillis() > airTime.getTimeInMillis();
         }
 
         @Override
@@ -268,13 +280,20 @@ public class EpisodesActivity extends BaseTopActivity {
                 e.printStackTrace();
             }
             if (releaseDay != null) {
-                return (int) (TimeUnit.MILLISECONDS.toSeconds(releaseDay.getTime() - today));
+                java.util.Calendar airTime = java.util.Calendar.getInstance();
+                airTime.setTime(releaseDay);
+                airTime.set(java.util.Calendar.HOUR_OF_DAY, 20);
+                airTime.set(java.util.Calendar.MINUTE, 0);
+                airTime.set(java.util.Calendar.SECOND, 0);
+
+                long delayMillis = airTime.getTimeInMillis() - today;
+                return delayMillis > 0 ? (int) TimeUnit.MILLISECONDS.toSeconds(delayMillis) : 0;
             } else {
                 return 0;
             }
         }
 
-    public void setNotification() {
+        public void setNotification() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.POST_NOTIFICATIONS)) {
@@ -287,36 +306,61 @@ public class EpisodesActivity extends BaseTopActivity {
                                 })
                                 .show();
                     } else {
-                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                         if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
-                             Snackbar.make(binding.notificationFab, getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
-                                     .setAction(getString(R.string.snackbar_settings), new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
-                                             Intent intent = new Intent();
-                                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                             Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
-                                             intent.setData(uri);
-                                             startActivity(intent);
-                                         }
-                                     })
-                                     .show();
-                         } else {
-                             sharedPreferences.edit().putBoolean("PREF_PERMISSION_REQUESTED", true).apply();
-                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-                         }
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
+                            Snackbar.make(binding.notificationFab, getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
+                                    .setAction(getString(R.string.snackbar_settings), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent();
+                                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                            Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                            intent.setData(uri);
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .show();
+                        } else {
+                            sharedPreferences.edit().putBoolean("PREF_PERMISSION_REQUESTED", true).apply();
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                        }
                     }
                     return;
                 }
             }
-            int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
-             if (intervalSeconds != 0 && details != null) {
-                 if (getArguments() != null) {
-                      WorkManagerUtils.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
-                              getArguments().getString(Constants.TITLE), details[0]);
-                 }
-                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
-             }
+            int id = Integer.parseInt(details[5]);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean isScheduled = sp.getBoolean("reminder_" + id, false);
+
+            if (isScheduled) {
+                WorkManagerUtils.cancelReminder(getContext(), id);
+                sp.edit().remove("reminder_" + id).apply();
+                Toast.makeText(getContext(), R.string.toast_notification_cancelled, Toast.LENGTH_SHORT).show();
+            } else {
+                int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
+                if (intervalSeconds != 0 && details != null) {
+                    if (getArguments() != null) {
+                        WorkManagerUtils.scheduleReminder(getContext(), intervalSeconds, id,
+                                getArguments().getString(Constants.TITLE), details[0]);
+                    }
+                    sp.edit().putBoolean("reminder_" + id, true).apply();
+                    Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+                }
+            }
+            updateFabUI();
+        }
+
+        private void updateFabUI() {
+            int id = Integer.parseInt(details[5]);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean isScheduled = sp.getBoolean("reminder_" + id, false);
+            if (isScheduled) {
+                binding.notificationFab.setImageResource(R.drawable.icon_cancel_black);
+                binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorGrey)));
+            } else {
+                binding.notificationFab.setImageResource(R.drawable.icon_tv_black);
+                binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorYellow)));
+            }
         }
     }
 

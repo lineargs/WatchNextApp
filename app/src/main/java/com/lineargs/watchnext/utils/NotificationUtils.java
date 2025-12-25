@@ -179,11 +179,11 @@ public class NotificationUtils extends ContextWrapper {
     }
 
     private static int reminderSmallIcon() {
-        return R.drawable.app_icon_black;
+        return R.drawable.icon_notifications_black;
     }
 
     private static Bitmap reminderLargeIcon(Context context) {
-        return BitmapFactory.decodeResource(context.getResources(), R.drawable.app_icon_black);
+        return BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_notifications_black);
     }
 
     private NotificationManager getManager() {

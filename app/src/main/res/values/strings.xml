@@ -59,6 +59,7 @@
     <string name="toast_add_to_favorites">Added to favorites</string>
     <string name="toast_remove_from_favorites">Removed from favorites</string>
     <string name="toast_notification_reminder">Notification reminder scheduled</string>
+    <string name="toast_notification_cancelled">Notification reminder cancelled</string>
     <string name="toast_aired_already">This episode aired already</string>
     <string name="snackbar_no_connection">No connection</string>
     <string name="no_apps_installed">No apps installed</string>

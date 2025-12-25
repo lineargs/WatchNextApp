@@ -30,4 +30,8 @@ public class WorkManagerUtils {
                 reminderRequest
         );
     }
+
+    public static void cancelReminder(Context context, int id) {
+        WorkManager.getInstance(context).cancelUniqueWork(String.valueOf(id));
+    }
 }
