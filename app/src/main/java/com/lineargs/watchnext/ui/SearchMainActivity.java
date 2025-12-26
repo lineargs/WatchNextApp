@@ -2,17 +2,12 @@ package com.lineargs.watchnext.ui;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
@@ -21,14 +16,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SearchAdapter;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
-import com.lineargs.watchnext.utils.Constants;
 
 import com.lineargs.watchnext.databinding.ActivitySearchMainBinding;
-
-import static android.view.View.GONE;
 
 /**
  * Created by goranminov on 06/11/2017.
@@ -208,7 +198,7 @@ public class SearchMainActivity extends BaseTopActivity {
         if (binding.swipeRefreshLayout != null) {
             binding.swipeRefreshLayout.setRefreshing(true);
         }
-        binding.searchResults.setVisibility(GONE);
+        binding.searchResults.setVisibility(View.GONE);
     }
 
     private void showData() {
@@ -218,7 +208,7 @@ public class SearchMainActivity extends BaseTopActivity {
         binding.searchResults.setVisibility(View.VISIBLE);
         // We might want to hide empty view here if we add one
         if (binding.emptyView != null) {
-            binding.emptyView.setVisibility(GONE);
+            binding.emptyView.setVisibility(View.GONE);
         }
     }
 
@@ -226,7 +216,7 @@ public class SearchMainActivity extends BaseTopActivity {
         if (binding.swipeRefreshLayout != null) {
             binding.swipeRefreshLayout.setRefreshing(false);
         }
-        binding.searchResults.setVisibility(GONE);
+        binding.searchResults.setVisibility(View.GONE);
         if (binding.emptyView != null) {
             binding.emptyView.setVisibility(View.VISIBLE);
         }

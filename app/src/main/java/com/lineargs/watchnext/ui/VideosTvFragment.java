@@ -1,24 +1,16 @@
 package com.lineargs.watchnext.ui;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
-import com.lineargs.watchnext.data.VideosQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import com.lineargs.watchnext.databinding.FragmentVideosTvBinding;
@@ -63,9 +55,6 @@ public class VideosTvFragment extends BaseFragment implements VideosAdapter.OnIt
         if (mUri != null) {
             int seriesId = Integer.parseInt(mUri.getLastPathSegment());
             viewModel.setMovieId(seriesId); // VideosViewModel handles both movie and tv?
-            // Actually VideosViewModel uses VideosRepository. VideosRepository uses DetailsDao.
-            // The Videos table just has movie_id, but it's used for both Movies and Series in the app logic?
-            // Let's assume it maps to tmdbId which is consistent.
             
             viewModel.getVideos().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Videos>>() {
                 @Override

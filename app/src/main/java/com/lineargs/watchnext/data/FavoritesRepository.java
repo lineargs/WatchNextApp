@@ -33,6 +33,14 @@ public class FavoritesRepository {
         return favoritesDao.getFavoriteSeriesIds();
     }
 
+    public LiveData<Integer> getMoviesCount() {
+        return favoritesDao.getMoviesCountLiveData();
+    }
+
+    public LiveData<Integer> getSeriesCount() {
+        return favoritesDao.getSeriesCountLiveData();
+    }
+
     public void deleteFavorite(int id) {
         WatchNextDatabase.databaseWriteExecutor.execute(() -> favoritesDao.deleteFavorite(id));
     }

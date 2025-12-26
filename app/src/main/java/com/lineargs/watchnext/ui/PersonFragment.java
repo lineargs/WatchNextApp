@@ -1,27 +1,20 @@
 package com.lineargs.watchnext.ui;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.PersonQuery;
 import com.lineargs.watchnext.sync.syncpeople.PersonSyncUtils;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
@@ -52,7 +45,7 @@ public class PersonFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentPersonBinding.inflate(inflater, container, false);
         if (savedInstanceState == null) {
-            PersonSyncUtils.syncReviews(getContext(), id);
+            PersonSyncUtils.syncPerson(getContext(), id);
             startLoading();
         }
         

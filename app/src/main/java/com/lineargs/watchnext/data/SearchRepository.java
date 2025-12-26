@@ -29,4 +29,8 @@ public class SearchRepository {
     public LiveData<List<SearchTv>> getSearchTvSeries() {
         return searchDao.getSearchTvSeriesLiveData();
     }
+
+    public LiveData<SearchTv> getSearchTvLiveData(int id) {
+        return searchDao.getSearchTvLiveData(id);
+    }
 }

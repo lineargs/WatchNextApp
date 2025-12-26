@@ -2,10 +2,8 @@ package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;

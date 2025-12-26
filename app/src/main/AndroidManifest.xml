@@ -54,31 +54,7 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.SearchSerieActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@style/WatchNext.Search">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.SearchMovieActivity"
-            android:exported="true"
-            android:launchMode="singleTop">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings" />

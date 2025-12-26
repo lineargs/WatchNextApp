@@ -3,7 +3,6 @@ package com.lineargs.watchnext.adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -127,9 +126,13 @@ public class FavoritesAdapter extends ListAdapter<Favorites, FavoritesAdapter.Fa
 
         @Override
         public boolean areContentsTheSame(@NonNull Favorites oldItem, @NonNull Favorites newItem) {
-            // Simplified equality check, can be expanded if needed
-            return oldItem.getTmdbId() == newItem.getTmdbId() 
-                    && oldItem.getTitle().equals(newItem.getTitle());
+            return oldItem.getTmdbId() == newItem.getTmdbId()
+                    && java.util.Objects.equals(oldItem.getTitle(), newItem.getTitle())
+                    && java.util.Objects.equals(oldItem.getVoteAverage(), newItem.getVoteAverage())
+                    && java.util.Objects.equals(oldItem.getStatus(), newItem.getStatus())
+                    && java.util.Objects.equals(oldItem.getReleaseDate(), newItem.getReleaseDate())
+                    && java.util.Objects.equals(oldItem.getPosterPath(), newItem.getPosterPath())
+                    && oldItem.getNotify() == newItem.getNotify();
         }
     }
 }

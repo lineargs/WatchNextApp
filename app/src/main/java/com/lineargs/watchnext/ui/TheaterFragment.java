@@ -2,14 +2,10 @@ package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -18,8 +14,6 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
 import com.lineargs.watchnext.jobs.WorkManagerUtils;
 

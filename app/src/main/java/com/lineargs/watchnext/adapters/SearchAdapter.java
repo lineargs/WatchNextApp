@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
@@ -25,8 +24,6 @@ import com.lineargs.watchnext.databinding.ItemSearchBinding;
 
 /**
  * Created by goranminov on 06/11/2017.
- * <p>
- * See {@link MainAdapter}
  */
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

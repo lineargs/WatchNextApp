@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,16 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
-import com.squareup.picasso.Picasso;
 
 import com.lineargs.watchnext.databinding.ItemCrewBinding;
 
 /**
  * Created by goranminov on 02/11/2017.
- * <p>
- * See {@link MainAdapter}
  */
 
 public class CrewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

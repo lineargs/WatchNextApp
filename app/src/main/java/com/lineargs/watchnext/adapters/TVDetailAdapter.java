@@ -1,16 +1,11 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-
-import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.Query;
 
 import com.lineargs.watchnext.databinding.ItemTvDetailBinding;
 

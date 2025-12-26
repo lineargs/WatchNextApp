@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,16 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
-import com.squareup.picasso.Picasso;
 
 import com.lineargs.watchnext.databinding.ItemCastBinding;
 
 /**
  * Created by goranminov on 31/10/2017.
- * <p>
- * See {@link MainAdapter}
  */
 
 public class CastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

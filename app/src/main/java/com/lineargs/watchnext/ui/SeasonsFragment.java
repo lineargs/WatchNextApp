@@ -3,28 +3,22 @@ package com.lineargs.watchnext.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SeasonsAdapter;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.utils.Constants;
 
 import com.lineargs.watchnext.databinding.FragmentSeasonsBinding;

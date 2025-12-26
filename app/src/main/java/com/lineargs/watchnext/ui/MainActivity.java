@@ -3,31 +3,27 @@ package com.lineargs.watchnext.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.viewpager.widget.ViewPager;
-import com.google.android.material.tabs.TabLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-// import com.crashlytics.android.Crashlytics;
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.utils.NotificationUtils;
 import com.lineargs.watchnext.jobs.WorkManagerUtils;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.ui.FavoritesViewModel;
 import com.lineargs.watchnext.adapters.FavoritesAdapter;
 

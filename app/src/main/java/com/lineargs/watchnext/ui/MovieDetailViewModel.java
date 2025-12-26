@@ -14,6 +14,7 @@ import com.lineargs.watchnext.data.ReviewsRepository;
 import com.lineargs.watchnext.data.VideosRepository;
 import com.lineargs.watchnext.data.entity.Credits;
 import com.lineargs.watchnext.data.entity.Favorites;
+import com.lineargs.watchnext.data.entity.Movie;
 import com.lineargs.watchnext.data.entity.PopularMovie;
 import com.lineargs.watchnext.data.entity.Review;
 import com.lineargs.watchnext.data.entity.Videos;
@@ -29,12 +30,13 @@ public class MovieDetailViewModel extends AndroidViewModel {
     private final FavoritesRepository favoritesRepository;
 
     private final MutableLiveData<android.net.Uri> movieUri = new MutableLiveData<>();
-    private final LiveData<com.lineargs.watchnext.data.entity.Movie> movie;
-    private final LiveData<List<Credits>> cast;
-    private final LiveData<List<Credits>> crew;
-    private final LiveData<List<Review>> reviews;
-    private final LiveData<List<Videos>> videos;
-    private final LiveData<Favorites> favorite;
+    private LiveData<Movie> movie;
+    private LiveData<java.util.List<com.lineargs.watchnext.data.entity.Credits>> cast;
+    private LiveData<java.util.List<com.lineargs.watchnext.data.entity.Credits>> crew;
+    private LiveData<java.util.List<com.lineargs.watchnext.data.entity.Review>> reviews;
+    private LiveData<java.util.List<com.lineargs.watchnext.data.entity.Videos>> videos;
+    private LiveData<com.lineargs.watchnext.data.entity.Favorites> favorite;
+    private final MutableLiveData<Integer> movieId = new MutableLiveData<>();
 
     public MovieDetailViewModel(@NonNull Application application) {
         super(application);
@@ -48,35 +50,66 @@ public class MovieDetailViewModel extends AndroidViewModel {
             int id = Integer.parseInt(uri.getLastPathSegment());
             String path = uri.getPath();
             if (path.contains("popular")) {
-                return (LiveData) moviesRepository.getPopularMovieLiveData(id);
+                return Transformations.map(moviesRepository.getPopularMovieLiveData(id), movie -> (Movie) movie);
             } else if (path.contains("toprated")) {
-                return (LiveData) moviesRepository.getTopRatedMovieLiveData(id);
+                return Transformations.map(moviesRepository.getTopRatedMovieLiveData(id), movie -> (Movie) movie);
             } else if (path.contains("upcoming")) {
-                return (LiveData) moviesRepository.getUpcomingMovieLiveData(id);
+                return Transformations.map(moviesRepository.getUpcomingMovieLiveData(id), movie -> (Movie) movie);
             } else if (path.contains("theater")) {
-                return (LiveData) moviesRepository.getTheaterMovieLiveData(id);
+                return Transformations.map(moviesRepository.getTheaterMovieLiveData(id), movie -> (Movie) movie);
             } else if (path.contains("search")) {
-                // Search Repository
                 com.lineargs.watchnext.data.SearchRepository searchRepo = new com.lineargs.watchnext.data.SearchRepository(getApplication());
-                return (LiveData) searchRepo.getSearchMovieLiveData(id);
+                return Transformations.map(searchRepo.getSearchMovieLiveData(id), movie -> (Movie) movie);
             } else if (path.contains("favorites")) {
-                return (LiveData) favoritesRepository.getFavorite(id);
+                return Transformations.map(favoritesRepository.getFavorite(id), this::mapFavoriteToMovie);
             } else {
-                 return (LiveData) moviesRepository.getPopularMovieLiveData(id);
+                return Transformations.map(moviesRepository.getPopularMovieLiveData(id), movie -> (Movie) movie);
             }
         });
-
-        LiveData<Integer> movieId = Transformations.map(movieUri, uri -> Integer.parseInt(uri.getLastPathSegment()));
-
+ 
         cast = Transformations.switchMap(movieId, creditsRepository::getCast);
         crew = Transformations.switchMap(movieId, creditsRepository::getCrew);
         reviews = Transformations.switchMap(movieId, reviewsRepository::getReviews);
         videos = Transformations.switchMap(movieId, videosRepository::getVideos);
-        favorite = Transformations.switchMap(movieId, favoritesRepository::getFavorite);
+        favorite = Transformations.switchMap(movieId, id -> {
+            if (id == null) {
+                return new MutableLiveData<>(null);
+            } else {
+                return favoritesRepository.getFavorite(id);
+            }
+        });
+    }
+
+    private Movie mapFavoriteToMovie(Favorites favorites) {
+        if (favorites == null) return null;
+        PopularMovie movie = new PopularMovie();
+        movie.setTmdbId(favorites.getTmdbId());
+        movie.setTitle(favorites.getTitle());
+        movie.setOverview(favorites.getOverview());
+        movie.setPosterPath(favorites.getPosterPath());
+        movie.setBackdropPath(favorites.getBackdropPath());
+        movie.setVoteAverage(favorites.getVoteAverage());
+        movie.setReleaseDate(favorites.getReleaseDate());
+        movie.setOriginalLanguage(favorites.getOriginalLanguage());
+        movie.setProductionCompanies(favorites.getProductionCompanies());
+        movie.setProductionCountries(favorites.getProductionCountries());
+        movie.setStatus(favorites.getStatus());
+        movie.setGenres(favorites.getGenres());
+        movie.setRuntime(favorites.getRuntime());
+        movie.setImdbId(favorites.getImdbId());
+        movie.setHomepage(favorites.getHomepage());
+        return movie;
+    }
+
+    public void setMovieId(int id) {
+        movieId.setValue(id);
     }
 
     public void setMovieUri(android.net.Uri uri) {
         movieUri.setValue(uri);
+        if (uri != null) {
+            movieId.setValue(Integer.parseInt(uri.getLastPathSegment()));
+        }
     }
 
     public LiveData<com.lineargs.watchnext.data.entity.Movie> getMovie() {

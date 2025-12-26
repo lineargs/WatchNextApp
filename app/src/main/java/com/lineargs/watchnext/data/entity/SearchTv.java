@@ -21,6 +21,21 @@ public class SearchTv {
     @ColumnInfo(name = DataContract.Search.COLUMN_POSTER_PATH)
     private String posterPath;
 
+    @ColumnInfo(name = DataContract.PopularMovieEntry.COLUMN_OVERVIEW)
+    private String overview;
+
+    @ColumnInfo(name = DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH)
+    private String backdropPath;
+
+    @ColumnInfo(name = DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE)
+    private String voteAverage;
+
+    @ColumnInfo(name = DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE)
+    private String releaseDate;
+
+    @ColumnInfo(name = DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE)
+    private String originalLanguage;
+
     // Getters and Setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
@@ -33,4 +48,19 @@ public class SearchTv {
 
     public String getPosterPath() { return posterPath; }
     public void setPosterPath(String posterPath) { this.posterPath = posterPath; }
+
+    public String getOverview() { return overview; }
+    public void setOverview(String overview) { this.overview = overview; }
+
+    public String getBackdropPath() { return backdropPath; }
+    public void setBackdropPath(String backdropPath) { this.backdropPath = backdropPath; }
+
+    public String getVoteAverage() { return voteAverage; }
+    public void setVoteAverage(String voteAverage) { this.voteAverage = voteAverage; }
+
+    public String getReleaseDate() { return releaseDate; }
+    public void setReleaseDate(String releaseDate) { this.releaseDate = releaseDate; }
+
+    public String getOriginalLanguage() { return originalLanguage; }
+    public void setOriginalLanguage(String originalLanguage) { this.originalLanguage = originalLanguage; }
 }

@@ -29,6 +29,10 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
 import com.lineargs.watchnext.databinding.FragmentSeriesDetailBinding;
+import com.lineargs.watchnext.data.entity.Favorites;
+import android.content.res.ColorStateList;
+import androidx.core.content.ContextCompat;
+import com.lineargs.watchnext.data.entity.PopularSerie;
 
 public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnClick {
 
@@ -157,6 +161,30 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
                      }
                 }
             });
+            // Observe Favorite Status
+            viewModel.getFavorite().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<Favorites>() {
+                @Override
+                public void onChanged(Favorites favorite) {
+                    if (favorite != null) {
+                        binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+                        binding.starFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorBlack)));
+                        binding.seriesButtons.reminders.setVisibility(View.VISIBLE);
+                        if (favorite.getNotify() == 1) {
+                            binding.seriesButtons.reminders.setText(R.string.stop_reminding_all);
+                            binding.seriesButtons.reminders.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_cancel_black, 0, 0, 0);
+                        } else {
+                            binding.seriesButtons.reminders.setText(R.string.remind_all_episodes);
+                            binding.seriesButtons.reminders.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_notifications_black, 0, 0, 0);
+                        }
+                    } else {
+                        binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+                        binding.starFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorBlack)));
+                        binding.seriesButtons.reminders.setVisibility(View.VISIBLE);
+                        binding.seriesButtons.reminders.setText(R.string.remind_all_episodes);
+                        binding.seriesButtons.reminders.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_notifications_black, 0, 0, 0);
+                    }
+                }
+            });
         }
         
         binding.starFab.setOnClickListener(new View.OnClickListener() {
@@ -245,14 +273,11 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
             DbUtils.removeFromFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-            binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
-            // Also unsubscribe if removed from favorites? 
-            // Better not, maybe keep it but they won't see it in schedule tab until they refavorite.
-            // Requirement said "Subscribing -> Favorite", not "Unfavorite -> Unsubscribe".
+            // FAB update handled by observer
         } else {
             DbUtils.addTVToFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-            binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+            // FAB update handled by observer
         }
         updateSubscriptionButton();
     }

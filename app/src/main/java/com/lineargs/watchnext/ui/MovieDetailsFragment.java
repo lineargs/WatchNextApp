@@ -30,6 +30,9 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
 import com.lineargs.watchnext.databinding.FragmentMovieDetailBinding;
+import com.lineargs.watchnext.data.entity.Favorites;
+import android.content.res.ColorStateList;
+import androidx.core.content.ContextCompat;
 
 /**
  * A fragment using ViewModel to show details for the movie.
@@ -191,6 +194,20 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
                      }
                 }
             });
+
+            // Observe Favorite Status
+            viewModel.getFavorite().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<Favorites>() {
+                @Override
+                public void onChanged(Favorites favorite) {
+                    if (favorite != null) {
+                        binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+                        binding.starFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorBlack)));
+                    } else {
+                        binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+                        binding.starFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorBlack)));
+                    }
+                }
+            });
         }
         
         binding.starFab.setOnClickListener(new View.OnClickListener() {
@@ -301,11 +318,11 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
             DbUtils.removeFromFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-            binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+            // FAB update handled by observer
         } else {
             DbUtils.addMovieToFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-            binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+            // FAB update handled by observer
         }
     }
 
@@ -368,11 +385,7 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         ServiceUtils.setUpGoogleSearchButton(title, binding.movieButtons.google);
         ServiceUtils.setUpYouTubeButton(title, binding.movieButtons.youtube);
         ServiceUtils.setUpGooglePlayButton(title, binding.movieButtons.googlePlay);
-        if (DbUtils.isFavorite(getContext(), id)) {
-            binding.starFab.setImageDrawable(Utils.starImage(getContext()));
-        } else {
-            binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
-        }
+        // The FAB update logic is now handled by the ViewModel observer
         if (binding.coverPoster != null) {
             ServiceUtils.loadPicasso(getContext(), movie.getPosterPath())
                     .fit()

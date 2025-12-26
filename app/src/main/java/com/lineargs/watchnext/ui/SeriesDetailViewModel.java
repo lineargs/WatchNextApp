@@ -32,14 +32,15 @@ public class SeriesDetailViewModel extends AndroidViewModel {
     private final FavoritesRepository favoritesRepository;
 
     private final MutableLiveData<android.net.Uri> seriesUri = new MutableLiveData<>();
+    private LiveData<java.util.List<com.lineargs.watchnext.data.entity.Seasons>> seasons;
+    private LiveData<java.util.List<com.lineargs.watchnext.data.entity.Videos>> videos;
+    private LiveData<com.lineargs.watchnext.data.entity.Favorites> favorite;
+    private final MutableLiveData<Integer> serieId = new MutableLiveData<>();
 
     private final LiveData<PopularSerie> serie;
     private final LiveData<List<Credits>> cast;
     private final LiveData<List<Credits>> crew;
     private final LiveData<List<Review>> reviews;
-    private final LiveData<List<Videos>> videos;
-    private final LiveData<List<Seasons>> seasons;
-    private final LiveData<Favorites> favorite;
 
     public SeriesDetailViewModel(@NonNull Application application) {
         super(application);
@@ -61,23 +62,46 @@ public class SeriesDetailViewModel extends AndroidViewModel {
                 return Transformations.map(seriesRepository.getTopRatedSerieLiveData(id), this::mapTopRatedToPopular);
             } else if (path.contains("ontheair")) {
                 return Transformations.map(seriesRepository.getOnTheAirSerieLiveData(id), this::mapOnTheAirToPopular);
+            } else if (path.contains("search")) {
+                com.lineargs.watchnext.data.SearchRepository searchRepo = new com.lineargs.watchnext.data.SearchRepository(getApplication());
+                return Transformations.map(searchRepo.getSearchTvLiveData(id), this::mapSearchToPopular);
             } else {
-                 return seriesRepository.getPopularSerieLiveData(id);
+                return seriesRepository.getPopularSerieLiveData(id);
             }
         });
+        cast = Transformations.switchMap(serieId, creditsRepository::getCast);
+        crew = Transformations.switchMap(serieId, creditsRepository::getCrew);
+        reviews = Transformations.switchMap(serieId, reviewsRepository::getReviews);
+        videos = Transformations.switchMap(serieId, videosRepository::getVideos);
+        seasons = Transformations.switchMap(serieId, seasonsRepository::getSeasons);
+        favorite = Transformations.switchMap(serieId, id -> {
+            if (id == null) {
+                return new MutableLiveData<>(null);
+            } else {
+                return favoritesRepository.getFavorite(id);
+            }
+        });
+    }
 
-        LiveData<Integer> seriesId = Transformations.map(seriesUri, uri -> Integer.parseInt(uri.getLastPathSegment()));
-
-        cast = Transformations.switchMap(seriesId, creditsRepository::getCast);
-        crew = Transformations.switchMap(seriesId, creditsRepository::getCrew);
-        reviews = Transformations.switchMap(seriesId, reviewsRepository::getReviews);
-        videos = Transformations.switchMap(seriesId, videosRepository::getVideos);
-        seasons = Transformations.switchMap(seriesId, seasonsRepository::getSeasons);
-        favorite = Transformations.switchMap(seriesId, favoritesRepository::getFavorite);
+    private PopularSerie mapSearchToPopular(com.lineargs.watchnext.data.entity.SearchTv searchTv) {
+        if (searchTv == null) return null;
+        PopularSerie serie = new PopularSerie();
+        serie.setTmdbId(searchTv.getTmdbId());
+        serie.setTitle(searchTv.getTitle());
+        serie.setOverview(searchTv.getOverview());
+        serie.setPosterPath(searchTv.getPosterPath());
+        serie.setBackdropPath(searchTv.getBackdropPath());
+        serie.setVoteAverage(searchTv.getVoteAverage());
+        serie.setReleaseDate(searchTv.getReleaseDate());
+        serie.setOriginalLanguage(searchTv.getOriginalLanguage());
+        return serie;
     }
 
     public void setSeriesUri(android.net.Uri uri) {
         seriesUri.setValue(uri);
+        if (uri != null) {
+            serieId.setValue(Integer.parseInt(uri.getLastPathSegment()));
+        }
     }
 
     private PopularSerie mapFavoriteToSerie(Favorites favorites) {
@@ -92,8 +116,12 @@ public class SeriesDetailViewModel extends AndroidViewModel {
         serie.setReleaseDate(favorites.getReleaseDate());
         serie.setOriginalLanguage(favorites.getOriginalLanguage());
         serie.setProductionCompanies(favorites.getProductionCompanies());
+        serie.setProductionCountries(favorites.getProductionCountries());
         serie.setGenres(favorites.getGenres());
         serie.setStatus(favorites.getStatus());
+        serie.setRuntime(favorites.getRuntime());
+        serie.setImdbId(favorites.getImdbId());
+        serie.setHomepage(favorites.getHomepage());
         return serie;
     }
 
@@ -149,15 +177,15 @@ public class SeriesDetailViewModel extends AndroidViewModel {
         return reviews;
     }
 
-    public LiveData<List<Videos>> getVideos() {
+    public LiveData<java.util.List<com.lineargs.watchnext.data.entity.Videos>> getVideos() {
         return videos;
     }
 
-    public LiveData<List<Seasons>> getSeasons() {
+    public LiveData<java.util.List<com.lineargs.watchnext.data.entity.Seasons>> getSeasons() {
         return seasons;
     }
 
-    public LiveData<Favorites> getFavorite() {
+    public LiveData<com.lineargs.watchnext.data.entity.Favorites> getFavorite() {
         return favorite;
     }
 }

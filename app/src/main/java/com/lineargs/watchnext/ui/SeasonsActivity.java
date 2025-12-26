@@ -3,7 +3,6 @@ package com.lineargs.watchnext.ui;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.utils.Constants;
@@ -52,11 +51,6 @@ public class SeasonsActivity extends BaseTopActivity {
         super.setDrawerIndicatorEnabled();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.icon_arrow_back_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 }

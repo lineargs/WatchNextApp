@@ -2,16 +2,12 @@ package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.MoviesUpcomingAdapter;
-import com.lineargs.watchnext.data.DataContract;
 
 /**
  * Created by goranminov on 03/11/2017.

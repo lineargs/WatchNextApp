@@ -2,22 +2,16 @@ package com.lineargs.watchnext.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.CreditsCrewAdapter;
-import com.lineargs.watchnext.data.CreditsQuery;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.Constants;
 

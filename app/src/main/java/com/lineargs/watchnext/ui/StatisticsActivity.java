@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.utils.StatsUtils;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.lineargs.watchnext.databinding.ActivityStatisticsBinding;
 import com.lineargs.watchnext.databinding.ItemStatisticsBinding;
@@ -66,8 +66,20 @@ public class StatisticsActivity extends BaseTopActivity {
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             binding = ItemStatisticsBinding.inflate(inflater, container, false);
-            binding.moviesCount.setText(String.valueOf(StatsUtils.getMoviesCount(getActivity())));
-            binding.seriesCount.setText(String.valueOf(StatsUtils.getSeriesCount(getActivity())));
+            StatisticsViewModel viewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
+            
+            viewModel.getMoviesCount().observe(getViewLifecycleOwner(), count -> {
+                if (count != null) {
+                    binding.moviesCount.setText(String.valueOf(count));
+                }
+            });
+            
+            viewModel.getSeriesCount().observe(getViewLifecycleOwner(), count -> {
+                if (count != null) {
+                    binding.seriesCount.setText(String.valueOf(count));
+                }
+            });
+            
             return binding.getRoot();
         }
 

@@ -1,25 +1,17 @@
 package com.lineargs.watchnext.ui;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.ReviewAdapter;
-import com.lineargs.watchnext.data.ReviewQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import com.lineargs.watchnext.databinding.FragmentReviewBinding;

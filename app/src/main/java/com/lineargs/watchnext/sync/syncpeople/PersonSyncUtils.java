@@ -10,7 +10,7 @@ import com.lineargs.watchnext.workers.PersonWorker;
 
 public class PersonSyncUtils {
 
-    public static void syncReviews(@NonNull Context context, @NonNull String id) {
+    public static void syncPerson(@NonNull Context context, @NonNull String id) {
         Data inputData = new Data.Builder()
                 .putString(PersonWorker.ARG_ID, id)
                 .build();
