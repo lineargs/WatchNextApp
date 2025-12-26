@@ -77,16 +77,20 @@ public class WatchNextWorker extends Worker {
     }
 
     private void fetchPopularMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getPopularContentValues(response.body().getResults());
             insertData(DataContract.PopularMovieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_popular_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchUpcomingMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getUpcomingContentValues(response.body().getResults());
@@ -95,7 +99,7 @@ public class WatchNextWorker extends Worker {
     }
 
     private void fetchTopRatedMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getTopContentValues(response.body().getResults());
@@ -104,7 +108,7 @@ public class WatchNextWorker extends Worker {
     }
 
     private void fetchTheaterMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getTheaterContentValues(response.body().getResults());

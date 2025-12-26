@@ -26,7 +26,8 @@ public interface MovieApiService {
     Call<Movies> getMovies(
             @Path("path") String path,
             @Query("api_key") String apiKey,
-            @Query("region") String region);
+            @Query("region") String region,
+            @Query("page") int page);
 
     /**
      * Method of type retrofit GET
