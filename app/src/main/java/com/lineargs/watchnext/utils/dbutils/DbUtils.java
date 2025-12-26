@@ -220,5 +220,10 @@ public class DbUtils {
         contentValues.put(DataContract.Favorites.COLUMN_NOTIFY, notify);
         context.getContentResolver().update(DataContract.Favorites.buildFavoritesUriWithId(id),
                 contentValues, null, null);
+        if (notify == 0) {
+            com.lineargs.watchnext.data.WatchNextDatabase.databaseWriteExecutor.execute(() -> {
+                com.lineargs.watchnext.data.WatchNextDatabase.getDatabase(context).upcomingEpisodesDao().deleteBySeriesId((int) id);
+            });
+        }
     }
 }
