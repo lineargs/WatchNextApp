@@ -112,8 +112,11 @@ public class FavoritesAdapter extends ListAdapter<Favorites, FavoritesAdapter.Fa
             binding.mainStarImage.setImageDrawable(
                     VectorDrawableCompat.create(context.getResources(), R.drawable.icon_star_black, context.getTheme()));
 
+            int placeholderId = favorite.getType() == 0 ? R.drawable.placeholder_movie : R.drawable.placeholder_serie;
             ServiceUtils.loadPicasso(context, favorite.getPosterPath())
                     .fit()
+                    .placeholder(placeholderId)
+                    .error(placeholderId)
                     .into(binding.mainPoster);
         }
     }

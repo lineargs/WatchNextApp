@@ -152,6 +152,8 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ServiceUtils.loadPicasso(stillPath.getContext(), episode.getStillPath())
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerInside()
+                    .placeholder(R.drawable.placeholder_serie)
+                    .error(R.drawable.placeholder_serie)
                     .into(stillPath);
         }
 

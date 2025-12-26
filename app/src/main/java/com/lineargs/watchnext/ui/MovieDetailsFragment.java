@@ -392,11 +392,15 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         if (binding.coverPoster != null) {
             ServiceUtils.loadPicasso(getContext(), movie.getPosterPath())
                     .fit()
+                    .placeholder(R.drawable.placeholder_movie)
+                    .error(R.drawable.placeholder_movie)
                     .into(binding.coverPoster);
         }
         if (binding.coverBackdrop != null) {
             ServiceUtils.loadPicasso(getContext(), movie.getBackdropPath())
                     .fit()
+                    .placeholder(R.drawable.placeholder_movie)
+                    .error(R.drawable.placeholder_movie)
                     .into(binding.coverBackdrop);
         }
     }

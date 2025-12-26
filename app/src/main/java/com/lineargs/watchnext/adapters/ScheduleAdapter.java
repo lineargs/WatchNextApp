@@ -91,11 +91,11 @@ public class ScheduleAdapter extends ListAdapter<UpcomingEpisodes, ScheduleAdapt
                 ServiceUtils.loadPicasso(context, posterPath)
                         .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                         .centerCrop()
-                        .placeholder(R.drawable.gradient_shape)
-                        .error(R.drawable.gradient_shape)
+                        .placeholder(R.drawable.placeholder_serie)
+                        .error(R.drawable.placeholder_serie)
                         .into(binding.seriesPoster);
             } else {
-                binding.seriesPoster.setImageResource(R.drawable.gradient_shape);
+                binding.seriesPoster.setImageResource(R.drawable.placeholder_serie);
             }
 
             binding.getRoot().setOnClickListener(v -> listener.onItemClick(episode));

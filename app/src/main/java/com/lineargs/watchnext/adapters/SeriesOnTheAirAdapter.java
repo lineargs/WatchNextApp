@@ -38,6 +38,8 @@ public class SeriesOnTheAirAdapter extends BaseTabbedAdapter {
         ServiceUtils.loadPicasso(holder.poster.getContext(), serie.getPosterPath())
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
+                .placeholder(R.drawable.placeholder_serie)
+                .error(R.drawable.placeholder_serie)
                 .into(holder.poster);
 
         holder.star.setOnClickListener(new View.OnClickListener() {
