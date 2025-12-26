@@ -190,6 +190,11 @@ public class MainActivity extends BaseTopActivity {
         return nColumns;
     }
 
+    @Override
+    public void setDrawerIndicatorEnabled() {
+        binding.toolbar.toolbar.setNavigationIcon(R.drawable.icon_menu_grey);
+    }
+
     private void startIntent(Intent intent) {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

@@ -199,7 +199,7 @@ public abstract class BaseDrawerActivity extends BaseActivity {
     }
 
     public void setDrawerIndicatorEnabled() {
-        toolbar.setNavigationIcon(R.drawable.icon_menu_grey);
+        toolbar.setNavigationIcon(R.drawable.icon_menu_white);
     }
 
     public void openNavDrawer() {
