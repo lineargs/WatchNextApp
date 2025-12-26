@@ -104,6 +104,10 @@ public class WatchNextWorker extends Worker {
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getTopContentValues(response.body().getResults());
             insertData(DataContract.TopRatedMovieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_top_rated_next_page", 2)
+                    .apply();
         }
     }
 
