@@ -37,6 +37,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity android:name=".ui.TheaterActivity" />
+        <activity android:name=".ui.AiringTodayActivity" />
         <activity android:name=".ui.MovieDetailsActivity" />
         <activity android:name=".ui.SeriesDetailsActivity" />
         <activity android:name=".ui.TabbedSeriesActivity" />

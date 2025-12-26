@@ -14,6 +14,7 @@ import com.lineargs.watchnext.data.entity.TopRatedMovie;
 import com.lineargs.watchnext.data.entity.TopRatedSerie;
 import com.lineargs.watchnext.data.entity.UpcomingMovie;
 import com.lineargs.watchnext.data.entity.OnTheAirSerie;
+import com.lineargs.watchnext.data.entity.AiringTodaySerie;
 import com.lineargs.watchnext.utils.Utils;
 
 /**
@@ -68,6 +69,9 @@ public class DbUtils {
                 favorite = mapSerieToFavorite(serie);
             } else if (path.contains(DataContract.PATH_ON_THE_AIR_SERIE)) {
                 OnTheAirSerie serie = db.seriesDao().getOnTheAirSerieSync(id);
+                favorite = mapSerieToFavorite(serie);
+            } else if (path.contains(DataContract.PATH_AIRING_TODAY_SERIE)) {
+                AiringTodaySerie serie = db.seriesDao().getAiringTodaySerieSync(id);
                 favorite = mapSerieToFavorite(serie);
             }
 
@@ -139,6 +143,24 @@ public class DbUtils {
     }
 
     private static Favorites mapSerieToFavorite(OnTheAirSerie serie) {
+        if (serie == null) return null;
+        Favorites favorite = new Favorites();
+        favorite.setTmdbId(serie.getTmdbId());
+        favorite.setOverview(serie.getOverview());
+        favorite.setOriginalLanguage(serie.getOriginalLanguage());
+        favorite.setTitle(serie.getOriginalTitle());
+        favorite.setPosterPath(serie.getPosterPath());
+        favorite.setBackdropPath(serie.getBackdropPath());
+        favorite.setReleaseDate(serie.getReleaseDate());
+        favorite.setVoteAverage(serie.getVoteAverage());
+        favorite.setStatus(serie.getStatus());
+        favorite.setProductionCompanies(serie.getProductionCompanies());
+        favorite.setGenres(serie.getGenres());
+        favorite.setType(1);
+        return favorite;
+    }
+
+    private static Favorites mapSerieToFavorite(AiringTodaySerie serie) {
         if (serie == null) return null;
         Favorites favorite = new Favorites();
         favorite.setTmdbId(serie.getTmdbId());

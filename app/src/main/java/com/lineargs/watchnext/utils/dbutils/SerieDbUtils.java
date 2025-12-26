@@ -134,6 +134,39 @@ public class SerieDbUtils {
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
+     * @param seriesResults List used to get the values from our API response
+     * @return The {@link ContentValues}
+     */
+    public static ContentValues[] getAiringTodayContentValues(List<SeriesResult> seriesResults) {
+        int i = 0;
+        ContentValues[] values = new ContentValues[seriesResults.size()];
+        for (SeriesResult seriesResult : seriesResults) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, seriesResult.getId());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, seriesResult.getName());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, seriesResult.getOverview());
+            try {
+                contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(seriesResult.getFirstAirDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(seriesResult.getVoteAverage())));
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + seriesResult.getPosterPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + seriesResult.getBackdropPath());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, seriesResult.getOriginalLanguage());
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, seriesResult.getOriginalName());
+
+            values[i] = contentValues;
+            i++;
+        }
+
+        return values;
+    }
+
+    /**
+     * Builds ContentValues[] used for our ContentResolver
+     *
      * @param result Object used to get the values from our API response
      * @return The {@link ContentValues}
      */

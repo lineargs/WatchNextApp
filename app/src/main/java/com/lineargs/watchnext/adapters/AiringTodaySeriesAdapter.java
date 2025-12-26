@@ -1,0 +1,73 @@
+package com.lineargs.watchnext.adapters;
+
+import android.content.Context;
+import android.net.Uri;
+import androidx.annotation.NonNull;
+import android.view.View;
+
+import com.lineargs.watchnext.R;
+import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.utils.ServiceUtils;
+
+/**
+ * Created by goranminov on 04/11/2017.
+ * <p>
+ * See {@link MoviesPopularAdapter}
+ */
+
+public class AiringTodaySeriesAdapter extends BaseTabbedAdapter {
+
+    private java.util.List<com.lineargs.watchnext.data.entity.AiringTodaySerie> series;
+
+    public AiringTodaySeriesAdapter(@NonNull Context context, OnItemClickListener listener) {
+        super(context, listener);
+    }
+
+    @Override
+    protected void bindViews(final TabbedViewHolder holder, final Context context, int position) {
+        final com.lineargs.watchnext.data.entity.AiringTodaySerie serie = series.get(position);
+        final long id = serie.getTmdbId();
+        if (isFavorite(context, id)) {
+            holder.star.setImageDrawable(starImage());
+        } else {
+            holder.star.setImageDrawable(starImageBorder());
+        }
+        holder.title.setText(serie.getTitle());
+        ServiceUtils.loadPicasso(holder.poster.getContext(), serie.getPosterPath())
+                .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
+                .centerCrop()
+                .placeholder(R.drawable.placeholder_serie)
+                .error(R.drawable.placeholder_serie)
+                .into(holder.poster);
+
+        holder.star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = DataContract.AiringTodaySerieEntry.buildSerieUriWithId(id);
+                boolean isFavorite = isFavorite(context, id);
+                callback.onToggleFavorite(uri, isFavorite);
+            }
+        });
+    }
+
+    @Override
+    protected void onViewClick(View view, int position) {
+        com.lineargs.watchnext.data.entity.AiringTodaySerie serie = series.get(position);
+        Uri uri = DataContract.AiringTodaySerieEntry.buildSerieUriWithId(serie.getTmdbId());
+        callback.onItemSelected(uri);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (series == null) {
+            return 0;
+        } else {
+            return series.size();
+        }
+    }
+
+    public void swapSeries(java.util.List<com.lineargs.watchnext.data.entity.AiringTodaySerie> series) {
+        this.series = series;
+        notifyDataSetChanged();
+    }
+}

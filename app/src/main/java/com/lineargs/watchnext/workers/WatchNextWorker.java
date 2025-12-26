@@ -32,6 +32,7 @@ public class WatchNextWorker extends Worker {
     private static final String PATH_UPCOMING = "upcoming";
     private static final String PATH_THEATER = "now_playing";
     private static final String PATH_ON_THE_AIR = "on_the_air";
+    private static final String PATH_AIRING_TODAY = "airing_today";
     private static final int SYNC_NOTIFICATION_ID = 29101988;
 
     private static final Retrofit retrofit = new Retrofit.Builder()
@@ -67,6 +68,7 @@ public class WatchNextWorker extends Worker {
             fetchPopularSeries(seriesApiService);
             fetchTopRatedSeries(seriesApiService);
             fetchOnTheAirSeries(seriesApiService);
+            fetchAiringTodaySeries(seriesApiService);
 
             NotificationUtils.syncComplete(SYNC_NOTIFICATION_ID, getApplicationContext());
             return Result.success();
@@ -163,6 +165,19 @@ public class WatchNextWorker extends Worker {
             android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                     .edit()
                     .putInt("pref_series_on_the_air_next_page", 2)
+                    .apply();
+        }
+    }
+
+    private void fetchAiringTodaySeries(SeriesApiService service) throws IOException {
+        Call<Series> call = service.getSeries(PATH_AIRING_TODAY, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
+        Response<Series> response = call.execute();
+        if (response.isSuccessful() && response.body() != null) {
+            ContentValues[] values = SerieDbUtils.getAiringTodayContentValues(response.body().getResults());
+            insertData(DataContract.AiringTodaySerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_airing_today_next_page", 2)
                     .apply();
         }
     }

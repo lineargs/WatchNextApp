@@ -9,6 +9,7 @@ import com.lineargs.watchnext.data.SeriesRepository;
 import com.lineargs.watchnext.data.entity.OnTheAirSerie;
 import com.lineargs.watchnext.data.entity.PopularSerie;
 import com.lineargs.watchnext.data.entity.TopRatedSerie;
+import com.lineargs.watchnext.data.entity.AiringTodaySerie;
 
 import java.util.List;
 
@@ -44,6 +45,10 @@ public class SeriesViewModel extends AndroidViewModel {
 
     public LiveData<List<OnTheAirSerie>> getOnTheAirSeries() {
         return repository.getOnTheAirSeries();
+    }
+
+    public LiveData<List<AiringTodaySerie>> getAiringTodaySeries() {
+        return repository.getAiringTodaySeries();
     }
 
     public LiveData<List<Integer>> getFavoriteSeriesIds() {
@@ -106,6 +111,28 @@ public class SeriesViewModel extends AndroidViewModel {
         if (Boolean.TRUE.equals(isLoading.getValue())) return;
 
         repository.fetchNextOnTheAirSeries(new com.lineargs.watchnext.utils.NetworkStateCallback() {
+            @Override
+            public void onLoading() {
+                isLoading.postValue(true);
+            }
+
+            @Override
+            public void onSuccess() {
+                isLoading.postValue(false);
+            }
+
+            @Override
+            public void onError(String message) {
+                isLoading.postValue(false);
+                errorMessage.postValue(message);
+            }
+        });
+    }
+
+    public void loadNextAiringTodayPage() {
+        if (Boolean.TRUE.equals(isLoading.getValue())) return;
+
+        repository.fetchNextAiringTodaySeries(new com.lineargs.watchnext.utils.NetworkStateCallback() {
             @Override
             public void onLoading() {
                 isLoading.postValue(true);
