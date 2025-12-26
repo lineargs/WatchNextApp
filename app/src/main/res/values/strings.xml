@@ -60,6 +60,7 @@
     <string name="toast_remove_from_favorites">Removed from favorites</string>
     <string name="toast_notification_reminder">Notification reminder scheduled</string>
     <string name="toast_notification_cancelled">Notification reminder cancelled</string>
+    <string name="toast_notification_canceled">Notification reminder cancelled</string>
     <string name="remind_all_episodes">All episodes reminder</string>
     <string name="stop_reminding_all">Stop reminding episodes</string>
     <string name="toast_subscribed">Subscribed to all episodes. Added to Favorites.</string>

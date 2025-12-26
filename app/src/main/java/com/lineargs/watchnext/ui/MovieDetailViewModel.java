@@ -135,4 +135,26 @@ public class MovieDetailViewModel extends AndroidViewModel {
     public LiveData<Favorites> getFavorite() {
         return favorite;
     }
+
+    public void toggleFavorite(android.net.Uri uri, boolean remove) {
+        if (remove) {
+            favoritesRepository.removeFromFavorites(uri);
+        } else {
+            favoritesRepository.addMovieToFavorites(uri);
+        }
+    }
+
+    /**
+     * Checks if data exists in DB, if not triggers sync.
+     * Uses DbUtils in background thread to avoid UI block.
+     */
+    public void checkDataAndSync(android.content.Context context, android.net.Uri uri) {
+        com.lineargs.watchnext.data.WatchNextDatabase.databaseWriteExecutor.execute(() -> {
+            if (!com.lineargs.watchnext.utils.dbutils.DbUtils.checkForCredits(context, uri.getLastPathSegment())) {
+                com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils.syncFullMovieDetail(context, uri);
+            } else if (com.lineargs.watchnext.utils.dbutils.DbUtils.checkForExtras(context, uri)) {
+                com.lineargs.watchnext.sync.syncmovies.MovieSyncUtils.syncUpdateMovieDetail(context, uri);
+            }
+        });
+    }
 }

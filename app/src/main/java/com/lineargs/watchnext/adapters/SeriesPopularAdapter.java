@@ -44,15 +44,8 @@ public class SeriesPopularAdapter extends BaseTabbedAdapter {
             @Override
             public void onClick(View view) {
                 Uri uri = DataContract.PopularSerieEntry.buildSerieUriWithId(id);
-                if (isFavorite(context, id)) {
-                    DbUtils.removeFromFavorites(context, uri);
-                    Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-                    holder.star.setImageDrawable(starImageBorder());
-                } else {
-                    DbUtils.addTVToFavorites(context, uri);
-                    Toast.makeText(context, context.getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-                    holder.star.setImageDrawable(starImage());
-                }
+                boolean isFavorite = isFavorite(context, id);
+                callback.onToggleFavorite(uri, isFavorite);
             }
         });
     }

@@ -21,6 +21,9 @@ public interface DetailsDao {
     @Query("SELECT * FROM review WHERE movie_id = :movieId")
     androidx.lifecycle.LiveData<java.util.List<Review>> getReviewsLiveData(int movieId);
 
+    @Query("SELECT COUNT(*) FROM review WHERE movie_id = :movieId")
+    int getReviewsCount(int movieId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertReview(Review review);
 

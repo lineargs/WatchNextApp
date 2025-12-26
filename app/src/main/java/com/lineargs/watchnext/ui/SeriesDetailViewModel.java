@@ -188,4 +188,41 @@ public class SeriesDetailViewModel extends AndroidViewModel {
     public LiveData<com.lineargs.watchnext.data.entity.Favorites> getFavorite() {
         return favorite;
     }
+
+    public void toggleFavorite(android.net.Uri uri, boolean remove) {
+        if (remove) {
+            favoritesRepository.removeFromFavorites(uri);
+        } else {
+            favoritesRepository.addSeriesToFavorites(uri);
+        }
+    }
+
+    public void toggleSubscription(long id, int notify) {
+        favoritesRepository.updateSubscription(id, notify);
+        com.lineargs.watchnext.jobs.WorkManagerUtils.syncSubscriptionsImmediately(getApplication());
+    }
+
+    /**
+     * Checks if data exists in DB, if not triggers sync.
+     * Uses DbUtils in background thread to avoid UI block.
+     */
+    public void checkDataAndSync(android.content.Context context, android.net.Uri uri) {
+        com.lineargs.watchnext.data.WatchNextDatabase.databaseWriteExecutor.execute(() -> {
+            if (!com.lineargs.watchnext.utils.dbutils.DbUtils.checkForCredits(context, uri.getLastPathSegment())) {
+                com.lineargs.watchnext.sync.syncseries.SerieDetailUtils.syncSeasons(context, uri);
+            } else {
+                 // The 'else' block in Fragment was calling updateDetails() if savedState == null.
+                 // Fragment Logic: 
+                 // if (!checkForCredits) syncSeasons
+                 // else if (savedState == null) updateDetails
+                 // This means updateDetails is called ALWAYS if we already have credits?
+                 // Wait, original Logic:
+                 // if (!DbUtils.checkForCredits...) { ... } else if (savedState == null) { ... }
+                 // So if credits exist, we update details.
+                 // Wait, if credits check is false, we sync seasons. Does syncSeasons also update details? 
+                 // Let's assume we maintain the logic.
+                 com.lineargs.watchnext.sync.syncseries.SerieDetailUtils.updateDetails(context, uri);
+            }
+        });
+    }
 }

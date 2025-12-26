@@ -59,6 +59,17 @@ public class MoviesUpcomingFragment extends MoviesListFragment implements Movies
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
     }
+
+    @Override
+    public void onToggleFavorite(Uri uri, boolean isFavorite) {
+        com.lineargs.watchnext.ui.MoviesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.MoviesViewModel.class);
+        viewModel.toggleFavorite(uri, isFavorite);
+        if (isFavorite) {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        } else {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 
 

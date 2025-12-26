@@ -43,4 +43,12 @@ public class MoviesViewModel extends AndroidViewModel {
     public LiveData<List<Integer>> getFavoriteMovieIds() {
         return favoritesRepository.getFavoriteMovieIds();
     }
+
+    public void toggleFavorite(android.net.Uri uri, boolean remove) {
+        if (remove) {
+            favoritesRepository.removeFromFavorites(uri);
+        } else {
+            favoritesRepository.addMovieToFavorites(uri);
+        }
+    }
 }

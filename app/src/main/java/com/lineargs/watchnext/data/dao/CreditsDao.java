@@ -28,6 +28,9 @@ public interface CreditsDao {
     @Query("SELECT * FROM credits WHERE type = 1 AND movie_id = :movieId")
     androidx.lifecycle.LiveData<java.util.List<Credits>> getCrewForMovieLiveData(int movieId);
 
+    @Query("SELECT COUNT(*) FROM credits WHERE movie_id = :movieId")
+    int getAllCreditsCount(int movieId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertCredit(Credits credit);
 }

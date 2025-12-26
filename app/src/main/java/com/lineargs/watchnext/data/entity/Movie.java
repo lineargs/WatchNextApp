@@ -13,4 +13,8 @@ public interface Movie {
     String getProductionCompanies();
     String getProductionCountries();
     String getGenres();
+    String getOriginalTitle();
+    String getOriginalLanguage();
+    String getHomepage();
+    String getStatus();
 }

@@ -38,4 +38,12 @@ public class SeriesViewModel extends AndroidViewModel {
     public LiveData<List<Integer>> getFavoriteSeriesIds() {
         return favoritesRepository.getFavoriteSeriesIds();
     }
+
+    public void toggleFavorite(android.net.Uri uri, boolean remove) {
+        if (remove) {
+            favoritesRepository.removeFromFavorites(uri);
+        } else {
+            favoritesRepository.addSeriesToFavorites(uri);
+        }
+    }
 }

@@ -381,10 +381,18 @@ public class EpisodesActivity extends BaseTopActivity {
             int id = Integer.parseInt(details[5]);
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
             boolean isScheduled = sp.getBoolean("reminder_" + id, false);
+            boolean isSeriesSubscribed = ((EpisodesActivity) getActivity()).isSeriesSubscribed;
 
-            if (isScheduled || (((EpisodesActivity) getActivity()).isSeriesSubscribed)) {
+            if (isSeriesSubscribed) {
+                // If subscribed to the whole series, just inform the user.
                 Toast.makeText(getContext(), R.string.toast_subscription_handled, Toast.LENGTH_SHORT).show();
+            } else if (isScheduled) {
+                // If manual reminder is set, allow cancelling it.
+                WorkManagerUtils.cancelReminder(getContext(), id);
+                sp.edit().putBoolean("reminder_" + id, false).apply();
+                Toast.makeText(getContext(), getString(R.string.toast_notification_canceled), Toast.LENGTH_SHORT).show();
             } else {
+                // If nothing set, schedule a new manual reminder.
                 int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
                 if (intervalSeconds != 0 && details != null) {
                     if (getArguments() != null) {
@@ -408,7 +416,10 @@ public class EpisodesActivity extends BaseTopActivity {
                 boolean isScheduled = sp.getBoolean("reminder_" + id, false);
                 boolean isSeriesSubscribed = ((EpisodesActivity) getActivity()).isSeriesSubscribed;
                 
-                if (isScheduled || isSeriesSubscribed) {
+                if (isSeriesSubscribed) {
+                    binding.notificationFab.setImageResource(R.drawable.icon_notifications_black);
+                    binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorGrey)));
+                } else if (isScheduled) {
                     binding.notificationFab.setImageResource(R.drawable.icon_cancel_black);
                     binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorGrey)));
                 } else {

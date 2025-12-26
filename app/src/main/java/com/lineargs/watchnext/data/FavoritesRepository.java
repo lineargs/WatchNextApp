@@ -12,7 +12,10 @@ public class FavoritesRepository {
 
     private final FavoritesDao favoritesDao;
 
+    private final Application application;
+
     public FavoritesRepository(Application application) {
+        this.application = application;
         WatchNextDatabase database = WatchNextDatabase.getDatabase(application);
         favoritesDao = database.favoritesDao();
     }
@@ -43,5 +46,21 @@ public class FavoritesRepository {
 
     public void deleteFavorite(int id) {
         WatchNextDatabase.databaseWriteExecutor.execute(() -> favoritesDao.deleteFavorite(id));
+    }
+
+    public void addMovieToFavorites(android.net.Uri uri) {
+        com.lineargs.watchnext.utils.dbutils.DbUtils.addMovieToFavorites(application, uri);
+    }
+
+    public void addSeriesToFavorites(android.net.Uri uri) {
+        com.lineargs.watchnext.utils.dbutils.DbUtils.addTVToFavorites(application, uri);
+    }
+
+    public void removeFromFavorites(android.net.Uri uri) {
+        com.lineargs.watchnext.utils.dbutils.DbUtils.removeFromFavorites(application, uri);
+    }
+
+    public void updateSubscription(long id, int notify) {
+        com.lineargs.watchnext.utils.dbutils.DbUtils.updateSubscription(application, id, notify);
     }
 }

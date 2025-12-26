@@ -29,6 +29,17 @@ public class SeriesOnTheAirFragment extends SeriesListFragment implements Series
     }
 
     @Override
+    public void onToggleFavorite(Uri uri, boolean isFavorite) {
+        com.lineargs.watchnext.ui.SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.SeriesViewModel.class);
+        viewModel.toggleFavorite(uri, isFavorite);
+        if (isFavorite) {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        } else {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public RecyclerView.Adapter getAdapter() {
         adapter = new SeriesOnTheAirAdapter(getActivity(), this);
         return adapter;

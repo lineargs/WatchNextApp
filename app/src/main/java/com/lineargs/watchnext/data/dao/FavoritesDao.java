@@ -43,6 +43,9 @@ public interface FavoritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertFavorite(Favorites favorite);
 
+    @Query("SELECT COUNT(*) FROM favorites WHERE movie_id = :id")
+    int checkFavorite(int id);
+
     @Query("DELETE FROM favorites WHERE movie_id = :id")
     int deleteFavorite(int id);
 }

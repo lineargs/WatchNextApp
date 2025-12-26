@@ -23,6 +23,9 @@ public interface SeriesDao {
     Cursor getPopularSerie(int id);
 
     @Query("SELECT * FROM popularseries WHERE movie_id = :id")
+    PopularSerie getPopularSerieSync(int id);
+
+    @Query("SELECT * FROM popularseries WHERE movie_id = :id")
     androidx.lifecycle.LiveData<PopularSerie> getPopularSerieLiveData(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -42,6 +45,9 @@ public interface SeriesDao {
     Cursor getTopRatedSerie(int id);
 
     @Query("SELECT * FROM topseries WHERE movie_id = :id")
+    TopRatedSerie getTopRatedSerieSync(int id);
+
+    @Query("SELECT * FROM topseries WHERE movie_id = :id")
     androidx.lifecycle.LiveData<TopRatedSerie> getTopRatedSerieLiveData(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -59,6 +65,9 @@ public interface SeriesDao {
 
     @Query("SELECT * FROM ontheairseries WHERE movie_id = :id")
     Cursor getOnTheAirSerie(int id);
+
+    @Query("SELECT * FROM ontheairseries WHERE movie_id = :id")
+    OnTheAirSerie getOnTheAirSerieSync(int id);
 
     @Query("SELECT * FROM ontheairseries WHERE movie_id = :id")
     androidx.lifecycle.LiveData<OnTheAirSerie> getOnTheAirSerieLiveData(int id);

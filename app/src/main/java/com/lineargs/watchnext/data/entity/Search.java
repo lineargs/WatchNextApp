@@ -99,4 +99,8 @@ public class Search implements Movie {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    @Override public String getOriginalTitle() { return null; }
+    @Override public String getOriginalLanguage() { return null; }
+    @Override public String getHomepage() { return null; }
 }

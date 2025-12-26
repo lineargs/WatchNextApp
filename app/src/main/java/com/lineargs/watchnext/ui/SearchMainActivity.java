@@ -12,11 +12,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.SearchAdapter;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
+import com.lineargs.watchnext.data.DataContract;
 
 import com.lineargs.watchnext.databinding.ActivitySearchMainBinding;
 
@@ -25,7 +27,7 @@ import com.lineargs.watchnext.databinding.ActivitySearchMainBinding;
  * <p>
  * Search Activity used to search for movies on the Db website
  */
-public class SearchMainActivity extends BaseTopActivity {
+public class SearchMainActivity extends BaseTopActivity implements SearchAdapter.OnSearchItemClickListener {
 
     private ActivitySearchMainBinding binding;
     boolean adult;
@@ -46,7 +48,7 @@ public class SearchMainActivity extends BaseTopActivity {
         setupSearchView();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         binding.searchResults.setLayoutManager(layoutManager);
-        mResultsAdapter = new SearchAdapter(this);
+        mResultsAdapter = new SearchAdapter(this, this);
         binding.searchResults.setAdapter(mResultsAdapter);
         String query = getIntent().getStringExtra(SearchManager.QUERY);
         query = query == null ? "" : query;
@@ -65,6 +67,20 @@ public class SearchMainActivity extends BaseTopActivity {
                      showEmpty();
                  }
              }
+        });
+        
+        viewModel.getFavoriteMovieIds().observe(this, new androidx.lifecycle.Observer<java.util.List<Integer>>() {
+            @Override
+            public void onChanged(java.util.List<Integer> ids) {
+                mResultsAdapter.setFavoriteMovieIds(ids);
+            }
+        });
+        
+        viewModel.getFavoriteSeriesIds().observe(this, new androidx.lifecycle.Observer<java.util.List<Integer>>() {
+            @Override
+            public void onChanged(java.util.List<Integer> ids) {
+                mResultsAdapter.setFavoriteSeriesIds(ids);
+            }
         });
 
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -219,6 +235,34 @@ public class SearchMainActivity extends BaseTopActivity {
         binding.searchResults.setVisibility(View.GONE);
         if (binding.emptyView != null) {
             binding.emptyView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onSearchItemSelected(int tmdbId, int mediaType) {
+        if (mediaType == 0) {
+            Intent intent = new Intent(this, com.lineargs.watchnext.ui.MovieDetailsActivity.class);
+            intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId));
+            startActivity(intent);
+        } else if (mediaType == 1) {
+            Intent intent = new Intent(this, com.lineargs.watchnext.ui.SeriesDetailsActivity.class);
+            intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId));
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onToggleFavorite(int tmdbId, int mediaType, boolean isFavorite) {
+        if (isFavorite) {
+            viewModel.removeFavorite(DataContract.Search.buildSearchUriWithId(tmdbId));
+            Toast.makeText(this, getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
+        } else {
+            if (mediaType == 0) {
+                SearchSyncUtils.syncSearchMovie(this, String.valueOf(tmdbId));
+            } else {
+                SearchSyncUtils.syncTV(this, String.valueOf(tmdbId));
+            }
+            Toast.makeText(this, getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
         }
     }
 }
