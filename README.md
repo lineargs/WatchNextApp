@@ -57,7 +57,7 @@ License
 
 ```MIT License
 
-Copyright (c) 2017 Goran Minov
+Copyright (c) 2025 Goran Minov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
