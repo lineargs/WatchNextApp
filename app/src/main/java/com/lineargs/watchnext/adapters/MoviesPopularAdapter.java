@@ -62,7 +62,7 @@ public class MoviesPopularAdapter extends BaseTabbedAdapter {
             public void onClick(View view) {
                 Uri uri = DataContract.PopularMovieEntry.buildMovieUriWithId(id);
                 boolean isFavorite = isFavorite(context, id);
-                callback.onToggleFavorite(uri, isFavorite);
+                callback.onToggleFavorite(uri, isFavorite, movie);
             }
         });
     }

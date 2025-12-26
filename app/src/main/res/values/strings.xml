@@ -55,6 +55,13 @@
     <string name="tab_on_the_air">On The Air</string>
     <string name="tab_upcoming">Upcoming</string>
     <string name="title_activity_about">About</string>
+    <string name="title_activity_trending">Trending</string>
+    <string name="tab_trending_movies">Movies</string>
+    <string name="tab_trending_series">Series</string>
+    <string name="tab_trending_people">People</string>
+    <string name="title_trending_movies">Trending Movies</string>
+    <string name="title_trending_series">Trending Series</string>
+    <string name="title_trending_people">Trending People</string>
 
     <!-- Toasts and Snackbars -->
     <string name="toast_add_to_favorites">Added to favorites</string>

@@ -176,7 +176,6 @@ public class SerieDbUtils {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, result.getId());
-        contentValues.put(DataContract.Favorites.COLUMN_TYPE, 1);
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, result.getName());
         contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, result.getOverview());
         try {
@@ -284,5 +283,39 @@ public class SerieDbUtils {
                 buildGenresString(result.getGenres()));
 
         return contentValues;
+    }
+    /**
+     * Builds ContentValues[] used for our ContentResolver
+     *
+     * @param result Object used to get the values from our API response
+     * @return The {@link ContentValues}
+     */
+    public static ContentValues[] getSyncSeries(SeriesDetails result) {
+
+        ContentValues[] values = new ContentValues[1];
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, result.getId());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, result.getName());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, result.getOverview());
+        try {
+            contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(result.getFirstAirDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_MEDIUM_BASE + result.getPosterPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_MEDIUM_BASE + result.getBackdropPath());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, result.getOriginalLanguage());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, result.getOriginalName());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_STATUS, result.getStatus());
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_PRODUCTION_COMPANIES,
+                buildCompaniesString(result.getProductionCompanies()));
+        contentValues.put(DataContract.PopularMovieEntry.COLUMN_GENRES,
+                buildGenresString(result.getGenres()));
+
+        values[0] = contentValues;
+
+        return values;
     }
 }

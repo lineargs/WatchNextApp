@@ -78,7 +78,13 @@ public class MovieDetailWorker extends Worker {
             
             // Update Movie
             ContentValues updateValues = MovieDbUtils.updateMovie(movie);
-            context.getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            int rows = context.getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            if (rows == 0) {
+                ContentValues[] insertValues = MovieDbUtils.getSyncMovie(movie);
+                if (insertValues != null && insertValues.length > 0) {
+                    context.getContentResolver().insert(Utils.getBaseUri(uri), insertValues[0]);
+                }
+            }
 
             // Insert Cast
             ContentValues[] castValues = CreditDbUtils.getCastContentValues(movie.getCredits(), id);
@@ -104,7 +110,13 @@ public class MovieDetailWorker extends Worker {
 
         if (response.isSuccessful() && response.body() != null) {
             ContentValues updateValues = MovieDbUtils.updateMovie(response.body());
-            getApplicationContext().getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            int rows = getApplicationContext().getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            if (rows == 0) {
+                ContentValues[] insertValues = MovieDbUtils.getSyncMovie(response.body());
+                if (insertValues != null && insertValues.length > 0) {
+                    getApplicationContext().getContentResolver().insert(Utils.getBaseUri(uri), insertValues[0]);
+                }
+            }
         }
     }
 

@@ -52,8 +52,16 @@ public class FavoritesRepository {
         com.lineargs.watchnext.utils.dbutils.DbUtils.addMovieToFavorites(application, uri);
     }
 
+    public void addMovieToFavorites(com.lineargs.watchnext.data.entity.Movie movie) {
+        com.lineargs.watchnext.utils.dbutils.DbUtils.addMovieToFavorites(application, movie);
+    }
+
     public void addSeriesToFavorites(android.net.Uri uri) {
         com.lineargs.watchnext.utils.dbutils.DbUtils.addTVToFavorites(application, uri);
+    }
+
+    public void addSeriesToFavorites(com.lineargs.watchnext.data.entity.PopularSerie serie) {
+        com.lineargs.watchnext.utils.dbutils.DbUtils.addSerieToFavorites(application, serie);
     }
 
     public void removeFromFavorites(android.net.Uri uri) {

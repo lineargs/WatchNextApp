@@ -53,6 +53,17 @@ public class DbUtils {
         });
     }
 
+    public static void addMovieToFavorites(Context context, Movie movie) {
+        WatchNextDatabase.databaseWriteExecutor.execute(() -> {
+            WatchNextDatabase db = WatchNextDatabase.getDatabase(context);
+            Favorites favorite = mapMovieToFavorite(movie);
+            if (favorite != null) {
+                db.favoritesDao().insertFavorite(favorite);
+                updateWidget(context);
+            }
+        });
+    }
+
     public static void addTVToFavorites(Context context, Uri uri) {
         WatchNextDatabase.databaseWriteExecutor.execute(() -> {
             String path = uri.getPath();
@@ -75,6 +86,17 @@ public class DbUtils {
                 favorite = mapSerieToFavorite(serie);
             }
 
+            if (favorite != null) {
+                db.favoritesDao().insertFavorite(favorite);
+                updateWidget(context);
+            }
+        });
+    }
+
+    public static void addSerieToFavorites(Context context, PopularSerie serie) {
+        WatchNextDatabase.databaseWriteExecutor.execute(() -> {
+            WatchNextDatabase db = WatchNextDatabase.getDatabase(context);
+            Favorites favorite = mapSerieToFavorite(serie);
             if (favorite != null) {
                 db.favoritesDao().insertFavorite(favorite);
                 updateWidget(context);

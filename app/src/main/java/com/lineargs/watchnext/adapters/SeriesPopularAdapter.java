@@ -47,7 +47,7 @@ public class SeriesPopularAdapter extends BaseTabbedAdapter {
             public void onClick(View view) {
                 Uri uri = DataContract.PopularSerieEntry.buildSerieUriWithId(id);
                 boolean isFavorite = isFavorite(context, id);
-                callback.onToggleFavorite(uri, isFavorite);
+                callback.onToggleFavorite(uri, isFavorite, serie);
             }
         });
     }

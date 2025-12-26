@@ -77,7 +77,13 @@ public class SerieDetailWorker extends Worker {
 
             // Update Series
             ContentValues updateValues = SerieDbUtils.updateSeries(series);
-            context.getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            int rows = context.getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            if (rows == 0) {
+                ContentValues[] insertValues = SerieDbUtils.getSyncSeries(series);
+                if (insertValues != null && insertValues.length > 0) {
+                    context.getContentResolver().insert(Utils.getBaseUri(uri), insertValues[0]);
+                }
+            }
 
             // Insert Seasons
             ContentValues[] seasonValues = SerieDbUtils.getSeasons(context, series, id);
@@ -99,7 +105,13 @@ public class SerieDetailWorker extends Worker {
 
         if (response.isSuccessful() && response.body() != null) {
             ContentValues updateValues = SerieDbUtils.updateSeries(response.body());
-            getApplicationContext().getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            int rows = getApplicationContext().getContentResolver().update(Utils.getBaseUri(uri), updateValues, DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{id});
+            if (rows == 0) {
+                ContentValues[] insertValues = SerieDbUtils.getSyncSeries(response.body());
+                if (insertValues != null && insertValues.length > 0) {
+                    getApplicationContext().getContentResolver().insert(Utils.getBaseUri(uri), insertValues[0]);
+                }
+            }
         }
     }
 

@@ -63,6 +63,18 @@ public class SeriesViewModel extends AndroidViewModel {
         }
     }
 
+    public void toggleFavorite(android.net.Uri uri, com.lineargs.watchnext.data.entity.PopularSerie serie, boolean remove) {
+        if (remove) {
+            favoritesRepository.removeFromFavorites(uri);
+        } else {
+            if (serie != null) {
+                favoritesRepository.addSeriesToFavorites(serie);
+            } else {
+                favoritesRepository.addSeriesToFavorites(uri);
+            }
+        }
+    }
+
     public void loadNextPopularPage() {
         if (Boolean.TRUE.equals(isLoading.getValue())) return;
 

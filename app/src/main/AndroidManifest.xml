@@ -42,6 +42,9 @@
         <activity android:name=".ui.SeriesDetailsActivity" />
         <activity android:name=".ui.TabbedSeriesActivity" />
         <activity android:name=".ui.TabbedMoviesActivity" />
+        <activity android:name=".ui.TrendingMoviesActivity" />
+        <activity android:name=".ui.TrendingSeriesActivity" />
+        <activity android:name=".ui.TrendingPeopleActivity" />
         <activity
             android:name=".ui.SearchMainActivity"
             android:exported="true"

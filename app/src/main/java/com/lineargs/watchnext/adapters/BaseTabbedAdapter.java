@@ -119,6 +119,9 @@ public abstract class BaseTabbedAdapter extends RecyclerView.Adapter<RecyclerVie
     public interface OnItemClickListener {
         void onItemSelected(Uri uri);
         void onToggleFavorite(Uri uri, boolean isFavorite);
+        default void onToggleFavorite(Uri uri, boolean isFavorite, Object item) {
+             onToggleFavorite(uri, isFavorite);
+        }
     }
 
     /**

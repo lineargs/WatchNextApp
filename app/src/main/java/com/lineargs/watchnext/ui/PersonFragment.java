@@ -114,6 +114,15 @@ public class PersonFragment extends Fragment {
 
     private void loadViews(com.lineargs.watchnext.data.entity.Person person) {
         profilePath = person.getProfilePath();
+        if (getActivity() != null) {
+            getActivity().setTitle(person.getName());
+            if (getActivity() instanceof androidx.appcompat.app.AppCompatActivity) {
+                androidx.appcompat.app.ActionBar actionBar = ((androidx.appcompat.app.AppCompatActivity) getActivity()).getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(person.getName());
+                }
+            }
+        }
         ServiceUtils.loadPicasso(binding.stillPath.getContext(), person.getProfilePath())
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()

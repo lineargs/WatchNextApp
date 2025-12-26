@@ -41,6 +41,26 @@
             </group>
         </menu>
     </item>
+
+    <item android:title="@string/title_activity_trending">
+        <menu>
+            <group android:id="@+id/navigation_trending"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_trending_movies"
+                    android:icon="@drawable/icon_movie_black"
+                    android:title="@string/tab_trending_movies" />
+                <item
+                    android:id="@+id/nav_trending_series"
+                    android:icon="@drawable/icon_tv_black"
+                    android:title="@string/tab_trending_series" />
+                <item
+                    android:id="@+id/nav_trending_people"
+                    android:icon="@drawable/icon_person_black"
+                    android:title="@string/tab_trending_people" />
+            </group>
+        </menu>
+    </item>
     <!--<item-->
     <!--android:id="@+id/nav_statistics"-->
     <!--android:icon="@drawable/icon_statistics_black"-->

@@ -55,6 +55,18 @@ public class MoviesViewModel extends AndroidViewModel {
         }
     }
 
+    public void toggleFavorite(android.net.Uri uri, com.lineargs.watchnext.data.entity.Movie movie, boolean remove) {
+        if (remove) {
+            favoritesRepository.removeFromFavorites(uri);
+        } else {
+            if (movie != null) {
+                favoritesRepository.addMovieToFavorites(movie);
+            } else {
+                favoritesRepository.addMovieToFavorites(uri);
+            }
+        }
+    }
+
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }

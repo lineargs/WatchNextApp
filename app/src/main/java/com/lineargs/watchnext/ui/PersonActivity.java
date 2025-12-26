@@ -27,6 +27,8 @@ public class PersonActivity extends BaseActivity {
             fragment.setmUri(getIntent().getData());
             if (getIntent().hasExtra(Constants.ID)) {
                 fragment.setId(getIntent().getStringExtra(Constants.ID));
+            } else {
+                fragment.setId(getIntent().getData().getLastPathSegment());
             }
             if (getIntent().hasExtra(Constants.NAME)) {
                 name = getIntent().getStringExtra(Constants.NAME);

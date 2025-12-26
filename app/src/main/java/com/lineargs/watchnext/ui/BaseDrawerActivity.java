@@ -152,6 +152,24 @@ public abstract class BaseDrawerActivity extends BaseActivity {
                 }
                 intent = new Intent(this, AiringTodayActivity.class);
                 break;
+            case R.id.nav_trending_movies:
+                if (this instanceof TrendingMoviesActivity) {
+                    break;
+                }
+                intent = new Intent(this, TrendingMoviesActivity.class);
+                break;
+            case R.id.nav_trending_series:
+                if (this instanceof TrendingSeriesActivity) {
+                    break;
+                }
+                intent = new Intent(this, TrendingSeriesActivity.class);
+                break;
+            case R.id.nav_trending_people:
+                if (this instanceof TrendingPeopleActivity) {
+                    break;
+                }
+                intent = new Intent(this, TrendingPeopleActivity.class);
+                break;
 //            case R.id.nav_statistics:
 //                if (this instanceof StatisticsActivity) {
 //                    break;
