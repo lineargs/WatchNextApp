@@ -121,6 +121,10 @@ public class WatchNextWorker extends Worker {
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getTheaterContentValues(response.body().getResults());
             insertData(DataContract.TheaterMovieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_theater_next_page", 2)
+                    .apply();
         }
     }
 
