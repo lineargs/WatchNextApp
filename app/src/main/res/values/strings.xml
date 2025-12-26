@@ -60,7 +60,7 @@
     <string name="toast_remove_from_favorites">Removed from favorites</string>
     <string name="toast_notification_reminder">Notification reminder scheduled</string>
     <string name="toast_notification_cancelled">Notification reminder cancelled</string>
-    <string name="remind_all_episodes">Remind all episodes</string>
+    <string name="remind_all_episodes">All episodes reminder</string>
     <string name="stop_reminding_all">Stop reminding episodes</string>
     <string name="toast_subscribed">Subscribed to all episodes. Added to Favorites.</string>
     <string name="toast_unsubscribed">Unsubscribed from episode reminders.</string>
@@ -74,6 +74,7 @@
     <string name="snackbar_notifications_disabled">Notifications are disabled</string>
     <string name="snackbar_grant">Grant</string>
     <string name="snackbar_settings">Settings</string>
+    <string name="toast_subscription_handled">Reminders already handled by series subscription</string>
 
     <!-- Season and Episode -->
     <string name="season">Season %d</string>
