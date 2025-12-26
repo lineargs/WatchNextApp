@@ -63,6 +63,7 @@
     <string name="remind_all_episodes">All episodes reminder</string>
     <string name="stop_reminding_all">Stop reminding episodes</string>
     <string name="toast_subscribed">Subscribed to all episodes. Added to Favorites.</string>
+    <string name="toast_subscribed_only">Subscribed to all episodes.</string>
     <string name="toast_unsubscribed">Unsubscribed from episode reminders.</string>
     <string name="tab_favorites">Favorites</string>
     <string name="tab_schedule">Upcoming Episodes</string>

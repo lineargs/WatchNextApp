@@ -263,13 +263,18 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
             DbUtils.updateSubscription(getContext(), seriesId, 0);
             Toast.makeText(getContext(), R.string.toast_unsubscribed, Toast.LENGTH_SHORT).show();
         } else {
-            if (!DbUtils.isFavorite(getContext(), seriesId)) {
+            boolean isFavorite = DbUtils.isFavorite(getContext(), seriesId);
+            if (!isFavorite) {
                 DbUtils.addTVToFavorites(getContext(), mUri);
                 binding.starFab.setImageDrawable(Utils.starImage(getContext()));
             }
             DbUtils.updateSubscription(getContext(), seriesId, 1);
             WorkManagerUtils.syncSubscriptionsImmediately(getContext());
-            Toast.makeText(getContext(), R.string.toast_subscribed, Toast.LENGTH_SHORT).show();
+            if (isFavorite) {
+                Toast.makeText(getContext(), R.string.toast_subscribed_only, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), R.string.toast_subscribed, Toast.LENGTH_SHORT).show();
+            }
         }
         updateSubscriptionButton();
     }
