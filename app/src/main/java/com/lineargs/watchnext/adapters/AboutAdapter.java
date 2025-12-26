@@ -21,27 +21,26 @@ import com.lineargs.watchnext.databinding.ItemLibraryBinding;
 public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final Library[] library = {
-            //TODO Move them to strings resources for translating
-            new Library("Android Jetpack (AndroidX)",
-                    "Android Jetpack is a suite of libraries to help developers follow best practices, reduce boilerplate code, and write code that works consistently across Android versions and devices.",
+            new Library(R.string.lib_android_jetpack_name,
+                    R.string.lib_android_jetpack_desc,
                     "https://developer.android.com/jetpack/"),
-            new Library("Retrofit",
-                    "A type-safe HTTP client for Android and Java",
+            new Library(R.string.lib_retrofit_name,
+                    R.string.lib_retrofit_desc,
                     "http://square.github.io/retrofit/"),
-            new Library("Picasso",
-                    "A powerful image downloading and caching library for Android",
+            new Library(R.string.lib_picasso_name,
+                    R.string.lib_picasso_desc,
                     "http://square.github.io/picasso/"),
-            new Library("Firebase Crashlytics",
-                    "Lightweight, realtime crash reporter that helps you track, prioritize, and fix stability issues that erode your app quality",
+            new Library(R.string.lib_crashlytics_name,
+                    R.string.lib_crashlytics_desc,
                     "https://firebase.google.com/docs/crashlytics/"),
-            new Library("Firebase Cloud Messaging",
-                    "Firebase Cloud Messaging (FCM) is a cross-platform messaging solution that lets you reliably deliver messages at no cost.",
+            new Library(R.string.lib_fcm_name,
+                    R.string.lib_fcm_desc,
                     "https://firebase.google.com/docs/cloud-messaging/"),
-            new Library("WorkManager",
-                    "The recommended solution for persistent work.",
+            new Library(R.string.lib_workmanager_name,
+                    R.string.lib_workmanager_desc,
                     "https://developer.android.com/topic/libraries/architecture/workmanager"),
-            new Library("Room Persistence Library",
-                    "The Room persistence library provides an abstraction layer over SQLite to allow for more robust database access while harnessing the full power of SQLite.",
+            new Library(R.string.lib_room_name,
+                    R.string.lib_room_desc,
                     "https://developer.android.com/topic/libraries/architecture/room")
     };
     private final int VIEW_TYPE_ABOUT = 0;
@@ -106,8 +105,8 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void bindLibrary(final LibraryHolder holder, final Library library) {
-        holder.name.setText(library.name);
-        holder.description.setText(library.description);
+        holder.name.setText(library.nameRes);
+        holder.description.setText(library.descriptionRes);
     }
 
     public interface OnWebsiteClick {
@@ -115,13 +114,13 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private static class Library {
-        final String name;
-        final String description;
+        final int nameRes;
+        final int descriptionRes;
         final String link;
 
-        Library(String name, String description, String link) {
-            this.name = name;
-            this.description = description;
+        Library(int nameRes, int descriptionRes, String link) {
+            this.nameRes = nameRes;
+            this.descriptionRes = descriptionRes;
             this.link = link;
         }
     }
