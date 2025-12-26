@@ -22,7 +22,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.utils.WorkManagerUtils;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.tools.Tools;
 
 import java.util.Locale;

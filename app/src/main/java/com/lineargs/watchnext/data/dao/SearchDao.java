@@ -35,7 +35,7 @@ public interface SearchDao {
     androidx.lifecycle.LiveData<java.util.List<SearchTv>> getSearchTvSeriesLiveData();
 
     @Query("SELECT * FROM searchtv WHERE movie_id = :id")
-    Cursor getSearchTvSerie(int id);
+    androidx.lifecycle.LiveData<SearchTv> getSearchTvLiveData(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertSearchTvSerie(SearchTv serie);

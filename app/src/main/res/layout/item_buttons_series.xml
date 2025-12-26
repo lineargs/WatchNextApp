@@ -13,6 +13,16 @@
         android:background="@android:color/darker_gray" />
 
     <Button
+        android:id="@+id/reminders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/button_min_height"
+        style="?android:attr/buttonBarButtonStyle"
+        android:drawableLeft="@drawable/icon_notifications_black"
+        android:drawableStart="@drawable/icon_notifications_black"
+        android:text="@string/remind_all_episodes"/>
+
+    <Button
         android:id="@+id/google"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

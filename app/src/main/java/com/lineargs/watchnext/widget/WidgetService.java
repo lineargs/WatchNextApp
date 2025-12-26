@@ -9,7 +9,6 @@ import android.widget.RemoteViewsService;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.io.IOException;
@@ -21,6 +20,15 @@ import java.io.IOException;
  */
 
 public class WidgetService extends RemoteViewsService {
+
+    private static final String[] PROJECTION = {
+            DataContract.PopularMovieEntry._ID,
+            DataContract.PopularMovieEntry.COLUMN_TITLE,
+            DataContract.PopularMovieEntry.COLUMN_POSTER_PATH
+    };
+
+    private static final int INDEX_TITLE = 1;
+    private static final int INDEX_POSTER_PATH = 2;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -47,7 +55,7 @@ public class WidgetService extends RemoteViewsService {
             if (mCursor != null) mCursor.close();
             mCursor = mContext.getContentResolver().query(
                     DataContract.Favorites.CONTENT_URI,
-                    Query.PROJECTION,
+                    PROJECTION,
                     null,
                     null,
                     null);
@@ -83,9 +91,9 @@ public class WidgetService extends RemoteViewsService {
 
             views.setOnClickFillInIntent(R.id.widget_row, fillIntent);
 
-            views.setTextViewText(R.id.widget_title, mCursor.getString(Query.TITLE));
+            views.setTextViewText(R.id.widget_title, mCursor.getString(INDEX_TITLE));
 
-            String posterPath = mCursor.getString(Query.POSTER_PATH);
+            String posterPath = mCursor.getString(INDEX_POSTER_PATH);
 
             setWidgetPoster(views, posterPath);
 

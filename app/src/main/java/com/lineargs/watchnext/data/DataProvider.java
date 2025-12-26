@@ -676,6 +676,7 @@ public class DataProvider extends ContentProvider {
                 long _id = db.insert(DataContract.Person.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.Person.buildPersonUriWithId(_id);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Person.TABLE_NAME);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -1004,6 +1005,7 @@ public class DataProvider extends ContentProvider {
                 }
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Person.TABLE_NAME);
                 }
                 return rowsInserted;
             default:
@@ -1232,12 +1234,14 @@ public class DataProvider extends ContentProvider {
                         DataContract.Person.TABLE_NAME,
                         selection,
                         selectionArgs);
+                if (rowsDeleted > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Person.TABLE_NAME);
                 break;
             case CODE_PERSON_WITH_ID:
                 rowsDeleted = db.delete(
                         DataContract.Person.TABLE_NAME,
                         DataContract.Person._ID + " = ? ",
                         selectionArgs);
+                if (rowsDeleted > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Person.TABLE_NAME);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -1294,6 +1298,12 @@ public class DataProvider extends ContentProvider {
                 rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
                 break;
+            case CODE_FAVORITES_WITH_ID:
+                rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values,
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                        new String[]{uri.getLastPathSegment()});
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
+                break;
             case CODE_SEARCH:
                 rowsUpdated = db.update(DataContract.Search.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Search.TABLE_NAME);
@@ -1319,6 +1329,7 @@ public class DataProvider extends ContentProvider {
                 break;
             case CODE_PERSON:
                 rowsUpdated = db.update(DataContract.Person.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Person.TABLE_NAME);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

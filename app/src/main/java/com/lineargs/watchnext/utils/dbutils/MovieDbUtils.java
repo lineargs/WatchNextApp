@@ -159,36 +159,6 @@ public class MovieDbUtils {
     /**
      * Builds ContentValues[] used for our ContentResolver
      *
-     * @param result Object used to get the values from our API response
-     * @return The {@link ContentValues}
-     */
-    public static ContentValues[] getSyncMovie(Result result) {
-
-        ContentValues[] values = new ContentValues[1];
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID, result.getId());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_TITLE, result.getTitle());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_OVERVIEW, result.getOverview());
-        try {
-            contentValues.put(DataContract.PopularMovieEntry.COLUMN_RELEASE_DATE, MovieUtils.getNormalizedReleaseDate(result.getReleaseDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE, MovieUtils.getNormalizedVoteAverage(String.valueOf(result.getVoteAverage())));
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_POSTER_PATH, IMAGE_SMALL_BASE + result.getPosterPath());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_BACKDROP_PATH, IMAGE_SMALL_BASE + result.getBackdropPath());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_LANGUAGE, result.getOriginalLanguage());
-        contentValues.put(DataContract.PopularMovieEntry.COLUMN_ORIGINAL_TITLE, result.getOriginalTitle());
-
-        values[0] = contentValues;
-
-        return values;
-    }
-
-    /**
-     * Builds ContentValues[] used for our ContentResolver
-     *
      * @param movie Object used to get the values from our API response
      * @return The {@link ContentValues}
      */

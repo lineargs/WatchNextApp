@@ -2,7 +2,6 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
@@ -16,26 +15,29 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.SearchQuery;
 import com.lineargs.watchnext.sync.syncsearch.SearchSyncUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
-import com.lineargs.watchnext.utils.dbutils.DbUtils;
 
 import com.lineargs.watchnext.databinding.ItemSearchBinding;
 
 /**
  * Created by goranminov on 06/11/2017.
- * <p>
- * See {@link MainAdapter}
  */
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    public interface OnSearchItemClickListener {
+        void onSearchItemSelected(int tmdbId, int mediaType);
+        void onToggleFavorite(int tmdbId, int mediaType, boolean isFavorite);
+    }
+    
+    private OnSearchItemClickListener callback;
     private java.util.List<com.lineargs.watchnext.data.entity.Search> searchResults;
     private Context context;
 
-    public SearchAdapter(@NonNull Context context) {
+    public SearchAdapter(@NonNull Context context, OnSearchItemClickListener listener) {
         this.context = context;
+        this.callback = listener;
     }
 
     @NonNull
@@ -64,18 +66,24 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    public boolean isFavorite(Context context, long id) {
-        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
-        Cursor cursor = context.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-        if (cursor != null && cursor.getCount() != 0) {
-            cursor.close();
-            return true;
+    private java.util.Set<Integer> favoriteMovieIds = new java.util.HashSet<>();
+    private java.util.Set<Integer> favoriteSeriesIds = new java.util.HashSet<>();
+
+    public void setFavoriteMovieIds(java.util.List<Integer> ids) {
+        this.favoriteMovieIds = new java.util.HashSet<>(ids);
+        notifyDataSetChanged();
+    }
+
+    public void setFavoriteSeriesIds(java.util.List<Integer> ids) {
+        this.favoriteSeriesIds = new java.util.HashSet<>(ids);
+        notifyDataSetChanged();
+    }
+    
+    private boolean isFavorite(int id, int mediaType) {
+        if (mediaType == 0) {
+            return favoriteMovieIds.contains(id);
         } else {
-            return false;
+            return favoriteSeriesIds.contains(id);
         }
     }
 
@@ -108,26 +116,16 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 com.lineargs.watchnext.data.entity.Search search = searchResults.get(position);
-                int tmdbId = search.getTmdbId();
-                if (search.getMediaType() == 0) {
-                    Intent intent = new Intent(context, com.lineargs.watchnext.ui.MovieDetailsActivity.class);
-                    intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId));
-                    context.startActivity(intent);
-                } else if (search.getMediaType() == 1) {
-                    Intent intent = new Intent(context, com.lineargs.watchnext.ui.SeriesDetailsActivity.class);
-                    // We pass the Search URI for consistency with standard loaders but add ID as extra
-                    // SeriesDetailsActivity logic needs to be verified to handle this if it relies on distinct tables
-                    intent.setData(DataContract.Search.buildSearchUriWithId(tmdbId)); 
-                    context.startActivity(intent);
-                }
+                callback.onSearchItemSelected(search.getTmdbId(), search.getMediaType());
             }
         }
 
         void bindViews(final Context context, int position) {
             final com.lineargs.watchnext.data.entity.Search search = searchResults.get(position);
             final int tmdbId = search.getTmdbId(); 
+            final int mediaType = search.getMediaType();
             
-            if (isFavorite(context, tmdbId)) {
+            if (isFavorite(tmdbId, mediaType)) {
                 star.setImageDrawable(deleteFromFavorites(context));
             } else {
                 star.setImageDrawable(addToFavorites(context));
@@ -135,18 +133,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             star.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isFavorite(context, tmdbId)) {
-                        DbUtils.removeFromFavorites(context, DataContract.Search.buildSearchUriWithId(tmdbId));
-                        Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-                        star.setImageDrawable(addToFavorites(context));
-                    } else {
-                        if (search.getMediaType() == 0) {
-                            SearchSyncUtils.syncSearchMovie(context, String.valueOf(tmdbId));
-                        } else {
-                            SearchSyncUtils.syncTV(context, String.valueOf(tmdbId));
-                        }
-                        Toast.makeText(context, context.getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
+                    boolean isFavorite = isFavorite(tmdbId, mediaType);
+                    callback.onToggleFavorite(tmdbId, mediaType, isFavorite);
+                    // Optimistically update UI
+                    if (!isFavorite) {
                         star.setImageDrawable(deleteFromFavorites(context));
+                    } else {
+                        star.setImageDrawable(addToFavorites(context));
                     }
                 }
             });
@@ -167,4 +160,3 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 }
-

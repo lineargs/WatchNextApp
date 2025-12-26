@@ -11,6 +11,7 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import android.content.res.ColorStateList;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.fragment.app.Fragment;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.jobs.WorkManagerUtils;
+import com.lineargs.watchnext.utils.ReminderUtils;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 import com.lineargs.watchnext.tools.SeasonTools;
 import com.lineargs.watchnext.utils.Constants;
@@ -60,9 +62,11 @@ public class EpisodesActivity extends BaseTopActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private String title = "", subtitle = "";
-    private int number;
+    private int seasonNumber;
     private String seasonId = "";
+    private boolean isSeriesSubscribed = false;
     private String showName = "";
+    private int episodeNumber = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,52 +74,136 @@ public class EpisodesActivity extends BaseTopActivity {
         binding = ActivityEpisodesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if (getIntent().hasExtra(Constants.SEASON_NUMBER) && getIntent().hasExtra(Constants.EPISODES)) {
-            title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(Constants.SEASON_NUMBER, -1));
-            subtitle = getIntent().getStringExtra(Constants.EPISODES);
-        }
-
         setupActionBar();
         setupNavDrawer();
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Initialize ViewModel
         EpisodeViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(EpisodeViewModel.class);
 
-        if (getIntent().hasExtra(Constants.SEASON_ID) && getIntent().hasExtra(Constants.SERIE_ID) && getIntent().hasExtra(Constants.SEASON_NUMBER)) {
-            String serieId = getIntent().getStringExtra(Constants.SERIE_ID);
-            number = getIntent().getIntExtra(Constants.SEASON_NUMBER, -1);
-            seasonId = getIntent().getStringExtra(Constants.SEASON_ID);
-            SeasonUtils.syncEpisodes(this, serieId, number, seasonId);
-            startLoading();
+        // Create the adapter
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-            viewModel.setSeasonId(seasonId);
-            viewModel.getEpisodes().observe(this, new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Episodes>>() {
-                @Override
-                public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes) {
-                    if (episodes != null && !episodes.isEmpty()) {
-                        mSectionsPagerAdapter.swapEpisodes(episodes);
-                        showData();
+        // Observe episodes for UI updates and scrolling
+        viewModel.getEpisodes().observe(this, new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Episodes>>() {
+            @Override
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes) {
+                if (episodes != null && !episodes.isEmpty()) {
+                    mSectionsPagerAdapter.swapEpisodes(episodes);
+                    showData();
+                    if (binding.container.getAdapter() == null) {
                         binding.container.setAdapter(mSectionsPagerAdapter);
                         binding.tabs.setupWithViewPager(binding.container);
                     }
-                }
-            });
-
-            viewModel.getSeason().observe(this, new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.Seasons>() {
-                @Override
-                public void onChanged(com.lineargs.watchnext.data.entity.Seasons season) {
-                    if (season != null) {
-                        setPoster(season.getPosterPath());
-                        showName = season.getShowName();
-                        mSectionsPagerAdapter.setShowName(showName);
+                    
+                    if (episodeNumber != -1) {
+                        final int targetEpisode = episodeNumber;
+                        episodeNumber = -1; // Reset immediately
+                        binding.container.post(() -> {
+                            for (int i = 0; i < episodes.size(); i++) {
+                                if (episodes.get(i).getEpisodeNumber() == targetEpisode) {
+                                    binding.container.setCurrentItem(i, true);
+                                    break;
+                                }
+                            }
+                        });
                     }
                 }
-            });
+            }
+        });
+
+        // Observe season for poster and title updates
+        viewModel.getSeason().observe(this, new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.Seasons>() {
+            @Override
+            public void onChanged(com.lineargs.watchnext.data.entity.Seasons season) {
+                if (season != null) {
+                    setPoster(season.getPosterPath());
+                    showName = season.getShowName();
+                    mSectionsPagerAdapter.setShowName(showName);
+                    
+                    if (TextUtils.isEmpty(subtitle) || subtitle.contains("null")) {
+                        subtitle = getResources().getQuantityString(R.plurals.numberOfEpisodes, season.getEpisodeCount(), season.getEpisodeCount());
+                        if (getSupportActionBar() != null) {
+                            getSupportActionBar().setSubtitle(subtitle);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Handle Intent mapping
+        if (getIntent().hasExtra(Constants.SEASON_NUMBER) && getIntent().hasExtra(Constants.EPISODES)) {
+            title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(Constants.SEASON_NUMBER, -1));
+            subtitle = getIntent().getStringExtra(Constants.EPISODES);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(title);
+                getSupportActionBar().setSubtitle(subtitle);
+            }
         }
+        
+        if (getIntent().hasExtra(Constants.EPISODE_NUMBER)) {
+            episodeNumber = getIntent().getIntExtra(Constants.EPISODE_NUMBER, -1);
+        }
+
+        Uri data = getIntent().getData();
+        if (data != null) {
+            // Handle Deep Link URI: content://com.lineargs.watchnext/episodes/ID
+            try {
+                int episodeId = Integer.parseInt(data.getLastPathSegment());
+                viewModel.getEpisodeById(episodeId).observe(this, episode -> {
+                    if (episode != null) {
+                        if (episodeNumber == -1) {
+                            episodeNumber = episode.getEpisodeNumber();
+                        }
+                        if (TextUtils.isEmpty(title)) {
+                            seasonNumber = episode.getSeasonNumber();
+                            title = SeasonTools.getSeasonString(this, seasonNumber);
+                            if (getSupportActionBar() != null) {
+                                getSupportActionBar().setTitle(title);
+                            }
+                        }
+                        
+                        String sid = String.valueOf(episode.getSeasonId());
+                        if (TextUtils.isEmpty(seasonId) || !seasonId.equals(sid)) {
+                            seasonId = sid;
+                            viewModel.setSeasonId(seasonId);
+                        }
+                        
+                        // To get SerieId for subscription check, we can check season data
+                        viewModel.getSeason().observe(this, s -> {
+                            if (s != null) {
+                                viewModel.setSerieId(s.getTmdbId());
+                            }
+                        });
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (getIntent().hasExtra(Constants.SEASON_ID) && getIntent().hasExtra(Constants.SERIE_ID) && getIntent().hasExtra(Constants.SEASON_NUMBER)) {
+            String sidStr = getIntent().getStringExtra(Constants.SERIE_ID);
+            try {
+                viewModel.setSerieId(Integer.parseInt(sidStr));
+            } catch (Exception ignored) {}
+            seasonNumber = getIntent().getIntExtra(Constants.SEASON_NUMBER, -1);
+            seasonId = getIntent().getStringExtra(Constants.SEASON_ID);
+            SeasonUtils.syncEpisodes(this, sidStr, seasonNumber, seasonId);
+            startLoading();
+            viewModel.setSeasonId(seasonId);
+        }
+
+        // Observe series favorite status for unified reminders
+        viewModel.getSeriesFavorite().observe(this, favorite -> {
+            boolean wasSubscribed = isSeriesSubscribed;
+            isSeriesSubscribed = favorite != null && favorite.getNotify() == 1;
+            if (wasSubscribed != isSeriesSubscribed) {
+                // If the state changed, we might need to refresh fragments
+                // FragmentPagerAdapter doesn't easily let us call update on fragments,
+                // but PlaceholderFragment can observe this or activity can communicate.
+                // For simplicity, we'll use a static flag and tell fragments to update if they are visible.
+                // In a real app, a shared ViewModel is better.
+                mSectionsPagerAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void startLoading() {
@@ -224,6 +312,8 @@ public class EpisodesActivity extends BaseTopActivity {
                 }
                 if (TextUtils.isEmpty(details[3]) || airedAlready(details[3])) {
                     binding.notificationFab.setVisibility(GONE);
+                } else {
+                    updateFabUI();
                 }
                 ServiceUtils.loadPicasso(binding.stillPath.getContext(), details[1])
                         .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
@@ -240,16 +330,7 @@ public class EpisodesActivity extends BaseTopActivity {
         }
 
         private boolean airedAlready(String date) {
-            Date date1 = null;
-            if (date != null) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_pattern), Locale.getDefault());
-                try {
-                    date1 = simpleDateFormat.parse(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            return date1 != null && (System.currentTimeMillis() > date1.getTime());
+            return !ReminderUtils.shouldShowReminderFab(date);
         }
 
         @Override
@@ -259,22 +340,10 @@ public class EpisodesActivity extends BaseTopActivity {
         }
 
         private int getSeconds(long today, String date) {
-            if (TextUtils.isEmpty(date)) return 0;
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_pattern), Locale.getDefault());
-            Date releaseDay = null;
-            try {
-                releaseDay = simpleDateFormat.parse(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if (releaseDay != null) {
-                return (int) (TimeUnit.MILLISECONDS.toSeconds(releaseDay.getTime() - today));
-            } else {
-                return 0;
-            }
+            return ReminderUtils.getReminderDelayInSeconds(date);
         }
 
-    public void setNotification() {
+        public void setNotification() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.POST_NOTIFICATIONS)) {
@@ -287,36 +356,79 @@ public class EpisodesActivity extends BaseTopActivity {
                                 })
                                 .show();
                     } else {
-                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                         if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
-                             Snackbar.make(binding.notificationFab, getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
-                                     .setAction(getString(R.string.snackbar_settings), new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
-                                             Intent intent = new Intent();
-                                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                             Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
-                                             intent.setData(uri);
-                                             startActivity(intent);
-                                         }
-                                     })
-                                     .show();
-                         } else {
-                             sharedPreferences.edit().putBoolean("PREF_PERMISSION_REQUESTED", true).apply();
-                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-                         }
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
+                            Snackbar.make(binding.notificationFab, getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
+                                    .setAction(getString(R.string.snackbar_settings), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent();
+                                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                            Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                            intent.setData(uri);
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .show();
+                        } else {
+                            sharedPreferences.edit().putBoolean("PREF_PERMISSION_REQUESTED", true).apply();
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                        }
                     }
                     return;
                 }
             }
-            int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
-             if (intervalSeconds != 0 && details != null) {
-                 if (getArguments() != null) {
-                      WorkManagerUtils.scheduleReminder(getContext(), intervalSeconds, Integer.parseInt(details[5]),
-                              getArguments().getString(Constants.TITLE), details[0]);
-                 }
-                 Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
-             }
+            int id = Integer.parseInt(details[5]);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean isScheduled = sp.getBoolean("reminder_" + id, false);
+            boolean isSeriesSubscribed = ((EpisodesActivity) getActivity()).isSeriesSubscribed;
+
+            if (isSeriesSubscribed) {
+                // If subscribed to the whole series, just inform the user.
+                Toast.makeText(getContext(), R.string.toast_subscription_handled, Toast.LENGTH_SHORT).show();
+            } else if (isScheduled) {
+                // If manual reminder is set, allow cancelling it.
+                WorkManagerUtils.cancelReminder(getContext(), id);
+                sp.edit().putBoolean("reminder_" + id, false).apply();
+                Toast.makeText(getContext(), getString(R.string.toast_notification_canceled), Toast.LENGTH_SHORT).show();
+            } else {
+                // If nothing set, schedule a new manual reminder.
+                int intervalSeconds = getSeconds(System.currentTimeMillis(), details[3]);
+                if (intervalSeconds != 0 && details != null) {
+                    if (getArguments() != null) {
+                        WorkManagerUtils.scheduleReminder(getContext(), intervalSeconds, id,
+                                getArguments().getString(Constants.TITLE), details[0]);
+                    }
+                    sp.edit().putBoolean("reminder_" + id, true).apply();
+                    Toast.makeText(getContext(), getString(R.string.toast_notification_reminder), Toast.LENGTH_SHORT).show();
+                }
+            }
+            updateFabUI();
+        }
+
+        private void updateFabUI() {
+            if (getContext() == null || binding == null || details == null || details.length < 6) {
+                return;
+            }
+            try {
+                int id = Integer.parseInt(details[5]);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean isScheduled = sp.getBoolean("reminder_" + id, false);
+                boolean isSeriesSubscribed = ((EpisodesActivity) getActivity()).isSeriesSubscribed;
+                
+                if (isSeriesSubscribed) {
+                    binding.notificationFab.setImageResource(R.drawable.icon_notifications_black);
+                    binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorGrey)));
+                } else if (isScheduled) {
+                    binding.notificationFab.setImageResource(R.drawable.icon_cancel_black);
+                    binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorGrey)));
+                } else {
+                    binding.notificationFab.setImageResource(R.drawable.icon_tv_black);
+                    binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorYellow)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -361,7 +473,7 @@ public class EpisodesActivity extends BaseTopActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             if (episodes != null) {
-                return SeasonTools.getEpisodeFormat(EpisodesActivity.this, number, episodes.get(position).getEpisodeNumber());
+                return SeasonTools.getEpisodeFormat(EpisodesActivity.this, seasonNumber, episodes.get(position).getEpisodeNumber());
             }
             return "";
         }

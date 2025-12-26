@@ -24,6 +24,9 @@ public interface MoviesDao {
     Cursor getPopularMovie(int id);
 
     @Query("SELECT * FROM popularmovies WHERE movie_id = :id")
+    PopularMovie getPopularMovieSync(int id);
+
+    @Query("SELECT * FROM popularmovies WHERE movie_id = :id")
     androidx.lifecycle.LiveData<PopularMovie> getPopularMovieLiveData(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -43,6 +46,9 @@ public interface MoviesDao {
     Cursor getTopRatedMovie(int id);
 
     @Query("SELECT * FROM topmovies WHERE movie_id = :id")
+    TopRatedMovie getTopRatedMovieSync(int id);
+
+    @Query("SELECT * FROM topmovies WHERE movie_id = :id")
     androidx.lifecycle.LiveData<TopRatedMovie> getTopRatedMovieLiveData(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -60,6 +66,9 @@ public interface MoviesDao {
 
     @Query("SELECT * FROM upcomingmovies WHERE movie_id = :id")
     Cursor getUpcomingMovie(int id);
+
+    @Query("SELECT * FROM upcomingmovies WHERE movie_id = :id")
+    UpcomingMovie getUpcomingMovieSync(int id);
 
     @Query("SELECT * FROM upcomingmovies WHERE movie_id = :id")
     androidx.lifecycle.LiveData<UpcomingMovie> getUpcomingMovieLiveData(int id);
@@ -82,6 +91,9 @@ public interface MoviesDao {
 
     @Query("SELECT * FROM theatermovies WHERE movie_id = :id")
     androidx.lifecycle.LiveData<TheaterMovie> getTheaterMovieLiveData(int id);
+
+    @Query("SELECT * FROM theatermovies WHERE movie_id = :id")
+    TheaterMovie getTheaterMovieSync(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertTheaterMovie(TheaterMovie movie);

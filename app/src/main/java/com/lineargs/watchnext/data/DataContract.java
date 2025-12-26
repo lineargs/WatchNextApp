@@ -412,6 +412,7 @@ public class DataContract {
          * The value for movie is 0, and for series is 1
          */
         public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_NOTIFY = "notify";
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITES;
 

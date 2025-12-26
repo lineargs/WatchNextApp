@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import androidx.annotation.NonNull;
@@ -27,9 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.EpisodesQuery;
-import com.lineargs.watchnext.data.SeasonsQuery;
-// import com.lineargs.watchnext.jobs.ReminderFirebaseUtilities;
 import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
@@ -43,14 +39,13 @@ import com.lineargs.watchnext.databinding.ItemEpisodesBinding;
 
 /**
  * Created by goranminov on 09/12/2017.
- * <p>
- * Same ol' episodes adapter
  */
 
 public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private Cursor cursor, backCursor;
+    private java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes;
+    private com.lineargs.watchnext.data.entity.Seasons season;
 
     public EpisodesAdapter(@NonNull Context context) {
         this.context = context;
@@ -60,7 +55,9 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemEpisodesBinding binding = ItemEpisodesBinding.inflate(LayoutInflater.from(context), parent, false);
-        return new SeasonsViewHolder(binding);
+        // Wait, I noticed I used ItemSearchBinding by mistake in my thought but let me check the original code.
+        // Original code used: ItemEpisodesBinding binding = ItemEpisodesBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new SeasonsViewHolder(ItemEpisodesBinding.inflate(LayoutInflater.from(context), parent, false));
     }
 
     @Override
@@ -71,20 +68,20 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        if (cursor == null) {
+        if (episodes == null) {
             return 0;
         } else {
-            return cursor.getCount();
+            return episodes.size();
         }
     }
 
-    public void swapCursor(Cursor cursor) {
-        this.cursor = cursor;
+    public void swapEpisodes(java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes) {
+        this.episodes = episodes;
         notifyDataSetChanged();
     }
 
-    public void swapBackCursor(Cursor cursor) {
-        this.backCursor = cursor;
+    public void swapSeason(com.lineargs.watchnext.data.entity.Seasons season) {
+        this.season = season;
         notifyDataSetChanged();
     }
 
@@ -129,27 +126,30 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindViews(int position) {
-            cursor.moveToPosition(position);
-            name.setText(cursor.getString(EpisodesQuery.NAME));
-            voteAverage.setText(cursor.getString(EpisodesQuery.VOTE_AVERAGE));
-            releaseDate.setText(cursor.getString(EpisodesQuery.RELEASE_DATE));
-            overview.setText(cursor.getString(EpisodesQuery.OVERVIEW));
-            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.GUEST_STARS))) {
+            com.lineargs.watchnext.data.entity.Episodes episode = episodes.get(position);
+            name.setText(episode.getName());
+            voteAverage.setText(episode.getVoteAverage());
+            releaseDate.setText(episode.getReleaseDate());
+            overview.setText(episode.getOverview());
+            if (TextUtils.isEmpty(episode.getGuestStars())) {
                 guestStarsContainer.setVisibility(View.GONE);
             } else {
-                guestStars.setText(cursor.getString(EpisodesQuery.GUEST_STARS));
+                guestStarsContainer.setVisibility(View.VISIBLE);
+                guestStars.setText(episode.getGuestStars());
             }
-            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.DIRECTORS))) {
+            if (TextUtils.isEmpty(episode.getDirectors())) {
                 directorsContainer.setVisibility(View.GONE);
             } else {
-                directors.setText(cursor.getString(EpisodesQuery.DIRECTORS));
+                directorsContainer.setVisibility(View.VISIBLE);
+                directors.setText(episode.getDirectors());
             }
-            if (TextUtils.isEmpty(cursor.getString(EpisodesQuery.WRITERS))) {
+            if (TextUtils.isEmpty(episode.getWriters())) {
                 writersContainer.setVisibility(View.GONE);
             } else {
-                writers.setText(cursor.getString(EpisodesQuery.WRITERS));
+                writersContainer.setVisibility(View.VISIBLE);
+                writers.setText(episode.getWriters());
             }
-            ServiceUtils.loadPicasso(stillPath.getContext(), cursor.getString(EpisodesQuery.STILL_PATH))
+            ServiceUtils.loadPicasso(stillPath.getContext(), episode.getStillPath())
                     .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                     .centerInside()
                     .into(stillPath);
@@ -172,14 +172,14 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                          if (sharedPreferences.getBoolean("PREF_PERMISSION_REQUESTED", false)) {
                              Snackbar.make(notification, context.getString(R.string.snackbar_notifications_disabled), Snackbar.LENGTH_LONG)
                                      .setAction(context.getString(R.string.snackbar_settings), new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
-                                             Intent intent = new Intent();
-                                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                             Uri uri = Uri.fromParts("package", context.getPackageName(), null);
-                                             intent.setData(uri);
-                                             context.startActivity(intent);
-                                         }
+                                          @Override
+                                          public void onClick(View v) {
+                                              Intent intent = new Intent();
+                                              intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                              Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                                              intent.setData(uri);
+                                              context.startActivity(intent);
+                                          }
                                      })
                                      .show();
                          } else {
@@ -190,11 +190,11 @@ public class EpisodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     return;
                 }
             }
-            cursor.moveToPosition(getAdapterPosition());
-            String date = cursor.getString(EpisodesQuery.RELEASE_DATE);
-            String name = cursor.getString(EpisodesQuery.NAME);
-            int id = cursor.getInt(EpisodesQuery.EPISODE_ID);
-            String title = backCursor.getString(SeasonsQuery.SHOW_NAME);
+            com.lineargs.watchnext.data.entity.Episodes episode = episodes.get(getAdapterPosition());
+            String date = episode.getReleaseDate();
+            String name = episode.getName();
+            int id = episode.getEpisodeId();
+            String title = season != null ? season.getShowName() : "";
             if (!airedAlready(date)) {
                 int intervalSeconds = getSeconds(System.currentTimeMillis(), date);
                 if (intervalSeconds != 0) {

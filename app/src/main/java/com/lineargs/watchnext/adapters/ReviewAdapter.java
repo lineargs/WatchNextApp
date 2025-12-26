@@ -1,23 +1,18 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.ReviewQuery;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.databinding.ItemReviewBinding;
 
 /**
- * Created by goranminov on 22/11/2017.
- * <p>
- * See {@link MainAdapter}
+ * Created by Goran Minov on 22/11/2017.
  */
 
 public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

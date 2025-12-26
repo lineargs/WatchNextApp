@@ -2,27 +2,23 @@ package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.tools.SeasonTools;
 import com.lineargs.watchnext.utils.ServiceUtils;
-import com.squareup.picasso.Picasso;
 
 import com.lineargs.watchnext.databinding.ItemSeasonsBinding;
 
 /**
  * Created by goranminov on 27/11/2017.
- * <p>
- * See {@link MainAdapter}
  */
 
 public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -46,7 +42,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SeasonsViewHolder viewHolder = (SeasonsViewHolder) holder;
-        viewHolder.bindViews(context, position);
+        viewHolder.bindViews(position);
     }
 
     @Override
@@ -83,7 +79,7 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (callback != null) binding.getRoot().setOnClickListener(this);
         }
 
-        void bindViews(Context context, int position) {
+        void bindViews(int position) {
             Resources resources = context.getResources();
             com.lineargs.watchnext.data.entity.Seasons season = seasons.get(position);
             int number = 0;

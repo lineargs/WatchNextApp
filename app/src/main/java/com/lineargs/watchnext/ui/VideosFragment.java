@@ -1,24 +1,16 @@
 package com.lineargs.watchnext.ui;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.VideosAdapter;
-import com.lineargs.watchnext.data.VideosQuery;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import com.lineargs.watchnext.databinding.FragmentVideosBinding;
@@ -34,6 +26,7 @@ public class VideosFragment extends BaseFragment implements VideosAdapter.OnItem
     private VideosAdapter mAdapter;
     private Handler handler;
     private VideosViewModel viewModel;
+
 
     public void setmUri(Uri uri) {
         this.mUri = uri;

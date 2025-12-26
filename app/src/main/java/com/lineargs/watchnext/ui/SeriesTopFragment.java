@@ -2,10 +2,8 @@ package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
@@ -28,6 +26,17 @@ public class SeriesTopFragment extends SeriesListFragment implements SeriesTopAd
         intent.setData(uri);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
+    }
+
+    @Override
+    public void onToggleFavorite(Uri uri, boolean isFavorite) {
+        com.lineargs.watchnext.ui.SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.SeriesViewModel.class);
+        viewModel.toggleFavorite(uri, isFavorite);
+        if (isFavorite) {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        } else {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

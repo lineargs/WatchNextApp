@@ -1,7 +1,6 @@
 package com.lineargs.watchnext.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.dbutils.DbUtils;
 
@@ -46,15 +44,8 @@ public class SeriesPopularAdapter extends BaseTabbedAdapter {
             @Override
             public void onClick(View view) {
                 Uri uri = DataContract.PopularSerieEntry.buildSerieUriWithId(id);
-                if (isFavorite(context, id)) {
-                    DbUtils.removeFromFavorites(context, uri);
-                    Toast.makeText(context, context.getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-                    holder.star.setImageDrawable(starImageBorder());
-                } else {
-                    DbUtils.addTVToFavorites(context, uri);
-                    Toast.makeText(context, context.getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-                    holder.star.setImageDrawable(starImage());
-                }
+                boolean isFavorite = isFavorite(context, id);
+                callback.onToggleFavorite(uri, isFavorite);
             }
         });
     }

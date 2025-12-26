@@ -30,6 +30,9 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
 import com.squareup.picasso.Picasso;
 
 import com.lineargs.watchnext.databinding.FragmentMovieDetailBinding;
+import com.lineargs.watchnext.data.entity.Favorites;
+import android.content.res.ColorStateList;
+import androidx.core.content.ContextCompat;
 
 /**
  * A fragment using ViewModel to show details for the movie.
@@ -104,18 +107,17 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
             binding.starFab.setVisibility(View.GONE);
         }
 
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(MovieDetailViewModel.class);
+
         if (mUri != null) {
-            if (savedState == null && !DbUtils.checkForCredits(context, mUri.getLastPathSegment())) {
-                MovieSyncUtils.syncFullMovieDetail(context, mUri);
-            } else if (savedState == null && DbUtils.checkForExtras(context, mUri)) {
-                MovieSyncUtils.syncUpdateMovieDetail(context, mUri);
+            if (savedState == null) {
+                // Perform sync check in background
+                viewModel.checkDataAndSync(context, mUri);
             }
             startCastLoading();
             startCrewLoading();
         }
-
-        // Initialize ViewModel
-        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(MovieDetailViewModel.class);
         if (mUri != null) {
             viewModel.setMovieUri(mUri);
             
@@ -189,6 +191,20 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
                             binding.movieFooter.videos.setTextColor(android.graphics.Color.GRAY);
                         }
                      }
+                }
+            });
+
+            // Observe Favorite Status
+            viewModel.getFavorite().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<Favorites>() {
+                @Override
+                public void onChanged(Favorites favorite) {
+                    if (favorite != null) {
+                        binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+                        binding.starFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorBlack)));
+                    } else {
+                        binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+                        binding.starFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorBlack)));
+                    }
                 }
             });
         }
@@ -297,15 +313,24 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
      * to add it in our favorites table. We do simple check if we have it already.
      * If we do we delete it(On user choice), if not we just copy the data.
      */
+    /* If the activity is opened from anywhere except the Main activity we have an option
+     * to add it in our favorites table. We do simple check if we have it already.
+     * If we do we delete it(On user choice), if not we just copy the data.
+     */
     public void starFabFavorite() {
-        if (DbUtils.isFavorite(getContext(), Long.parseLong(mUri.getLastPathSegment()))) {
-            DbUtils.removeFromFavorites(getContext(), mUri);
+        boolean isFavorite = false;
+        if (viewModel.getFavorite().getValue() != null) {
+            isFavorite = true;
+        }
+
+        if (isFavorite) {
+            viewModel.toggleFavorite(mUri, true);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
-            binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+            // FAB update handled by observer
         } else {
-            DbUtils.addMovieToFavorites(getContext(), mUri);
+            viewModel.toggleFavorite(mUri, false);
             Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
-            binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+            // FAB update handled by observer
         }
     }
 
@@ -358,21 +383,12 @@ public class MovieDetailsFragment extends Fragment implements CastAdapter.OnClic
         // String imdb = cursor.getString(Query.IMDB_ID); // PopularMovie has imdbId
         String imdb = movie.getImdbId();
         
-        if (binding.movieFooter.reviews != null) {
-            ServiceUtils.setUpCommentsButton(getContext(), mUri.getLastPathSegment(), binding.movieFooter.reviews);
-        }
-        if (binding.movieFooter.videos != null) {
-            ServiceUtils.setUpVideosButton(getContext(), mUri.getLastPathSegment(), binding.movieFooter.videos);
-        }
+        // Button setup handled by Observers for Reviews and Videos
         ServiceUtils.setUpImdbButton(imdb, binding.movieButtons.imdb);
         ServiceUtils.setUpGoogleSearchButton(title, binding.movieButtons.google);
         ServiceUtils.setUpYouTubeButton(title, binding.movieButtons.youtube);
         ServiceUtils.setUpGooglePlayButton(title, binding.movieButtons.googlePlay);
-        if (DbUtils.isFavorite(getContext(), id)) {
-            binding.starFab.setImageDrawable(Utils.starImage(getContext()));
-        } else {
-            binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
-        }
+        // The FAB update logic is now handled by the ViewModel observer
         if (binding.coverPoster != null) {
             ServiceUtils.loadPicasso(getContext(), movie.getPosterPath())
                     .fit()

@@ -1,13 +1,13 @@
 package com.lineargs.watchnext.ui;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +19,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.EpisodesAdapter;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.EpisodesQuery;
-import com.lineargs.watchnext.data.SeasonsQuery;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 
 import com.lineargs.watchnext.databinding.ContentEpisodesBinding;
@@ -32,13 +29,13 @@ import com.lineargs.watchnext.databinding.ContentEpisodesBinding;
  * ???
  */
 
-public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class EpisodesFragment extends Fragment {
 
-    private static final int LOADER_ID = 112, BACK_LOADER_ID = 456;
     private ContentEpisodesBinding binding;
     int number = -1;
     private EpisodesAdapter mAdapter;
     private String seasonId = "", serieId = "";
+    private EpisodeViewModel viewModel;
 
     public EpisodesFragment() {
     }
@@ -85,8 +82,28 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
         mAdapter = new EpisodesAdapter(context);
         binding.episodesRecyclerView.setAdapter(mAdapter);
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-        getLoaderManager().initLoader(BACK_LOADER_ID, null, this);
+        // Initialize ViewModel
+        viewModel = new androidx.lifecycle.ViewModelProvider(this).get(EpisodeViewModel.class);
+        viewModel.setSeasonId(seasonId);
+        
+        viewModel.getEpisodes().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.Episodes>>() {
+            @Override
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.Episodes> episodes) {
+                if (episodes != null && !episodes.isEmpty()) {
+                    mAdapter.swapEpisodes(episodes);
+                    showData();
+                }
+            }
+        });
+
+        viewModel.getSeason().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<com.lineargs.watchnext.data.entity.Seasons>() {
+            @Override
+            public void onChanged(com.lineargs.watchnext.data.entity.Seasons season) {
+                if (season != null) {
+                    mAdapter.swapSeason(season);
+                }
+            }
+        });
     }
 
     private void startLoading() {
@@ -101,56 +118,6 @@ public class EpisodesFragment extends Fragment implements LoaderManager.LoaderCa
             binding.swipeRefreshLayout.setRefreshing(false);
         }
         binding.episodesRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_ID:
-                return new CursorLoader(getContext(),
-                        DataContract.Episodes.CONTENT_URI,
-                        EpisodesQuery.EPISODE_PROJECTION,
-                        DataContract.Episodes.COLUMN_SEASON_ID + " = ? ",
-                        new String[]{seasonId},
-                        null);
-            case BACK_LOADER_ID:
-                return new CursorLoader(getContext(),
-                        DataContract.Seasons.CONTENT_URI,
-                        SeasonsQuery.SEASON_PROJECTION,
-                        DataContract.Seasons.COLUMN_SEASON_ID + " = ? ",
-                        new String[]{seasonId},
-                        null);
-            default:
-                throw new RuntimeException("Loader not implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()) {
-            case LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapCursor(data);
-                    showData();
-                }
-                break;
-            case BACK_LOADER_ID:
-                if (data != null && data.getCount() != 0) {
-                    data.moveToFirst();
-                    mAdapter.swapBackCursor(data);
-                }
-                break;
-            default:
-                throw new RuntimeException("Loader not implemented: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-        mAdapter.swapBackCursor(null);
     }
 
     @Override

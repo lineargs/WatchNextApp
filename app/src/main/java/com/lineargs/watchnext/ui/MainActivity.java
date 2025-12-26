@@ -3,30 +3,27 @@ package com.lineargs.watchnext.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
 
-// import com.crashlytics.android.Crashlytics;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.utils.NotificationUtils;
-import com.lineargs.watchnext.utils.WorkManagerUtils;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
+import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.ui.FavoritesViewModel;
 import com.lineargs.watchnext.adapters.FavoritesAdapter;
 
@@ -40,8 +37,8 @@ public class MainActivity extends BaseTopActivity {
     private static final String ASC = " ASC", DESC = " DESC";
     @NonNull
     ActivityMainBinding binding;
-    private FavoritesAdapter mAdapter;
     private FavoritesViewModel viewModel;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
     private String currentSortOrder;
 
     @Override
@@ -54,7 +51,7 @@ public class MainActivity extends BaseTopActivity {
         
         setupActionBar();
         setupNavDrawer();
-        setupViews();
+        setupTabs();
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -64,6 +61,7 @@ public class MainActivity extends BaseTopActivity {
         if (isConnected()) {
             WorkManagerUtils.schedulePeriodicSync(this);
             WorkManagerUtils.syncImmediately(this);
+            WorkManagerUtils.scheduleSubscriptionCheck(this);
         }
     }
 
@@ -78,59 +76,16 @@ public class MainActivity extends BaseTopActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    private void showData() {
-        if (findViewById(R.id.empty_layout) != null) {findViewById(R.id.empty_layout).setVisibility(View.GONE);}
-        findViewById(R.id.main_recycler_view).setVisibility(View.VISIBLE);
-    }
+    private void setupTabs() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        binding.container.setAdapter(mSectionsPagerAdapter);
+        binding.tabs.setupWithViewPager(binding.container);
 
-    private void hideData() {
-        if (findViewById(R.id.empty_layout) != null) {findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);}
-        findViewById(R.id.main_recycler_view).setVisibility(View.GONE);
-    }
-
-    private void setupViews() {
-        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns());
-        RecyclerView recyclerView = findViewById(R.id.main_recycler_view);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        
-        mAdapter = new FavoritesAdapter(this, this::onItemSelected, this::onStarClicked);
-        recyclerView.setAdapter(mAdapter);
-        
         binding.fab.setOnClickListener(view -> searchFab());
         binding.toolbar.titleMainActivity.setOnClickListener(view -> searchTextView());
         
-        android.content.SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        android.content.SharedPreferences sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this);
         currentSortOrder = sharedPreferences.getString(PREF_SORT_ORDER, DataContract.PopularMovieEntry.COLUMN_TITLE + ASC);
-
-        viewModel.setSortOrder(currentSortOrder);
-        viewModel.getFavorites().observe(this, favorites -> {
-            if (favorites != null && !favorites.isEmpty()) {
-                mAdapter.submitList(favorites, () -> {
-                    if (recyclerView != null) {
-                        recyclerView.scrollToPosition(0);
-                    }
-                });
-                showData();
-            } else {
-                hideData();
-            }
-        });
-    }
-
-    private void onStarClicked(com.lineargs.watchnext.data.entity.Favorites favorite) {
-        viewModel.removeFavorite(favorite.getTmdbId());
-        android.widget.Toast.makeText(this, getString(R.string.toast_remove_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
-    }
-
-    // sortList and safeParseDouble removed
-
-
-    @Override
-    public void setDrawerIndicatorEnabled() {
-        super.setDrawerIndicatorEnabled();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.icon_menu_grey);
     }
 
     @Override
@@ -231,8 +186,51 @@ public class MainActivity extends BaseTopActivity {
         return nColumns;
     }
 
+    @Override
+    public void setDrawerIndicatorEnabled() {
+        binding.toolbar.toolbar.setNavigationIcon(R.drawable.icon_menu_grey);
+    }
+
     private void startIntent(Intent intent) {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new FavoritesFragment();
+                case 1:
+                    return new ScheduleFragment();
+                default:
+                    return new FavoritesFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.tab_favorites);
+                case 1:
+                    return getString(R.string.tab_schedule);
+                default:
+                    return null;
+            }
+        }
     }
 }

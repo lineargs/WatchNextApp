@@ -2,14 +2,10 @@ package com.lineargs.watchnext.ui;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -18,10 +14,8 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.adapters.TheaterAdapter;
-import com.lineargs.watchnext.data.DataContract;
-import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
-import com.lineargs.watchnext.utils.WorkManagerUtils;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 
 import com.lineargs.watchnext.databinding.FragmentTheaterBinding;
 
@@ -98,6 +92,17 @@ public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnIt
         intent.setData(uri);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
+    }
+
+    @Override
+    public void onToggleFavorite(Uri uri, boolean isFavorite) {
+        com.lineargs.watchnext.ui.MoviesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.MoviesViewModel.class);
+        viewModel.toggleFavorite(uri, isFavorite);
+        if (isFavorite) {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        } else {
+            android.widget.Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), android.widget.Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

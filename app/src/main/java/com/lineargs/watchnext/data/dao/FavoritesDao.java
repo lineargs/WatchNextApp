@@ -28,8 +28,23 @@ public interface FavoritesDao {
     @Query("SELECT movie_id FROM favorites WHERE type = 1")
     androidx.lifecycle.LiveData<java.util.List<Integer>> getFavoriteSeriesIds();
 
+    @Query("SELECT COUNT(*) FROM favorites WHERE type = 0")
+    androidx.lifecycle.LiveData<Integer> getMoviesCountLiveData();
+
+    @Query("SELECT COUNT(*) FROM favorites WHERE type = 1")
+    androidx.lifecycle.LiveData<Integer> getSeriesCountLiveData();
+
+    @Query("SELECT * FROM favorites WHERE type = 1 AND notify = 1")
+    java.util.List<Favorites> getSubscribedSeries();
+
+    @Query("UPDATE favorites SET notify = :notify WHERE movie_id = :id")
+    int updateNotifyStatus(int id, int notify);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertFavorite(Favorites favorite);
+
+    @Query("SELECT COUNT(*) FROM favorites WHERE movie_id = :id")
+    int checkFavorite(int id);
 
     @Query("DELETE FROM favorites WHERE movie_id = :id")
     int deleteFavorite(int id);
