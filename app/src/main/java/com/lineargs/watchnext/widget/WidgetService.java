@@ -2,16 +2,17 @@ package com.lineargs.watchnext.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.data.WatchNextDatabase;
+import com.lineargs.watchnext.data.entity.Favorites;
 import com.lineargs.watchnext.utils.ServiceUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by goranminov on 24/11/2017.
@@ -21,24 +22,15 @@ import java.io.IOException;
 
 public class WidgetService extends RemoteViewsService {
 
-    private static final String[] PROJECTION = {
-            DataContract.PopularMovieEntry._ID,
-            DataContract.PopularMovieEntry.COLUMN_TITLE,
-            DataContract.PopularMovieEntry.COLUMN_POSTER_PATH
-    };
-
-    private static final int INDEX_TITLE = 1;
-    private static final int INDEX_POSTER_PATH = 2;
-
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new ListRemoteViewsFactory(this.getApplicationContext());
     }
 
-    private class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    private static class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         Context mContext;
-        Cursor mCursor;
+        List<Favorites> mFavorites;
 
         ListRemoteViewsFactory(Context context) {
             mContext = context;
@@ -52,24 +44,20 @@ public class WidgetService extends RemoteViewsService {
         //called on start and when notifyAppWidgetViewDataChanged is called
         @Override
         public void onDataSetChanged() {
-            if (mCursor != null) mCursor.close();
-            mCursor = mContext.getContentResolver().query(
-                    DataContract.Favorites.CONTENT_URI,
-                    PROJECTION,
-                    null,
-                    null,
-                    null);
+            mFavorites = WatchNextDatabase.getDatabase(mContext).favoritesDao().getFavoritesSync();
         }
 
         @Override
         public void onDestroy() {
-            if (mCursor != null) mCursor.close();
+            if (mFavorites != null) {
+                mFavorites.clear();
+            }
         }
 
         @Override
         public int getCount() {
-            if (mCursor == null) return 0;
-            return mCursor.getCount();
+            if (mFavorites == null) return 0;
+            return mFavorites.size();
         }
 
         /**
@@ -80,20 +68,22 @@ public class WidgetService extends RemoteViewsService {
          */
         @Override
         public RemoteViews getViewAt(int i) {
-            if (mCursor == null || mCursor.getCount() == 0) return null;
+            if (mFavorites == null || mFavorites.size() == 0) return null;
 
-            mCursor.moveToPosition(i);
+            Favorites favorite = mFavorites.get(i);
 
             RemoteViews views = new RemoteViews(mContext.getPackageName(),
                     R.layout.widget_app);
 
             Intent fillIntent = new Intent();
-
+            android.net.Uri uri = com.lineargs.watchnext.data.DataContract.Favorites.buildFavoritesUriWithId(favorite.getTmdbId());
+            fillIntent.setData(uri);
+            fillIntent.putExtra("is_series", favorite.getType() == 1);
             views.setOnClickFillInIntent(R.id.widget_row, fillIntent);
 
-            views.setTextViewText(R.id.widget_title, mCursor.getString(INDEX_TITLE));
+            views.setTextViewText(R.id.widget_title, favorite.getTitle());
 
-            String posterPath = mCursor.getString(INDEX_POSTER_PATH);
+            String posterPath = favorite.getPosterPath();
 
             setWidgetPoster(views, posterPath);
 

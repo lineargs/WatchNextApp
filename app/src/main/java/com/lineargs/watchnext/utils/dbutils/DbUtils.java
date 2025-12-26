@@ -47,6 +47,7 @@ public class DbUtils {
 
             if (favorite != null) {
                 db.favoritesDao().insertFavorite(favorite);
+                updateWidget(context);
             }
         });
     }
@@ -72,6 +73,7 @@ public class DbUtils {
 
             if (favorite != null) {
                 db.favoritesDao().insertFavorite(favorite);
+                updateWidget(context);
             }
         });
     }
@@ -158,6 +160,7 @@ public class DbUtils {
         int id = Integer.parseInt(uri.getLastPathSegment());
         WatchNextDatabase.databaseWriteExecutor.execute(() -> {
             WatchNextDatabase.getDatabase(context).favoritesDao().deleteFavorite(id);
+            updateWidget(context);
         });
     }
 
@@ -229,5 +232,10 @@ public class DbUtils {
     private static boolean hasVideos(Context context, int movieId) {
          // Fallback: force fetch if unsure.
          return false; 
+    }
+    public static void updateWidget(Context context) {
+        android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new android.content.ComponentName(context, com.lineargs.watchnext.widget.AppWidget.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, com.lineargs.watchnext.R.id.widget_list_view);
     }
 }

@@ -14,6 +14,9 @@ public interface FavoritesDao {
     Cursor getFavorites();
 
     @Query("SELECT * FROM favorites")
+    java.util.List<Favorites> getFavoritesSync();
+
+    @Query("SELECT * FROM favorites")
     androidx.lifecycle.LiveData<java.util.List<Favorites>> getFavoritesLiveData();
 
     @Query("SELECT * FROM favorites WHERE movie_id = :id")

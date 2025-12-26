@@ -29,16 +29,6 @@ public class MovieUtils {
     }
 
     /**
-     * Helper method used in the Main Activity
-     * @param date The date read from the database
-     * @return Return the date formatted based on the Phone Locale
-     */
-    public static String getMainNormalizedDate(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        return simpleDateFormat.format(date);
-    }
-
-    /**
      * @param vote The vote average String received from the API
      * @return The same String concatenated
      */

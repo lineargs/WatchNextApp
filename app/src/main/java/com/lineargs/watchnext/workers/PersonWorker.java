@@ -50,7 +50,7 @@ public class PersonWorker extends Worker {
             Response<Person> response = call.execute();
             if (response.isSuccessful() && response.body() != null) {
                 ContentValues[] values = PersonDbUtils.getPersonContentValues(response.body());
-                if (values != null && values.length > 0) {
+                if (values.length > 0) {
                     getApplicationContext().getContentResolver().bulkInsert(DataContract.Person.CONTENT_URI, values);
                 }
             }

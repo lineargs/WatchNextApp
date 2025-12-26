@@ -57,6 +57,12 @@
 
     <!-- Toasts and Snackbars -->
     <string name="toast_add_to_favorites">Added to favorites</string>
+    <!-- toast_remove_from_favorites is "Removed from favorites" which implies action. 
+         The new toast is for "This item was removed from favorites" or similar state. 
+         But wait, I used toast_removed_from_favorites in MainActivity.
+         The existing one is toast_remove_from_favorites (verb).
+         I will use "Item removed from favorites" for the new one. -->
+    <string name="toast_removed_from_favorites">Item no longer in favorites</string>
     <string name="toast_remove_from_favorites">Removed from favorites</string>
     <string name="toast_notification_reminder">Notification reminder scheduled</string>
     <string name="toast_notification_cancelled">Notification reminder cancelled</string>
