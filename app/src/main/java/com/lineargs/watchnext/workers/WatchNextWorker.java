@@ -129,29 +129,41 @@ public class WatchNextWorker extends Worker {
     }
 
     private void fetchPopularSeries(SeriesApiService service) throws IOException {
-        Call<Series> call = service.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> call = service.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
         Response<Series> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = SerieDbUtils.getPopularContentValues(response.body().getResults());
             insertData(DataContract.PopularSerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_popular_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchTopRatedSeries(SeriesApiService service) throws IOException {
-        Call<Series> call = service.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> call = service.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
         Response<Series> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = SerieDbUtils.getTopContentValues(response.body().getResults());
             insertData(DataContract.TopRatedSerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_top_rated_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchOnTheAirSeries(SeriesApiService service) throws IOException {
-        Call<Series> call = service.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> call = service.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
         Response<Series> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = SerieDbUtils.getOnTheAirContentValues(response.body().getResults());
             insertData(DataContract.OnTheAirSerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_on_the_air_next_page", 2)
+                    .apply();
         }
     }
 

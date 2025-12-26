@@ -70,6 +70,38 @@ public class SeriesOnTheAirFragment extends SeriesListFragment implements Series
                 }
             }
         });
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tabbed_series_recycler_view);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@androidx.annotation.NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)) {
+                    viewModel.loadNextOnTheAirPage();
+                }
+            }
+        });
+
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading != null) {
+                    androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+                    if (swipeRefreshLayout != null) {
+                        swipeRefreshLayout.setRefreshing(isLoading);
+                    }
+                }
+            }
+        });
+
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                if (message != null) {
+                    android.widget.Toast.makeText(getContext(), message, android.widget.Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
 
