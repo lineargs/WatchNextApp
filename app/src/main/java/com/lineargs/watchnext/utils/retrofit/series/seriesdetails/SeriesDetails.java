@@ -64,6 +64,10 @@ public class SeriesDetails {
     @Expose
     private int numberOfEpisodes;
 
+    @SerializedName("next_episode_to_air")
+    @Expose
+    private NextEpisodeToAir nextEpisodeToAir;
+
     @SerializedName("number_of_seasons")
     @Expose
     private int numberOfSeasons;
@@ -166,6 +170,10 @@ public class SeriesDetails {
 
     public int getNumberOfSeasons() {
         return numberOfSeasons;
+    }
+
+    public NextEpisodeToAir getNextEpisodeToAir() {
+        return nextEpisodeToAir;
     }
 
     public List<String> getOriginCountry() {

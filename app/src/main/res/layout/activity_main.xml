@@ -10,6 +10,7 @@
         android:id="@+id/list_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/background"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -27,15 +28,21 @@
                     layout="@layout/toolbar_main" />
             </androidx.cardview.widget.CardView>
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/colorYellow"
+                app:tabSelectedTextColor="@color/colorYellow"
+                app:tabTextColor="@android:color/white" />
+
         </com.google.android.material.appbar.AppBarLayout>
 
-        <fragment
-            android:id="@+id/main_fragment"
-            android:name="com.lineargs.watchnext.ui.MainFragment"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:layout="@layout/fragment_main" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

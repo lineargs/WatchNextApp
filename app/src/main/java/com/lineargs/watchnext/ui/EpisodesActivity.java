@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.jobs.WorkManagerUtils;
+import com.lineargs.watchnext.utils.ReminderUtils;
 import com.lineargs.watchnext.sync.syncseries.SeasonUtils;
 import com.lineargs.watchnext.tools.SeasonTools;
 import com.lineargs.watchnext.utils.Constants;
@@ -64,6 +65,7 @@ public class EpisodesActivity extends BaseTopActivity {
     private int number;
     private String seasonId = "";
     private String showName = "";
+    private int episodeNumber = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,10 @@ public class EpisodesActivity extends BaseTopActivity {
         if (getIntent().hasExtra(Constants.SEASON_NUMBER) && getIntent().hasExtra(Constants.EPISODES)) {
             title = SeasonTools.getSeasonString(this, getIntent().getIntExtra(Constants.SEASON_NUMBER, -1));
             subtitle = getIntent().getStringExtra(Constants.EPISODES);
+        }
+        
+        if (getIntent().hasExtra(Constants.EPISODE_NUMBER)) {
+            episodeNumber = getIntent().getIntExtra(Constants.EPISODE_NUMBER, -1);
         }
 
         setupActionBar();
@@ -102,6 +108,17 @@ public class EpisodesActivity extends BaseTopActivity {
                         showData();
                         binding.container.setAdapter(mSectionsPagerAdapter);
                         binding.tabs.setupWithViewPager(binding.container);
+                        
+                        if (episodeNumber != -1) {
+                            for (int i = 0; i < episodes.size(); i++) {
+                                if (episodes.get(i).getEpisodeNumber() == episodeNumber) {
+                                    binding.container.setCurrentItem(i);
+                                    break;
+                                }
+                            }
+                            // Reset so it doesn't jump again on further updates
+                            episodeNumber = -1;
+                        }
                     }
                 }
             });
@@ -243,25 +260,7 @@ public class EpisodesActivity extends BaseTopActivity {
         }
 
         private boolean airedAlready(String date) {
-            Date date1 = null;
-            if (date != null) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_pattern), Locale.getDefault());
-                try {
-                    date1 = simpleDateFormat.parse(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (date1 == null) return true;
-
-            // Allow reminders on the release day if it's before 8:00 PM
-            java.util.Calendar airTime = java.util.Calendar.getInstance();
-            airTime.setTime(date1);
-            airTime.set(java.util.Calendar.HOUR_OF_DAY, 20);
-            airTime.set(java.util.Calendar.MINUTE, 0);
-            airTime.set(java.util.Calendar.SECOND, 0);
-
-            return System.currentTimeMillis() > airTime.getTimeInMillis();
+            return !ReminderUtils.shouldShowReminderFab(date);
         }
 
         @Override
@@ -271,26 +270,7 @@ public class EpisodesActivity extends BaseTopActivity {
         }
 
         private int getSeconds(long today, String date) {
-            if (TextUtils.isEmpty(date)) return 0;
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_pattern), Locale.getDefault());
-            Date releaseDay = null;
-            try {
-                releaseDay = simpleDateFormat.parse(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if (releaseDay != null) {
-                java.util.Calendar airTime = java.util.Calendar.getInstance();
-                airTime.setTime(releaseDay);
-                airTime.set(java.util.Calendar.HOUR_OF_DAY, 20);
-                airTime.set(java.util.Calendar.MINUTE, 0);
-                airTime.set(java.util.Calendar.SECOND, 0);
-
-                long delayMillis = airTime.getTimeInMillis() - today;
-                return delayMillis > 0 ? (int) TimeUnit.MILLISECONDS.toSeconds(delayMillis) : 0;
-            } else {
-                return 0;
-            }
+            return ReminderUtils.getReminderDelayInSeconds(date);
         }
 
         public void setNotification() {
@@ -351,15 +331,22 @@ public class EpisodesActivity extends BaseTopActivity {
         }
 
         private void updateFabUI() {
-            int id = Integer.parseInt(details[5]);
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-            boolean isScheduled = sp.getBoolean("reminder_" + id, false);
-            if (isScheduled) {
-                binding.notificationFab.setImageResource(R.drawable.icon_cancel_black);
-                binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorGrey)));
-            } else {
-                binding.notificationFab.setImageResource(R.drawable.icon_tv_black);
-                binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorYellow)));
+            if (getContext() == null || binding == null || details == null || details.length < 6) {
+                return;
+            }
+            try {
+                int id = Integer.parseInt(details[5]);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean isScheduled = sp.getBoolean("reminder_" + id, false);
+                if (isScheduled) {
+                    binding.notificationFab.setImageResource(R.drawable.icon_cancel_black);
+                    binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorGrey)));
+                } else {
+                    binding.notificationFab.setImageResource(R.drawable.icon_tv_black);
+                    binding.notificationFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorYellow)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

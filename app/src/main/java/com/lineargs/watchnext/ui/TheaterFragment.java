@@ -21,7 +21,7 @@ import com.lineargs.watchnext.adapters.TheaterAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.data.Query;
 import com.lineargs.watchnext.utils.NetworkUtils;
-import com.lineargs.watchnext.utils.WorkManagerUtils;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 
 import com.lineargs.watchnext.databinding.FragmentTheaterBinding;
 

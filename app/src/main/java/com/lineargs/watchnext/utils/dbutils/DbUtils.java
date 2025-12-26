@@ -196,4 +196,29 @@ public class DbUtils {
         cursor.close();
         return favorite;
     }
+
+    public static boolean isSubscribed(Context context, long id) {
+        Uri uri = DataContract.Favorites.buildFavoritesUriWithId(id);
+        Cursor cursor = context.getContentResolver().query(uri,
+                new String[]{DataContract.Favorites.COLUMN_NOTIFY},
+                null,
+                null,
+                null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                boolean subscribed = cursor.getInt(0) == 1;
+                cursor.close();
+                return subscribed;
+            }
+            cursor.close();
+        }
+        return false;
+    }
+
+    public static void updateSubscription(Context context, long id, int notify) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DataContract.Favorites.COLUMN_NOTIFY, notify);
+        context.getContentResolver().update(DataContract.Favorites.buildFavoritesUriWithId(id),
+                contentValues, null, null);
+    }
 }

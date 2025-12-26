@@ -1294,6 +1294,12 @@ public class DataProvider extends ContentProvider {
                 rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
                 break;
+            case CODE_FAVORITES_WITH_ID:
+                rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values,
+                        DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                        new String[]{uri.getLastPathSegment()});
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Favorites.TABLE_NAME);
+                break;
             case CODE_SEARCH:
                 rowsUpdated = db.update(DataContract.Search.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.Search.TABLE_NAME);

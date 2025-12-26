@@ -21,6 +21,7 @@ import com.lineargs.watchnext.adapters.CastAdapter;
 import com.lineargs.watchnext.adapters.TVDetailAdapter;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.sync.syncseries.SerieDetailUtils;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.utils.Constants;
 import com.lineargs.watchnext.utils.ServiceUtils;
 import com.lineargs.watchnext.utils.Utils;
@@ -189,6 +190,13 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
             }
         });
         }
+
+        binding.seriesButtons.reminders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleSubscription();
+            }
+        });
     }
 
     @Override
@@ -238,10 +246,41 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
             DbUtils.removeFromFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), Toast.LENGTH_SHORT).show();
             binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
+            // Also unsubscribe if removed from favorites? 
+            // Better not, maybe keep it but they won't see it in schedule tab until they refavorite.
+            // Requirement said "Subscribing -> Favorite", not "Unfavorite -> Unsubscribe".
         } else {
             DbUtils.addTVToFavorites(getContext(), mUri);
             Toast.makeText(getContext(), getString(R.string.toast_add_to_favorites), Toast.LENGTH_SHORT).show();
             binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+        }
+        updateSubscriptionButton();
+    }
+
+    private void toggleSubscription() {
+        long seriesId = Long.parseLong(mUri.getLastPathSegment());
+        if (DbUtils.isSubscribed(getContext(), seriesId)) {
+            DbUtils.updateSubscription(getContext(), seriesId, 0);
+            Toast.makeText(getContext(), R.string.toast_unsubscribed, Toast.LENGTH_SHORT).show();
+        } else {
+            if (!DbUtils.isFavorite(getContext(), seriesId)) {
+                DbUtils.addTVToFavorites(getContext(), mUri);
+                binding.starFab.setImageDrawable(Utils.starImage(getContext()));
+            }
+            DbUtils.updateSubscription(getContext(), seriesId, 1);
+            WorkManagerUtils.syncSubscriptionsImmediately(getContext());
+            Toast.makeText(getContext(), R.string.toast_subscribed, Toast.LENGTH_SHORT).show();
+        }
+        updateSubscriptionButton();
+    }
+
+    private void updateSubscriptionButton() {
+        if (DbUtils.isSubscribed(getContext(), id)) {
+            binding.seriesButtons.reminders.setText(R.string.stop_reminding_all);
+            binding.seriesButtons.reminders.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_cancel_black, 0, 0, 0);
+        } else {
+            binding.seriesButtons.reminders.setText(R.string.remind_all_episodes);
+            binding.seriesButtons.reminders.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_notifications_black, 0, 0, 0);
         }
     }
 
@@ -317,6 +356,7 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         } else {
             binding.starFab.setImageDrawable(Utils.starBorderImage(getContext()));
         }
+        updateSubscriptionButton();
         if (binding.coverPoster != null) {
             Picasso.get()
                     .load(serie.getPosterPath())

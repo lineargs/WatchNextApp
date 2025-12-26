@@ -60,6 +60,13 @@
     <string name="toast_remove_from_favorites">Removed from favorites</string>
     <string name="toast_notification_reminder">Notification reminder scheduled</string>
     <string name="toast_notification_cancelled">Notification reminder cancelled</string>
+    <string name="remind_all_episodes">Remind all episodes</string>
+    <string name="stop_reminding_all">Stop reminding episodes</string>
+    <string name="toast_subscribed">Subscribed to all episodes. Added to Favorites.</string>
+    <string name="toast_unsubscribed">Unsubscribed from episode reminders.</string>
+    <string name="tab_favorites">Favorites</string>
+    <string name="tab_schedule">Upcoming Episodes</string>
+    <string name="upcoming_empty_text">No upcoming episodes for your subscribed series. Subscribe to more series to see them here!</string>
     <string name="toast_aired_already">This episode aired already</string>
     <string name="snackbar_no_connection">No connection</string>
     <string name="no_apps_installed">No apps installed</string>

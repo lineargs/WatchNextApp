@@ -27,6 +27,9 @@ public class Favorites implements Movie {
     @ColumnInfo(name = DataContract.Favorites.COLUMN_TYPE, defaultValue = "0")
     private int type;
 
+    @ColumnInfo(name = DataContract.Favorites.COLUMN_NOTIFY, defaultValue = "0")
+    private int notify;
+
     @ColumnInfo(name = DataContract.PopularMovieEntry.COLUMN_VOTE_AVERAGE)
     private String voteAverage;
 
@@ -117,4 +120,7 @@ public class Favorites implements Movie {
 
     public String getOriginalTitle() { return originalTitle; }
     public void setOriginalTitle(String originalTitle) { this.originalTitle = originalTitle; }
+
+    public int getNotify() { return notify; }
+    public void setNotify(int notify) { this.notify = notify; }
 }

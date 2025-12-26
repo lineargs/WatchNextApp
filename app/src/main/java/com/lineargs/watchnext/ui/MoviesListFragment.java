@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.Query;
-import com.lineargs.watchnext.utils.WorkManagerUtils;
+import com.lineargs.watchnext.jobs.WorkManagerUtils;
 import com.lineargs.watchnext.utils.NetworkUtils;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
