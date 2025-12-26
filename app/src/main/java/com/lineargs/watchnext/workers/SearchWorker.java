@@ -81,7 +81,7 @@ public class SearchWorker extends Worker {
             // Clear both search and searchTv tables to be safe, or just search
             // For now, let's stick to using the SEARCH table for everything
             getApplicationContext().getContentResolver().delete(DataContract.Search.CONTENT_URI, null, null);
-            if (values != null && values.length > 0) {
+            if (values.length > 0) {
                 getApplicationContext().getContentResolver().bulkInsert(DataContract.Search.CONTENT_URI, values);
             }
         }
@@ -92,7 +92,7 @@ public class SearchWorker extends Worker {
         Response<com.lineargs.watchnext.utils.retrofit.movies.moviedetail.MovieDetail> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getSyncMovie(response.body());
-            if (values != null && values.length > 0) {
+            if (values.length > 0) {
                 getApplicationContext().getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI, values);
             }
         }
@@ -103,7 +103,7 @@ public class SearchWorker extends Worker {
         Response<SeriesResult> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = SerieDbUtils.getSyncTV(response.body());
-            if (values != null && values.length > 0) {
+            if (values.length > 0) {
                 getApplicationContext().getContentResolver().bulkInsert(DataContract.Favorites.CONTENT_URI, values);
             }
         }

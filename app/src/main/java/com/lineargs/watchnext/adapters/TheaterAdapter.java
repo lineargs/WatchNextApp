@@ -38,6 +38,8 @@ public class TheaterAdapter extends BaseTabbedAdapter {
         ServiceUtils.loadPicasso(holder.poster.getContext(), movie.getPosterPath())
                 .resizeDimen(R.dimen.movie_poster_width_default, R.dimen.movie_poster_height_default)
                 .centerCrop()
+                .placeholder(R.drawable.placeholder_movie)
+                .error(R.drawable.placeholder_movie)
                 .into(holder.poster);
 
         holder.star.setOnClickListener(new View.OnClickListener() {

@@ -54,7 +54,7 @@ public class SeasonWorker extends Worker {
             Response<SeasonDetails> response = call.execute();
             if (response.isSuccessful() && response.body() != null) {
                 ContentValues[] values = SerieDbUtils.getEpisodes(response.body().getEpisodes(), seasonId);
-                if (values != null && values.length > 0) {
+                if (values.length > 0) {
                     getApplicationContext().getContentResolver().bulkInsert(DataContract.Episodes.CONTENT_URI, values);
                 }
             }

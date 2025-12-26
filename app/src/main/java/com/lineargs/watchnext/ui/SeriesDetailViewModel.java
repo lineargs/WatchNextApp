@@ -62,6 +62,8 @@ public class SeriesDetailViewModel extends AndroidViewModel {
                 return Transformations.map(seriesRepository.getTopRatedSerieLiveData(id), this::mapTopRatedToPopular);
             } else if (path.contains("ontheair")) {
                 return Transformations.map(seriesRepository.getOnTheAirSerieLiveData(id), this::mapOnTheAirToPopular);
+            } else if (path.contains("airingtoday")) {
+                return Transformations.map(seriesRepository.getAiringTodaySerieLiveData(id), this::mapAiringTodayToPopular);
             } else if (path.contains("search")) {
                 com.lineargs.watchnext.data.SearchRepository searchRepo = new com.lineargs.watchnext.data.SearchRepository(getApplication());
                 return Transformations.map(searchRepo.getSearchTvLiveData(id), this::mapSearchToPopular);
@@ -156,6 +158,23 @@ public class SeriesDetailViewModel extends AndroidViewModel {
         serie.setProductionCompanies(onTheAir.getProductionCompanies());
         serie.setGenres(onTheAir.getGenres());
         serie.setStatus(onTheAir.getStatus());
+        return serie;
+    }
+
+    private PopularSerie mapAiringTodayToPopular(com.lineargs.watchnext.data.entity.AiringTodaySerie airingToday) {
+        if (airingToday == null) return null;
+        PopularSerie serie = new PopularSerie();
+        serie.setTmdbId(airingToday.getTmdbId());
+        serie.setTitle(airingToday.getTitle());
+        serie.setOverview(airingToday.getOverview());
+        serie.setPosterPath(airingToday.getPosterPath());
+        serie.setBackdropPath(airingToday.getBackdropPath());
+        serie.setVoteAverage(airingToday.getVoteAverage());
+        serie.setReleaseDate(airingToday.getReleaseDate());
+        serie.setOriginalLanguage(airingToday.getOriginalLanguage());
+        serie.setProductionCompanies(airingToday.getProductionCompanies());
+        serie.setGenres(airingToday.getGenres());
+        serie.setStatus(airingToday.getStatus());
         return serie;
     }
 

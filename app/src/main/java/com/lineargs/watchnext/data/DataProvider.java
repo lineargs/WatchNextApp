@@ -44,6 +44,8 @@ public class DataProvider extends ContentProvider {
     public static final int CODE_TOP_SERIES_WITH_ID = 801;
     public static final int CODE_ON_THE_AIR_SERIES = 900;
     public static final int CODE_ON_THE_AIR_SERIES_WITH_ID = 901;
+    public static final int CODE_AIRING_TODAY_SERIES = 910;
+    public static final int CODE_AIRING_TODAY_SERIES_WITH_ID = 911;
     public static final int CODE_FAVORITES = 1000;
     public static final int CODE_FAVORITES_WITH_ID = 1001;
     public static final int CODE_SEARCH = 2000;
@@ -120,6 +122,8 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(authority, DataContract.PATH_TOP_SERIE + "/#", CODE_TOP_SERIES_WITH_ID);
         matcher.addURI(authority, DataContract.PATH_ON_THE_AIR_SERIE, CODE_ON_THE_AIR_SERIES);
         matcher.addURI(authority, DataContract.PATH_ON_THE_AIR_SERIE + "/#", CODE_ON_THE_AIR_SERIES_WITH_ID);
+        matcher.addURI(authority, DataContract.PATH_AIRING_TODAY_SERIE, CODE_AIRING_TODAY_SERIES);
+        matcher.addURI(authority, DataContract.PATH_AIRING_TODAY_SERIE + "/#", CODE_AIRING_TODAY_SERIES_WITH_ID);
         matcher.addURI(authority, DataContract.PATH_FAVORITES, CODE_FAVORITES);
         matcher.addURI(authority, DataContract.PATH_FAVORITES + "/#", CODE_FAVORITES_WITH_ID);
         matcher.addURI(authority, DataContract.PATH_SEARCH, CODE_SEARCH);
@@ -324,6 +328,20 @@ public class DataProvider extends ContentProvider {
                         .orderBy(sortOrder);
                 cursor = db.query(builder.create());
                 break;
+            case CODE_AIRING_TODAY_SERIES:
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.AiringTodaySerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(selection, selectionArgs)
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
+                break;
+            case CODE_AIRING_TODAY_SERIES_WITH_ID:
+                builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.AiringTodaySerieEntry.TABLE_NAME)
+                        .columns(projection)
+                        .selection(DataContract.PopularMovieEntry.COLUMN_MOVIE_ID + " = ? ", new String[]{uri.getLastPathSegment()})
+                        .orderBy(sortOrder);
+                cursor = db.query(builder.create());
+                break;
             case CODE_FAVORITES:
                 builder = androidx.sqlite.db.SupportSQLiteQueryBuilder.builder(DataContract.Favorites.TABLE_NAME)
                         .columns(projection)
@@ -476,6 +494,10 @@ public class DataProvider extends ContentProvider {
                 return DataContract.OnTheAirSerieEntry.CONTENT_TYPE;
             case CODE_ON_THE_AIR_SERIES_WITH_ID:
                 return DataContract.OnTheAirSerieEntry.CONTENT_ITEM_TYPE;
+            case CODE_AIRING_TODAY_SERIES:
+                return DataContract.AiringTodaySerieEntry.CONTENT_TYPE;
+            case CODE_AIRING_TODAY_SERIES_WITH_ID:
+                return DataContract.AiringTodaySerieEntry.CONTENT_ITEM_TYPE;
             case CODE_SEARCH:
                 return DataContract.Search.CONTENT_TYPE;
             case CODE_SEARCH_WITH_ID:
@@ -603,6 +625,15 @@ public class DataProvider extends ContentProvider {
                 long _id = db.insert(DataContract.OnTheAirSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
                 if (_id > 0) {
                     returnUri = DataContract.OnTheAirSerieEntry.buildSerieUriWithId(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+            case CODE_AIRING_TODAY_SERIES: {
+                long _id = db.insert(DataContract.AiringTodaySerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values);
+                if (_id > 0) {
+                    returnUri = DataContract.AiringTodaySerieEntry.buildSerieUriWithId(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -863,6 +894,24 @@ public class DataProvider extends ContentProvider {
                 if (rowsInserted > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
                     database.getInvalidationTracker().notifyObserversByTableNames(DataContract.OnTheAirSerieEntry.TABLE_NAME);
+                }
+                return rowsInserted;
+            case CODE_AIRING_TODAY_SERIES:
+                db.beginTransaction();
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(DataContract.AiringTodaySerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, value);
+                        if (_id != -1) {
+                            rowsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                if (rowsInserted > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    database.getInvalidationTracker().notifyObserversByTableNames(DataContract.AiringTodaySerieEntry.TABLE_NAME);
                 }
                 return rowsInserted;
             case CODE_FAVORITES:
@@ -1137,6 +1186,12 @@ public class DataProvider extends ContentProvider {
                         selection,
                         selectionArgs);
                 break;
+            case CODE_AIRING_TODAY_SERIES:
+                rowsDeleted = db.delete(
+                        DataContract.AiringTodaySerieEntry.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+                break;
             case CODE_ON_THE_AIR_SERIES_WITH_ID:
                 rowsDeleted = db.delete(
                         DataContract.OnTheAirSerieEntry.TABLE_NAME,
@@ -1293,6 +1348,10 @@ public class DataProvider extends ContentProvider {
             case CODE_ON_THE_AIR_SERIES:
                 rowsUpdated = db.update(DataContract.OnTheAirSerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
                 if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.OnTheAirSerieEntry.TABLE_NAME);
+                break;
+            case CODE_AIRING_TODAY_SERIES:
+                rowsUpdated = db.update(DataContract.AiringTodaySerieEntry.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);
+                if (rowsUpdated > 0) database.getInvalidationTracker().notifyObserversByTableNames(DataContract.AiringTodaySerieEntry.TABLE_NAME);
                 break;
             case CODE_FAVORITES:
                 rowsUpdated = db.update(DataContract.Favorites.TABLE_NAME, android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE, values, selection, selectionArgs);

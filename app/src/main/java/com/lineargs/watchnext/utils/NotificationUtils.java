@@ -1,5 +1,6 @@
 package com.lineargs.watchnext.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
@@ -74,6 +75,7 @@ public class NotificationUtils extends ContextWrapper {
         managerCompat.cancel(id);
     }
 
+    @SuppressLint("MissingPermission")
     public static void episodeReminder(String text, int id, String title, Context context) {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
@@ -96,6 +98,7 @@ public class NotificationUtils extends ContextWrapper {
         notificationManagerCompat.notify(id, notificationBuilder.build());
     }
 
+    @SuppressLint("MissingPermission")
     public static void syncComplete(int id, Context context) {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
@@ -117,6 +120,7 @@ public class NotificationUtils extends ContextWrapper {
         notificationManagerCompat.notify(id, notificationBuilder.build());
     }
 
+    @SuppressLint("MissingPermission")
     public static void syncProgress(int id, Context context) {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);

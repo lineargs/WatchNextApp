@@ -50,6 +50,7 @@ public class DataContract {
     public static final String PATH_POPULAR_SERIE = "popularserie";
     public static final String PATH_TOP_SERIE = "topratedserie";
     public static final String PATH_ON_THE_AIR_SERIE = "ontheair";
+    public static final String PATH_AIRING_TODAY_SERIE = "airingtoday";
     public static final String PATH_FAVORITES = "favorites";
     public static final String PATH_SEARCH = "search";
     public static final String PATH_SEARCH_TV = "searchtv";
@@ -387,6 +388,38 @@ public class DataContract {
 
         /**
          * Builds a URI that adds the serie id to the end of the on the air series content URI path.
+         * This is used to query details about a single serie entry by id.
+         *
+         * @param id Serie ID
+         * @return Uri to query details about a single serie entry
+         */
+        public static Uri buildSerieUriWithId(long id) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+    }
+
+    /* Inner class that defines the table contents of the airing today series table */
+    public static final class AiringTodaySerieEntry implements BaseColumns {
+
+        /* The base CONTENT_URI used to query the airing today series table from the content provider */
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_AIRING_TODAY_SERIE)
+                .build();
+
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_AIRING_TODAY_SERIE;
+        static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_AIRING_TODAY_SERIE;
+
+        /* *************************************
+         * We use the Popular Movies column names
+         * ************************************* */
+
+        /* Used internally as the name of our airing today series table. */
+        public static final String TABLE_NAME = "airingtodayseries";
+
+        /**
+         * Builds a URI that adds the serie id to the end of the airing today series content URI path.
          * This is used to query details about a single serie entry by id.
          *
          * @param id Serie ID

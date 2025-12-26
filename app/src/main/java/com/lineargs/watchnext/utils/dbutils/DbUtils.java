@@ -14,6 +14,7 @@ import com.lineargs.watchnext.data.entity.TopRatedMovie;
 import com.lineargs.watchnext.data.entity.TopRatedSerie;
 import com.lineargs.watchnext.data.entity.UpcomingMovie;
 import com.lineargs.watchnext.data.entity.OnTheAirSerie;
+import com.lineargs.watchnext.data.entity.AiringTodaySerie;
 import com.lineargs.watchnext.utils.Utils;
 
 /**
@@ -47,6 +48,7 @@ public class DbUtils {
 
             if (favorite != null) {
                 db.favoritesDao().insertFavorite(favorite);
+                updateWidget(context);
             }
         });
     }
@@ -68,10 +70,14 @@ public class DbUtils {
             } else if (path.contains(DataContract.PATH_ON_THE_AIR_SERIE)) {
                 OnTheAirSerie serie = db.seriesDao().getOnTheAirSerieSync(id);
                 favorite = mapSerieToFavorite(serie);
+            } else if (path.contains(DataContract.PATH_AIRING_TODAY_SERIE)) {
+                AiringTodaySerie serie = db.seriesDao().getAiringTodaySerieSync(id);
+                favorite = mapSerieToFavorite(serie);
             }
 
             if (favorite != null) {
                 db.favoritesDao().insertFavorite(favorite);
+                updateWidget(context);
             }
         });
     }
@@ -154,10 +160,29 @@ public class DbUtils {
         return favorite;
     }
 
+    private static Favorites mapSerieToFavorite(AiringTodaySerie serie) {
+        if (serie == null) return null;
+        Favorites favorite = new Favorites();
+        favorite.setTmdbId(serie.getTmdbId());
+        favorite.setOverview(serie.getOverview());
+        favorite.setOriginalLanguage(serie.getOriginalLanguage());
+        favorite.setTitle(serie.getOriginalTitle());
+        favorite.setPosterPath(serie.getPosterPath());
+        favorite.setBackdropPath(serie.getBackdropPath());
+        favorite.setReleaseDate(serie.getReleaseDate());
+        favorite.setVoteAverage(serie.getVoteAverage());
+        favorite.setStatus(serie.getStatus());
+        favorite.setProductionCompanies(serie.getProductionCompanies());
+        favorite.setGenres(serie.getGenres());
+        favorite.setType(1);
+        return favorite;
+    }
+
     public static void removeFromFavorites(Context context, Uri uri) {
         int id = Integer.parseInt(uri.getLastPathSegment());
         WatchNextDatabase.databaseWriteExecutor.execute(() -> {
             WatchNextDatabase.getDatabase(context).favoritesDao().deleteFavorite(id);
+            updateWidget(context);
         });
     }
 
@@ -229,5 +254,10 @@ public class DbUtils {
     private static boolean hasVideos(Context context, int movieId) {
          // Fallback: force fetch if unsure.
          return false; 
+    }
+    public static void updateWidget(Context context) {
+        android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new android.content.ComponentName(context, com.lineargs.watchnext.widget.AppWidget.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, com.lineargs.watchnext.R.id.widget_list_view);
     }
 }

@@ -4,12 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lineargs.watchnext.R;
 import com.lineargs.watchnext.data.DataContract;
 import com.lineargs.watchnext.utils.ServiceUtils;
-import com.lineargs.watchnext.utils.dbutils.DbUtils;
 
 /**
  * Created by goranminov on 04/11/2017.
@@ -17,17 +15,17 @@ import com.lineargs.watchnext.utils.dbutils.DbUtils;
  * See {@link MoviesPopularAdapter}
  */
 
-public class SeriesOnTheAirAdapter extends BaseTabbedAdapter {
+public class AiringTodaySeriesAdapter extends BaseTabbedAdapter {
 
-    private java.util.List<com.lineargs.watchnext.data.entity.OnTheAirSerie> series;
+    private java.util.List<com.lineargs.watchnext.data.entity.AiringTodaySerie> series;
 
-    public SeriesOnTheAirAdapter(@NonNull Context context, OnItemClickListener listener) {
+    public AiringTodaySeriesAdapter(@NonNull Context context, OnItemClickListener listener) {
         super(context, listener);
     }
 
     @Override
     protected void bindViews(final TabbedViewHolder holder, final Context context, int position) {
-        final com.lineargs.watchnext.data.entity.OnTheAirSerie serie = series.get(position);
+        final com.lineargs.watchnext.data.entity.AiringTodaySerie serie = series.get(position);
         final long id = serie.getTmdbId();
         if (isFavorite(context, id)) {
             holder.star.setImageDrawable(starImage());
@@ -45,7 +43,7 @@ public class SeriesOnTheAirAdapter extends BaseTabbedAdapter {
         holder.star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = DataContract.OnTheAirSerieEntry.buildSerieUriWithId(id);
+                Uri uri = DataContract.AiringTodaySerieEntry.buildSerieUriWithId(id);
                 boolean isFavorite = isFavorite(context, id);
                 callback.onToggleFavorite(uri, isFavorite);
             }
@@ -54,8 +52,8 @@ public class SeriesOnTheAirAdapter extends BaseTabbedAdapter {
 
     @Override
     protected void onViewClick(View view, int position) {
-        com.lineargs.watchnext.data.entity.OnTheAirSerie serie = series.get(position);
-        Uri uri = DataContract.OnTheAirSerieEntry.buildSerieUriWithId(serie.getTmdbId());
+        com.lineargs.watchnext.data.entity.AiringTodaySerie serie = series.get(position);
+        Uri uri = DataContract.AiringTodaySerieEntry.buildSerieUriWithId(serie.getTmdbId());
         callback.onItemSelected(uri);
     }
 
@@ -68,11 +66,8 @@ public class SeriesOnTheAirAdapter extends BaseTabbedAdapter {
         }
     }
 
-    public void swapSeries(java.util.List<com.lineargs.watchnext.data.entity.OnTheAirSerie> series) {
+    public void swapSeries(java.util.List<com.lineargs.watchnext.data.entity.AiringTodaySerie> series) {
         this.series = series;
         notifyDataSetChanged();
     }
 }
-
-
-

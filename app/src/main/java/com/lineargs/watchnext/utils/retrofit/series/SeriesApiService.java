@@ -18,8 +18,9 @@ public interface SeriesApiService {
 
     @GET("tv/{path}")
     Call<Series> getSeries(
-            @Path("path") String path,
-            @Query("api_key") String apiKey);
+        @Path("path") String path,
+        @Query("api_key") String apiKey,
+        @Query("page") int page);
 
     @GET("tv/{tv_id}")
     Call<SeriesDetails> getDetails(

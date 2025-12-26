@@ -236,7 +236,7 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
             getFragmentManager().beginTransaction()
                     .replace(R.id.seasons_frame_layout, fragment)
                     .commit();
-            VideosTvFragment videosFragment = new VideosTvFragment();
+            VideosFragment videosFragment = new VideosFragment();
             videosFragment.setmUri(DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment())));
             getFragmentManager().beginTransaction()
                     .replace(R.id.videos_frame_layout, videosFragment)
@@ -340,7 +340,7 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
     }
 
     public void loadVideos() {
-        Intent intent = new Intent(getContext(), VideosTvActivity.class);
+        Intent intent = new Intent(getContext(), VideosActivity.class);
         Uri uri = DataContract.Videos.buildVideoUriWithId(Long.parseLong(mUri.getLastPathSegment()));
         intent.setData(uri);
         intent.putExtra(Constants.TITLE, title);
@@ -391,15 +391,17 @@ public class SeriesDetailsFragment extends Fragment implements CastAdapter.OnCli
         // The observer will update the FAB and Subscription button.
         
         if (binding.coverPoster != null) {
-            Picasso.get()
-                    .load(serie.getPosterPath())
+            ServiceUtils.loadPicasso(getContext(), serie.getPosterPath())
                     .fit()
+                    .placeholder(R.drawable.placeholder_serie)
+                    .error(R.drawable.placeholder_serie)
                     .into(binding.coverPoster);
         }
         if (binding.coverBackdrop != null) {
-            Picasso.get()
-                    .load(serie.getBackdropPath())
+            ServiceUtils.loadPicasso(getContext(), serie.getBackdropPath())
                     .fit()
+                    .placeholder(R.drawable.placeholder_serie)
+                    .error(R.drawable.placeholder_serie)
                     .into(binding.coverBackdrop);
         }
     }

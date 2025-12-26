@@ -63,4 +63,8 @@ public class FavoritesRepository {
     public void updateSubscription(long id, int notify) {
         com.lineargs.watchnext.utils.dbutils.DbUtils.updateSubscription(application, id, notify);
     }
+
+    public boolean isFavorite(int id) {
+        return favoritesDao.checkFavorite(id) > 0;
+    }
 }

@@ -144,9 +144,12 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
             title.setText(search.getTitle());
+            int placeholderId = search.getMediaType() == 0 ? R.drawable.placeholder_movie : R.drawable.placeholder_serie;
             ServiceUtils.loadPicasso(poster.getContext(), search.getPosterPath())
                     .centerInside()
                     .fit()
+                    .placeholder(placeholderId)
+                    .error(placeholderId)
                     .into(poster);
             
             // Visual indicator

@@ -44,6 +44,7 @@
     <string name="title_activity_tabbed_movies">Movies</string>
     <string name="title_activity_tabbed_series">Series</string>
     <string name="title_activity_theater">In Theaters</string>
+    <string name="title_activity_airing_today">Airing Today</string>
     <string name="title_activity_main">Favorites</string>
     <string name="title_activity_settings">Settings</string>
     <string name="subtitle_activity_videos">Videos</string>
@@ -57,6 +58,9 @@
 
     <!-- Toasts and Snackbars -->
     <string name="toast_add_to_favorites">Added to favorites</string>
+    <!-- toast_remove_from_favorites is "Removed from favorites" which implies action. 
+         The new toast is for "This item was removed from favorites" or similar state.  -->
+    <string name="toast_removed_from_favorites">Item no longer in favorites</string>
     <string name="toast_remove_from_favorites">Removed from favorites</string>
     <string name="toast_notification_reminder">Notification reminder scheduled</string>
     <string name="toast_notification_cancelled">Notification reminder cancelled</string>
@@ -144,6 +148,8 @@
     <string name="movies_count">movies</string>
     <string name="series_count">series</string>
     <string name="runtime_of_all_movies">Runtime of all movies</string>
+    <string name="nav_header_movies">Explore Movies</string>
+    <string name="nav_header_series">Explore Series</string>
 
     <!-- NON TRANSLATABLE -->
     <!-- Main -->
@@ -236,6 +242,7 @@
     <string name="nav_movies_content_description" translatable="false">Click to explore movies</string>
     <string name="nav_series_content_description" translatable="false">Click to explore all series</string>
     <string name="nav_theaters_content_description" translatable="false">Click for movies in theaters</string>
+    <string name="nav_airing_today_content_description" translatable="false">Click for series airing today</string>
     <string name="nav_settings_content_description" translatable="false">Click for application settings</string>
     <string name="sort_content_description" translatable="false">Click for sorting the favorites</string>
     <string name="action_share_content_description" translatable="false">Click to share</string>
@@ -257,4 +264,20 @@
     <string name="still_path_transition" translatable="false">still_path_transition</string>
     <string name="google_play_search" translatable="false">https://play.google.com/store/search?q=%s&amp;c=movies</string>
 
+
+    <!-- Libraries -->
+    <string name="lib_android_jetpack_name">Android Jetpack (AndroidX)</string>
+    <string name="lib_android_jetpack_desc">Android Jetpack is a suite of libraries to help developers follow best practices, reduce boilerplate code, and write code that works consistently across Android versions and devices.</string>
+    <string name="lib_retrofit_name">Retrofit</string>
+    <string name="lib_retrofit_desc">A type-safe HTTP client for Android and Java</string>
+    <string name="lib_picasso_name">Picasso</string>
+    <string name="lib_picasso_desc">A powerful image downloading and caching library for Android</string>
+    <string name="lib_crashlytics_name">Firebase Crashlytics</string>
+    <string name="lib_crashlytics_desc">Lightweight, realtime crash reporter that helps you track, prioritize, and fix stability issues that erode your app quality</string>
+    <string name="lib_fcm_name">Firebase Cloud Messaging</string>
+    <string name="lib_fcm_desc">Firebase Cloud Messaging (FCM) is a cross-platform messaging solution that lets you reliably deliver messages at no cost.</string>
+    <string name="lib_workmanager_name">WorkManager</string>
+    <string name="lib_workmanager_desc">The recommended solution for persistent work.</string>
+    <string name="lib_room_name">Room Persistence Library</string>
+    <string name="lib_room_desc">The Room persistence library provides an abstraction layer over SQLite to allow for more robust database access while harnessing the full power of SQLite.</string>
 </resources>

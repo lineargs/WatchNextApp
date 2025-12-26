@@ -32,6 +32,7 @@ public class WatchNextWorker extends Worker {
     private static final String PATH_UPCOMING = "upcoming";
     private static final String PATH_THEATER = "now_playing";
     private static final String PATH_ON_THE_AIR = "on_the_air";
+    private static final String PATH_AIRING_TODAY = "airing_today";
     private static final int SYNC_NOTIFICATION_ID = 29101988;
 
     private static final Retrofit retrofit = new Retrofit.Builder()
@@ -67,6 +68,7 @@ public class WatchNextWorker extends Worker {
             fetchPopularSeries(seriesApiService);
             fetchTopRatedSeries(seriesApiService);
             fetchOnTheAirSeries(seriesApiService);
+            fetchAiringTodaySeries(seriesApiService);
 
             NotificationUtils.syncComplete(SYNC_NOTIFICATION_ID, getApplicationContext());
             return Result.success();
@@ -77,65 +79,106 @@ public class WatchNextWorker extends Worker {
     }
 
     private void fetchPopularMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getPopularContentValues(response.body().getResults());
             insertData(DataContract.PopularMovieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_popular_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchUpcomingMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_UPCOMING, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getUpcomingContentValues(response.body().getResults());
             insertData(DataContract.UpcomingMovieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_upcoming_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchTopRatedMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getTopContentValues(response.body().getResults());
             insertData(DataContract.TopRatedMovieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_top_rated_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchTheaterMovies(MovieApiService service, String region) throws IOException {
-        Call<Movies> call = service.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY, region);
+        Call<Movies> call = service.getMovies(PATH_THEATER, BuildConfig.MOVIE_DATABASE_API_KEY, region, 1);
         Response<Movies> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = MovieDbUtils.getTheaterContentValues(response.body().getResults());
             insertData(DataContract.TheaterMovieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_theater_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchPopularSeries(SeriesApiService service) throws IOException {
-        Call<Series> call = service.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> call = service.getSeries(PATH_POPULAR, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
         Response<Series> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = SerieDbUtils.getPopularContentValues(response.body().getResults());
             insertData(DataContract.PopularSerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_popular_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchTopRatedSeries(SeriesApiService service) throws IOException {
-        Call<Series> call = service.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> call = service.getSeries(PATH_TOP_RATED, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
         Response<Series> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = SerieDbUtils.getTopContentValues(response.body().getResults());
             insertData(DataContract.TopRatedSerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_top_rated_next_page", 2)
+                    .apply();
         }
     }
 
     private void fetchOnTheAirSeries(SeriesApiService service) throws IOException {
-        Call<Series> call = service.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY);
+        Call<Series> call = service.getSeries(PATH_ON_THE_AIR, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
         Response<Series> response = call.execute();
         if (response.isSuccessful() && response.body() != null) {
             ContentValues[] values = SerieDbUtils.getOnTheAirContentValues(response.body().getResults());
             insertData(DataContract.OnTheAirSerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_on_the_air_next_page", 2)
+                    .apply();
+        }
+    }
+
+    private void fetchAiringTodaySeries(SeriesApiService service) throws IOException {
+        Call<Series> call = service.getSeries(PATH_AIRING_TODAY, BuildConfig.MOVIE_DATABASE_API_KEY, 1);
+        Response<Series> response = call.execute();
+        if (response.isSuccessful() && response.body() != null) {
+            ContentValues[] values = SerieDbUtils.getAiringTodayContentValues(response.body().getResults());
+            insertData(DataContract.AiringTodaySerieEntry.CONTENT_URI, values);
+            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putInt("pref_series_airing_today_next_page", 2)
+                    .apply();
         }
     }
 

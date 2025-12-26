@@ -84,6 +84,34 @@ public class TheaterFragment extends BaseFragment implements TheaterAdapter.OnIt
                 }
             }
         });
+
+        binding.theaterRecyclerView.addOnScrollListener(new androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@androidx.annotation.NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)) {
+                    viewModel.loadNextTheaterPage();
+                }
+            }
+        });
+
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading != null) {
+                    binding.swipeRefreshLayout.setRefreshing(isLoading);
+                }
+            }
+        });
+
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                if (message != null) {
+                    android.widget.Toast.makeText(getContext(), message, android.widget.Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

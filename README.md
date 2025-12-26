@@ -4,23 +4,47 @@ Simple application to track and explore all the information from your favourite 
 
 <img src="app/src/main/ic_launcher-web.png" width="200" height="200"/>
 
-- Explore all the details from the Popular, Top Rated and Upcoming Movies.
-- Explore all the details from the Popular, Top Rated and On The Air Series. 
-- See the Movies showing in the Theaters.
-- Search for Movies and Series.
-- Add them to your Favourites list.
-- Manually schedule notification for any upcoming Episodes.
-- Choose from Grey / Blue Grey Theme
+Features
+--------
+- Discover Popular, Top Rated, and Upcoming Movies.
+- Discover Popular, Top Rated, and On The Air TV Series.
+- See what Movies are currently in Theaters.
+- Universal Search for Movies and Series.
+- Manage your Favorites.
+- Subscribe to Series to get reminders for all upcoming episodes.
+- Manually schedule reminders for individual episodes.
+- Offline support for viewing cached content.
+- Choose from Grey / Blue Grey Theme.
 
-<a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://github.com/lineargs/WatchNextApp/blob/master/google_play.png' height="70"/></a> <a href='https://www.amazon.com/gp/product/B0787D5ZZJ/ref=mas_pm_watchnext'><img alt='Available on Amazon' src='https://github.com/lineargs/WatchNextApp/blob/master/amazon.png' height="70"/></a>
+<a href='https://play.google.com/store/apps/details?id=com.lineargs.watchnext&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://github.com/lineargs/WatchNextApp/blob/master/google_play.png' height="70"/></a>
 
-Phone screenshots
------------------
-<img src="screenshots/phone_drawer.png" width="280"/> <img src="screenshots/phone_main_search.png" width="280"/> <img src="screenshots/phone_series_detail.png" width="280"/>
+Getting Started
+---------------
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/lineargs/WatchNextApp.git
+    ```
+2.  **Open in Android Studio**:
+    Open the `WatchNextApp` folder in Android Studio.
 
-10-inch tablet screenshots
------------------
-<img src="screenshots/tablet_10_main_search.png" width="280"/> <img src="screenshots/tablet_10_movie_detail.png" width="280"/> <img src="screenshots/tablet_10_movie_search.png" width="280"/>
+3.  **Get a TMDB API Key**:
+    -   Create an account at [The Movie Database (TMDb)](https://www.themoviedb.org/).
+    -   Go to your account settings and generate an API key in the API section.
+
+4.  **Configure API Key**:
+    -   Open or create the `gradle.properties` file in the root directory of the project.
+    -   Add the following line, replacing `YOUR_API_KEY` with the key you obtained:
+        ```properties
+        TMDbApiKey="YOUR_API_KEY"
+        ```
+
+5.  **Run the App**:
+    -   Sync the project with Gradle files.
+    -   Run the app on an emulator or a physical device.
+
+Contributing
+------------
+Contributions are welcomed! If you'd like to improve WatchNext, please fork the repository and submit a pull request.
 
 Powered by
 ----------

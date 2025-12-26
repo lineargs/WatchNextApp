@@ -77,4 +77,26 @@ public interface SeriesDao {
 
     @Query("DELETE FROM ontheairseries WHERE movie_id = :id")
     int deleteOnTheAirSerie(int id);
+
+    // Airing Today Series
+    @Query("SELECT * FROM airingtodayseries")
+    Cursor getAiringTodaySeries();
+
+    @Query("SELECT * FROM airingtodayseries")
+    androidx.lifecycle.LiveData<java.util.List<com.lineargs.watchnext.data.entity.AiringTodaySerie>> getAiringTodaySeriesLiveData();
+
+    @Query("SELECT * FROM airingtodayseries WHERE movie_id = :id")
+    Cursor getAiringTodaySerie(int id);
+
+    @Query("SELECT * FROM airingtodayseries WHERE movie_id = :id")
+    com.lineargs.watchnext.data.entity.AiringTodaySerie getAiringTodaySerieSync(int id);
+
+    @Query("SELECT * FROM airingtodayseries WHERE movie_id = :id")
+    androidx.lifecycle.LiveData<com.lineargs.watchnext.data.entity.AiringTodaySerie> getAiringTodaySerieLiveData(int id);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insertAiringTodaySerie(com.lineargs.watchnext.data.entity.AiringTodaySerie serie);
+
+    @Query("DELETE FROM airingtodayseries WHERE movie_id = :id")
+    int deleteAiringTodaySerie(int id);
 }

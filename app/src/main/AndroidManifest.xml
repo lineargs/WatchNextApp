@@ -37,6 +37,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity android:name=".ui.TheaterActivity" />
+        <activity android:name=".ui.AiringTodayActivity" />
         <activity android:name=".ui.MovieDetailsActivity" />
         <activity android:name=".ui.SeriesDetailsActivity" />
         <activity android:name=".ui.TabbedSeriesActivity" />
@@ -62,7 +63,7 @@
         <activity android:name=".ui.CreditsCastActivity" />
         <activity android:name=".ui.CreditsCrewActivity" />
         <activity android:name=".ui.VideosActivity" />
-        <activity android:name=".ui.VideosTvActivity" />
+
         <activity android:name=".ui.SeasonsActivity" />
         <activity android:name=".ui.EpisodesActivity" />
         <activity android:name=".ui.PersonActivity" />

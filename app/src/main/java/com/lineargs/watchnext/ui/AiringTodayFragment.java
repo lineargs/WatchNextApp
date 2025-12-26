@@ -7,22 +7,21 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lineargs.watchnext.R;
-import com.lineargs.watchnext.adapters.SeriesPopularAdapter;
-import com.lineargs.watchnext.data.DataContract;
+import com.lineargs.watchnext.adapters.AiringTodaySeriesAdapter;
 
 /**
- * Created by goranminov on 03/11/2017.
+ * Created by goranminov on 04/11/2017.
  * <p>
  * A fragment for our Tabbed Series View Pager
  */
 
-public class SeriesPopularFragment extends SeriesListFragment implements SeriesPopularAdapter.OnItemClickListener {
+public class AiringTodayFragment extends SeriesListFragment implements AiringTodaySeriesAdapter.OnItemClickListener {
 
-    private SeriesPopularAdapter adapter;
+    private AiringTodaySeriesAdapter adapter;
 
     @Override
     public void onItemSelected(Uri uri) {
-        Intent intent = new Intent(getContext(), SeriesDetailsActivity.class);
+        Intent intent = new Intent(getActivity(), SeriesDetailsActivity.class);
         intent.setData(uri);
         Bundle bundle = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_right, R.anim.slide_out_left).toBundle();
         startActivity(intent, bundle);
@@ -30,7 +29,7 @@ public class SeriesPopularFragment extends SeriesListFragment implements SeriesP
 
     @Override
     public void onToggleFavorite(Uri uri, boolean isFavorite) {
-        com.lineargs.watchnext.ui.SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.SeriesViewModel.class);
+        SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SeriesViewModel.class);
         viewModel.toggleFavorite(uri, isFavorite);
         if (isFavorite) {
             android.widget.Toast.makeText(getContext(), getString(R.string.toast_remove_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
@@ -41,17 +40,17 @@ public class SeriesPopularFragment extends SeriesListFragment implements SeriesP
 
     @Override
     public RecyclerView.Adapter getAdapter() {
-        adapter = new SeriesPopularAdapter(getActivity(), this);
+        adapter = new AiringTodaySeriesAdapter(getActivity(), this);
         return adapter;
     }
 
     @Override
     public void onViewCreated(@androidx.annotation.NonNull android.view.View view, @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        com.lineargs.watchnext.ui.SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(com.lineargs.watchnext.ui.SeriesViewModel.class);
-        viewModel.getPopularSeries().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.PopularSerie>>() {
+        SeriesViewModel viewModel = new androidx.lifecycle.ViewModelProvider(this).get(SeriesViewModel.class);
+        viewModel.getAiringTodaySeries().observe(getViewLifecycleOwner(), new androidx.lifecycle.Observer<java.util.List<com.lineargs.watchnext.data.entity.AiringTodaySerie>>() {
             @Override
-            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.PopularSerie> series) {
+            public void onChanged(java.util.List<com.lineargs.watchnext.data.entity.AiringTodaySerie> series) {
                 if (series != null && !series.isEmpty()) {
                     adapter.swapSeries(series);
                     showData();
@@ -77,7 +76,7 @@ public class SeriesPopularFragment extends SeriesListFragment implements SeriesP
             public void onScrolled(@androidx.annotation.NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
-                    viewModel.loadNextPopularPage();
+                    viewModel.loadNextAiringTodayPage();
                 }
             }
         });
@@ -104,4 +103,3 @@ public class SeriesPopularFragment extends SeriesListFragment implements SeriesP
         });
     }
 }
-

@@ -93,6 +93,8 @@ public class SeasonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ServiceUtils.loadPicasso(context, season.getPosterPath())
                     .centerCrop()
                     .fit()
+                    .placeholder(R.drawable.placeholder_serie)
+                    .error(R.drawable.placeholder_serie)
                     .into(poster);
         }
 

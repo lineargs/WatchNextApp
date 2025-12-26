@@ -20,6 +20,9 @@ public interface MoviesDao {
     @Query("SELECT * FROM popularmovies")
     androidx.lifecycle.LiveData<java.util.List<PopularMovie>> getPopularMoviesLiveData();
 
+    @Query("SELECT COUNT(*) FROM popularmovies")
+    int getPopularMoviesCount();
+
     @Query("SELECT * FROM popularmovies WHERE movie_id = :id")
     Cursor getPopularMovie(int id);
 

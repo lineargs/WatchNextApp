@@ -63,6 +63,24 @@ public class MainActivity extends BaseTopActivity {
             WorkManagerUtils.syncImmediately(this);
             WorkManagerUtils.scheduleSubscriptionCheck(this);
         }
+        
+        if (getIntent().getData() != null && getIntent().hasExtra("is_series")) {
+            final android.net.Uri uri = getIntent().getData();
+            final boolean isSeries = getIntent().getBooleanExtra("is_series", false);
+            final int id = Integer.parseInt(uri.getLastPathSegment());
+            final com.lineargs.watchnext.data.FavoritesRepository repository = new com.lineargs.watchnext.data.FavoritesRepository(getApplication());
+            
+            com.lineargs.watchnext.data.WatchNextDatabase.databaseWriteExecutor.execute(() -> {
+                if (repository.isFavorite(id)) {
+                    runOnUiThread(() -> onItemSelected(uri, isSeries));
+                } else {
+                    runOnUiThread(() -> {
+                        android.widget.Toast.makeText(MainActivity.this, getString(R.string.toast_removed_from_favorites), android.widget.Toast.LENGTH_SHORT).show();
+                        com.lineargs.watchnext.utils.dbutils.DbUtils.updateWidget(MainActivity.this);
+                    });
+                }
+            });
+        }
     }
 
     public void searchFab() {
