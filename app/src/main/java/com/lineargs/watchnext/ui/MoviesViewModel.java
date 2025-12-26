@@ -106,4 +106,26 @@ public class MoviesViewModel extends AndroidViewModel {
             }
         });
     }
+
+    public void loadNextUpcomingPage() {
+        if (Boolean.TRUE.equals(isLoading.getValue())) return;
+
+        repository.fetchNextUpcomingMovies(new com.lineargs.watchnext.utils.NetworkStateCallback() {
+            @Override
+            public void onLoading() {
+                isLoading.postValue(true);
+            }
+
+            @Override
+            public void onSuccess() {
+                isLoading.postValue(false);
+            }
+
+            @Override
+            public void onError(String message) {
+                isLoading.postValue(false);
+                errorMessage.postValue(message);
+            }
+        });
+    }
 }
