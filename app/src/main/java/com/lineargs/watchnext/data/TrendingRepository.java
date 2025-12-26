@@ -42,15 +42,39 @@ public class TrendingRepository {
         return errorMessage;
     }
 
+    private int moviesPage = 1;
+    private int seriesPage = 1;
+    private int peoplePage = 1;
+
+    private boolean isMoviesLoading = false;
+    private boolean isSeriesLoading = false;
+    private boolean isPeopleLoading = false;
+
+    private final MutableLiveData<List<PopularMovie>> trendingMovies = new MutableLiveData<>();
+    private final MutableLiveData<List<PopularSerie>> trendingSeries = new MutableLiveData<>();
+    private final MutableLiveData<List<Person>> trendingPeople = new MutableLiveData<>();
+
     public MutableLiveData<List<PopularMovie>> getTrendingMovies() {
-        MutableLiveData<List<PopularMovie>> data = new MutableLiveData<>();
+        if (trendingMovies.getValue() == null) {
+            loadTrendingMovies();
+        }
+        return trendingMovies;
+    }
+
+    private void loadTrendingMovies() {
+        if (isMoviesLoading) return;
+        isMoviesLoading = true;
         isLoading.setValue(true);
-        apiService.getTrendingMovies("day", BuildConfig.MOVIE_DATABASE_API_KEY).enqueue(new Callback<Movies>() {
+        apiService.getTrendingMovies("day", BuildConfig.MOVIE_DATABASE_API_KEY, moviesPage).enqueue(new Callback<Movies>() {
             @Override
             public void onResponse(Call<Movies> call, Response<Movies> response) {
+                isMoviesLoading = false;
                 isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
                     List<PopularMovie> movies = new ArrayList<>();
+                    if (trendingMovies.getValue() != null) {
+                        movies.addAll(trendingMovies.getValue());
+                    }
                     for (Result result : response.body().getResults()) {
                         PopularMovie movie = new PopularMovie();
                         movie.setTmdbId(result.getId());
@@ -64,7 +88,8 @@ public class TrendingRepository {
                         movie.setOriginalTitle(result.getOriginalTitle());
                         movies.add(movie);
                     }
-                    data.setValue(movies);
+                    trendingMovies.setValue(movies);
+                    moviesPage++;
                 } else {
                     errorMessage.setValue("Failed to fetch trending movies");
                 }
@@ -72,22 +97,38 @@ public class TrendingRepository {
 
             @Override
             public void onFailure(Call<Movies> call, Throwable t) {
+                isMoviesLoading = false;
                 isLoading.setValue(false);
                 errorMessage.setValue(t.getMessage());
             }
         });
-        return data;
+    }
+
+    public void loadNextTrendingMovies() {
+        loadTrendingMovies();
     }
 
     public MutableLiveData<List<PopularSerie>> getTrendingSeries() {
-        MutableLiveData<List<PopularSerie>> data = new MutableLiveData<>();
+        if (trendingSeries.getValue() == null) {
+            loadTrendingSeries();
+        }
+        return trendingSeries;
+    }
+
+    private void loadTrendingSeries() {
+        if (isSeriesLoading) return;
+        isSeriesLoading = true;
         isLoading.setValue(true);
-        apiService.getTrendingSeries("day", BuildConfig.MOVIE_DATABASE_API_KEY).enqueue(new Callback<Series>() {
+        apiService.getTrendingSeries("day", BuildConfig.MOVIE_DATABASE_API_KEY, seriesPage).enqueue(new Callback<Series>() {
             @Override
             public void onResponse(Call<Series> call, Response<Series> response) {
+                isSeriesLoading = false;
                 isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
                     List<PopularSerie> series = new ArrayList<>();
+                    if (trendingSeries.getValue() != null) {
+                        series.addAll(trendingSeries.getValue());
+                    }
                     for (SeriesResult result : response.body().getResults()) {
                         PopularSerie serie = new PopularSerie();
                         serie.setTmdbId(result.getId());
@@ -101,7 +142,8 @@ public class TrendingRepository {
                         serie.setOriginalTitle(result.getOriginalName());
                         series.add(serie);
                     }
-                    data.setValue(series);
+                    trendingSeries.setValue(series);
+                    seriesPage++;
                 } else {
                     errorMessage.setValue("Failed to fetch trending series");
                 }
@@ -109,22 +151,41 @@ public class TrendingRepository {
 
             @Override
             public void onFailure(Call<Series> call, Throwable t) {
+                isSeriesLoading = false;
                 isLoading.setValue(false);
                 errorMessage.setValue(t.getMessage());
             }
         });
-        return data;
+    }
+
+    public void loadNextTrendingSeries() {
+        loadTrendingSeries();
     }
 
     public MutableLiveData<List<Person>> getTrendingPeople() {
-        MutableLiveData<List<Person>> data = new MutableLiveData<>();
+        if (trendingPeople.getValue() == null) {
+            loadTrendingPeople();
+        }
+        return trendingPeople;
+    }
+
+    private void loadTrendingPeople() {
+        if (isPeopleLoading) return;
+        isPeopleLoading = true;
         isLoading.setValue(true);
-        apiService.getTrendingPeople("day", BuildConfig.MOVIE_DATABASE_API_KEY).enqueue(new Callback<TrendingPeopleResponse>() {
+        apiService.getTrendingPeople("day", BuildConfig.MOVIE_DATABASE_API_KEY, peoplePage).enqueue(new Callback<TrendingPeopleResponse>() {
             @Override
             public void onResponse(Call<TrendingPeopleResponse> call, Response<TrendingPeopleResponse> response) {
+                isPeopleLoading = false;
                 isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    data.setValue(response.body().getResults());
+                    List<Person> people = new ArrayList<>();
+                    if (trendingPeople.getValue() != null) {
+                        people.addAll(trendingPeople.getValue());
+                    }
+                    people.addAll(response.body().getResults());
+                    trendingPeople.setValue(people);
+                    peoplePage++;
                 } else {
                     errorMessage.setValue("Failed to fetch trending people");
                 }
@@ -132,10 +193,14 @@ public class TrendingRepository {
 
             @Override
             public void onFailure(Call<TrendingPeopleResponse> call, Throwable t) {
+                isPeopleLoading = false;
                 isLoading.setValue(false);
                 errorMessage.setValue(t.getMessage());
             }
         });
-        return data;
+    }
+
+    public void loadNextTrendingPeople() {
+        loadTrendingPeople();
     }
 }

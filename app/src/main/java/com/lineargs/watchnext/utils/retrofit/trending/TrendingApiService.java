@@ -12,15 +12,18 @@ public interface TrendingApiService {
     @GET("trending/movie/{time_window}")
     Call<Movies> getTrendingMovies(
             @Path("time_window") String timeWindow,
-            @Query("api_key") String apiKey);
+            @Query("api_key") String apiKey,
+            @Query("page") int page);
 
     @GET("trending/tv/{time_window}")
     Call<Series> getTrendingSeries(
             @Path("time_window") String timeWindow,
-            @Query("api_key") String apiKey);
+            @Query("api_key") String apiKey,
+            @Query("page") int page);
 
     @GET("trending/person/{time_window}")
     Call<TrendingPeopleResponse> getTrendingPeople(
             @Path("time_window") String timeWindow,
-            @Query("api_key") String apiKey);
+            @Query("api_key") String apiKey,
+            @Query("page") int page);
 }

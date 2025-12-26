@@ -42,7 +42,15 @@ public class TrendingViewModel extends AndroidViewModel {
         return repository.getIsLoading();
     }
 
-    public LiveData<String> getErrorMessage() {
-        return repository.getErrorMessage();
+    public void loadNextTrendingMovies() {
+        repository.loadNextTrendingMovies();
+    }
+
+    public void loadNextTrendingSeries() {
+        repository.loadNextTrendingSeries();
+    }
+
+    public void loadNextTrendingPeople() {
+        repository.loadNextTrendingPeople();
     }
 }

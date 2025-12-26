@@ -83,6 +83,16 @@ public class TrendingSeriesFragment extends BaseFragment implements SeriesPopula
         adapter = new SeriesPopularAdapter(requireActivity(), this);
         binding.trendingRecyclerView.setAdapter(adapter);
 
+        binding.trendingRecyclerView.addOnScrollListener(new androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)) {
+                    viewModel.loadNextTrendingSeries();
+                }
+            }
+        });
+
         binding.swipeRefreshLayout.setEnabled(false);
     }
 

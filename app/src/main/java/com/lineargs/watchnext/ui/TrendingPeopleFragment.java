@@ -63,6 +63,16 @@ public class TrendingPeopleFragment extends BaseFragment implements TrendingPeop
         adapter = new TrendingPeopleAdapter(requireContext(), this);
         binding.trendingRecyclerView.setAdapter(adapter);
 
+        binding.trendingRecyclerView.addOnScrollListener(new androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)) {
+                    viewModel.loadNextTrendingPeople();
+                }
+            }
+        });
+
         binding.swipeRefreshLayout.setEnabled(false);
     }
 
